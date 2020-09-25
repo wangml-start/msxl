@@ -1,0 +1,113 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".MainActivity">
+
+    <LinearLayout
+            android:id="@+id/signin_top_menu"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_alignParentTop="true"
+            android:background="@color/bg_white"
+            android:orientation="horizontal">
+
+        <Button
+                android:id="@+id/backup_btn"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:background="@color/bg_white"
+                android:gravity="center"
+                android:visibility="gone"
+                android:text="@string/backup" />
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+        <Button
+                android:id="@+id/bt_go_register"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:background="@color/bg_white"
+                android:gravity="center"
+                android:text="@string/register" />
+    </LinearLayout>
+
+    <View
+            android:id="@+id/signin_top_menu_div"
+            android:layout_width="match_parent"
+            android:layout_height="5px"
+            android:layout_alignBottom="@id/signin_top_menu"
+            android:background="@color/div_white" />
+
+
+    <LinearLayout
+            style="@style/register_item">
+        <TextView
+                android:id="@+id/lb_account"
+                style="@style/register_label"
+                android:text="@string/sign_email"></TextView>
+        <EditText
+                android:id="@+id/tx_email"
+                android:inputType="textEmailAddress"
+                style="@style/register_input">
+            <requestFocus />
+        </EditText>
+    </LinearLayout>
+
+    <LinearLayout
+            style="@style/register_item">
+        <TextView
+                android:id="@+id/lb_pwd"
+                style="@style/register_label"
+                android:text="@string/sign_user_wd" />
+        <EditText
+                android:id="@+id/tx_pwd"
+                android:inputType="textPassword"
+                style="@style/register_input"
+                >
+        </EditText>
+    </LinearLayout>
+    <LinearLayout style="@style/register_item">
+        <TextView
+                android:id="@+id/lb_dis_pws"
+                style="@style/register_label"
+                android:text="@string/lb_valid_code" />
+        <com.cgmn.msxl.comp.showPassworCheckBox
+                android:id="@+id/ck_dis_pws"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false" />
+    </LinearLayout>
+
+    <LinearLayout
+            style="@style/register_item"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:weightSum="100"
+            >
+        <Button
+                android:id="@+id/bt_login"
+                android:background="@drawable/bt_back"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp"
+                android:enabled="false"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:text="@string/signin" />
+        <Button
+                android:id="@+id/bt_forget"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bt_back"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="50"
+                android:enabled="true"
+                android:text="@string/forget_pws" />
+    </LinearLayout>
+</LinearLayout>

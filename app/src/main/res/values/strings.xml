@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">App</string>
+<!--    登录-->
+    <string name="signin">登录</string>
+    <string name="register">注册</string>
+    <string name="signin_register">登录/注册</string>
+    <string name="backup">&lt;返回</string>
+    <string name="sign_email">注册邮箱</string>
+    <string name="sign_user_name">用户名</string>
+    <string name="sign_user_wd">密码</string>
+    <string name="new_user_wd">新密码</string>
+    <string name="wd_reqiure_8">需要8位以上</string>
+    <string name="valid_fails">验证失败</string>
+    <string name="email_user_for">可用于找回密码</string>
+    <string name="forget_pws">忘记密码</string>
+    <string name="lb_valid_code">验证码</string>
+    <string name="send_email">发送邮件</string>
+</resources>
