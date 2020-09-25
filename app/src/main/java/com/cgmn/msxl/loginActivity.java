@@ -1,5 +1,6 @@
 package com.cgmn.msxl;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import com.cgmn.msxl.comp.showPassworCheckBox;
 import com.cgmn.msxl.utils.CommonUtil;
 
 public class loginActivity extends CustomerBaseActivity {
@@ -16,6 +18,7 @@ public class loginActivity extends CustomerBaseActivity {
     private Button bt_login;
     private Button bt_go_register;
     private Button bt_forget_pws;
+    private showPassworCheckBox ck_show;
 
     private Context mContext;
 
@@ -66,6 +69,7 @@ public class loginActivity extends CustomerBaseActivity {
 
 
 
+    @SuppressLint("WrongViewCast")
     private void bindView(){
         mContext = this;
         tx_pwd = findViewById(R.id.tx_pwd);
@@ -74,11 +78,15 @@ public class loginActivity extends CustomerBaseActivity {
         bt_login = findViewById(R.id.bt_login);
         bt_go_register = findViewById(R.id.bt_go_register);
         bt_forget_pws = findViewById(R.id.bt_forget);
+        ck_show = findViewById(R.id.ck_dis_pws);
 
         bt_login.setOnClickListener(this);
         bt_forget_pws.setOnClickListener(this);
         bt_go_register.setOnClickListener(this);
 
         tx_pwd.addTextChangedListener(this);
+
+        ck_show.setPws(tx_pwd);
+        ck_show.setOnCheckedChangeListener(ck_show);
     }
 }

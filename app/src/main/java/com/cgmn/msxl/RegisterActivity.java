@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import com.cgmn.msxl.comp.showPassworCheckBox;
 import com.cgmn.msxl.utils.CommonUtil;
 import com.cgmn.msxl.utils.MyPatternUtil;
 
@@ -21,6 +22,7 @@ public class RegisterActivity extends CustomerBaseActivity {
     private EditText tx_email;
     private Button btRegister;
     private Button go_signin;
+    private showPassworCheckBox ck_show;
 
     private Context mContext;
 
@@ -95,17 +97,24 @@ public class RegisterActivity extends CustomerBaseActivity {
         btRegister = findViewById(R.id.btRegister);
         go_signin = findViewById(R.id.go_signin);
 
+        ck_show = findViewById(R.id.ck_dis_pws);
+
         btRegister.setOnClickListener(this);
         go_signin.setOnClickListener(this);
 
         tx_pwd.addTextChangedListener(this);
 
+        ck_show.setPws(tx_pwd);
+        ck_show.setOnCheckedChangeListener(ck_show);
+
         Intent intent=getIntent();
         Bundle bundle = intent.getBundleExtra("datas");
-        String email=bundle.getString("email");
-        String pws=bundle.getString("pws");
-        tx_email.setText(email);
-        tx_pwd.setText(pws);
+        if(bundle != null){
+            String email=bundle.getString("email");
+            String pws=bundle.getString("pws");
+            tx_email.setText(email);
+            tx_pwd.setText(pws);
+        }
     }
 
     private void setHintSize() {

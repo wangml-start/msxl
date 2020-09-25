@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import com.cgmn.msxl.comp.showPassworCheckBox;
 import com.cgmn.msxl.utils.CommonUtil;
 import com.cgmn.msxl.utils.MyPatternUtil;
 
@@ -20,6 +21,7 @@ public class ForgetPasswordActivity extends CustomerBaseActivity {
     private Button bt_go_register;
     private Button bt_sent_email;
     private Button backup_btn;
+    private showPassworCheckBox ck_show;
 
     private Context mContext;
 
@@ -117,12 +119,17 @@ public class ForgetPasswordActivity extends CustomerBaseActivity {
         backup_btn = findViewById(R.id.backup_btn);
         time = new MyTimeCount(60000, 1000);
 
+        ck_show = findViewById(R.id.ck_dis_pws);
+
         bt_login.setOnClickListener(this);
         bt_go_register.setOnClickListener(this);
         bt_sent_email.setOnClickListener(this);
         backup_btn.setOnClickListener(this);
 
         tx_valid_code.addTextChangedListener(this);
+
+        ck_show.setPws(tx_new_pwd);
+        ck_show.setOnCheckedChangeListener(ck_show);
 
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra("datas");
