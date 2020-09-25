@@ -15,4 +15,5 @@
     <string name="forget_pws">忘记密码</string>
     <string name="lb_valid_code">验证码</string>
     <string name="send_email">发送邮件</string>
+    <string name="show_pws">显示密码</string>
 </resources>

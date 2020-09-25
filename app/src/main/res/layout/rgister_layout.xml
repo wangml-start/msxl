@@ -90,7 +90,7 @@
         <TextView
                 android:id="@+id/lb_dis_pws"
                 style="@style/register_label"
-                android:text="@string/lb_valid_code" />
+                android:text="@string/show_pws" />
         <com.cgmn.msxl.comp.showPassworCheckBox
                 android:id="@+id/ck_dis_pws"
                 android:layout_width="wrap_content"
