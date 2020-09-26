@@ -26,13 +26,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
 
-        <Button
-                android:id="@+id/bt_go_register"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:background="@color/bg_white"
-                android:gravity="center"
-                android:text="@string/register" />
     </LinearLayout>
 
     <View

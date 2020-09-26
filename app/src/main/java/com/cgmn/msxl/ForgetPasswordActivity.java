@@ -18,7 +18,6 @@ public class ForgetPasswordActivity extends CustomerBaseActivity {
     private EditText tx_valid_code;
 
     private Button bt_login;
-    private Button bt_go_register;
     private Button bt_sent_email;
     private Button backup_btn;
     private showPassworCheckBox ck_show;
@@ -45,13 +44,6 @@ public class ForgetPasswordActivity extends CustomerBaseActivity {
             String code = tx_valid_code.getText().toString();
             Toast.makeText(mContext, em + pws + code, Toast.LENGTH_SHORT).show();
 
-        } else if (v.getId() == R.id.bt_go_register) {
-            Intent intent = new Intent(this, RegisterActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString("email", tx_email.getText().toString());
-            bundle.putString("pws", tx_new_pwd.getText().toString());
-            intent.putExtra("datas", bundle);
-            startActivity(intent);
         } else if (v.getId() == R.id.bt_send_mail) {
             String em = tx_email.getText().toString();
             Toast.makeText(mContext, em, Toast.LENGTH_SHORT).show();
@@ -114,7 +106,6 @@ public class ForgetPasswordActivity extends CustomerBaseActivity {
         tx_email = findViewById(R.id.tx_email);
         tx_valid_code = findViewById(R.id.tx_valid_code);
         bt_login = findViewById(R.id.bt_login);
-        bt_go_register = findViewById(R.id.bt_go_register);
         bt_sent_email = findViewById(R.id.bt_send_mail);
         backup_btn = findViewById(R.id.backup_btn);
         time = new MyTimeCount(60000, 1000);
@@ -122,7 +113,6 @@ public class ForgetPasswordActivity extends CustomerBaseActivity {
         ck_show = findViewById(R.id.ck_dis_pws);
 
         bt_login.setOnClickListener(this);
-        bt_go_register.setOnClickListener(this);
         bt_sent_email.setOnClickListener(this);
         backup_btn.setOnClickListener(this);
 

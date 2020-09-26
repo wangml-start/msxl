@@ -16,7 +16,6 @@ public class loginActivity extends CustomerBaseActivity {
     private EditText tx_email;
 
     private Button bt_login;
-    private Button bt_go_register;
     private Button bt_forget_pws;
     private showPassworCheckBox ck_show;
 
@@ -40,9 +39,6 @@ public class loginActivity extends CustomerBaseActivity {
             String pws = tx_pwd.getText().toString();
 
             Toast.makeText(mContext, em + pws, Toast.LENGTH_SHORT).show();
-
-        }else if(v.getId() == R.id.bt_go_register){
-            startActivity(new Intent(this, RegisterActivity.class));
         }else if(v.getId() == R.id.bt_forget){
             Intent intent = new Intent(this, ForgetPasswordActivity.class);
             Bundle bundle=new Bundle();
@@ -76,13 +72,11 @@ public class loginActivity extends CustomerBaseActivity {
         tx_email = findViewById(R.id.tx_email);
 
         bt_login = findViewById(R.id.bt_login);
-        bt_go_register = findViewById(R.id.bt_go_register);
         bt_forget_pws = findViewById(R.id.bt_forget);
         ck_show = findViewById(R.id.ck_dis_pws);
 
         bt_login.setOnClickListener(this);
         bt_forget_pws.setOnClickListener(this);
-        bt_go_register.setOnClickListener(this);
 
         tx_pwd.addTextChangedListener(this);
 
