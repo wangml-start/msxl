@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">App</string>
+    <string name="app_name">模式训练</string>
 <!--    登录-->
     <string name="signin">登录</string>
     <string name="register">注册</string>
@@ -16,4 +16,6 @@
     <string name="lb_valid_code">验证码</string>
     <string name="send_email">发送邮件</string>
     <string name="show_pws">显示密码</string>
+    <string name="auto_register">用户不存在时自动注册</string>
+
 </resources>

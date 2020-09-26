@@ -19,11 +19,15 @@
                 android:layout_height="wrap_content"
                 android:background="@color/bg_white"
                 android:gravity="center"
+                android:layout_marginTop="2dp"
                 android:text="@string/backup" />
 
         <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
+                android:gravity="center"
                 android:layout_height="wrap_content"
+                android:text="@string/forget_pws"
+                android:layout_marginTop="2dp"
                 android:layout_weight="1" />
 
     </LinearLayout>
@@ -31,7 +35,7 @@
     <View
             android:id="@+id/signin_top_menu_div"
             android:layout_width="match_parent"
-            android:layout_height="5px"
+            android:layout_height="2px"
             android:layout_alignBottom="@id/signin_top_menu"
             android:background="@color/div_white" />
 

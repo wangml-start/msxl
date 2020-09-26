@@ -19,20 +19,25 @@
                 android:layout_height="wrap_content"
                 android:background="@color/bg_white"
                 android:gravity="center"
+                android:layout_marginTop="2dp"
                 android:visibility="gone"
                 android:text="@string/backup" />
 
         <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_marginTop="2dp"
+                android:text="@string/signin"
+                />
 
     </LinearLayout>
 
     <View
             android:id="@+id/signin_top_menu_div"
             android:layout_width="match_parent"
-            android:layout_height="5px"
+            android:layout_height="2px"
             android:layout_alignBottom="@id/signin_top_menu"
             android:background="@color/div_white" />
 
@@ -74,6 +79,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="false" />
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="35dp"
+                android:text="@string/auto_register"/>
     </LinearLayout>
 
     <LinearLayout
