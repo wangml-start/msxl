@@ -6,7 +6,7 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class CustomerBaseActivity extends AppCompatActivity
-        implements TextWatcher, View.OnClickListener {
+        implements TextWatcher, View.OnClickListener, View.OnFocusChangeListener {
 
     protected String getSourceString(int sourceId){
         return getResources().getString(sourceId);
@@ -29,6 +29,11 @@ public class CustomerBaseActivity extends AppCompatActivity
 
     @Override
     public void onClick(View v) {
+
+    }
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
 
     }
 }

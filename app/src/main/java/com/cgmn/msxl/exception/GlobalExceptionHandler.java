@@ -84,8 +84,8 @@ public class GlobalExceptionHandler implements Thread.UncaughtExceptionHandler{
                 Log.d("2635", "Exception: "+e.getMessage());
             }
             //如果不关闭程序,会导致程序无法启动,需要完全结束进程才能重新启动
-            android.os.Process.killProcess(android.os.Process.myPid());
-            System.exit(10);
+//            android.os.Process.killProcess(android.os.Process.myPid());
+//            System.exit(10);
         }
 
     }

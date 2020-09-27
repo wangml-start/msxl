@@ -1,7 +1,7 @@
 package com.cgmn.msxl.utils;
 
 import android.net.Uri;
-import com.cgmn.msxl.service.PropertyService;
+import android.util.Base64;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -79,6 +79,32 @@ public class CommonUtil {
                 resMap.put(key, value);
             }
         }
+    }
+
+    public static String encodePassword(String pass, Integer times){
+        int index = 3;
+        if(times != null){
+            index = times;
+        }
+        String trans = pass;
+        while(index-- > 0){
+            trans = Base64.encodeToString(trans.getBytes(), Base64.DEFAULT);
+        }
+
+        return trans;
+    }
+
+    public static String decodePassword(String pass, Integer times){
+        int index = 3;
+        if(times != null){
+            index = times;
+        }
+        String trans = pass;
+        while(index-- > 0){
+            trans = new String(Base64.decode(trans.getBytes(), Base64.DEFAULT));
+        }
+
+        return trans;
     }
 
 }

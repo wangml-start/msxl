@@ -50,6 +50,7 @@
                 android:text="@string/sign_email"></TextView>
         <EditText
                 android:id="@+id/tx_email"
+                android:hint="@string/email_user_for"
                 android:inputType="textEmailAddress"
                 style="@style/register_input">
             <requestFocus />
@@ -64,6 +65,7 @@
                 android:text="@string/sign_user_wd" />
         <EditText
                 android:id="@+id/tx_pwd"
+                android:hint="@string/wd_reqiure_8"
                 android:inputType="textPassword"
                 style="@style/register_input"
                 >

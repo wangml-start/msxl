@@ -49,6 +49,7 @@
 
         <EditText
                 android:id="@+id/tx_email"
+                android:hint="@string/email_user_for"
                 style="@style/register_input"
                 android:inputType="textEmailAddress">
 
@@ -66,6 +67,7 @@
         <EditText
                 android:id="@+id/tx_new_user_wd"
                 style="@style/register_input"
+                android:hint="@string/wd_reqiure_8"
                 android:inputType="textPassword"></EditText>
     </LinearLayout>
 
@@ -80,6 +82,7 @@
                 android:id="@+id/tx_valid_code"
                 style="@style/register_input"
                 android:inputType="number"
+                android:hint="@string/wd_valid_code"
                 android:maxLength="6"></EditText>
     </LinearLayout>
 

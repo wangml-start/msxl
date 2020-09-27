@@ -5,24 +5,19 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.cgmn.msxl.comp.showPassworCheckBox;
 import com.cgmn.msxl.application.AppApplication;
-import com.cgmn.msxl.service.MyJsonObjectRequest;
 import com.cgmn.msxl.service.PropertyService;
 import com.cgmn.msxl.utils.CommonUtil;
 import com.cgmn.msxl.utils.MyPatternUtil;
-import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -68,25 +63,31 @@ public class loginActivity extends CustomerBaseActivity {
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-        boolean flag = false;
-        String em = tx_email.getText().toString();
-        String pws = tx_pwd.getText().toString();
-        if (!CommonUtil.isEmpty(em) && pws.length() >= 8) {
-            StringBuffer tipes = new StringBuffer();
-            if (CommonUtil.isEmpty(em) || !MyPatternUtil.validEmail(em)) {
-                tipes.append(getSourceString(R.string.sign_email));
-                tipes.append(getSourceString(R.string.valid_fails));
-                Toast.makeText(mContext, tipes.toString(), Toast.LENGTH_SHORT).show();
-                flag = false;
-            } else {
-                flag = true;
-            }
+        validForm();
+    }
 
-            if (flag) {
-                bt_login.setEnabled(true);
-            } else {
-                bt_login.setEnabled(false);
-            }
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if(hasFocus){
+            return;
+        }
+        String email = tx_email.getText().toString();
+        if (CommonUtil.isEmpty(email) || !MyPatternUtil.validEmail(email)) {
+            StringBuffer tipes = new StringBuffer();
+            tipes.append(getSourceString(R.string.sign_email));
+            tipes.append(getSourceString(R.string.valid_fails));
+            Toast.makeText(mContext, tipes.toString(), Toast.LENGTH_SHORT).show();
+        }
+        validForm();
+    }
+
+    private void validForm(){
+        String email = tx_email.getText().toString();
+        String pws = tx_pwd.getText().toString();
+        if (MyPatternUtil.validEmail(email) && pws.length() >= 8) {
+            bt_login.setEnabled(true);
+        } else {
+            bt_login.setEnabled(false);
         }
     }
 
@@ -104,6 +105,7 @@ public class loginActivity extends CustomerBaseActivity {
         bt_login.setOnClickListener(this);
         bt_forget_pws.setOnClickListener(this);
 
+        tx_email.setOnFocusChangeListener(this);
         tx_pwd.addTextChangedListener(this);
 
         ck_show.setPws(tx_pwd);

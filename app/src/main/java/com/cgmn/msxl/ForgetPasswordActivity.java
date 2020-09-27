@@ -1,5 +1,6 @@
 package com.cgmn.msxl;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,9 +9,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.cgmn.msxl.application.AppApplication;
 import com.cgmn.msxl.comp.showPassworCheckBox;
+import com.cgmn.msxl.service.PropertyService;
 import com.cgmn.msxl.utils.CommonUtil;
 import com.cgmn.msxl.utils.MyPatternUtil;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ForgetPasswordActivity extends CustomerBaseActivity {
     private EditText tx_new_pwd;
@@ -35,21 +45,20 @@ public class ForgetPasswordActivity extends CustomerBaseActivity {
 
     @Override
     public void onClick(View v) {
+        Map<String, String> p = new HashMap<>();
         if (v.getId() == R.id.bt_login) {
-//            startActivity(new Intent(this, RegisterActivity.class));
-////            this.finish();
-
-            String em = tx_email.getText().toString();
-            String pws = tx_new_pwd.getText().toString();
-            String code = tx_valid_code.getText().toString();
-            Toast.makeText(mContext, em + pws + code, Toast.LENGTH_SHORT).show();
-
+            p.put("email", tx_email.getText().toString());
+            p.put("pws", tx_new_pwd.getText().toString());
+            p.put("FORGET_LOGIN", "1");
+            p.put("code", tx_valid_code.getText().toString());
+            onLogin(p);
         } else if (v.getId() == R.id.bt_send_mail) {
             String em = tx_email.getText().toString();
-            Toast.makeText(mContext, em, Toast.LENGTH_SHORT).show();
-            if(MyPatternUtil.validEmail(em)){
+            if (MyPatternUtil.validEmail(em)) {
                 time.start();
-            }else{
+                p.put("email", tx_email.getText().toString());
+                sendValidCodeMessage(p);
+            } else {
                 StringBuffer tipes = new StringBuffer();
                 tipes.append(getSourceString(R.string.sign_email));
                 tipes.append(getSourceString(R.string.valid_fails));
@@ -63,40 +72,43 @@ public class ForgetPasswordActivity extends CustomerBaseActivity {
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-        boolean flag = true;
-        if (s.length() < 6) {
-            flag = false;
-        }
+        validForm();
+    }
 
-        if (flag && validForm()) {
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if(hasFocus){
+            return;
+        }
+        if(v.getId() == R.id.tx_email){
+            String email = tx_email.getText().toString();
+            if (CommonUtil.isEmpty(email) || !MyPatternUtil.validEmail(email)) {
+                StringBuffer tipes = new StringBuffer();
+                tipes.append(getSourceString(R.string.sign_email));
+                tipes.append(getSourceString(R.string.valid_fails));
+                Toast.makeText(mContext, tipes.toString(), Toast.LENGTH_SHORT).show();
+            }
+        }else if(v.getId() == R.id.tx_new_user_wd){
+            String ws = tx_new_pwd.getText().toString();
+            if (CommonUtil.isEmpty(ws) || ws.length() < 8) {
+                StringBuffer tipes = new StringBuffer();
+                tipes.append(getSourceString(R.string.new_user_wd));
+                tipes.append(getSourceString(R.string.valid_fails));
+                Toast.makeText(mContext, tipes.toString(), Toast.LENGTH_SHORT).show();
+            }
+        }
+        validForm();
+    }
+
+    private void validForm() {
+        String em = tx_email.getText().toString();
+        String pws = tx_new_pwd.getText().toString();
+        String code = tx_valid_code.getText().toString();
+        if (MyPatternUtil.validEmail(em) && pws.length() >= 8 && code.length() == 6) {
             bt_login.setEnabled(true);
         } else {
             bt_login.setEnabled(false);
         }
-    }
-
-    private boolean validForm() {
-        boolean flag = true;
-        String em = tx_email.getText().toString();
-        String pws = tx_new_pwd.getText().toString();
-        StringBuffer tipes = new StringBuffer();
-        if (CommonUtil.isEmpty(em) || !MyPatternUtil.validEmail(em)) {
-            tipes.append(getSourceString(R.string.sign_email));
-            tipes.append(getSourceString(R.string.valid_fails));
-            tipes.append("\n");
-            flag = false;
-        }
-        if (CommonUtil.isEmpty(pws) || pws.length() < 8) {
-            tipes.append(getSourceString(R.string.new_user_wd));
-            tipes.append(getSourceString(R.string.valid_fails));
-            tipes.append(":" + getSourceString(R.string.wd_reqiure_8));
-            flag = false;
-        }
-
-        if (tipes.length() > 0) {
-            Toast.makeText(mContext, tipes.toString(), Toast.LENGTH_SHORT).show();
-        }
-        return flag;
     }
 
 
@@ -116,6 +128,8 @@ public class ForgetPasswordActivity extends CustomerBaseActivity {
         bt_sent_email.setOnClickListener(this);
         backup_btn.setOnClickListener(this);
 
+        tx_email.setOnFocusChangeListener(this);
+        tx_new_pwd.setOnFocusChangeListener(this);
         tx_valid_code.addTextChangedListener(this);
 
         ck_show.setPws(tx_new_pwd);
@@ -125,6 +139,67 @@ public class ForgetPasswordActivity extends CustomerBaseActivity {
         Bundle bundle = intent.getBundleExtra("datas");
         String email = bundle.getString("email");
         tx_email.setText(email);
+    }
+
+    private void sendValidCodeMessage(Map<String, String> p) {
+        String url = CommonUtil.buildGetUrl(
+                PropertyService.getInstance().getKey("serverUrl"),
+                "/user/valid_code", p);
+        StringRequest request = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String s) {
+                        Map<String, Object> map = new HashMap<>();
+                        CommonUtil.jsonStrToMap(s, map);
+                        Integer status = (Integer) map.get("status");
+                        if (status == null || status == -1) {
+                            Toast.makeText(mContext, (String) map.get("error"), Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(mContext, s, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        Toast.makeText(mContext, "服务器异常！", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        AppApplication.getInstance().addToRequestQueue(request, "Request Send Valid Code:");
+    }
+
+    private void onLogin(Map<String, String> params){
+        final ProgressDialog pDialog = new ProgressDialog(this);
+        pDialog.setMessage("登录中...");
+        pDialog.show();
+        String url = CommonUtil.buildGetUrl(
+                PropertyService.getInstance().getKey("serverUrl"),
+                "/user/login", params);
+        StringRequest request = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String s) {
+                        pDialog.hide();
+                        Map<String, Object> map = new HashMap<>();
+                        CommonUtil.jsonStrToMap(s, map);
+                        Integer status = (Integer) map.get("status");
+                        if(status == null || status == -1){
+                            Toast.makeText(mContext, (String) map.get("error"), Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(mContext, s, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        pDialog.hide();
+                        Toast.makeText(mContext, "登陆失败，服务器异常！", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        AppApplication.getInstance().addToRequestQueue(request, "login");
     }
 
 
