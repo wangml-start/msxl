@@ -18,7 +18,6 @@ import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.AppApplication;
 import com.cgmn.msxl.comp.LoginBaseActivity;
 import com.cgmn.msxl.comp.showPassworCheckBox;
-import com.cgmn.msxl.db.DBHelper;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.service.PropertyService;
 import com.cgmn.msxl.utils.CommonUtil;

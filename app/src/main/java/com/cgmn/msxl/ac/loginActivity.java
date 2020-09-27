@@ -2,7 +2,6 @@ package com.cgmn.msxl.ac;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,13 +17,11 @@ import com.cgmn.msxl.R;
 import com.cgmn.msxl.comp.LoginBaseActivity;
 import com.cgmn.msxl.comp.showPassworCheckBox;
 import com.cgmn.msxl.application.AppApplication;
-import com.cgmn.msxl.db.DBHelper;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.service.PropertyService;
 import com.cgmn.msxl.utils.CommonUtil;
 import com.cgmn.msxl.utils.MyPatternUtil;
 import com.google.gson.Gson;
-import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -132,13 +129,17 @@ public class loginActivity extends LoginBaseActivity {
                     @Override
                     public void onResponse(String s) {
                         pDialog.hide();
-                        Gson gson = new Gson();
-                        BaseData data = gson.fromJson(s, BaseData.class);
-                        Integer status = data.getStatus();
-                        if(status == null || status == -1){
-                            Toast.makeText(mContext, data.getError(), Toast.LENGTH_SHORT).show();
-                        }else{
-                            afterLoginSuccess(data.getUser(), mContext);
+                        try{
+                            Gson gson = new Gson();
+                            BaseData data = gson.fromJson(s, BaseData.class);
+                            Integer status = data.getStatus();
+                            if(status == null || status == -1){
+                                Toast.makeText(mContext, data.getError(), Toast.LENGTH_SHORT).show();
+                            }else{
+                                afterLoginSuccess(data.getUser(), mContext);
+                            }
+                        }catch (Exception e){
+                            e.printStackTrace();
                         }
                     }
                 },

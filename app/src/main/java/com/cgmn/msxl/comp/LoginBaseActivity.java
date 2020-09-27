@@ -11,9 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.cgmn.msxl.ac.AppMainActivity;
 import com.cgmn.msxl.application.AppApplication;
 import com.cgmn.msxl.data.User;
-import com.cgmn.msxl.db.DBHelper;
+import com.cgmn.msxl.db.AppSqlHelper;
 
-import java.util.Map;
 
 public class LoginBaseActivity extends AppCompatActivity
         implements TextWatcher, View.OnClickListener, View.OnFocusChangeListener {
@@ -49,15 +48,15 @@ public class LoginBaseActivity extends AppCompatActivity
 
     public void afterLoginSuccess(User user, Context context){
         //存数据
-        DBHelper sqlHeper = new DBHelper(context);
+        AppSqlHelper sqlHeper = new AppSqlHelper(context);
         String token = user.getToken();
         ContentValues values = new ContentValues();
-        values.put("account", user.getAccount());
+        values.put("phone", user.getPhone());
         values.put("user_name", user.getUserName());
         values.put("password", user.getPassword());
         values.put("token", token);
         values.put("last_active", 1);
-        sqlHeper.upsert("users", values, "id");
+        sqlHeper.upsert("users", values, "phone");
         AppApplication.getInstance().setToken(token);
 
         //跳转

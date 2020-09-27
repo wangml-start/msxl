@@ -1,17 +1,17 @@
 package com.cgmn.msxl.data;
 
 public class User {
-    String account;
+    String phone;
     String password;
     String token;
     String userName;
 
-    public String getAccount() {
-        return account;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setAccount(String account) {
-        this.account = account;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getPassword() {

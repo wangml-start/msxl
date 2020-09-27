@@ -7,7 +7,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.AppApplication;
-import com.cgmn.msxl.db.DBHelper;
+import com.cgmn.msxl.db.AppSqlHelper;
 
 import java.util.Map;
 
@@ -33,8 +33,8 @@ public class AppMainActivity extends AppCompatActivity {
         un.setText(bundle.getString("userName"));
         token.setText(AppApplication.getInstance().getToken());
 
-        DBHelper sqlHeper = new DBHelper(mContxt);
+        AppSqlHelper sqlHeper = new AppSqlHelper(mContxt);
         Map<String, Object> map = sqlHeper.getActiveUser();
-        ps.setText((Integer) map.get("password"));
+        ps.setText((String) map.get("password"));
     }
 }
