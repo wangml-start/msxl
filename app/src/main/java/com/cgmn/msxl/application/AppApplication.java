@@ -19,13 +19,15 @@ public class AppApplication extends Application {
 
     private static AppApplication mInstance;
 
+    private String token;
+
     @Override
     public void onCreate() {
         super.onCreate();
         mInstance = this;
 
-        GlobalExceptionHandler mException = GlobalExceptionHandler.getInstance();
-        mException.init(getApplicationContext());  //注册
+//        GlobalExceptionHandler mException = GlobalExceptionHandler.getInstance();
+//        mException.init(getApplicationContext());  //注册
     }
 
     public static synchronized AppApplication getInstance() {
@@ -64,5 +66,13 @@ public class AppApplication extends Application {
         if (mRequestQueue != null) {
             mRequestQueue.cancelAll(tag);
         }
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

@@ -49,15 +49,6 @@ public class CommonUtil {
         return builder.build().getQuery();
     }
 
-    public static void jsonStrToMap(String jsonStr, Map<String, Object> resMap){
-        try {
-            JSONObject jsonObject = new JSONObject(jsonStr);
-            jsonToMap(jsonObject, resMap);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
     public static void jsonToMap(JSONObject jsonObject, Map<String, Object> resMap){
         Iterator it = jsonObject.keys();
         while (it.hasNext()) {

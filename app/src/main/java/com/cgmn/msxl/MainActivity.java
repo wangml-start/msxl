@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import com.cgmn.msxl.exception.GlobalExceptionHandler;
+import com.cgmn.msxl.ac.loginActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     private Button btn;

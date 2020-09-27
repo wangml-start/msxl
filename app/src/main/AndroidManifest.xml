@@ -23,8 +23,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".loginActivity" />
-        <activity android:name=".ForgetPasswordActivity" />
+        <activity android:name=".ac.loginActivity" />
+        <activity android:name=".ac.ForgetPasswordActivity" />
+        <activity android:name=".ac.AppMainActivity" />
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
 

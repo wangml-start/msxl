@@ -1,7 +1,8 @@
-package com.cgmn.msxl;
+package com.cgmn.msxl.ac;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,16 +14,22 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.cgmn.msxl.R;
+import com.cgmn.msxl.comp.LoginBaseActivity;
 import com.cgmn.msxl.comp.showPassworCheckBox;
 import com.cgmn.msxl.application.AppApplication;
+import com.cgmn.msxl.db.DBHelper;
+import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.service.PropertyService;
 import com.cgmn.msxl.utils.CommonUtil;
 import com.cgmn.msxl.utils.MyPatternUtil;
+import com.google.gson.Gson;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class loginActivity extends CustomerBaseActivity {
+public class loginActivity extends LoginBaseActivity {
     private EditText tx_pwd;
     private EditText tx_email;
 
@@ -117,7 +124,6 @@ public class loginActivity extends CustomerBaseActivity {
         final ProgressDialog pDialog = new ProgressDialog(this);
         pDialog.setMessage("登录中...");
         pDialog.show();
-
         String url = CommonUtil.buildGetUrl(
                 PropertyService.getInstance().getKey("serverUrl"),
                 "/user/login", values);
@@ -126,13 +132,13 @@ public class loginActivity extends CustomerBaseActivity {
                     @Override
                     public void onResponse(String s) {
                         pDialog.hide();
-                        Map<String, Object> map = new HashMap<>();
-                        CommonUtil.jsonStrToMap(s, map);
-                        Integer status = (Integer) map.get("status");
+                        Gson gson = new Gson();
+                        BaseData data = gson.fromJson(s, BaseData.class);
+                        Integer status = data.getStatus();
                         if(status == null || status == -1){
-                            Toast.makeText(mContext, (String) map.get("error"), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, data.getError(), Toast.LENGTH_SHORT).show();
                         }else{
-                            Toast.makeText(mContext, s, Toast.LENGTH_SHORT).show();
+                            afterLoginSuccess(data.getUser(), mContext);
                         }
                     }
                 },

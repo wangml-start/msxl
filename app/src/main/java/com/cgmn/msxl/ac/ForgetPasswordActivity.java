@@ -1,6 +1,7 @@
-package com.cgmn.msxl;
+package com.cgmn.msxl.ac;
 
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,16 +14,21 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.AppApplication;
+import com.cgmn.msxl.comp.LoginBaseActivity;
 import com.cgmn.msxl.comp.showPassworCheckBox;
+import com.cgmn.msxl.db.DBHelper;
+import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.service.PropertyService;
 import com.cgmn.msxl.utils.CommonUtil;
 import com.cgmn.msxl.utils.MyPatternUtil;
+import com.google.gson.Gson;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class ForgetPasswordActivity extends CustomerBaseActivity {
+public class ForgetPasswordActivity extends LoginBaseActivity {
     private EditText tx_new_pwd;
     private EditText tx_email;
     private EditText tx_valid_code;
@@ -149,11 +155,11 @@ public class ForgetPasswordActivity extends CustomerBaseActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String s) {
-                        Map<String, Object> map = new HashMap<>();
-                        CommonUtil.jsonStrToMap(s, map);
-                        Integer status = (Integer) map.get("status");
+                        Gson gson = new Gson();
+                        BaseData data = gson.fromJson(s, BaseData.class);
+                        Integer status = data.getStatus();
                         if (status == null || status == -1) {
-                            Toast.makeText(mContext, (String) map.get("error"), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, data.getError(), Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(mContext, s, Toast.LENGTH_SHORT).show();
                         }
@@ -181,13 +187,13 @@ public class ForgetPasswordActivity extends CustomerBaseActivity {
                     @Override
                     public void onResponse(String s) {
                         pDialog.hide();
-                        Map<String, Object> map = new HashMap<>();
-                        CommonUtil.jsonStrToMap(s, map);
-                        Integer status = (Integer) map.get("status");
+                        Gson gson = new Gson();
+                        BaseData data = gson.fromJson(s, BaseData.class);
+                        Integer status = data.getStatus();
                         if(status == null || status == -1){
-                            Toast.makeText(mContext, (String) map.get("error"), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, data.getError(), Toast.LENGTH_SHORT).show();
                         }else{
-                            Toast.makeText(mContext, s, Toast.LENGTH_SHORT).show();
+                            afterLoginSuccess(data.getUser(), mContext);
                         }
                     }
                 },
