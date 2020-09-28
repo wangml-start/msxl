@@ -21,6 +21,7 @@ import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.utils.CommonUtil;
 import com.cgmn.msxl.utils.FixStringBuffer;
 import com.cgmn.msxl.utils.MessageUtil;
+import com.cgmn.msxl.utils.NetworkUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,6 +38,10 @@ public class MainActivity extends LoginBaseActivity {
         setContentView(R.layout.activity_main);
         mContext = this;
         btn = findViewById(R.id.register_btn);
+
+        if(!NetworkUtil.isNetworkConnected(mContext)){
+            Toast.makeText(mContext, getSourceString(R.string.no_network), Toast.LENGTH_SHORT).show();
+        }
         btn.setOnClickListener(this);
         autoLogin();
     }
@@ -100,16 +105,5 @@ public class MainActivity extends LoginBaseActivity {
     public void onClick(View v) {
         startActivity(new Intent(this, loginActivity.class));
         this.finish();
-    }
-
-    public boolean isNetworkConnected(Context context) {
-        if (context != null) {
-            ConnectivityManager nanager = (ConnectivityManager)mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo mNetworkInfo = nanager.getActiveNetworkInfo();
-            if (mNetworkInfo != null) {
-                return mNetworkInfo.isAvailable();
-            }
-        }
-        return false;
     }
 }

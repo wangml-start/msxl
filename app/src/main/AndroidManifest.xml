@@ -3,6 +3,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         package="com.cgmn.msxl">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application
             android:name=".application.AppApplication"
             android:allowBackup="true"
