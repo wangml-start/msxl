@@ -45,6 +45,9 @@ public class CommonUtil {
         Uri uri = Uri.parse(url);
         Uri.Builder builder = uri.buildUpon();
         for(Map.Entry<String, String> entry:params.entrySet()){
+            if(entry.getValue() == null){
+                continue;
+            }
             builder.appendQueryParameter(entry.getKey(), URLEncoder.encode(entry.getValue()));
         }
         return builder.build().getQuery();

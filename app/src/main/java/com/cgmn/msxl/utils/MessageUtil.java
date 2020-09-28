@@ -6,7 +6,7 @@ public class MessageUtil {
     public static int REQUEST_SUCCESS = 0x002;
 
     //登录相关
-    public static int SAVE_USER_INFO_SUCCESS = 0x003;
+    public static int LOAD_USER_INFOR = 0x003;
 
 
 

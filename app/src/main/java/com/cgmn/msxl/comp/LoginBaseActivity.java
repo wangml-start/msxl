@@ -10,10 +10,21 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.cgmn.msxl.application.AppApplication;
 import com.cgmn.msxl.data.User;
 import com.cgmn.msxl.db.AppSqlHelper;
+import com.cgmn.msxl.server_interface.BaseData;
+import com.cgmn.msxl.service.PropertyService;
+import com.cgmn.msxl.utils.CommonUtil;
 import com.cgmn.msxl.utils.MessageUtil;
+import com.google.gson.Gson;
+
+import java.util.Map;
 
 
 public class LoginBaseActivity extends AppCompatActivity
@@ -46,6 +57,47 @@ public class LoginBaseActivity extends AppCompatActivity
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
 
+    }
+
+    public void onLoginRequest(Map<String, String> values,
+                               final Context mContext, final Handler mHandler) {
+        String url = CommonUtil.buildGetUrl(
+                PropertyService.getInstance().getKey("serverUrl"),
+                "/user/login", values);
+        StringRequest request = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String s) {
+                        Message message = Message.obtain();
+                        message.what = MessageUtil.REQUEST_SUCCESS;
+                        try{
+                            Gson gson = new Gson();
+                            BaseData data = gson.fromJson(s, BaseData.class);
+                            message.obj = data;
+                            Integer status = data.getStatus();
+                            if(status == null || status == -1){
+                                throw new Exception(data.getError());
+                            }else{
+                                saveUserToDb(data.getUser(), mContext);
+                            }
+                        }catch (Exception e){
+                            message.what = MessageUtil.EXCUTE_EXCEPTION;
+                            message.obj = e;
+                        }
+                        mHandler.sendMessage(message);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        Message message = Message.obtain();
+                        message.what = MessageUtil.EXCUTE_EXCEPTION;
+                        message.obj = volleyError;
+                        mHandler.sendMessage(message);
+                    }
+                });
+        request.setRetryPolicy(new DefaultRetryPolicy(10 * 1000, 0, 1.0f));
+        AppApplication.getInstance().addToRequestQueue(request, "login");
     }
 
     public void saveUserToDb(User user, Context context) {

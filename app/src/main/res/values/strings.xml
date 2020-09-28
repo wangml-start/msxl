@@ -18,5 +18,6 @@
     <string name="send_email">邮箱验证</string>
     <string name="show_pws">显示密码</string>
     <string name="auto_register">用户不存在时自动注册</string>
+    <string name="logining">正在登陆....</string>
 
 </resources>

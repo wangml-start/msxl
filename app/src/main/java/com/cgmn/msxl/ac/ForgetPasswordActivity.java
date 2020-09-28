@@ -46,7 +46,6 @@ public class ForgetPasswordActivity extends LoginBaseActivity {
     private MyTimeCount time;
     //消息处理
     private Handler mHandler;
-    ProgressDialog pDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,12 +64,11 @@ public class ForgetPasswordActivity extends LoginBaseActivity {
             p.put("pws", sercurety);
             p.put("FORGET_LOGIN", "1");
             p.put("code", tx_valid_code.getText().toString());
-            pDialog.setMessage("登录中...");
-            pDialog.show();
+            Toast.makeText(mContext, getSourceString(R.string.logining), Toast.LENGTH_SHORT).show();
             GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
                 @Override
                 public void run() {
-                    onLogin(p);
+                    onLoginRequest(p, mContext, mHandler);
                     Log.e(TAG,"NAME="+Thread.currentThread().getName());
                 }
             });
@@ -142,7 +140,6 @@ public class ForgetPasswordActivity extends LoginBaseActivity {
 
     private void bindView() {
         mContext = this;
-        pDialog = new ProgressDialog(mContext);
         tx_new_pwd = findViewById(R.id.tx_new_user_wd);
         tx_email = findViewById(R.id.tx_email);
         tx_valid_code = findViewById(R.id.tx_valid_code);
@@ -175,7 +172,6 @@ public class ForgetPasswordActivity extends LoginBaseActivity {
             @Override
             public boolean handleMessage(Message msg) {
                 if(msg.what == MessageUtil.REQUEST_SUCCESS){
-                    pDialog.hide();
                     BaseData data = (BaseData) msg.obj;
                     User user = data.getUser();
                     //跳转
@@ -186,7 +182,6 @@ public class ForgetPasswordActivity extends LoginBaseActivity {
                     startActivity(intent);
                     finish();
                 }else if(msg.what == MessageUtil.EXCUTE_EXCEPTION){
-                    pDialog.hide();
                     Exception exception = (Exception) msg.obj;
                     StringBuffer mes = new StringBuffer("服务器异常！");
                     mes.append("\n");
@@ -231,44 +226,9 @@ public class ForgetPasswordActivity extends LoginBaseActivity {
         AppApplication.getInstance().addToRequestQueue(request, "Request Send Valid Code:");
     }
 
-    private void onLogin(Map<String, String> params){
-        String url = CommonUtil.buildGetUrl(
-                PropertyService.getInstance().getKey("serverUrl"),
-                "/user/login", params);
-        StringRequest request = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String s) {
-                        Message message = Message.obtain();
-                        message.what = MessageUtil.REQUEST_SUCCESS;
-                        try{
-                            Gson gson = new Gson();
-                            BaseData data = gson.fromJson(s, BaseData.class);
-                            message.obj = data;
-                            Integer status = data.getStatus();
-                            if(status == null || status == -1){
-                                throw new Exception(data.getError());
-                            }else{
-                                saveUserToDb(data.getUser(), mContext);
-                            }
-                        }catch (Exception e){
-                            message.what = MessageUtil.EXCUTE_EXCEPTION;
-                            message.obj = e;
-                        }
-                        mHandler.sendMessage(message);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError volleyError) {
-                        Message message = Message.obtain();
-                        message.what = MessageUtil.EXCUTE_EXCEPTION;
-                        message.obj = volleyError;
-                        mHandler.sendMessage(message);
-                    }
-                });
-
-        AppApplication.getInstance().addToRequestQueue(request, "login");
+    @Override
+    public void finish() {
+        super.finish();
     }
 
 
