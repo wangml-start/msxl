@@ -1,11 +1,10 @@
 package com.cgmn.msxl.ac;
 
 import android.app.ProgressDialog;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
-import android.os.CountDownTimer;
+import android.os.*;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,11 +15,15 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.AppApplication;
+import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.LoginBaseActivity;
 import com.cgmn.msxl.comp.showPassworCheckBox;
+import com.cgmn.msxl.data.User;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.service.PropertyService;
+import com.cgmn.msxl.utils.AESUtil;
 import com.cgmn.msxl.utils.CommonUtil;
+import com.cgmn.msxl.utils.MessageUtil;
 import com.cgmn.msxl.utils.MyPatternUtil;
 import com.google.gson.Gson;
 
@@ -28,6 +31,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ForgetPasswordActivity extends LoginBaseActivity {
+    private static final String TAG = ForgetPasswordActivity.class.getSimpleName();
     private EditText tx_new_pwd;
     private EditText tx_email;
     private EditText tx_valid_code;
@@ -40,29 +44,48 @@ public class ForgetPasswordActivity extends LoginBaseActivity {
     private Context mContext;
 
     private MyTimeCount time;
+    //消息处理
+    private Handler mHandler;
+    ProgressDialog pDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.forget_pws_layout);
+        initMessageHandle();
         bindView();
     }
 
     @Override
     public void onClick(View v) {
-        Map<String, String> p = new HashMap<>();
+        final Map<String, String> p = new HashMap<>();
         if (v.getId() == R.id.bt_login) {
             p.put("email", tx_email.getText().toString());
-            p.put("pws", tx_new_pwd.getText().toString());
+            String sercurety = AESUtil.encrypt(tx_new_pwd.getText().toString(), MessageUtil.SERCURETY);
+            p.put("pws", sercurety);
             p.put("FORGET_LOGIN", "1");
             p.put("code", tx_valid_code.getText().toString());
-            onLogin(p);
+            pDialog.setMessage("登录中...");
+            pDialog.show();
+            GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
+                @Override
+                public void run() {
+                    onLogin(p);
+                    Log.e(TAG,"NAME="+Thread.currentThread().getName());
+                }
+            });
         } else if (v.getId() == R.id.bt_send_mail) {
             String em = tx_email.getText().toString();
             if (MyPatternUtil.validEmail(em)) {
                 time.start();
                 p.put("email", tx_email.getText().toString());
-                sendValidCodeMessage(p);
+                GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        sendValidCodeMessage(p);
+                        Log.e(TAG,"NAME="+Thread.currentThread().getName());
+                    }
+                });
             } else {
                 StringBuffer tipes = new StringBuffer();
                 tipes.append(getSourceString(R.string.sign_email));
@@ -119,6 +142,7 @@ public class ForgetPasswordActivity extends LoginBaseActivity {
 
     private void bindView() {
         mContext = this;
+        pDialog = new ProgressDialog(mContext);
         tx_new_pwd = findViewById(R.id.tx_new_user_wd);
         tx_email = findViewById(R.id.tx_email);
         tx_valid_code = findViewById(R.id.tx_valid_code);
@@ -146,6 +170,35 @@ public class ForgetPasswordActivity extends LoginBaseActivity {
         tx_email.setText(email);
     }
 
+    private void initMessageHandle(){
+        mHandler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message msg) {
+                if(msg.what == MessageUtil.REQUEST_SUCCESS){
+                    pDialog.hide();
+                    BaseData data = (BaseData) msg.obj;
+                    User user = data.getUser();
+                    //跳转
+                    Intent intent = new Intent(mContext, AppMainActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("userName", user.getUserName());
+                    intent.putExtra("userDate", bundle);
+                    startActivity(intent);
+                    finish();
+                }else if(msg.what == MessageUtil.EXCUTE_EXCEPTION){
+                    pDialog.hide();
+                    Exception exception = (Exception) msg.obj;
+                    StringBuffer mes = new StringBuffer("服务器异常！");
+                    mes.append("\n");
+                    mes.append(exception.getMessage());
+                    //TODO: 异常处理
+                    Toast.makeText(mContext, mes.toString(), Toast.LENGTH_SHORT).show();
+                }
+                return false;
+            }
+        });
+    }
+
     private void sendValidCodeMessage(Map<String, String> p) {
         String url = CommonUtil.buildGetUrl(
                 PropertyService.getInstance().getKey("serverUrl"),
@@ -158,16 +211,20 @@ public class ForgetPasswordActivity extends LoginBaseActivity {
                         BaseData data = gson.fromJson(s, BaseData.class);
                         Integer status = data.getStatus();
                         if (status == null || status == -1) {
-                            Toast.makeText(mContext, data.getError(), Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(mContext, s, Toast.LENGTH_SHORT).show();
+                            Message message = Message.obtain();
+                            message.what = MessageUtil.EXCUTE_EXCEPTION;
+                            message.obj = new Exception(data.getError());
+                            mHandler.sendMessage(message);
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        Toast.makeText(mContext, "服务器异常！", Toast.LENGTH_SHORT).show();
+                        Message message = Message.obtain();
+                        message.what = MessageUtil.EXCUTE_EXCEPTION;
+                        message.obj = volleyError;
+                        mHandler.sendMessage(message);
                     }
                 });
 
@@ -175,9 +232,6 @@ public class ForgetPasswordActivity extends LoginBaseActivity {
     }
 
     private void onLogin(Map<String, String> params){
-        final ProgressDialog pDialog = new ProgressDialog(this);
-        pDialog.setMessage("登录中...");
-        pDialog.show();
         String url = CommonUtil.buildGetUrl(
                 PropertyService.getInstance().getKey("serverUrl"),
                 "/user/login", params);
@@ -185,22 +239,32 @@ public class ForgetPasswordActivity extends LoginBaseActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String s) {
-                        pDialog.hide();
-                        Gson gson = new Gson();
-                        BaseData data = gson.fromJson(s, BaseData.class);
-                        Integer status = data.getStatus();
-                        if(status == null || status == -1){
-                            Toast.makeText(mContext, data.getError(), Toast.LENGTH_SHORT).show();
-                        }else{
-                            afterLoginSuccess(data.getUser(), mContext);
+                        Message message = Message.obtain();
+                        message.what = MessageUtil.REQUEST_SUCCESS;
+                        try{
+                            Gson gson = new Gson();
+                            BaseData data = gson.fromJson(s, BaseData.class);
+                            message.obj = data;
+                            Integer status = data.getStatus();
+                            if(status == null || status == -1){
+                                throw new Exception(data.getError());
+                            }else{
+                                saveUserToDb(data.getUser(), mContext);
+                            }
+                        }catch (Exception e){
+                            message.what = MessageUtil.EXCUTE_EXCEPTION;
+                            message.obj = e;
                         }
+                        mHandler.sendMessage(message);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        pDialog.hide();
-                        Toast.makeText(mContext, "登陆失败，服务器异常！", Toast.LENGTH_SHORT).show();
+                        Message message = Message.obtain();
+                        message.what = MessageUtil.EXCUTE_EXCEPTION;
+                        message.obj = volleyError;
+                        mHandler.sendMessage(message);
                     }
                 });
 

@@ -4,20 +4,22 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
-import com.cgmn.msxl.ac.AppMainActivity;
 import com.cgmn.msxl.application.AppApplication;
 import com.cgmn.msxl.data.User;
 import com.cgmn.msxl.db.AppSqlHelper;
+import com.cgmn.msxl.utils.MessageUtil;
 
 
 public class LoginBaseActivity extends AppCompatActivity
         implements TextWatcher, View.OnClickListener, View.OnFocusChangeListener {
 
-    protected String getSourceString(int sourceId){
+    protected String getSourceString(int sourceId) {
         return getResources().getString(sourceId);
     }
 
@@ -46,7 +48,7 @@ public class LoginBaseActivity extends AppCompatActivity
 
     }
 
-    public void afterLoginSuccess(User user, Context context){
+    public void saveUserToDb(User user, Context context) {
         //存数据
         AppSqlHelper sqlHeper = new AppSqlHelper(context);
         String token = user.getToken();
@@ -58,13 +60,5 @@ public class LoginBaseActivity extends AppCompatActivity
         values.put("last_active", 1);
         sqlHeper.upsert("users", values, "phone");
         AppApplication.getInstance().setToken(token);
-
-        //跳转
-        Intent intent = new Intent(this, AppMainActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString("userName", user.getUserName());
-        intent.putExtra("userDate", bundle);
-        startActivity(intent);
-        finish();
     }
 }

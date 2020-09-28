@@ -5,6 +5,7 @@ import android.util.Base64;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -44,7 +45,7 @@ public class CommonUtil {
         Uri uri = Uri.parse(url);
         Uri.Builder builder = uri.buildUpon();
         for(Map.Entry<String, String> entry:params.entrySet()){
-            builder.appendQueryParameter(entry.getKey(), (String) entry.getValue());
+            builder.appendQueryParameter(entry.getKey(), URLEncoder.encode(entry.getValue()));
         }
         return builder.build().getQuery();
     }
@@ -71,31 +72,4 @@ public class CommonUtil {
             }
         }
     }
-
-    public static String encodePassword(String pass, Integer times){
-        int index = 3;
-        if(times != null){
-            index = times;
-        }
-        String trans = pass;
-        while(index-- > 0){
-            trans = Base64.encodeToString(trans.getBytes(), Base64.DEFAULT);
-        }
-
-        return trans;
-    }
-
-    public static String decodePassword(String pass, Integer times){
-        int index = 3;
-        if(times != null){
-            index = times;
-        }
-        String trans = pass;
-        while(index-- > 0){
-            trans = new String(Base64.decode(trans.getBytes(), Base64.DEFAULT));
-        }
-
-        return trans;
-    }
-
 }

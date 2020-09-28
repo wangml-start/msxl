@@ -56,6 +56,7 @@ public class AppSqlHelper extends SQLiteOpenHelper {
         } catch (Exception e) {
             throw e;
         } finally {
+
             db.close();
         }
     }
