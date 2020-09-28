@@ -58,7 +58,7 @@ public class loginActivity extends LoginBaseActivity {
             String sercurety = AESUtil.encrypt(pws, MessageUtil.SERCURETY);
             p.put("pws", sercurety);
             p.put("GENERAL_LOGIN", "1");
-            CustmerToast.makeText(mContext, R.string.logining, CustmerToast.LENGTH_LONG).show();
+            CustmerToast.makeText(mContext, R.string.logining).show();
             GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
                 @Override
                 public void run() {

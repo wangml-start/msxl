@@ -60,7 +60,7 @@ public class ForgetPasswordActivity extends LoginBaseActivity {
             p.put("pws", sercurety);
             p.put("FORGET_LOGIN", "1");
             p.put("code", tx_valid_code.getText().toString());
-            CustmerToast.makeText(mContext, R.string.logining, CustmerToast.LENGTH_LONG).show();
+            CustmerToast.makeText(mContext, R.string.logining).show();
             GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
                 @Override
                 public void run() {
