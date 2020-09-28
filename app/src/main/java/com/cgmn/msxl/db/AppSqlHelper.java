@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import com.cgmn.msxl.utils.CommonUtil;
 
 import java.util.*;
 
@@ -145,6 +146,9 @@ public class AppSqlHelper extends SQLiteOpenHelper {
         String[] params = new String[]{};
         String[] fields = new String[]{"user_name", "phone", "password", "token"};
         List<Map<String, Object>> list = query(sql, params, fields);
+        if(CommonUtil.isEmpty(list) || list.size() == 0){
+            return null;
+        }
         return list.get(0);
     }
 }

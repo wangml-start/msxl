@@ -14,6 +14,7 @@ import android.os.Bundle;
 import com.cgmn.msxl.ac.AppMainActivity;
 import com.cgmn.msxl.ac.loginActivity;
 import com.cgmn.msxl.application.GlobalTreadPools;
+import com.cgmn.msxl.comp.CustmerToast;
 import com.cgmn.msxl.comp.LoginBaseActivity;
 import com.cgmn.msxl.data.User;
 import com.cgmn.msxl.db.AppSqlHelper;
@@ -38,12 +39,13 @@ public class MainActivity extends LoginBaseActivity {
         setContentView(R.layout.activity_main);
         mContext = this;
         btn = findViewById(R.id.register_btn);
+        btn.setOnClickListener(this);
 
         if(!NetworkUtil.isNetworkConnected(mContext)){
-            Toast.makeText(mContext, getSourceString(R.string.no_network), Toast.LENGTH_SHORT).show();
+            CustmerToast.makeText(mContext, R.string.no_network);
+        }else{
+            autoLogin();
         }
-        btn.setOnClickListener(this);
-        autoLogin();
     }
 
     private void autoLogin() {
@@ -57,7 +59,7 @@ public class MainActivity extends LoginBaseActivity {
                         p.put("email", (String) map.get("phone"));
                         p.put("pws", (String) map.get("password"));
                         p.put("GENERAL_LOGIN", "1");
-                        Toast.makeText(mContext, getSourceString(R.string.logining), Toast.LENGTH_SHORT).show();
+                        CustmerToast.makeText(mContext, R.string.logining, CustmerToast.LENGTH_LONG).show();
                         GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
                             @Override
                             public void run() {
@@ -81,7 +83,7 @@ public class MainActivity extends LoginBaseActivity {
                     FixStringBuffer mes = new FixStringBuffer();
                     mes.append("登陆失败: %s", exception.getMessage());
                     //TODO: 异常处理
-                    Toast.makeText(mContext, mes.toString(), Toast.LENGTH_SHORT).show();
+                    CustmerToast.makeText(mContext, mes.toString()).show();
                 }
                 return false;
             }

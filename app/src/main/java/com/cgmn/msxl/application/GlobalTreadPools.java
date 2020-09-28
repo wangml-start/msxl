@@ -3,6 +3,8 @@ package com.cgmn.msxl.application;
 import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
+import com.cgmn.msxl.R;
+import com.cgmn.msxl.comp.CustmerToast;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -50,7 +52,7 @@ public class GlobalTreadPools {
         @Override
         public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
             //可在这里做一些提示用户的操作
-            Toast.makeText(mContext.get(),"当前执行的任务过多，请稍后再试",Toast.LENGTH_SHORT).show();
+            CustmerToast.makeText(mContext.get(), R.string.so_many_task).show();
         }
     }
 

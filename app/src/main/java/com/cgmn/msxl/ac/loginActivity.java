@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
+import com.cgmn.msxl.comp.CustmerToast;
 import com.cgmn.msxl.comp.LoginBaseActivity;
 import com.cgmn.msxl.comp.showPassworCheckBox;
 import com.cgmn.msxl.data.User;
@@ -57,7 +58,7 @@ public class loginActivity extends LoginBaseActivity {
             String sercurety = AESUtil.encrypt(pws, MessageUtil.SERCURETY);
             p.put("pws", sercurety);
             p.put("GENERAL_LOGIN", "1");
-            Toast.makeText(mContext, getSourceString(R.string.logining), Toast.LENGTH_SHORT).show();
+            CustmerToast.makeText(mContext, R.string.logining, CustmerToast.LENGTH_LONG).show();
             GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
                 @Override
                 public void run() {
@@ -89,7 +90,7 @@ public class loginActivity extends LoginBaseActivity {
             StringBuffer tipes = new StringBuffer();
             tipes.append(getSourceString(R.string.sign_email));
             tipes.append(getSourceString(R.string.valid_fails));
-            Toast.makeText(mContext, tipes.toString(), Toast.LENGTH_SHORT).show();
+            CustmerToast.makeText(mContext, tipes.toString()).show();
         }
         validForm();
     }
@@ -158,7 +159,7 @@ public class loginActivity extends LoginBaseActivity {
                     FixStringBuffer mes = new FixStringBuffer();
                     mes.append("登陆失败: %s", exception.getMessage());
                     //TODO: 异常处理
-                    Toast.makeText(mContext, mes.toString(), Toast.LENGTH_SHORT).show();
+                    CustmerToast.makeText(mContext, mes.toString()).show();
                 }else if(msg.what == MessageUtil.LOAD_USER_INFOR){
                     Map<String, Object> map = (Map<String, Object>) msg.obj;
                     if(!CommonUtil.isEmpty(map)){

@@ -16,6 +16,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.AppApplication;
 import com.cgmn.msxl.application.GlobalTreadPools;
+import com.cgmn.msxl.comp.CustmerToast;
 import com.cgmn.msxl.comp.LoginBaseActivity;
 import com.cgmn.msxl.comp.showPassworCheckBox;
 import com.cgmn.msxl.data.User;
@@ -64,7 +65,7 @@ public class ForgetPasswordActivity extends LoginBaseActivity {
             p.put("pws", sercurety);
             p.put("FORGET_LOGIN", "1");
             p.put("code", tx_valid_code.getText().toString());
-            Toast.makeText(mContext, getSourceString(R.string.logining), Toast.LENGTH_SHORT).show();
+            CustmerToast.makeText(mContext, R.string.logining, CustmerToast.LENGTH_LONG).show();
             GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
                 @Override
                 public void run() {
@@ -89,7 +90,7 @@ public class ForgetPasswordActivity extends LoginBaseActivity {
                 tipes.append(getSourceString(R.string.sign_email));
                 tipes.append(getSourceString(R.string.valid_fails));
                 tipes.append("\n");
-                Toast.makeText(mContext, tipes.toString(), Toast.LENGTH_SHORT).show();
+                CustmerToast.makeText(mContext, tipes.toString()).show();
             }
         } else if (v.getId() == R.id.backup_btn) {
             finish();
@@ -112,7 +113,7 @@ public class ForgetPasswordActivity extends LoginBaseActivity {
                 StringBuffer tipes = new StringBuffer();
                 tipes.append(getSourceString(R.string.sign_email));
                 tipes.append(getSourceString(R.string.valid_fails));
-                Toast.makeText(mContext, tipes.toString(), Toast.LENGTH_SHORT).show();
+                CustmerToast.makeText(mContext, tipes.toString()).show();
             }
         }else if(v.getId() == R.id.tx_new_user_wd){
             String ws = tx_new_pwd.getText().toString();
@@ -120,7 +121,7 @@ public class ForgetPasswordActivity extends LoginBaseActivity {
                 StringBuffer tipes = new StringBuffer();
                 tipes.append(getSourceString(R.string.new_user_wd));
                 tipes.append(getSourceString(R.string.valid_fails));
-                Toast.makeText(mContext, tipes.toString(), Toast.LENGTH_SHORT).show();
+                CustmerToast.makeText(mContext, tipes.toString()).show();
             }
         }
         validForm();
@@ -187,7 +188,7 @@ public class ForgetPasswordActivity extends LoginBaseActivity {
                     mes.append("\n");
                     mes.append(exception.getMessage());
                     //TODO: 异常处理
-                    Toast.makeText(mContext, mes.toString(), Toast.LENGTH_SHORT).show();
+                    CustmerToast.makeText(mContext, mes.toString()).show();
                 }
                 return false;
             }
