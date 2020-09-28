@@ -19,6 +19,7 @@ import com.cgmn.msxl.application.AppApplication;
 import com.cgmn.msxl.data.User;
 import com.cgmn.msxl.db.AppSqlHelper;
 import com.cgmn.msxl.server_interface.BaseData;
+import com.cgmn.msxl.service.OkHttpClientManager;
 import com.cgmn.msxl.service.PropertyService;
 import com.cgmn.msxl.utils.CommonUtil;
 import com.cgmn.msxl.utils.MessageUtil;
@@ -64,40 +65,34 @@ public class LoginBaseActivity extends AppCompatActivity
         String url = CommonUtil.buildGetUrl(
                 PropertyService.getInstance().getKey("serverUrl"),
                 "/user/login", values);
-        StringRequest request = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
+        OkHttpClientManager.getAsyn(url,
+                new OkHttpClientManager.ResultCallback<BaseData>() {
                     @Override
-                    public void onResponse(String s) {
+                    public void onError(com.squareup.okhttp.Request request, Exception e) {
+                        Message message = Message.obtain();
+                        message.what = MessageUtil.EXCUTE_EXCEPTION;
+                        message.obj = e;
+                        mHandler.sendMessage(message);
+                    }
+                    @Override
+                    public void onResponse(BaseData data) {
                         Message message = Message.obtain();
                         message.what = MessageUtil.REQUEST_SUCCESS;
-                        try{
-                            Gson gson = new Gson();
-                            BaseData data = gson.fromJson(s, BaseData.class);
+                        try {
                             message.obj = data;
                             Integer status = data.getStatus();
-                            if(status == null || status == -1){
+                            if (status == null || status == -1) {
                                 throw new Exception(data.getError());
-                            }else{
+                            } else {
                                 saveUserToDb(data.getUser(), mContext);
                             }
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             message.what = MessageUtil.EXCUTE_EXCEPTION;
                             message.obj = e;
                         }
                         mHandler.sendMessage(message);
                     }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError volleyError) {
-                        Message message = Message.obtain();
-                        message.what = MessageUtil.EXCUTE_EXCEPTION;
-                        message.obj = volleyError;
-                        mHandler.sendMessage(message);
-                    }
                 });
-        request.setRetryPolicy(new DefaultRetryPolicy(10 * 1000, 0, 1.0f));
-        AppApplication.getInstance().addToRequestQueue(request, "login");
     }
 
     public void saveUserToDb(User user, Context context) {

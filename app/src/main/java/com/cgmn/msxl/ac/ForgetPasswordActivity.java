@@ -21,6 +21,7 @@ import com.cgmn.msxl.comp.LoginBaseActivity;
 import com.cgmn.msxl.comp.showPassworCheckBox;
 import com.cgmn.msxl.data.User;
 import com.cgmn.msxl.server_interface.BaseData;
+import com.cgmn.msxl.service.OkHttpClientManager;
 import com.cgmn.msxl.service.PropertyService;
 import com.cgmn.msxl.utils.AESUtil;
 import com.cgmn.msxl.utils.CommonUtil;
@@ -70,7 +71,7 @@ public class ForgetPasswordActivity extends LoginBaseActivity {
                 @Override
                 public void run() {
                     onLoginRequest(p, mContext, mHandler);
-                    Log.e(TAG,"NAME="+Thread.currentThread().getName());
+                    Log.e(TAG, "NAME=" + Thread.currentThread().getName());
                 }
             });
         } else if (v.getId() == R.id.bt_send_mail) {
@@ -82,7 +83,7 @@ public class ForgetPasswordActivity extends LoginBaseActivity {
                     @Override
                     public void run() {
                         sendValidCodeMessage(p);
-                        Log.e(TAG,"NAME="+Thread.currentThread().getName());
+                        Log.e(TAG, "NAME=" + Thread.currentThread().getName());
                     }
                 });
             } else {
@@ -104,10 +105,10 @@ public class ForgetPasswordActivity extends LoginBaseActivity {
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
-        if(hasFocus){
+        if (hasFocus) {
             return;
         }
-        if(v.getId() == R.id.tx_email){
+        if (v.getId() == R.id.tx_email) {
             String email = tx_email.getText().toString();
             if (CommonUtil.isEmpty(email) || !MyPatternUtil.validEmail(email)) {
                 StringBuffer tipes = new StringBuffer();
@@ -115,7 +116,7 @@ public class ForgetPasswordActivity extends LoginBaseActivity {
                 tipes.append(getSourceString(R.string.valid_fails));
                 CustmerToast.makeText(mContext, tipes.toString()).show();
             }
-        }else if(v.getId() == R.id.tx_new_user_wd){
+        } else if (v.getId() == R.id.tx_new_user_wd) {
             String ws = tx_new_pwd.getText().toString();
             if (CommonUtil.isEmpty(ws) || ws.length() < 8) {
                 StringBuffer tipes = new StringBuffer();
@@ -168,11 +169,11 @@ public class ForgetPasswordActivity extends LoginBaseActivity {
         tx_email.setText(email);
     }
 
-    private void initMessageHandle(){
+    private void initMessageHandle() {
         mHandler = new Handler(new Handler.Callback() {
             @Override
             public boolean handleMessage(Message msg) {
-                if(msg.what == MessageUtil.REQUEST_SUCCESS){
+                if (msg.what == MessageUtil.REQUEST_SUCCESS) {
                     BaseData data = (BaseData) msg.obj;
                     User user = data.getUser();
                     //跳转
@@ -182,7 +183,7 @@ public class ForgetPasswordActivity extends LoginBaseActivity {
                     intent.putExtra("userDate", bundle);
                     startActivity(intent);
                     finish();
-                }else if(msg.what == MessageUtil.EXCUTE_EXCEPTION){
+                } else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
                     Exception exception = (Exception) msg.obj;
                     StringBuffer mes = new StringBuffer("服务器异常！");
                     mes.append("\n");
@@ -199,12 +200,18 @@ public class ForgetPasswordActivity extends LoginBaseActivity {
         String url = CommonUtil.buildGetUrl(
                 PropertyService.getInstance().getKey("serverUrl"),
                 "/user/valid_code", p);
-        StringRequest request = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
+        OkHttpClientManager.getAsyn(url,
+                new OkHttpClientManager.ResultCallback<BaseData>() {
                     @Override
-                    public void onResponse(String s) {
-                        Gson gson = new Gson();
-                        BaseData data = gson.fromJson(s, BaseData.class);
+                    public void onError(com.squareup.okhttp.Request request, Exception e) {
+                        Message message = Message.obtain();
+                        message.what = MessageUtil.EXCUTE_EXCEPTION;
+                        message.obj = e;
+                        mHandler.sendMessage(message);
+                    }
+
+                    @Override
+                    public void onResponse(BaseData data) {
                         Integer status = data.getStatus();
                         if (status == null || status == -1) {
                             Message message = Message.obtain();
@@ -213,18 +220,7 @@ public class ForgetPasswordActivity extends LoginBaseActivity {
                             mHandler.sendMessage(message);
                         }
                     }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError volleyError) {
-                        Message message = Message.obtain();
-                        message.what = MessageUtil.EXCUTE_EXCEPTION;
-                        message.obj = volleyError;
-                        mHandler.sendMessage(message);
-                    }
                 });
-
-        AppApplication.getInstance().addToRequestQueue(request, "Request Send Valid Code:");
     }
 
     @Override
