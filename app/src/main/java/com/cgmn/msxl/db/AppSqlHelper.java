@@ -10,7 +10,7 @@ import com.cgmn.msxl.utils.CommonUtil;
 import java.util.*;
 
 public class AppSqlHelper extends SQLiteOpenHelper {
-    private static final int VERSION = 1;
+    private static final int VERSION = 3;
     public final static String DB_NAME = "app.db";
 
     public AppSqlHelper(Context context) {
@@ -20,8 +20,6 @@ public class AppSqlHelper extends SQLiteOpenHelper {
     @Override
     //数据库第一次创建时被调用
     public void onCreate(SQLiteDatabase db) {
-        System.out.println("Into SQLHelper");
-
         StringBuffer sql = new StringBuffer();
         sql.append("CREATE TABLE users(");
         sql.append("id INTEGER PRIMARY KEY AUTOINCREMENT,");
@@ -37,9 +35,15 @@ public class AppSqlHelper extends SQLiteOpenHelper {
     //软件版本号发生改变时调用
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        System.out.println("*****************************************");
+        System.out.println("*****************************************");
+        System.out.println("*****************************************");
         System.out.println("Into SQLHelper");
+        System.out.println("*****************************************");
+        System.out.println("*****************************************");
+        System.out.println("*****************************************");
 
-//        db.execSQL("ALTER TABLE person ADD phone VARCHAR(12) NULL");
+        db.execSQL("DELETE FROM users;");
     }
 
     public void upsert(String tableName, ContentValues values, String key) {
