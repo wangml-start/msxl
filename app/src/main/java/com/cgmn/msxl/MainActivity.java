@@ -1,19 +1,17 @@
 package com.cgmn.msxl;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 import android.os.Bundle;
 import com.cgmn.msxl.ac.AppMainActivity;
 import com.cgmn.msxl.ac.loginActivity;
@@ -115,6 +113,7 @@ public class MainActivity extends LoginBaseActivity {
     }
 
 
+    @SuppressLint("ResourceType")
     @Override
     protected void onResume() {
         super.onResume();
