@@ -27,5 +27,7 @@
     <string name="tab_menu_statistic">统计</string>
     <string name="tab_menu_alert">提醒</string>
     <string name="tab_menu_may">我的</string>
+    <string name="get_stock_datas">正在获取行情数据..</string>
+    <string name="ge_stock_info_failed">获取行情信息失败！: %s</string>
 
 </resources>

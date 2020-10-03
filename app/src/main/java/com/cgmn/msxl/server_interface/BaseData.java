@@ -9,6 +9,8 @@ public class BaseData {
 
     private User user;
 
+    private KlineSet klineSet;
+
     public Integer getStatus() {
         return status;
     }
@@ -31,5 +33,13 @@ public class BaseData {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public KlineSet getKLineSet() {
+        return klineSet;
+    }
+
+    public void setKLineSet(KlineSet klineSet) {
+        this.klineSet = klineSet;
     }
 }

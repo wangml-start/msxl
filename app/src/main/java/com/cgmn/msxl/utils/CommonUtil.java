@@ -2,6 +2,7 @@ package com.cgmn.msxl.utils;
 
 import android.net.Uri;
 import android.util.Base64;
+import com.cgmn.msxl.application.AppApplication;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -35,9 +36,17 @@ public class CommonUtil {
     public static String buildGetUrl(String url,String action, Map<String, String> params){
         StringBuffer res = new StringBuffer(url);
         res.append(action);
-        String paramStr = buildParamters(res.toString(), params);
-        res.append("?");
-        res.append(paramStr);
+        if(isEmpty(params)){
+            params = new HashMap<>();
+        }
+        if(!isEmpty(AppApplication.getInstance().getToken())){
+            params.put("token", AppApplication.getInstance().getToken());
+        }
+        if(!isEmpty(params)){
+            String paramStr = buildParamters(res.toString(), params);
+            res.append("?");
+            res.append(paramStr);
+        }
         return res.toString();
     }
 

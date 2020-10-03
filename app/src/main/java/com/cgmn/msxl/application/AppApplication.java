@@ -14,9 +14,6 @@ public class AppApplication extends Application {
     public void onCreate() {
         super.onCreate();
         mInstance = this;
-
-//        GlobalExceptionHandler mException = GlobalExceptionHandler.getInstance();
-//        mException.init(getApplicationContext());  //注册
     }
 
     public static synchronized AppApplication getInstance() {
