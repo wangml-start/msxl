@@ -15,8 +15,8 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:gravity="center"
-        android:textColor="@color/colorWhite"
-        android:textSize="17sp" />
+        android:textColor="@color/bg_white"
+        android:textSize="@dimen/NormalSize" />
 
     <TextView
         android:id="@+id/toast_sub"
@@ -27,7 +27,7 @@
         android:layout_marginRight="10dp"
         android:layout_marginTop="5dp"
         android:gravity="center"
-        android:textColor="@color/colorWhite"
-        android:textSize="12sp"
+        android:textColor="@color/bg_white"
+        android:textSize="@dimen/NormalSize"
         android:visibility="gone" />
 </LinearLayout>

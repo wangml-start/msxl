@@ -3,16 +3,18 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+    <color name="bg_white_title">#FFFFFFF2</color>
     <color name="bg_white">#FFFFFF</color>
     <color name="div_white">#E5E5E5</color>
     <color name="text_hint">#B5B2B2</color>
 
 
-    <color name="colorWhite">#FFF</color>
     <color name="bg_topbar">#FCFCFC</color>
     <color name="text_topbar">#694E42</color>
     <color name="text_yellow">#FFC800</color>
     <color name="transparent">#00FFFFFF</color>
     <color name="text_gray">#8D7A71</color>
+
+    <color name="bg_gray">#F1EEEE</color>
 
 </resources>

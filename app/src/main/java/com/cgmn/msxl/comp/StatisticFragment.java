@@ -10,17 +10,17 @@ import android.widget.TextView;
 import com.cgmn.msxl.R;
 
 @SuppressLint("ValidFragment")
-public class PageFragment extends Fragment {
+public class StatisticFragment extends Fragment {
     private String content;
-    public PageFragment(String content) {
+    public StatisticFragment(String content) {
         this.content = content;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fg_content, container, false);
-        TextView txt_content = (TextView) view.findViewById(R.id.txt_content);
-        txt_content.setText(content);
+        View view = inflater.inflate(R.layout.train_fragment, container, false);
+//        TextView txt_content = (TextView) view.findViewById(R.id.txt_content);
+//        txt_content.setText(content);
         return view;
     }
 }

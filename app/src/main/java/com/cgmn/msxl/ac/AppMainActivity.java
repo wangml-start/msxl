@@ -11,7 +11,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import com.cgmn.msxl.R;
-import com.cgmn.msxl.comp.PageFragment;
+import com.cgmn.msxl.comp.TrainFragment;
 import com.cgmn.msxl.utils.MessageUtil;
 
 public class AppMainActivity extends AppCompatActivity
@@ -19,52 +19,47 @@ public class AppMainActivity extends AppCompatActivity
     private static final String TAG = AppMainActivity.class.getSimpleName();
     private Context mContxt;
     //UI Object
-    private TextView txt_topbar;
-    private TextView txt_channel;
-    private TextView txt_message;
-    private TextView txt_better;
-    private TextView txt_setting;
+    private TextView txt_xunlian;
+    private TextView txt_statistic;
+    private TextView txt_may;
     private FrameLayout ly_content;
 
     //消息处理
     private Handler mHandler;
 
     //Fragment Object
-    private PageFragment fg1,fg2,fg3,fg4;
+    private TrainFragment fg1,fg2,fg3,fg4;
     private FragmentManager fManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.app_main_layout);
+        mContxt = this;
         initMessageHandle();
         bindAppMainView();
         fManager = getFragmentManager();
-        txt_channel.performClick();
+        txt_xunlian.performClick();
     }
 
 
     private void bindAppMainView() {
         mContxt = this;
-        txt_topbar = (TextView) findViewById(R.id.txt_topbar);
-        txt_channel = (TextView) findViewById(R.id.txt_channel);
-        txt_message = (TextView) findViewById(R.id.txt_message);
-        txt_better = (TextView) findViewById(R.id.txt_better);
-        txt_setting = (TextView) findViewById(R.id.txt_setting);
+        txt_xunlian = (TextView) findViewById(R.id.txt_xunlian);
+        txt_statistic = (TextView) findViewById(R.id.txt_statistic);
+        txt_may = (TextView) findViewById(R.id.txt_may);
         ly_content = (FrameLayout) findViewById(R.id.ly_content);
 
-        txt_channel.setOnClickListener(this);
-        txt_message.setOnClickListener(this);
-        txt_better.setOnClickListener(this);
-        txt_setting.setOnClickListener(this);
+        txt_xunlian.setOnClickListener(this);
+        txt_statistic.setOnClickListener(this);
+        txt_may.setOnClickListener(this);
     }
 
     //重置所有文本的选中状态
     private void setSelected(){
-        txt_channel.setSelected(false);
-        txt_message.setSelected(false);
-        txt_better.setSelected(false);
-        txt_setting.setSelected(false);
+        txt_xunlian.setSelected(false);
+        txt_statistic.setSelected(false);
+        txt_may.setSelected(false);
     }
 
     private void initMessageHandle() {
@@ -72,7 +67,9 @@ public class AppMainActivity extends AppCompatActivity
             @Override
             public boolean handleMessage(Message msg) {
                 if (msg.what == MessageUtil.REQUEST_SUCCESS) {
+
                 } else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
+
                 }
                 return false;
             }
@@ -93,44 +90,34 @@ public class AppMainActivity extends AppCompatActivity
         FragmentTransaction fTransaction = fManager.beginTransaction();
         hideAllFragment(fTransaction);
         switch (v.getId()){
-            case R.id.txt_channel:
+            case R.id.txt_xunlian:
                 setSelected();
-                txt_channel.setSelected(true);
+                txt_xunlian.setSelected(true);
                 if(fg1 == null){
-                    fg1 = new PageFragment("第一个Fragment");
+                    fg1 = new TrainFragment();
                     fTransaction.add(R.id.ly_content,fg1);
                 }else{
                     fTransaction.show(fg1);
                 }
                 break;
-            case R.id.txt_message:
+            case R.id.txt_statistic:
                 setSelected();
-                txt_message.setSelected(true);
+                txt_statistic.setSelected(true);
                 if(fg2 == null){
-                    fg2 = new PageFragment("第二个Fragment");
+//                    fg2 = new TrainFragment("第二个Fragment");
                     fTransaction.add(R.id.ly_content,fg2);
                 }else{
                     fTransaction.show(fg2);
                 }
                 break;
-            case R.id.txt_better:
+            case R.id.txt_may:
                 setSelected();
-                txt_better.setSelected(true);
+                txt_may.setSelected(true);
                 if(fg3 == null){
-                    fg3 = new PageFragment("第三个Fragment");
+//                    fg3 = new TrainFragment();
                     fTransaction.add(R.id.ly_content,fg3);
                 }else{
                     fTransaction.show(fg3);
-                }
-                break;
-            case R.id.txt_setting:
-                setSelected();
-                txt_setting.setSelected(true);
-                if(fg4 == null){
-                    fg4 = new PageFragment("第四个Fragment");
-                    fTransaction.add(R.id.ly_content,fg4);
-                }else{
-                    fTransaction.show(fg4);
                 }
                 break;
         }

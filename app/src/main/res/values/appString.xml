@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="tag_main_item" type="id"></item>
+    <item name="Tag_split_item" type="id"></item>
+
+    <string name="trading">操盘</string>
+    <string name="mode_setting">创建模式</string>
+    <string name="dragTrain">龙头战法训练</string>
+    <string name="tradTrain">常规训练</string>
+    <string name="up_train_txt">进阶训练</string>
+    <string name="ranking">排行</string>
+    <string name="total_ranking">总榜</string>
+    <string name="month_ranking">月榜</string>
+    <string name="day_ranking">日榜</string>
+
+</resources>
