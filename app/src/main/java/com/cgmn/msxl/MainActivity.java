@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.os.Bundle;
 import com.cgmn.msxl.ac.AppMainActivity;
+import com.cgmn.msxl.ac.NormalStrategyActivity;
 import com.cgmn.msxl.ac.loginActivity;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.CustmerToast;

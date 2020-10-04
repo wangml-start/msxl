@@ -5,16 +5,21 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.DisplayMetrics;
 import android.util.Log;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.CustmerToast;
+import com.cgmn.msxl.comp.k.KLine;
+import com.cgmn.msxl.comp.k.KlineChart;
+import com.cgmn.msxl.comp.k.KlineGroup;
 import com.cgmn.msxl.db.AppSqlHelper;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.server_interface.KlineSet;
+import com.cgmn.msxl.server_interface.StockDetail;
 import com.cgmn.msxl.service.OkHttpClientManager;
 import com.cgmn.msxl.service.PropertyService;
 import com.cgmn.msxl.utils.CommonUtil;
@@ -28,6 +33,8 @@ public class NormalStrategyActivity extends AppCompatActivity {
     //消息处理
     private Handler mHandler;
 
+    private LinearLayout chartParent;
+
     private Gson gson;
 
     @Override
@@ -36,6 +43,7 @@ public class NormalStrategyActivity extends AppCompatActivity {
         setContentView(R.layout.normal_strategy_layout);
         mContxt = this;
         gson = new Gson();
+        bindView();
         initMessageHandle();
         loadKLineSet();
     }
@@ -113,7 +121,34 @@ public class NormalStrategyActivity extends AppCompatActivity {
     }
 
     private void paintKLineGroups(KlineSet set){
-        TextView tx = findViewById(R.id.txt_datas);
-        tx.setText(gson.toJson(set));
+        Log.d("SET",set.toString());
+        Log.d("SET.init.size", set.getInitList().size() +"");
+        KlineGroup group = new KlineGroup();
+        for (int i = 0; i < set.getInitList().size(); i++) {
+            StockDetail detail = set.getInitList().get(i);
+            group.addKline(new KLine(
+                    detail.getHigh(),
+                    detail.getLow(),
+                    detail.getStart(),
+                    detail.getEnd(),
+                    detail.getVol(),
+                    ""));
+        }
+
+        KlineChart chart = new KlineChart(this);
+        chart.setData(group);
+        chart.notifyDataSetChanged(true);
+        chartParent.addView(chart);
+    }
+
+    private void bindView(){
+        chartParent = findViewById(R.id.chart_parent);
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+//        int screenWidth = dm.widthPixels;
+        int screenHeight = dm.heightPixels;
+        LinearLayout.LayoutParams linearParams =(LinearLayout.LayoutParams) chartParent.getLayoutParams();
+        linearParams.height = ((Double)(screenHeight * 0.5)).intValue();// 控件的高强制设成20
+        chartParent.setLayoutParams(linearParams);
     }
 }
