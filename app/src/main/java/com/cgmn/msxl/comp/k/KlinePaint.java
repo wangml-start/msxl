@@ -192,27 +192,29 @@ public class KlinePaint {
       //draw step 4: 均线
       if(i > 0){
         KLine preEntry = data.getNodes().get(i-1);
-        if(preEntry.avg5 > 0){
+        if(entry.avg5 > 0){
           averageBuffer[0] = i - 1;
           averageBuffer[2] = i;
           averageBuffer[1] = preEntry.avg5;
           averageBuffer[3] = entry.avg5;
           mapPoints(averageBuffer);
-          canvas.drawLine(averageBuffer[0],averageBuffer[1],averageBuffer[2],averageBuffer[3], mUpPaint);
+          canvas.drawLine(averageBuffer[0],averageBuffer[1],averageBuffer[2],averageBuffer[3], mk5Paint);
         }
-        if(preEntry.avg10 > 0){
+        if(entry.avg10 > 0){
           averageBuffer[0] = i - 1;
           averageBuffer[2] = i;
           averageBuffer[1] = preEntry.avg10;
           averageBuffer[3] = entry.avg10;
           mapPoints(averageBuffer);
-          canvas.drawLine(averageBuffer[0],averageBuffer[1],averageBuffer[2],averageBuffer[3], mUpPaint);
+          canvas.drawLine(averageBuffer[0],averageBuffer[1],averageBuffer[2],averageBuffer[3], mk10Paint);
         }
-        if(preEntry.avg20 > 0){
+        if(entry.avg20 > 0){
+          averageBuffer[0] = i - 1;
+          averageBuffer[2] = i;
           averageBuffer[1] = preEntry.avg20;
           averageBuffer[3] = entry.avg20;
           mapPoints(averageBuffer);
-          canvas.drawLine(averageBuffer[0],averageBuffer[1],averageBuffer[2],averageBuffer[3], mUpPaint);
+          canvas.drawLine(averageBuffer[0],averageBuffer[1],averageBuffer[2],averageBuffer[3], mk20Paint);
         }
       }
 

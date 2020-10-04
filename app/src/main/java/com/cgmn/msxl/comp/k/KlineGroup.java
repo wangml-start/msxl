@@ -19,23 +19,7 @@ public class KlineGroup {
   }
 
   public void addKline(KLine kline) {
-    nodes.addLast(kline);
-    ks5.addLast(kline.close);
-    ks10.addLast(kline.close);
-    ks20.addLast(kline.close);
-
-    if(ks5.size() > 5){
-      ks5.removeFirst();
-    }
-    if(ks10.size() > 10){
-      ks10.removeFirst();
-    }
-    if(ks20.size() > 20){
-      ks20.removeFirst();
-    }
-    kline.avg5 = calcAverage(5);
-    kline.avg10 = calcAverage(10);
-    kline.avg20 = calcAverage(20);
+    nodes.addFirst(kline);
   }
 
   public void calcMinMax(int start, int end) {
@@ -87,5 +71,27 @@ public class KlineGroup {
     }
 
     return sum/days;
+  }
+
+  public void calcAverage(){
+    for(int i = nodes.size()-1; i>=0; i--){
+      KLine kline = nodes.get(i);
+      ks5.addLast(kline.close);
+      ks10.addLast(kline.close);
+      ks20.addLast(kline.close);
+
+      if(ks5.size() > 5){
+        ks5.removeFirst();
+      }
+      if(ks10.size() > 10){
+        ks10.removeFirst();
+      }
+      if(ks20.size() > 20){
+        ks20.removeFirst();
+      }
+      kline.avg5 = calcAverage(5);
+      kline.avg10 = calcAverage(10);
+      kline.avg20 = calcAverage(20);
+    }
   }
 }

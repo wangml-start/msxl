@@ -20,7 +20,7 @@
     <color name="kline_up">#EF1B0B</color>
     <color name="kline_down">#27B32C</color>
 
-    <color name="kline_ave_5">#F6F2F2</color>
-    <color name="kline_ave_10">#EFDA28</color>
-    <color name="kline_ave_20">#D63BF1</color>
+    <color name="kline_ave_5">#3C3A3A</color>
+    <color name="kline_ave_10">#A19004</color>
+    <color name="kline_ave_20">#CF0AF1</color>
 </resources>

@@ -37,6 +37,8 @@ public class NormalStrategyActivity extends AppCompatActivity {
 
     private Gson gson;
 
+    private KlineSet klineset;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,13 +101,15 @@ public class NormalStrategyActivity extends AppCompatActivity {
             @Override
             public boolean handleMessage(Message msg) {
                 if (msg.what == MessageUtil.REQUEST_SUCCESS) {
-                    paintKLineGroups((KlineSet) msg.obj);
+                    klineset = (KlineSet) msg.obj;
+                    paintKLineGroups();
                 } else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
                     AppSqlHelper sqlHeper = new AppSqlHelper(mContxt);
                     String json = sqlHeper.getKlinJsonStr();
                     if(!CommonUtil.isEmpty(json)){
                         KlineSet set = gson.fromJson(json, KlineSet.class);
-                        paintKLineGroups(set);
+                        klineset = set;
+                        paintKLineGroups();
                     }else{
                         Exception exception = (Exception) msg.obj;
                         FixStringBuffer mes = new FixStringBuffer();
@@ -120,12 +124,13 @@ public class NormalStrategyActivity extends AppCompatActivity {
         });
     }
 
-    private void paintKLineGroups(KlineSet set){
-        Log.d("SET",set.toString());
-        Log.d("SET.init.size", set.getInitList().size() +"");
+    private void paintKLineGroups(){
+        if(klineset == null) {
+            return;
+        }
         KlineGroup group = new KlineGroup();
-        for (int i = 0; i < set.getInitList().size(); i++) {
-            StockDetail detail = set.getInitList().get(i);
+        for (int i = 0; i < klineset.getInitList().size(); i++) {
+            StockDetail detail = klineset.getInitList().get(i);
             group.addKline(new KLine(
                     detail.getHigh(),
                     detail.getLow(),
@@ -136,6 +141,7 @@ public class NormalStrategyActivity extends AppCompatActivity {
         }
 
         KlineChart chart = new KlineChart(this);
+        group.calcAverage();
         chart.setData(group);
         chart.notifyDataSetChanged(true);
         chartParent.addView(chart);
