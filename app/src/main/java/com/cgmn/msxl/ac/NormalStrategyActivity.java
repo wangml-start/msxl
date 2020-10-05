@@ -27,6 +27,9 @@ import com.cgmn.msxl.utils.FixStringBuffer;
 import com.cgmn.msxl.utils.MessageUtil;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class NormalStrategyActivity extends AppCompatActivity {
     private static final String TAG = NormalStrategyActivity.class.getSimpleName();
     private Context mContxt;
@@ -129,8 +132,11 @@ public class NormalStrategyActivity extends AppCompatActivity {
             return;
         }
         KlineGroup group = new KlineGroup();
-        for (int i = 0; i < klineset.getInitList().size(); i++) {
-            StockDetail detail = klineset.getInitList().get(i);
+        List<StockDetail> tem = new ArrayList<>();
+        tem.addAll(klineset.getInitList());
+//        tem.addAll(klineset.getFutureList());
+        for (int i = 0; i < tem.size(); i++) {
+            StockDetail detail = tem.get(i);
             group.addKline(new KLine(
                     detail.getHigh(),
                     detail.getLow(),
@@ -141,7 +147,7 @@ public class NormalStrategyActivity extends AppCompatActivity {
         }
 
         KlineChart chart = new KlineChart(this);
-        group.calcAverage();
+        group.calcAverageMACD();
         chart.setData(group);
         chart.notifyDataSetChanged(true);
         chartParent.addView(chart);
@@ -154,7 +160,7 @@ public class NormalStrategyActivity extends AppCompatActivity {
 //        int screenWidth = dm.widthPixels;
         int screenHeight = dm.heightPixels;
         LinearLayout.LayoutParams linearParams =(LinearLayout.LayoutParams) chartParent.getLayoutParams();
-        linearParams.height = ((Double)(screenHeight * 0.5)).intValue();// 控件的高强制设成20
+        linearParams.height = ((Double)(screenHeight * 0.7)).intValue();// 控件的高强制设成20
         chartParent.setLayoutParams(linearParams);
     }
 }

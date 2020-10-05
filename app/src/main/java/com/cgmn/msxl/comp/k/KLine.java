@@ -14,6 +14,10 @@ public class KLine {
   public float avg10;
   public float avg20;
 
+  public float dif;
+  public float dea;
+  public float macd;
+
   public KLine(float high, float low, float open, float close, int volume, String xValue) {
     this.high = high;
     this.low = low;
