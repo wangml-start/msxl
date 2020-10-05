@@ -160,7 +160,7 @@ public class NormalStrategyActivity extends AppCompatActivity {
 //        int screenWidth = dm.widthPixels;
         int screenHeight = dm.heightPixels;
         LinearLayout.LayoutParams linearParams =(LinearLayout.LayoutParams) chartParent.getLayoutParams();
-        linearParams.height = ((Double)(screenHeight * 0.7)).intValue();// 控件的高强制设成20
+        linearParams.height = ((Double)(screenHeight * 0.6)).intValue();// 控件的高强制设成20
         chartParent.setLayoutParams(linearParams);
     }
 }

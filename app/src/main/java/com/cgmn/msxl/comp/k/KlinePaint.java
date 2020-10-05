@@ -77,8 +77,8 @@ public class KlinePaint {
 
         mGridPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mGridPaint.setStyle(Paint.Style.STROKE);
-        mGridPaint.setStrokeWidth(0.8f);
-        mGridPaint.setColor(Color.BLACK);
+        mGridPaint.setStrokeWidth(0.6f);
+        mGridPaint.setColor(Color.GRAY);
 
         mLabelPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mLabelPaint.setColor(Color.BLACK);
