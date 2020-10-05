@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.os.Bundle;
 import com.cgmn.msxl.ac.AppMainActivity;
+import com.cgmn.msxl.ac.RealControlActivity;
 import com.cgmn.msxl.ac.loginActivity;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.CustmerToast;
@@ -22,10 +23,7 @@ import com.cgmn.msxl.data.User;
 import com.cgmn.msxl.db.AppSqlHelper;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.cgmn.msxl.server_interface.BaseData;
-import com.cgmn.msxl.utils.CommonUtil;
-import com.cgmn.msxl.utils.FixStringBuffer;
-import com.cgmn.msxl.utils.MessageUtil;
-import com.cgmn.msxl.utils.NetworkUtil;
+import com.cgmn.msxl.utils.*;
 
 import java.io.InputStream;
 import java.util.HashMap;
@@ -44,6 +42,7 @@ public class MainActivity extends LoginBaseActivity {
         mContext = this;
         btn = findViewById(R.id.register_btn);
         btn.setOnClickListener(this);
+
 
         if(!NetworkUtil.isNetworkConnected(mContext)){
             CustmerToast.makeText(mContext, R.string.no_network);
@@ -105,7 +104,7 @@ public class MainActivity extends LoginBaseActivity {
 
     @Override
     public void onClick(View v) {
-        startActivity(new Intent(this, loginActivity.class));
+        startActivity(new Intent(this, RealControlActivity.class));
         this.finish();
     }
 
@@ -126,4 +125,5 @@ public class MainActivity extends LoginBaseActivity {
         BitmapDrawable bd = new BitmapDrawable(getResources(), bm);
         layout.setBackgroundDrawable(bd);
     }
+
 }

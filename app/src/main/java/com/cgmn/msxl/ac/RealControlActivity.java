@@ -153,6 +153,7 @@ public class RealControlActivity extends AppCompatActivity {
         lb_close_price.setText("收盘价： 00.00");
         lb_close_rate.setText("涨跌:  00.00%");
         lb_left_day.setText("剩余: " + realtradeManage.getLeftDay() + " 天");
+
         lb_close_price.setTextColor(getResources().getColor(R.color.kline_ave_5));
         lb_close_rate.setTextColor(getResources().getColor(R.color.kline_ave_5));
     }
@@ -193,6 +194,14 @@ public class RealControlActivity extends AppCompatActivity {
                         chart.setData(realtradeManage.getGroup());
                         chart.notifyDataSetChanged(true);
                         updateTopBar();
+
+                        if(realtradeManage.openWithUp()){
+                            lb_open_price.setTextColor(getResources().getColor(R.color.kline_up));
+                            lb_open_rate.setTextColor(getResources().getColor(R.color.kline_up));
+                        }else if(realtradeManage.openWithDown()){
+                            lb_open_price.setTextColor(getResources().getColor(R.color.kline_down));
+                            lb_open_rate.setTextColor(getResources().getColor(R.color.kline_down));
+                        }
                     }else{
                         //TODO: end
                     }

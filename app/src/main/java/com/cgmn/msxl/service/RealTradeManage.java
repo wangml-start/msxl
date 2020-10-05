@@ -55,7 +55,7 @@ public class RealTradeManage {
         if (klineset.getFutureList().size() > 0) {
             currentK = klineset.getFutureList().get(0);
             float num = (currentK.getStart() - lastK.getEnd()) / lastK.getEnd();
-            if(num < 0 && currentK.getUpRate().indexOf("-") != -1){
+            if(num > -0.2){
                 currentK.setOpenrate(format.format(num));
             }else{
                 currentK.setOpenrate("--");
@@ -82,6 +82,7 @@ public class RealTradeManage {
         klineset.getFutureList().remove(0);
         klineset.getInitList().add(currentK);
         setDatas();
+        lastK = currentK;
         kStatus = CLOSE;
     }
 
@@ -95,5 +96,13 @@ public class RealTradeManage {
 
     public String getkStatus() {
         return kStatus;
+    }
+
+    public boolean openWithUp(){
+        return  (currentK.getStart() - lastK.getEnd()) > 0;
+    }
+
+    public boolean openWithDown(){
+        return  (currentK.getStart() - lastK.getEnd()) < 0;
     }
 }

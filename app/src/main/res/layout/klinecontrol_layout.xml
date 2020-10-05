@@ -2,6 +2,8 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clipToPadding="true"
+        android:fitsSystemWindows="true"
         android:orientation="vertical">
     <View
             android:layout_width="match_parent"
@@ -46,7 +48,6 @@
         <TextView
                 android:id="@+id/lb_left_s"
                 android:layout_width="fill_parent"
-                android:text="Wating.."
                 android:gravity="center"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
