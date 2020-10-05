@@ -6,4 +6,14 @@
         <item name="colorPrimaryDark">@color/bg_white_title</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
+
+    <style name='kline_top_bar'>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">3dp</item>
+        <item name="android:background">@color/bg_white</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_marginTop">2dp</item>
+    </style>
 </resources>

@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import com.cgmn.msxl.R;
-import com.cgmn.msxl.ac.NormalStrategyActivity;
+import com.cgmn.msxl.ac.RealControlActivity;
 import com.cgmn.msxl.comp.adpter.MutiLayoutAdapter;
 import com.cgmn.msxl.data.PageMainItem;
 import com.cgmn.msxl.data.SplitItem;
@@ -62,7 +62,7 @@ public class TrainFragment extends Fragment{
                         case 0:
                         case 1:
                         case 2:
-                            startActivity(new Intent(mContxt, NormalStrategyActivity.class));
+                            startActivity(new Intent(mContxt, RealControlActivity.class));
                             break;
                         case 3:
 

@@ -14,13 +14,13 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.os.Bundle;
 import com.cgmn.msxl.ac.AppMainActivity;
-import com.cgmn.msxl.ac.NormalStrategyActivity;
 import com.cgmn.msxl.ac.loginActivity;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.CustmerToast;
 import com.cgmn.msxl.comp.LoginBaseActivity;
 import com.cgmn.msxl.data.User;
 import com.cgmn.msxl.db.AppSqlHelper;
+import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.utils.CommonUtil;
 import com.cgmn.msxl.utils.FixStringBuffer;
@@ -83,11 +83,7 @@ public class MainActivity extends LoginBaseActivity {
                     startActivity(intent);
                     finish();
                 }else if(msg.what == MessageUtil.EXCUTE_EXCEPTION){
-                    Exception exception = (Exception) msg.obj;
-                    FixStringBuffer mes = new FixStringBuffer();
-                    mes.append("登陆失败: %s", exception.getMessage());
-                    //TODO: 异常处理
-                    CustmerToast.makeText(mContext, mes.toString()).show();
+                    GlobalExceptionHandler.getInstance(mContext).handlerException((Exception) msg.obj);
                 }
                 return false;
             }

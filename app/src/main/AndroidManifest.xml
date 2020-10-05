@@ -27,7 +27,7 @@
         <activity android:name=".ac.loginActivity" />
         <activity android:name=".ac.ForgetPasswordActivity" />
         <activity android:name=".ac.AppMainActivity" />
-        <activity android:name=".ac.NormalStrategyActivity" />
+        <activity android:name=".ac.RealControlActivity" />
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
 

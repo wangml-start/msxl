@@ -27,6 +27,8 @@ public class StockDetail {
 
     private String exchageRate;
 
+    private String openrate;
+
     public Integer getId() {
         return id;
     }
@@ -121,5 +123,13 @@ public class StockDetail {
 
     public void setExchageRate(String exchageRate) {
         this.exchageRate = exchageRate == null ? null : exchageRate.trim();
+    }
+
+    public String getOpenrate() {
+        return openrate;
+    }
+
+    public void setOpenrate(String openrate) {
+        this.openrate = openrate;
     }
 }

@@ -10,13 +10,6 @@ import com.cgmn.msxl.R;
 
 public class KlineChart extends View {
 
-//    private static final int SCROLL_STATE_IDLE = 0;
-
-//    private int mTouchSlop;
-//    private float mLastTouchX;
-//    private float mLastTouchY;
-//    private final int mMinFlingVelocity;
-//    private final int mMaxFlingVelocity;
     private RectF contentRect;
     private float contentMinOffset;
 
@@ -33,11 +26,6 @@ public class KlineChart extends View {
 
     public KlineChart(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-
-        final ViewConfiguration vc = ViewConfiguration.get(this.getContext());
-//        mTouchSlop = vc.getScaledTouchSlop();
-//        mMinFlingVelocity = vc.getScaledMinimumFlingVelocity();
-//        mMaxFlingVelocity = vc.getScaledMaximumFlingVelocity();
 
         contentRect = new RectF();
         contentMinOffset = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, context.getResources().getDisplayMetrics());

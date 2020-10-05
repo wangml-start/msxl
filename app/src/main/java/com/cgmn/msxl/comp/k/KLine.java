@@ -18,12 +18,19 @@ public class KLine {
   public float dea;
   public float macd;
 
-  public KLine(float high, float low, float open, float close, int volume, String xValue) {
+  public KLine(float high, float low, float open, float close, int volume) {
     this.high = high;
     this.low = low;
     this.open = open;
     this.close = close;
     this.volume = volume;
-    this.xValue = xValue;
+  }
+
+  public KLine(float open) {
+    this.high = open;
+    this.low = open;
+    this.open = open;
+    this.close = open;
+    this.volume = 1;
   }
 }

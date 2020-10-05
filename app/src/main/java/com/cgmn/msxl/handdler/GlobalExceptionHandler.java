@@ -4,8 +4,10 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.os.Message;
 import android.util.Log;
+import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.AppApplication;
 import com.cgmn.msxl.application.GlobalTreadPools;
+import com.cgmn.msxl.comp.CustmerToast;
 import com.cgmn.msxl.db.AppSqlHelper;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.service.OkHttpClientManager;
@@ -14,6 +16,8 @@ import com.cgmn.msxl.utils.CommonUtil;
 import com.cgmn.msxl.utils.MessageUtil;
 import com.squareup.okhttp.Request;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+
+import java.net.ConnectException;
 
 public class GlobalExceptionHandler {
     private Context mContxt;
@@ -42,7 +46,19 @@ public class GlobalExceptionHandler {
 
     public void handlerException(final Exception e){
         final String type = "APP_RUNTIMEERROR";
+        try{
+            if((ConnectException)e instanceof ConnectException){
+                CustmerToast.makeText(mContxt, mContxt.getString(R.string.network_loss)).show();
+            }
+        }catch (Exception e1){
+            CustmerToast.makeText(mContxt, e.getMessage()).show();
+        }
 
+        String token = AppApplication.getInstance().getToken();
+        if(CommonUtil.isEmpty(token)){
+            Log.d(TAG, "No Find TOKEN When send exception!");
+            return;
+        }
         GlobalTreadPools.getInstance(mContxt).execute(new Runnable() {
             @Override
             public void run() {

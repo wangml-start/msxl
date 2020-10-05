@@ -8,6 +8,7 @@ import android.os.Message;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
@@ -22,17 +23,16 @@ import com.cgmn.msxl.server_interface.KlineSet;
 import com.cgmn.msxl.server_interface.StockDetail;
 import com.cgmn.msxl.service.OkHttpClientManager;
 import com.cgmn.msxl.service.PropertyService;
+import com.cgmn.msxl.service.RealTradeManage;
 import com.cgmn.msxl.utils.CommonUtil;
 import com.cgmn.msxl.utils.FixStringBuffer;
 import com.cgmn.msxl.utils.MessageUtil;
 import com.google.gson.Gson;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class NormalStrategyActivity extends AppCompatActivity {
-    private static final String TAG = NormalStrategyActivity.class.getSimpleName();
+public class RealControlActivity extends AppCompatActivity {
+    private static final String TAG = RealControlActivity.class.getSimpleName();
     private Context mContxt;
+    private KlineChart chart;
     //消息处理
     private Handler mHandler;
 
@@ -40,14 +40,20 @@ public class NormalStrategyActivity extends AppCompatActivity {
 
     private Gson gson;
 
-    private KlineSet klineset;
+    private RealTradeManage realtradeManage;
+    TextView lb_open_price;
+    TextView lb_close_price;
+    TextView lb_open_rate;
+    TextView lb_close_rate;
+    TextView lb_left_day;
+    TextView lb_left_s;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.normal_strategy_layout);
-        mContxt = this;
-        gson = new Gson();
+        setContentView(R.layout.klinecontrol_layout);
         bindView();
         initMessageHandle();
         loadKLineSet();
@@ -104,15 +110,15 @@ public class NormalStrategyActivity extends AppCompatActivity {
             @Override
             public boolean handleMessage(Message msg) {
                 if (msg.what == MessageUtil.REQUEST_SUCCESS) {
-                    klineset = (KlineSet) msg.obj;
-                    paintKLineGroups();
+                    realtradeManage.setKlineset((KlineSet) msg.obj) ;
+                    startChartInit();
                 } else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
                     AppSqlHelper sqlHeper = new AppSqlHelper(mContxt);
                     String json = sqlHeper.getKlinJsonStr();
                     if(!CommonUtil.isEmpty(json)){
                         KlineSet set = gson.fromJson(json, KlineSet.class);
-                        klineset = set;
-                        paintKLineGroups();
+                        realtradeManage.setKlineset(set);
+                        startChartInit();
                     }else{
                         Exception exception = (Exception) msg.obj;
                         FixStringBuffer mes = new FixStringBuffer();
@@ -127,37 +133,44 @@ public class NormalStrategyActivity extends AppCompatActivity {
         });
     }
 
-    private void paintKLineGroups(){
-        if(klineset == null) {
+    private void startChartInit(){
+        if(realtradeManage.getKlineset() == null) {
             return;
         }
-        KlineGroup group = new KlineGroup();
-        List<StockDetail> tem = new ArrayList<>();
-        tem.addAll(klineset.getInitList());
-//        tem.addAll(klineset.getFutureList());
-        for (int i = 0; i < tem.size(); i++) {
-            StockDetail detail = tem.get(i);
-            group.addKline(new KLine(
-                    detail.getHigh(),
-                    detail.getLow(),
-                    detail.getStart(),
-                    detail.getEnd(),
-                    detail.getVol(),
-                    ""));
-        }
-
-        KlineChart chart = new KlineChart(this);
-        group.calcAverageMACD();
-        chart.setData(group);
+        realtradeManage.fixInitDate();
+        realtradeManage.showNextOpen();
+        chart.setData(realtradeManage.getGroup());
         chart.notifyDataSetChanged(true);
         chartParent.addView(chart);
+
+        updateTopBar();
+    }
+
+    private void updateTopBar(){
+        StockDetail curent = realtradeManage.getCurrentK();
+        lb_open_price.setText("开盘价： " + curent.getStart());
+        lb_open_rate.setText("涨跌:  " + curent.getOpenrate());
+
+        lb_left_day.setText(realtradeManage.getLeftDay() + " 天");
+        lb_left_s.setText("10 S");
     }
 
     private void bindView(){
+        mContxt = this;
+        gson = new Gson();
+        chart = new KlineChart(this);
+        realtradeManage = new RealTradeManage();
+
+        lb_open_price = findViewById(R.id.lb_open_price);
+        lb_close_price = findViewById(R.id.lb_close_price);
+        lb_open_rate = findViewById(R.id.lb_open_rate);
+        lb_close_rate = findViewById(R.id.lb_close_rate);
+        lb_left_day = findViewById(R.id.lb_left_day);
+        lb_left_s = findViewById(R.id.lb_left_s);
+
         chartParent = findViewById(R.id.chart_parent);
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
-//        int screenWidth = dm.widthPixels;
         int screenHeight = dm.heightPixels;
         LinearLayout.LayoutParams linearParams =(LinearLayout.LayoutParams) chartParent.getLayoutParams();
         linearParams.height = ((Double)(screenHeight * 0.6)).intValue();// 控件的高强制设成20

@@ -1,6 +1,5 @@
 package com.cgmn.msxl.ac;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.*;
@@ -14,6 +13,7 @@ import com.cgmn.msxl.comp.CustmerToast;
 import com.cgmn.msxl.comp.LoginBaseActivity;
 import com.cgmn.msxl.comp.showPassworCheckBox;
 import com.cgmn.msxl.data.User;
+import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.service.OkHttpClientManager;
 import com.cgmn.msxl.service.PropertyService;
@@ -178,12 +178,7 @@ public class ForgetPasswordActivity extends LoginBaseActivity {
                     startActivity(intent);
                     finish();
                 } else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
-                    Exception exception = (Exception) msg.obj;
-                    StringBuffer mes = new StringBuffer("服务器异常！");
-                    mes.append("\n");
-                    mes.append(exception.getMessage());
-                    //TODO: 异常处理
-                    CustmerToast.makeText(mContext, mes.toString()).show();
+                    GlobalExceptionHandler.getInstance(mContext).handlerException((Exception) msg.obj);
                 }
                 return false;
             }

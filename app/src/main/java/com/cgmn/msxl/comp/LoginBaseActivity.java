@@ -76,7 +76,7 @@ public class LoginBaseActivity extends AppCompatActivity
                             message.obj = data;
                             Integer status = data.getStatus();
                             if (status == null || status == -1) {
-                                throw new Exception(data.getError());
+                                throw new RuntimeException(data.getError());
                             } else {
                                 saveUserToDb(data.getUser(), mContext);
                             }
