@@ -8,6 +8,8 @@ import com.cgmn.msxl.server_interface.StockDetail;
 import java.text.DecimalFormat;
 
 public class RealTradeManage {
+    public static String OPEN = "OPEN";
+    public static String CLOSE = "CLOSE";
 
     private KlineSet klineset;
     DecimalFormat format = new DecimalFormat("0.00%");
@@ -16,11 +18,7 @@ public class RealTradeManage {
 
     private StockDetail lastK;
     private StockDetail currentK;
-
-
-    public RealTradeManage() {
-        this.group = new KlineGroup();
-    }
+    private String kStatus;
 
     public KlineSet getKlineset() {
         return klineset;
@@ -38,7 +36,8 @@ public class RealTradeManage {
         return group;
     }
 
-    public void fixInitDate(){
+    public void fixInitDate() {
+        this.group = new KlineGroup();
         for (int i = 0; i < klineset.getInitList().size(); i++) {
             StockDetail detail = klineset.getInitList().get(i);
             group.addKline(new KLine(
@@ -51,19 +50,28 @@ public class RealTradeManage {
         }
     }
 
-    public boolean showNextOpen(){
-        if(klineset.getFutureList().size() > 0){
+    public boolean showNextOpen() {
+        fixInitDate();
+        if (klineset.getFutureList().size() > 0) {
             currentK = klineset.getFutureList().get(0);
-            currentK.setOpenrate(format.format(currentK.getStart()/lastK.getEnd()));
+            float num = (currentK.getStart() - lastK.getEnd()) / lastK.getEnd();
+            if(num < 0 && currentK.getUpRate().indexOf("-") != -1){
+                currentK.setOpenrate(format.format(num));
+            }else{
+                currentK.setOpenrate("--");
+            }
             group.addKline(new KLine(currentK.getStart()));
+
+            kStatus = OPEN;
+            setDatas();
             return true;
         }
 
         return false;
     }
 
-    public void showNextClose(){
-        group.getNodes().removeLast();
+    public void showNextClose() {
+        fixInitDate();
         group.addKline(new KLine(
                 currentK.getHigh(),
                 currentK.getLow(),
@@ -72,14 +80,20 @@ public class RealTradeManage {
                 currentK.getVol()
         ));
         klineset.getFutureList().remove(0);
+        klineset.getInitList().add(currentK);
+        setDatas();
+        kStatus = CLOSE;
     }
 
-    public void setDatas(){
+    public void setDatas() {
         group.calcAverageMACD();
     }
 
-    public int getLeftDay(){
-        return klineset.getFutureList().size();
+    public int getLeftDay() {
+        return klineset.getFutureList().size() - 1;
     }
 
+    public String getkStatus() {
+        return kStatus;
+    }
 }

@@ -10,7 +10,7 @@ import com.cgmn.msxl.utils.CommonUtil;
 import java.util.*;
 
 public class AppSqlHelper extends SQLiteOpenHelper {
-    private static final int VERSION =5;
+    private static final int VERSION =6;
     public final static String DB_NAME = "app.db";
 
     public AppSqlHelper(Context context) {

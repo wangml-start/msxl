@@ -8,8 +8,6 @@ public class KLine {
 
   public final int volume;
 
-  public String xValue;
-
   public float avg5;
   public float avg10;
   public float avg20;
@@ -17,6 +15,8 @@ public class KLine {
   public float dif;
   public float dea;
   public float macd;
+
+  public boolean isOpen=false;
 
   public KLine(float high, float low, float open, float close, int volume) {
     this.high = high;
@@ -32,5 +32,6 @@ public class KLine {
     this.open = open;
     this.close = open;
     this.volume = 1;
+    this.isOpen = true;
   }
 }

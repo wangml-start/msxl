@@ -7,15 +7,15 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.CustmerToast;
-import com.cgmn.msxl.comp.k.KLine;
 import com.cgmn.msxl.comp.k.KlineChart;
-import com.cgmn.msxl.comp.k.KlineGroup;
 import com.cgmn.msxl.db.AppSqlHelper;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.cgmn.msxl.server_interface.BaseData;
@@ -47,6 +47,7 @@ public class RealControlActivity extends AppCompatActivity {
     TextView lb_close_rate;
     TextView lb_left_day;
     TextView lb_left_s;
+    Button bt_next;
 
 
 
@@ -137,7 +138,6 @@ public class RealControlActivity extends AppCompatActivity {
         if(realtradeManage.getKlineset() == null) {
             return;
         }
-        realtradeManage.fixInitDate();
         realtradeManage.showNextOpen();
         chart.setData(realtradeManage.getGroup());
         chart.notifyDataSetChanged(true);
@@ -147,12 +147,14 @@ public class RealControlActivity extends AppCompatActivity {
     }
 
     private void updateTopBar(){
-        StockDetail curent = realtradeManage.getCurrentK();
-        lb_open_price.setText("开盘价： " + curent.getStart());
-        lb_open_rate.setText("涨跌:  " + curent.getOpenrate());
-
-        lb_left_day.setText(realtradeManage.getLeftDay() + " 天");
-        lb_left_s.setText("10 S");
+        StockDetail current = realtradeManage.getCurrentK();
+        lb_open_price.setText("开盘价： " + current.getStart());
+        lb_open_rate.setText("涨跌:  " + current.getOpenrate());
+        lb_close_price.setText("收盘价： 00.00");
+        lb_close_rate.setText("涨跌:  00.00%");
+        lb_left_day.setText("剩余: " + realtradeManage.getLeftDay() + " 天");
+        lb_close_price.setTextColor(getResources().getColor(R.color.kline_ave_5));
+        lb_close_rate.setTextColor(getResources().getColor(R.color.kline_ave_5));
     }
 
     private void bindView(){
@@ -167,6 +169,37 @@ public class RealControlActivity extends AppCompatActivity {
         lb_close_rate = findViewById(R.id.lb_close_rate);
         lb_left_day = findViewById(R.id.lb_left_day);
         lb_left_s = findViewById(R.id.lb_left_s);
+        bt_next = findViewById(R.id.bt_next);
+
+        bt_next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(RealTradeManage.OPEN.equals(realtradeManage.getkStatus())){
+                    realtradeManage.showNextClose();
+                    chart.setData(realtradeManage.getGroup());
+                    chart.notifyDataSetChanged(true);
+                    StockDetail current = realtradeManage.getCurrentK();
+                    lb_close_price.setText("收盘价：" + current.getEnd());
+                    lb_close_rate.setText("涨跌: " + current.getUpRate());
+                    if(current.getEnd() > current.getStart()){
+                        lb_close_price.setTextColor(getResources().getColor(R.color.kline_up));
+                        lb_close_rate.setTextColor(getResources().getColor(R.color.kline_up));
+                    }else{
+                        lb_close_price.setTextColor(getResources().getColor(R.color.kline_down));
+                        lb_close_rate.setTextColor(getResources().getColor(R.color.kline_down));
+                    }
+                }else{
+                    if(realtradeManage.showNextOpen()){
+                        chart.setData(realtradeManage.getGroup());
+                        chart.notifyDataSetChanged(true);
+                        updateTopBar();
+                    }else{
+                        //TODO: end
+                    }
+                }
+
+            }
+        });
 
         chartParent = findViewById(R.id.chart_parent);
         DisplayMetrics dm = new DisplayMetrics();

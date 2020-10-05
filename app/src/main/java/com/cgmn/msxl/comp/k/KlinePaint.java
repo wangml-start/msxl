@@ -129,7 +129,18 @@ public class KlinePaint {
         canvas.clipRect(candleRect.left, candleRect.top, candleRect.right, macdRect.bottom);
         List<KLine> temList = data.getNodes().subList(visibleXMin, visibleXMax);
         for (int i = 0; i < temList.size(); i++) {
-            KLine entry = data.getNodes().get(i);
+            KLine entry = temList.get(i);
+            if(entry.isOpen){
+                float openKline[] = new float[4];
+                openKline[0] = i + mBarSpace;
+                openKline[2] = i + 1 - mBarSpace;
+                openKline[1] = entry.open;
+                openKline[3] = entry.open;
+                mapPoints(openKline);
+                canvas.drawLine(openKline[0], openKline[1], openKline[2], openKline[3], mLabelPaint);
+
+                continue;
+            }
 
             // draw step 0: set color
             Boolean isUp = entry.open < entry.close;
@@ -187,7 +198,7 @@ public class KlinePaint {
 
             //draw step 4: MA5 10 20
             if (i > 0) {
-                KLine preEntry = data.getNodes().get(i - 1);
+                KLine preEntry = temList.get(i - 1);
                 if (preEntry.avg5 > 0) {
                     averageBuffer[0] = i - 1;
                     averageBuffer[2] = i;
@@ -228,7 +239,7 @@ public class KlinePaint {
             }
 
             if (i > 0) {
-                KLine preEntry = data.getNodes().get(i - 1);
+                KLine preEntry = temList.get(i - 1);
                 difBuffer[0] = i - 1;
                 difBuffer[2] = i;
                 difBuffer[1] = preEntry.dif;
