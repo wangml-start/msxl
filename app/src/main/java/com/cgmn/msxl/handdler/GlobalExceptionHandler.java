@@ -51,7 +51,9 @@ public class GlobalExceptionHandler {
                 CustmerToast.makeText(mContxt, mContxt.getString(R.string.network_loss)).show();
             }
         }catch (Exception e1){
-            CustmerToast.makeText(mContxt, e.getMessage()).show();
+            if(!CommonUtil.isEmpty(e.getMessage())){
+                CustmerToast.makeText(mContxt, e.getMessage()).show();
+            }
         }
 
         String token = AppApplication.getInstance().getToken();
