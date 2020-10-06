@@ -89,13 +89,6 @@ public class RealControlActivity extends AppCompatActivity {
                                     Integer status = data.getStatus();
                                     if (status == null || status == -1) {
                                         throw new Exception(data.getError());
-                                    } else {
-                                        //存数据
-                                        AppSqlHelper sqlHeper = new AppSqlHelper(mContxt);
-                                        ContentValues values = new ContentValues();
-                                        values.put("content", gson.toJson(data.getKLineSet()));
-                                        values.put("data_type", "K_LINE_SET");
-                                        sqlHeper.upsert("temp_data_save", values, "data_type");
                                     }
                                 } catch (Exception e) {
                                     message.what = MessageUtil.EXCUTE_EXCEPTION;
@@ -117,20 +110,12 @@ public class RealControlActivity extends AppCompatActivity {
                     realtradeManage.setKlineset((KlineSet) msg.obj) ;
                     startChartInit();
                 } else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
-                    AppSqlHelper sqlHeper = new AppSqlHelper(mContxt);
-                    String json = sqlHeper.getKlinJsonStr();
-                    if(!CommonUtil.isEmpty(json)){
-                        KlineSet set = gson.fromJson(json, KlineSet.class);
-                        realtradeManage.setKlineset(set);
-                        startChartInit();
-                    }else{
-                        Exception exception = (Exception) msg.obj;
-                        StringBuffer mes = new StringBuffer();
-                        GlobalExceptionHandler.getInstance(mContxt).handlerException(exception);
-                        mes.append(getString(R.string.ge_stock_info_failed));
-                        //TODO: 异常处理
-                        CustmerToast.makeText(mContxt, mes.toString()).show();
-                    }
+                    Exception exception = (Exception) msg.obj;
+                    StringBuffer mes = new StringBuffer();
+                    GlobalExceptionHandler.getInstance(mContxt).handlerException(exception);
+                    mes.append(getString(R.string.ge_stock_info_failed));
+                    //TODO: 异常处理
+                    CustmerToast.makeText(mContxt, mes.toString()).show();
                 }
                 return false;
             }
