@@ -104,7 +104,7 @@ public class MainActivity extends LoginBaseActivity {
 
     @Override
     public void onClick(View v) {
-        startActivity(new Intent(this, RealControlActivity.class));
+        startActivity(new Intent(this, loginActivity.class));
         this.finish();
     }
 

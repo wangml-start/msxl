@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.CustmerToast;
+import com.cgmn.msxl.comp.StockHolderView;
 import com.cgmn.msxl.comp.k.KlineChart;
 import com.cgmn.msxl.db.AppSqlHelper;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
@@ -33,10 +34,12 @@ public class RealControlActivity extends AppCompatActivity {
     private static final String TAG = RealControlActivity.class.getSimpleName();
     private Context mContxt;
     private KlineChart chart;
+    private StockHolderView stockView;
     //消息处理
     private Handler mHandler;
 
-    private LinearLayout chartParent;
+    private LinearLayout chartParent, holderParent;
+
 
     private Gson gson;
 
@@ -122,7 +125,7 @@ public class RealControlActivity extends AppCompatActivity {
                         startChartInit();
                     }else{
                         Exception exception = (Exception) msg.obj;
-                        FixStringBuffer mes = new FixStringBuffer();
+                        StringBuffer mes = new StringBuffer();
                         GlobalExceptionHandler.getInstance(mContxt).handlerException(exception);
                         mes.append(getString(R.string.ge_stock_info_failed));
                         //TODO: 异常处理
@@ -142,7 +145,7 @@ public class RealControlActivity extends AppCompatActivity {
         chart.setData(realtradeManage.getGroup());
         chart.notifyDataSetChanged(true);
         chartParent.addView(chart);
-
+        holderParent.addView(stockView);
         updateTopBar();
     }
 
@@ -162,6 +165,7 @@ public class RealControlActivity extends AppCompatActivity {
         mContxt = this;
         gson = new Gson();
         chart = new KlineChart(this);
+        stockView = new StockHolderView(this);
         realtradeManage = new RealTradeManage();
 
         lb_open_price = findViewById(R.id.lb_open_price);
@@ -206,16 +210,19 @@ public class RealControlActivity extends AppCompatActivity {
                         //TODO: end
                     }
                 }
-
             }
         });
 
         chartParent = findViewById(R.id.chart_parent);
+        holderParent = findViewById(R.id.holder_parent);
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         int screenHeight = dm.heightPixels;
-        LinearLayout.LayoutParams linearParams =(LinearLayout.LayoutParams) chartParent.getLayoutParams();
-        linearParams.height = ((Double)(screenHeight * 0.6)).intValue();// 控件的高强制设成20
-        chartParent.setLayoutParams(linearParams);
+        LinearLayout.LayoutParams kparams =(LinearLayout.LayoutParams) chartParent.getLayoutParams();
+        kparams.height = ((Double)(screenHeight * 0.5)).intValue();
+        chartParent.setLayoutParams(kparams);
+        LinearLayout.LayoutParams holder =(LinearLayout.LayoutParams) holderParent.getLayoutParams();
+        holder.height = ((Double)(screenHeight * 0.4)).intValue();
+        holderParent.setLayoutParams(holder);
     }
 }

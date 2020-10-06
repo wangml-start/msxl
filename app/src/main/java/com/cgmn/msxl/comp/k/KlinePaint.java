@@ -77,7 +77,7 @@ public class KlinePaint {
 
         mGridPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mGridPaint.setStyle(Paint.Style.STROKE);
-        mGridPaint.setStrokeWidth(0.6f);
+        mGridPaint.setStrokeWidth(1f);
         mGridPaint.setColor(Color.GRAY);
 
         mLabelPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -89,9 +89,9 @@ public class KlinePaint {
         mk5Paint.setStyle(Paint.Style.FILL);
         mk10Paint.setStyle(Paint.Style.FILL);
         mk20Paint.setStyle(Paint.Style.FILL);
-        mk5Paint.setStrokeWidth(0.8f);
-        mk10Paint.setStrokeWidth(0.8f);
-        mk20Paint.setStrokeWidth(0.8f);
+        mk5Paint.setStrokeWidth(1f);
+        mk10Paint.setStrokeWidth(1f);
+        mk20Paint.setStrokeWidth(1f);
     }
 
     public void setContentRect(RectF contentRect) {

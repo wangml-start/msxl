@@ -5,6 +5,7 @@
         android:clipToPadding="true"
         android:fitsSystemWindows="true"
         android:orientation="vertical">
+    <!--top bar-->
     <View
             android:layout_width="match_parent"
             android:layout_marginTop="5dp"
@@ -34,6 +35,7 @@
                 style="@style/kline_top_bar"
                 />
     </LinearLayout>
+
     <LinearLayout
             android:id="@+id/lb_close_div"
             android:layout_width="match_parent"
@@ -62,11 +64,12 @@
             android:layout_height="2px"
             android:background="@color/div_white"
             android:layout_below="@id/lb_close_div"/>
+    <!--top bar-->
 
-
+    <!--k line -->
     <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:id="@+id/chart_parent"
             android:background="@color/bg_white"
@@ -74,18 +77,19 @@
             android:layout_centerVertical="true"
             >
     </LinearLayout>
-
     <View
             android:id="@+id/div_tab_bar"
             android:layout_width="match_parent"
             android:layout_height="2px"
             android:background="@color/div_white"
             android:layout_above="@id/ly_tab_bar"/>
+    <!--k line -->
+
 
     <LinearLayout
             android:id="@+id/ly_bottom_bar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="25dp"
             android:layout_alignParentBottom="true"
             android:background="@color/bg_white"
             android:orientation="horizontal">
@@ -95,6 +99,24 @@
                 android:id="@+id/bt_next"
                 android:background="@drawable/bt_back"
                 android:text="Next"
-            />
+                />
     </LinearLayout>
+
+
+    <!--stock holder -->
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/holder_parent"
+            android:background="@color/bg_white"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            >
+
+    </LinearLayout>
+    <!--stock holder -->
+
+
+
 </LinearLayout>
