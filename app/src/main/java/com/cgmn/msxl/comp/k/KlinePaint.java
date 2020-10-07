@@ -348,6 +348,7 @@ public class KlinePaint {
                 mLabelPaint);
         canvas.drawLine(candleRect.left, candleRect.height() * 2 / 3 + candleRect.top + fontMetrics.bottom, candleRect.right, candleRect.height() * 2 / 3 + candleRect.top + fontMetrics.bottom, mGridPaint);
 
+        mLabelPaint.setTextSize(30);
         canvas.drawText(
                 "VOL",
                 barRect.left * 9 / 10,

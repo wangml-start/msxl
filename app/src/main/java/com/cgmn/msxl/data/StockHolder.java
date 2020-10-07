@@ -201,6 +201,9 @@ public class StockHolder {
     }
 
     public String getRealRate(){
+        if(initTotAmt.intValue() == 0){
+            return "";
+        }
         return CommonUtil.formatPercent(pl/initTotAmt);
     }
 

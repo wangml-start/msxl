@@ -81,7 +81,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
             android:background="@color/bg_white"
-            android:orientation="vertical"></LinearLayout>
+            android:orientation="vertical"/>
 
     <View
             android:id="@+id/div_tab_bar"

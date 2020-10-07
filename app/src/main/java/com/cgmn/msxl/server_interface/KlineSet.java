@@ -6,7 +6,7 @@ public class KlineSet {
 
     private String stockName;
 
-    private String stocCode;
+    private String stockCode;
 
     private String startDate;
 
@@ -24,12 +24,12 @@ public class KlineSet {
         this.stockName = stockName;
     }
 
-    public String getStocCode() {
-        return stocCode;
+    public String getStockCode() {
+        return stockCode;
     }
 
-    public void setStocCode(String stocCode) {
-        this.stocCode = stocCode;
+    public void setStockCode(String stockCode) {
+        this.stockCode = stockCode;
     }
 
     public String getStartDate() {

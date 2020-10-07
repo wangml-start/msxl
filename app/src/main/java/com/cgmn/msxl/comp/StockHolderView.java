@@ -65,6 +65,10 @@ public class StockHolderView extends View {
         return stockHolder;
     }
 
+    public void setStockHolder(StockHolder stockHolder) {
+        this.stockHolder = stockHolder;
+    }
+
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         contentRect.set(contentMinOffset, contentMinOffset, w - contentMinOffset, h - contentMinOffset);
@@ -214,7 +218,7 @@ public class StockHolderView extends View {
 
         float[] plLb = calcTextPoint(stockHolder.getRateLb(), 1, 2/3.0f, topSpace+headSpace);
         canvas.drawText(
-                stockHolder.getHoldPlLb(),
+                stockHolder.getRateLb(),
                 plLb[0], plLb[1],
                 mLabelPaint);
         float[] plamt = calcTextPoint(stockHolder.getRealRate(), 2, 2/3.0f, topSpace+headSpace);

@@ -43,9 +43,10 @@ public class KlineChart extends View {
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        contentRect.set(contentMinOffset * 6, contentMinOffset, w - contentMinOffset, h - contentMinOffset);
+        klinePaint.setContentRect(contentRect);
         if(mData != null){
-            contentRect.set(contentMinOffset * 6, contentMinOffset, w - contentMinOffset, h - contentMinOffset);
-            notifyDataSetChanged(false);
+            invalidateView();
         }
     }
 
@@ -55,16 +56,12 @@ public class KlineChart extends View {
      */
     public void setData(KlineGroup data) {
         mData = data;
+        klinePaint.setData(mData);
+        mData.calcMinMax(0, mData.getNodes().size());
     }
 
-    public void notifyDataSetChanged(boolean invalidate) {
-        mData.calcMinMax(0, mData.getNodes().size());
-        klinePaint.setContentRect(contentRect);
-        klinePaint.setData(mData);
-
-        if (invalidate) {
-            invalidate();
-        }
+    public void invalidateView() {
+        invalidate();
     }
 
     @Override
