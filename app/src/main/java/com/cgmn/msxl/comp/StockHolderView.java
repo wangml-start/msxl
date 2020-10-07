@@ -194,42 +194,33 @@ public class StockHolderView extends View {
                 holdamt[0], holdamt[1],
                 mLabelPaint);
 
-        float[] plLb = calcTextPoint(stockHolder.getHoldPlLb(), 1, 1/3.0f, topSpace+headSpace);
-        canvas.drawText(
-                stockHolder.getHoldPlLb(),
-                plLb[0], plLb[1],
-                mLabelPaint);
-
-        Paint tempPain = mLabelPaint;
-        if(stockHolder.getHoldPl() > 0.01){
-            tempPain = mUpPaint;
-        }
-        if(stockHolder.getHoldPl() < 0.0){
-            tempPain = mDownPaint;
-        }
-        float[] plamt = calcTextPoint(stockHolder.getHoldPl(), 2, 1/3.0f, topSpace+headSpace);
-        canvas.drawText(
-                CommonUtil.formatNumer(stockHolder.getHoldPl()),
-                plamt[0], plamt[1],
-                tempPain);
-
-        float[] realPlLb = calcTextPoint(stockHolder.getPlLb(), 1, 2/3.0f, topSpace+headSpace);
+        float[] realPlLb = calcTextPoint(stockHolder.getPlLb(), 1, 1/3.0f, topSpace+headSpace);
         canvas.drawText(
                 stockHolder.getPlLb(),
                 realPlLb[0], realPlLb[1],
                 mLabelPaint);
-        tempPain = mLabelPaint;
+        Paint tempPain = mLabelPaint;
         if(stockHolder.getPl() > 0.01){
             tempPain = mUpPaint;
         }
         if(stockHolder.getPl() < 0.0){
             tempPain = mDownPaint;
         }
-        String plString = String.format("%s  %s", CommonUtil.formatNumer(stockHolder.getPl()), stockHolder.getRealRate());
-        float[] realPlamt = calcTextPoint(plString, 2, 2/3.0f, topSpace+headSpace);
+        float[] realPlamt = calcTextPoint(stockHolder.getPl(), 2, 1/3.0f, topSpace+headSpace);
         canvas.drawText(
-                plString,
+                CommonUtil.formatNumer(stockHolder.getPl()),
                 realPlamt[0], realPlamt[1],
+                tempPain);
+
+        float[] plLb = calcTextPoint(stockHolder.getRateLb(), 1, 2/3.0f, topSpace+headSpace);
+        canvas.drawText(
+                stockHolder.getHoldPlLb(),
+                plLb[0], plLb[1],
+                mLabelPaint);
+        float[] plamt = calcTextPoint(stockHolder.getRealRate(), 2, 2/3.0f, topSpace+headSpace);
+        canvas.drawText(
+                stockHolder.getRealRate(),
+                plamt[0], plamt[1],
                 tempPain);
 
 

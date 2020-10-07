@@ -198,8 +198,8 @@ public class RealControlActivity extends AppCompatActivity
             }
             stockView.getStockHolder().nextPrice(current.getEnd(), false);
         }else{
-            StockDetail current = realtradeManage.getCurrentK();
             if(realtradeManage.showNextOpen()){
+                StockDetail current = realtradeManage.getCurrentK();
                 chart.setData(realtradeManage.getGroup());
                 chart.notifyDataSetChanged(true);
                 updateTopBar();
@@ -212,6 +212,7 @@ public class RealControlActivity extends AppCompatActivity
                 }
                 stockView.getStockHolder().nextPrice(current.getStart(), true);
             }else{
+                StockDetail current = realtradeManage.getCurrentK();
                 stockView.getStockHolder().settleTrading(current.getEnd());
             }
         }

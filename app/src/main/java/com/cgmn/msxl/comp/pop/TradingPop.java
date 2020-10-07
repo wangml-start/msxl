@@ -129,7 +129,7 @@ public class TradingPop extends PopupWindow
             et_count.setText(avaiCount + "");
             setAmountText(CommonUtil.formatNumer(avaiCount*price));
         }else{
-            int avaiCount = (int) (stoHolder.getAvaiLabelShare() * persent);
+            int avaiCount = stoHolder.getAvaiSellCount(persent);
             et_count.setText(avaiCount+"");
             setAmountText(CommonUtil.formatNumer(avaiCount*price));
         }

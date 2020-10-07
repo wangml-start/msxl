@@ -15,6 +15,7 @@ public class StockHolder {
     private final String avaiAmtLb = "可用";
     private final String exchangeLb = "手续费";
     private final String plLb = "盈亏";
+    private final String rateLb = "盈亏率";
 
     private final float brokerRate = 0.00025f;
     private final float yinhuaRate = 0.001f;
@@ -82,6 +83,9 @@ public class StockHolder {
         return totAmtLb;
     }
 
+    public String getRateLb() {
+        return rateLb;
+    }
 
     public Float getHoldAmt() {
         return holdAmt;
@@ -197,7 +201,7 @@ public class StockHolder {
     }
 
     public String getRealRate(){
-        return CommonUtil.formatNumer(pl/initTotAmt);
+        return CommonUtil.formatPercent(pl/initTotAmt);
     }
 
     public void buyStock(int count, Float pri, String scode) {
@@ -224,6 +228,7 @@ public class StockHolder {
         holdPl -= fee;
         avaiAmt = totAmt - holdAmt;
         costPrice = (holdAmt-holdPl) / holdShare;
+        pl = totAmt - initTotAmt;
     }
 
     public void sellStock(int count, Float pri) {
@@ -245,12 +250,12 @@ public class StockHolder {
         totAmt -= fee;
         avaiAmt = totAmt - holdAmt;
         if(holdShare == 0){
-            pl += holdPl;
             costPrice = 0f;
             holdPl = 0.f;
         }else{
             costPrice = (holdAmt-holdPl) / holdShare;
         }
+        pl = totAmt - initTotAmt;
     }
 
     public int getAvaiBuyCount(String price) {
@@ -269,6 +274,11 @@ public class StockHolder {
         return 100 * avaiCount;
     }
 
+    public int getAvaiSellCount(float percent) {
+        int avaiCount = (int) (avaiLabelShare  * percent / 100);
+        return 100 * avaiCount;
+    }
+
     public void nextPrice(float pr, Boolean changeDay){
         price = pr;
         if(changeDay){
@@ -277,6 +287,7 @@ public class StockHolder {
         holdPl = (price - costPrice) * holdShare;
         holdAmt = price * holdShare;
         totAmt = holdAmt + avaiAmt;
+        pl = totAmt - initTotAmt;
     }
 
     public void settleTrading(Float price){
