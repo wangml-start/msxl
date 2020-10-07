@@ -75,6 +75,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:layout_marginRight="10dp"
             android:id="@+id/chart_parent"
             android:background="@color/bg_white"
             android:layout_centerHorizontal="true"
@@ -113,10 +114,40 @@
         <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/bt_change"
+                android:background="@drawable/bt_back"
+                android:text="换股"
+                />
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:id="@+id/bt_next"
                 android:background="@drawable/bt_back"
                 android:text="Next"
                 />
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/bt_buy"
+                android:background="@drawable/bt_back"
+                android:text="买入"
+                />
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/bt_sell"
+                android:background="@drawable/bt_back"
+                android:text="卖出"
+                />
     </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/pop_div"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/bg_white"
+            android:orientation="horizontal"/>
+
 
 </LinearLayout>

@@ -23,4 +23,21 @@
     <color name="kline_ave_5">#413F43</color>
     <color name="kline_ave_10">#FFC800</color>
     <color name="kline_ave_20">#E81689</color>
+
+
+
+    <color name="main_bg">#3B3B3B</color>
+    <color name="main_bg_light_light">#4a4a4a</color>
+    <color name="main_bg_grey">#171616</color>
+    <color name="main_bg_orange">#CD6600</color>
+    <color name="main_bg_orange_light">#AA6600</color>
+    <color name="main_bg_light">#A9A9A9</color>
+    <color name="main_bg_dark">#000000</color>
+    <color name="main_bg_black_light">#222222</color>
+    <color name="main_text_color">#EAEAEA</color>
+    <color name="main_red_color">#DA0505</color>
+    <color name="main_green_color">#32CD32</color>
+    <color name="main_blue_color">#1E90FF</color>
+    <color name="_e1e4e9">#e1e4e9</color>
+    <color name="_abb2bd">#abb2bd</color>
 </resources>

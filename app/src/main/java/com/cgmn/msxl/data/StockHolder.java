@@ -1,7 +1,9 @@
 package com.cgmn.msxl.data;
 
-import java.text.DecimalFormat;
+import com.cgmn.msxl.utils.CommonUtil;
+
 import java.util.LinkedList;
+import java.util.List;
 
 public class StockHolder {
     private final String holdAmtLb = "总市值";
@@ -13,27 +15,31 @@ public class StockHolder {
     private final String holdPlLb = "持仓盈亏";
     private final String avaiAmtLb = "可用";
     private final String exchangeLb = "手续费： ";
-    private final DecimalFormat format = new DecimalFormat("#0.00");
-    private final DecimalFormat formatP = new DecimalFormat("0.00%");
+
+    private final float brokerRate = 0.00025f;
+    private final float yinhuaRate = 0.001f;
+    private final float guohuRate = 0.001f;
 
     LinkedList<Trade> nodes;
 
-    private String code = "0023XX";
+    private String code = "";
 
-    private String totAmt = "200000.00";
-    private String holdAmt = "50000.00";
-    private String holdPl = "-5000.00";
-    private String avaiAmt = "150000.00";
+    private Float totAmt = 0.0f;
+    private Float holdAmt = 0.0f;
+    private Float holdPl = 0.0f;
+    private Float avaiAmt = 0.0f;
+    private Float costPrice = 0.0f;
+    private Float price = 0.0f;
+    private Float pl = 0.0f;
 
-    private float costPrice =30.51f;
-    private float price = 22.51f;
+    private int holdShare = 0;
+    private int avaiLabelShare = 0;
 
+    private Float exchange = 0.0f;
 
-    private float pl = 55555;
-    private int holdShare = 20000;
-    private int avaiLabelShare = 10000;
+    //违反的原则
+    private List<Integer> unprinciple;
 
-    private float exchange = 300.25f;
 
     public String getHead1() {
         return head1;
@@ -51,7 +57,7 @@ public class StockHolder {
         return head4;
     }
 
-    public StockHolder(){
+    public StockHolder() {
         nodes = new LinkedList();
     }
 
@@ -63,11 +69,11 @@ public class StockHolder {
         this.nodes = nodes;
     }
 
-    public String getTotAmt() {
+    public Float getTotAmt() {
         return totAmt;
     }
 
-    public void setTotAmt(String totAmt) {
+    public void setTotAmt(Float totAmt) {
         this.totAmt = totAmt;
     }
 
@@ -76,11 +82,11 @@ public class StockHolder {
     }
 
 
-    public String getHoldAmt() {
+    public Float getHoldAmt() {
         return holdAmt;
     }
 
-    public void setHoldAmt(String holdAmt) {
+    public void setHoldAmt(Float holdAmt) {
         this.holdAmt = holdAmt;
     }
 
@@ -89,11 +95,11 @@ public class StockHolder {
     }
 
 
-    public String getHoldPl() {
+    public Float getHoldPl() {
         return holdPl;
     }
 
-    public void setHoldPl(String holdPl) {
+    public void setHoldPl(Float holdPl) {
         this.holdPl = holdPl;
     }
 
@@ -102,11 +108,11 @@ public class StockHolder {
     }
 
 
-    public String getAvaiAmt() {
+    public Float getAvaiAmt() {
         return avaiAmt;
     }
 
-    public void setAvaiAmt(String avaiAmt) {
+    public void setAvaiAmt(Float avaiAmt) {
         this.avaiAmt = avaiAmt;
     }
 
@@ -115,66 +121,159 @@ public class StockHolder {
     }
 
     public String getCode() {
-        return code;
+        if(CommonUtil.isEmpty(code)){
+            return code;
+        }
+        return String.format("%sXX", code.substring(0, 3));
     }
 
     public void setCode(String code) {
         this.code = code;
     }
 
-    public String getCostPrice() {
-        return format.format(costPrice);
+    public Float getCostPrice() {
+        return costPrice;
     }
 
-    public void setCostPrice(float costPrice) {
+    public void setCostPrice(Float costPrice) {
         this.costPrice = costPrice;
     }
 
-    public String getPrice() {
-        return format.format(price);
+    public Float getPrice() {
+        return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(Float price) {
         this.price = price;
     }
 
-    public float getPl() {
+    public Float getPl() {
         return pl;
     }
 
-    public void setPl(float pl) {
+    public void setPl(Float pl) {
         this.pl = pl;
     }
 
-    public String getHoldShare() {
-        return format.format(holdShare);
+    public int getHoldShare() {
+        return holdShare;
     }
 
     public void setHoldShare(int holdShare) {
         this.holdShare = holdShare;
     }
 
-    public String getAvaiLabelShare() {
-        return format.format(avaiLabelShare);
+    public int getAvaiLabelShare() {
+        return avaiLabelShare;
     }
 
     public void setAvaiLabelShare(int avaiLabelShare) {
         this.avaiLabelShare = avaiLabelShare;
     }
 
-    public String getExchange() {
-        return format.format(exchange);
+    public Float getExchange() {
+        return exchange;
     }
 
-    public void setExchange(float exchange) {
+    public void setExchange(Float exchange) {
         this.exchange = exchange;
     }
 
-    public String getPlRate(){
-        return formatP.format((price-costPrice)/costPrice);
+    public String getPlRate() {
+        return CommonUtil.formatPercent((price - costPrice) / costPrice);
     }
 
     public String getExchangeLb() {
         return exchangeLb;
     }
+
+
+    public void buyStock(int count, Float pri, String scode) {
+        code = scode;
+        holdShare += count;
+        price = pri;
+        float buyAmt = pri * count;
+        float fee = 0;
+        if(scode.startsWith("6")){
+            float ghfee = count * guohuRate;
+            if (ghfee < 1) {
+                ghfee = 1;
+            }
+            fee += ghfee;
+        }
+        float brofee = buyAmt * brokerRate;
+        if (brofee < 5) {
+            brofee = 5;
+        }
+        fee += brofee;
+        exchange += fee;
+        totAmt -= fee;
+        holdAmt += buyAmt;
+        holdPl -= fee;
+        avaiAmt = totAmt - holdAmt;
+        costPrice = (holdAmt-holdPl) / holdShare;
+    }
+
+    public void sellStock(int count, Float pri) {
+        holdShare -= count;
+        avaiLabelShare -= count;
+        float sellAmt = price * count;
+        float yhfee = sellAmt * yinhuaRate;
+        if (yhfee < 5) {
+            yhfee = 5;
+        }
+        float brofee = sellAmt * brokerRate;
+        if (brofee < 5) {
+            brofee = 5;
+        }
+        float fee = brofee + yhfee;
+        exchange += fee;
+        holdPl -= fee;
+        holdAmt -= sellAmt;
+        totAmt -= fee;
+        avaiAmt = totAmt - holdAmt;
+        if(holdShare == 0){
+            costPrice = 0f;
+            holdPl = 0.f;
+        }else{
+            costPrice = (holdAmt-holdPl) / holdShare;
+        }
+    }
+
+    public int getAvaiBuyCount(String price) {
+        float priceNum = CommonUtil.castFloatFromString(price);
+        float avaiAmt = getAvaiAmt();
+        int avaiCount = (int) (avaiAmt / priceNum / 100);
+
+        return 100 * avaiCount;
+    }
+
+    public int getAvaiBuyCount(String price, float percent) {
+        float priceNum = CommonUtil.castFloatFromString(price);
+        float avaiAmt = getAvaiAmt() * percent;
+        int avaiCount = (int) (avaiAmt / priceNum / 100);
+
+        return 100 * avaiCount;
+    }
+
+    public void nextPrice(float pr, Boolean changeDay){
+        price = pr;
+        if(changeDay){
+            avaiLabelShare = holdShare;
+        }
+        holdPl = (price - costPrice) * holdShare;
+        holdAmt = price * holdShare;
+        totAmt = holdAmt + avaiAmt;
+    }
+
+    public boolean settleTrading(){
+        if(holdShare == 0){
+            Trade trade = new Trade(code, holdPl, exchange, unprinciple);
+            nodes.addLast(trade);
+            return true;
+        }else{
+            return false;
+        }
+    }
+
 }

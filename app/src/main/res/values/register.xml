@@ -21,6 +21,13 @@
         <item name="android:lines">1</item>
         <item name="android:textCursorDrawable">@null</item>
         <item name="colorControlNormal">@null</item>
-         <item name="colorControlActivated">@null</item>
+        <item name="colorControlActivated">@null</item>
+    </style>
+
+    <style name="trade_buy_sell">
+        <item name="android:textSize">@dimen/LargeSize</item>
+        <item name="android:background">@drawable/txt_bg</item>
+        <item name="android:gravity">center</item>
+
     </style>
 </resources>

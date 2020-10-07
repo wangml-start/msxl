@@ -7,12 +7,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URLEncoder;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 public class CommonUtil {
+    private static DecimalFormat formatP = new DecimalFormat("0.00%");
+    private static DecimalFormat format2 = new DecimalFormat("0.00");
+    private static DecimalFormat format3 = new DecimalFormat("0.000");
 
     public static boolean isEmpty(Object o){
         if(o == null){
@@ -83,5 +87,24 @@ public class CommonUtil {
                 resMap.put(key, value);
             }
         }
+    }
+
+    public static float castFloatFromString(String num){
+        return Float.valueOf(num);
+    }
+
+    public static String formatPercent(Object num){
+        return formatP.format(num);
+    }
+
+    public static String formatNumer(Object num, int tail){
+        if(tail ==3){
+            return format3.format(num);
+        }else {
+            return format2.format(num);
+        }
+    }
+    public static String formatNumer(Object num){
+        return format2.format(num);
     }
 }
