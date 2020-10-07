@@ -119,8 +119,6 @@ public class KlinePaint {
         calc();
         // DRAW LABELS
         renderLabels(canvas);
-        canvas.drawRect(contentRect, mGridPaint);
-        canvas.drawRect(candleRect, mGridPaint);
         canvas.drawRect(barRect, mGridPaint);
         canvas.drawRect(macdRect, mGridPaint);
 
@@ -349,6 +347,19 @@ public class KlinePaint {
                 candleRect.height() * 2 / 3 + candleRect.top + fontMetrics.bottom,
                 mLabelPaint);
         canvas.drawLine(candleRect.left, candleRect.height() * 2 / 3 + candleRect.top + fontMetrics.bottom, candleRect.right, candleRect.height() * 2 / 3 + candleRect.top + fontMetrics.bottom, mGridPaint);
+
+        canvas.drawText(
+                "VOL",
+                barRect.left * 9 / 10,
+                barRect.height() * 3 / 5 + candleRect.bottom,
+                mLabelPaint);
+
+        canvas.drawText(
+                "MACD",
+                macdRect.left*1.02f,
+                macdRect.height() * 3 / 5 + barRect.bottom,
+                mLabelPaint);
+
         canvas.save();
         canvas.restore();
     }
