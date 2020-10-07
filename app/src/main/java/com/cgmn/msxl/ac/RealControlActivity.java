@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -30,7 +31,8 @@ import com.cgmn.msxl.utils.FixStringBuffer;
 import com.cgmn.msxl.utils.MessageUtil;
 import com.google.gson.Gson;
 
-public class RealControlActivity extends AppCompatActivity {
+public class RealControlActivity extends AppCompatActivity
+        implements View.OnClickListener{
     private static final String TAG = RealControlActivity.class.getSimpleName();
     private Context mContxt;
     private KlineChart chart;
@@ -161,42 +163,7 @@ public class RealControlActivity extends AppCompatActivity {
         lb_left_s = findViewById(R.id.lb_left_s);
         bt_next = findViewById(R.id.bt_next);
 
-        bt_next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(RealTradeManage.OPEN.equals(realtradeManage.getkStatus())){
-                    realtradeManage.showNextClose();
-                    chart.setData(realtradeManage.getGroup());
-                    chart.notifyDataSetChanged(true);
-                    StockDetail current = realtradeManage.getCurrentK();
-                    lb_close_price.setText("收盘价：" + current.getEnd());
-                    lb_close_rate.setText("涨跌: " + current.getUpRate());
-                    if(current.getEnd() > current.getStart()){
-                        lb_close_price.setTextColor(getResources().getColor(R.color.kline_up));
-                        lb_close_rate.setTextColor(getResources().getColor(R.color.kline_up));
-                    }else{
-                        lb_close_price.setTextColor(getResources().getColor(R.color.kline_down));
-                        lb_close_rate.setTextColor(getResources().getColor(R.color.kline_down));
-                    }
-                }else{
-                    if(realtradeManage.showNextOpen()){
-                        chart.setData(realtradeManage.getGroup());
-                        chart.notifyDataSetChanged(true);
-                        updateTopBar();
-
-                        if(realtradeManage.openWithUp()){
-                            lb_open_price.setTextColor(getResources().getColor(R.color.kline_up));
-                            lb_open_rate.setTextColor(getResources().getColor(R.color.kline_up));
-                        }else if(realtradeManage.openWithDown()){
-                            lb_open_price.setTextColor(getResources().getColor(R.color.kline_down));
-                            lb_open_rate.setTextColor(getResources().getColor(R.color.kline_down));
-                        }
-                    }else{
-                        //TODO: end
-                    }
-                }
-            }
-        });
+        bt_next.setOnClickListener(this);
 
         chartParent = findViewById(R.id.chart_parent);
         holderParent = findViewById(R.id.holder_parent);
@@ -207,7 +174,48 @@ public class RealControlActivity extends AppCompatActivity {
         kparams.height = ((Double)(screenHeight * 0.5)).intValue();
         chartParent.setLayoutParams(kparams);
         LinearLayout.LayoutParams holder =(LinearLayout.LayoutParams) holderParent.getLayoutParams();
-        holder.height = ((Double)(screenHeight * 0.4)).intValue();
+        holder.height = ((Double)(screenHeight * 0.3)).intValue();
         holderParent.setLayoutParams(holder);
+    }
+
+    private void onNextClick(){
+        if(RealTradeManage.OPEN.equals(realtradeManage.getkStatus())){
+            realtradeManage.showNextClose();
+            chart.setData(realtradeManage.getGroup());
+            chart.notifyDataSetChanged(true);
+            StockDetail current = realtradeManage.getCurrentK();
+            lb_close_price.setText("收盘价：" + current.getEnd());
+            lb_close_rate.setText("涨跌: " + current.getUpRate());
+            if(current.getEnd() > current.getStart()){
+                lb_close_price.setTextColor(getResources().getColor(R.color.kline_up));
+                lb_close_rate.setTextColor(getResources().getColor(R.color.kline_up));
+            }else{
+                lb_close_price.setTextColor(getResources().getColor(R.color.kline_down));
+                lb_close_rate.setTextColor(getResources().getColor(R.color.kline_down));
+            }
+        }else{
+            if(realtradeManage.showNextOpen()){
+                chart.setData(realtradeManage.getGroup());
+                chart.notifyDataSetChanged(true);
+                updateTopBar();
+
+                if(realtradeManage.openWithUp()){
+                    lb_open_price.setTextColor(getResources().getColor(R.color.kline_up));
+                    lb_open_rate.setTextColor(getResources().getColor(R.color.kline_up));
+                }else if(realtradeManage.openWithDown()){
+                    lb_open_price.setTextColor(getResources().getColor(R.color.kline_down));
+                    lb_open_rate.setTextColor(getResources().getColor(R.color.kline_down));
+                }
+            }else{
+                //TODO: end
+            }
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v.getId() == R.id.bt_next){
+            onNextClick();
+        }
     }
 }

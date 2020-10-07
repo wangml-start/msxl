@@ -12,6 +12,5 @@
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
-            android:text="SSDSD"
             android:textSize="@dimen/smallSize" />
 </RelativeLayout>

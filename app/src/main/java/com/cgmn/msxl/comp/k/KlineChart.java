@@ -28,7 +28,7 @@ public class KlineChart extends View {
         super(context, attrs, defStyleAttr);
 
         contentRect = new RectF();
-        contentMinOffset = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, context.getResources().getDisplayMetrics());
+        contentMinOffset = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, context.getResources().getDisplayMetrics());
 
         klinePaint = new KlinePaint();
 
@@ -44,7 +44,7 @@ public class KlineChart extends View {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         if(mData != null){
-            contentRect.set(contentMinOffset * 2, contentMinOffset, w - contentMinOffset, h - contentMinOffset);
+            contentRect.set(contentMinOffset * 6, contentMinOffset, w - contentMinOffset, h - contentMinOffset);
             notifyDataSetChanged(false);
         }
     }

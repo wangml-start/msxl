@@ -5,6 +5,8 @@
         android:clipToPadding="true"
         android:fitsSystemWindows="true"
         android:orientation="vertical">
+
+
     <!--top bar-->
     <View
             android:layout_width="match_parent"
@@ -12,10 +14,12 @@
             android:layout_height="2px"
             android:background="@color/div_white"
             android:layout_above="@id/lb_open_div"/>
+
+
     <LinearLayout
             android:id="@+id/lb_open_div"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="25dp"
             android:background="@color/bg_white"
             android:orientation="horizontal">
         <TextView
@@ -39,7 +43,7 @@
     <LinearLayout
             android:id="@+id/lb_close_div"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="25dp"
             android:layout_alignParentTop="true"
             android:background="@color/bg_white"
             android:orientation="horizontal">
@@ -85,6 +89,19 @@
             android:layout_above="@id/ly_tab_bar"/>
     <!--k line -->
 
+    <!--stock holder -->
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/holder_parent"
+            android:background="@color/bg_white"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            >
+
+    </LinearLayout>
+    <!--stock holder -->
 
     <LinearLayout
             android:id="@+id/ly_bottom_bar"
@@ -101,22 +118,5 @@
                 android:text="Next"
                 />
     </LinearLayout>
-
-
-    <!--stock holder -->
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:id="@+id/holder_parent"
-            android:background="@color/bg_white"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            >
-
-    </LinearLayout>
-    <!--stock holder -->
-
-
 
 </LinearLayout>

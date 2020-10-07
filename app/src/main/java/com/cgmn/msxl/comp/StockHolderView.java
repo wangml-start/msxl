@@ -166,11 +166,16 @@ public class StockHolderView extends View {
                 stockHolder.getHoldPlLb(),
                 plLb[0], plLb[1],
                 mLabelPaint);
+
+        Paint tempPain = mUpPaint;
+        if(stockHolder.getPlRate().indexOf("-") != -1){
+            tempPain = mDownPaint;
+        }
         float[] plamt = calcTextPoint(stockHolder.getHoldPl(), 2, contentRect.width() / 2, topSpace+headSpace);
         canvas.drawText(
                 stockHolder.getHoldPl(),
                 plamt[0], plamt[1],
-                mLabelPaint);
+                tempPain);
 
 
     }

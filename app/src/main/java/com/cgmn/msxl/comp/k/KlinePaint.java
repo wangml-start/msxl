@@ -12,16 +12,16 @@ public class KlinePaint {
     protected final Paint mGridPaint, mLabelPaint;
     protected final Paint mk5Paint, mk10Paint, mk20Paint;
     private Paint.FontMetrics fontMetrics = new Paint.FontMetrics();
-    private float defaultTextSize;
 
     protected KlineGroup data;
 
+    protected RectF contentRect = new RectF();
     protected RectF candleRect = new RectF();
     protected RectF barRect = new RectF();
     protected RectF macdRect = new RectF();
 
     private final float candleBarRatio = 0.7f;
-    private final float macdBarRatio = 0.85f;
+    private final float reactUseRate = 0.95f;
 
     // contain 4 points to draw 2 lines.
     protected float[] shadowBuffer = new float[8];
@@ -96,17 +96,13 @@ public class KlinePaint {
 
     public void setContentRect(RectF contentRect) {
         float barTop = contentRect.bottom -
-                (1 - candleBarRatio) * (contentRect.height() - contentRect.top);
-        float macdTop = contentRect.bottom -
-                (1 - macdBarRatio) * (contentRect.height() - contentRect.top);
-        float candleBottom = barTop - contentRect.top;
-        float barBottom = macdTop - contentRect.top;
+                (1 - candleBarRatio) * (contentRect.height());
+        float macdTop = barTop + (1 - candleBarRatio) * (contentRect.height()) / 2.0f;
 
-        this.candleRect.set(contentRect.left, contentRect.top, contentRect.right, candleBottom);
-        this.barRect.set(contentRect.left, barTop, contentRect.right, barBottom);
+        this.candleRect.set(contentRect.left, contentRect.top, contentRect.right, barTop);
+        this.barRect.set(contentRect.left, barTop, contentRect.right, macdTop);
         this.macdRect.set(contentRect.left, macdTop, contentRect.right, contentRect.bottom);
-
-        defaultTextSize = contentRect.top * 3 / 4;
+        this.contentRect = contentRect;
     }
 
     public void setData(KlineGroup data) {
@@ -123,6 +119,10 @@ public class KlinePaint {
         calc();
         // DRAW LABELS
         renderLabels(canvas);
+        canvas.drawRect(contentRect, mGridPaint);
+        canvas.drawRect(candleRect, mGridPaint);
+        canvas.drawRect(barRect, mGridPaint);
+        canvas.drawRect(macdRect, mGridPaint);
 
         // set the entry draw area.
         canvas.save();
@@ -130,7 +130,7 @@ public class KlinePaint {
         List<KLine> temList = data.getNodes().subList(visibleXMin, visibleXMax);
         for (int i = 0; i < temList.size(); i++) {
             KLine entry = temList.get(i);
-            if(entry.isOpen){
+            if (entry.isOpen) {
                 float openKline[] = new float[4];
                 openKline[0] = i + mBarSpace;
                 openKline[2] = i + 1 - mBarSpace;
@@ -233,9 +233,9 @@ public class KlinePaint {
             mMatrixMacd.mapPoints(macdBuffer);
             mMatrixOffset.mapPoints(macdBuffer);
             if (entry.macd > 0) {
-                canvas.drawLine(shadowBuffer[0], macdBuffer[1], shadowBuffer[0], macdBuffer[3], mUpPaint);
+                canvas.drawLine(shadowBuffer[0], macdRect.bottom - macdBuffer[1], shadowBuffer[0], macdRect.bottom - macdBuffer[3], mUpPaint);
             } else {
-                canvas.drawLine(shadowBuffer[0], macdBuffer[1], shadowBuffer[0], macdBuffer[3], mDownPaint);
+                canvas.drawLine(shadowBuffer[0], macdRect.bottom - macdBuffer[1], shadowBuffer[0], macdRect.bottom - macdBuffer[3], mDownPaint);
             }
 
             if (i > 0) {
@@ -246,7 +246,7 @@ public class KlinePaint {
                 difBuffer[3] = entry.dif;
                 mMatrixMacd.mapPoints(difBuffer);
                 mMatrixOffset.mapPoints(difBuffer);
-                canvas.drawLine(difBuffer[0], difBuffer[1], difBuffer[2], difBuffer[3], mk5Paint);
+                canvas.drawLine(difBuffer[0], macdRect.bottom - difBuffer[1], difBuffer[2], macdRect.bottom - difBuffer[3], mk5Paint);
 
                 deaBuffer[0] = i - 1;
                 deaBuffer[2] = i;
@@ -254,7 +254,7 @@ public class KlinePaint {
                 deaBuffer[3] = entry.dea;
                 mMatrixMacd.mapPoints(deaBuffer);
                 mMatrixOffset.mapPoints(deaBuffer);
-                canvas.drawLine(deaBuffer[0], deaBuffer[1], deaBuffer[2], deaBuffer[3], mk10Paint);
+                canvas.drawLine(deaBuffer[0], macdRect.bottom - deaBuffer[1], deaBuffer[2], macdRect.bottom - deaBuffer[3], mk10Paint);
             }
 
 
@@ -384,9 +384,8 @@ public class KlinePaint {
     }
 
     public void prepareMatrixValue(float deltaY, float yMin) {
-        deltaY += yMin * 0.03;
         float scaleX = candleRect.width() / visibleCount;
-        float scaleY = candleRect.height() / deltaY;
+        float scaleY = candleRect.height() * reactUseRate / deltaY;
 
         mMatrixValue.reset();
         mMatrixValue.postTranslate(0, -yMin);
@@ -403,24 +402,30 @@ public class KlinePaint {
     public void prepareMatrixBar(float maxY) {
         // increase the y range for good looking.
         mMatrixBar.reset();
-        mMatrixBar.postScale(1, barRect.height() / maxY);
+        mMatrixBar.postScale(1, barRect.height() * reactUseRate / maxY);
     }
 
     public void prepareMatrixMacd() {
         float deltaY = Math.abs(data.mYMaxMacd) + Math.abs(data.mYMinMacd);
-        deltaY = deltaY * 20 / 10;
+        float absMax = Math.abs(data.mYMaxMacd);
         float absMin = Math.abs(data.mYMaxMacd);
-        if (Math.abs(data.mYMinMacd) < absMin) {
-          absMin = Math.abs(data.mYMinMacd);
+        int direction = 1;
+        if (Math.abs(data.mYMinMacd) > absMax) {
+            absMax = Math.abs(data.mYMinMacd);
+            direction = -1;
         }
-        float scaleY = macdRect.height() / deltaY;
+        if (Math.abs(data.mYMinMacd) < absMin) {
+            absMin = Math.abs(data.mYMinMacd);
+        }
+        float scaleY = macdRect.height() * 0.75f / deltaY;
         float scaleX = macdRect.width() / visibleCount;
         mMatrixMacd.reset();
-        float height = candleRect.height() + barRect.height() + macdRect.height();
-        mMatrixMacd.postTranslate(0, -absMin);
-        mMatrixMacd.postScale(scaleX, -scaleY);
-        mMatrixMacd.postTranslate(0, height);
-
+        if(direction > 0){
+            mMatrixMacd.postTranslate(0, absMin);
+        }else{
+            mMatrixMacd.postTranslate(0, absMax);
+        }
+        mMatrixMacd.postScale(scaleX, scaleY);
     }
 
     /**
@@ -444,7 +449,5 @@ public class KlinePaint {
     protected Matrix mMatrixMacd = new Matrix();
 
     protected int visibleXMin, visibleXMax;
-
-    private boolean isOnBorder = true;
 
 }
