@@ -18,7 +18,7 @@ import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.CustmerToast;
 import com.cgmn.msxl.comp.StockHolderView;
-import com.cgmn.msxl.comp.TradingPop;
+import com.cgmn.msxl.comp.pop.TradingPop;
 import com.cgmn.msxl.comp.k.KlineChart;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.cgmn.msxl.server_interface.BaseData;
@@ -198,8 +198,8 @@ public class RealControlActivity extends AppCompatActivity
             }
             stockView.getStockHolder().nextPrice(current.getEnd(), false);
         }else{
+            StockDetail current = realtradeManage.getCurrentK();
             if(realtradeManage.showNextOpen()){
-                StockDetail current = realtradeManage.getCurrentK();
                 chart.setData(realtradeManage.getGroup());
                 chart.notifyDataSetChanged(true);
                 updateTopBar();
@@ -212,7 +212,7 @@ public class RealControlActivity extends AppCompatActivity
                 }
                 stockView.getStockHolder().nextPrice(current.getStart(), true);
             }else{
-                //TODO: end
+                stockView.getStockHolder().settleTrading(current.getEnd());
             }
         }
     }
@@ -244,6 +244,12 @@ public class RealControlActivity extends AppCompatActivity
                 params[0].alpha = 1f;
                 getWindow().setAttributes(params[0]);
                 stockView.invalidateView();
+
+                if (stockView.getStockHolder().getHoldShare() == 0) {
+                    bt_change.setEnabled(true);
+                } else {
+                    bt_change.setEnabled(false);
+                }
             }
         });
     }

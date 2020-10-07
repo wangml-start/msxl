@@ -108,14 +108,20 @@ public class StockHolderView extends View {
         canvas.drawLines(rowlines, mGridPaint);
 
         float[] collines = new float[4];
-        collines[0] = contentRect.width() / 2;
+        collines[0] = 1/contentRect.width();
+        collines[2] = collines[0];
+        collines[1] = topSpace*4;
+        collines[3] = headSpace*2+topSpace - topSpace*4;
+
+        collines[0] = 2/contentRect.width();
         collines[2] = collines[0];
         collines[1] = topSpace*4;
         collines[3] = headSpace*2+topSpace - topSpace*4;
         mMatrixOffset.mapPoints(collines);
         canvas.drawLine(collines[0], collines[1], collines[2], collines[3], mGridPaint);
     }
-    private float[] calcTextPoint(Object value, int yOrder, float ox, float oY){
+
+    private float[] calcTextPoint(Object value, int yOrder, float ox_rate, float oY){
         String strValue = null;
         if(value instanceof Float){
             strValue = CommonUtil.formatNumer(value);
@@ -123,7 +129,7 @@ public class StockHolderView extends View {
             strValue = value.toString();
         }
 
-        float halfWidth = contentRect.width() / 2;
+        float halfWidth = contentRect.width() / 3;
         float textLength = mLabelPaint.measureText(strValue);
 
         float textHight = fontMetrics.bottom - fontMetrics.top;
@@ -134,7 +140,8 @@ public class StockHolderView extends View {
         }else if( yOrder == 2){
             y = ( headSpace - textHight *2 - vSpace) / 2 + textHight + vSpace;
         }
-        float[] pts = {x+ox, y+oY+textHight};
+        float baseX = contentRect.width() * ox_rate;
+        float[] pts = {x+baseX, y+oY+textHight};
         mMatrixOffset.mapPoints(pts);
         return pts;
     }
@@ -151,16 +158,28 @@ public class StockHolderView extends View {
                 totalamt[0], totalamt[1],
                 mLabelPaint);
 
-        float[] avaiLb = calcTextPoint(stockHolder.getAvaiAmtLb(), 1, contentRect.width() / 2, 5);
+        float[] avaiLb = calcTextPoint(stockHolder.getAvaiAmtLb(), 1, 1/3.0f, topSpace);
         canvas.drawText(
                 stockHolder.getAvaiAmtLb(),
                 avaiLb[0], avaiLb[1],
                 mLabelPaint);
-        float[] avaiamt = calcTextPoint(stockHolder.getAvaiAmt(), 2, contentRect.width() / 2, 5);
+        float[] avaiamt = calcTextPoint(stockHolder.getAvaiAmt(), 2, 1/3.0f, topSpace);
         canvas.drawText(
                 CommonUtil.formatNumer(stockHolder.getAvaiAmt()),
                 avaiamt[0], avaiamt[1],
                 mLabelPaint);
+
+        float[] exchgeLb = calcTextPoint(stockHolder.getExchangeLb(), 1, 2/3.0f, topSpace);
+        canvas.drawText(
+                stockHolder.getExchangeLb(),
+                exchgeLb[0], exchgeLb[1],
+                mLabelPaint);
+        float[] exchgeamt = calcTextPoint(stockHolder.getExchange(), 2, 2/3.0f, topSpace);
+        canvas.drawText(
+                CommonUtil.formatNumer(stockHolder.getExchange()),
+                exchgeamt[0], exchgeamt[1],
+                mLabelPaint);
+
 
         //第二排
         float[] holdlb = calcTextPoint(stockHolder.getHoldAmtLb(), 1, 0, topSpace+headSpace);
@@ -175,7 +194,7 @@ public class StockHolderView extends View {
                 holdamt[0], holdamt[1],
                 mLabelPaint);
 
-        float[] plLb = calcTextPoint(stockHolder.getHoldPlLb(), 1, contentRect.width() / 2, topSpace+headSpace);
+        float[] plLb = calcTextPoint(stockHolder.getHoldPlLb(), 1, 1/3.0f, topSpace+headSpace);
         canvas.drawText(
                 stockHolder.getHoldPlLb(),
                 plLb[0], plLb[1],
@@ -188,10 +207,29 @@ public class StockHolderView extends View {
         if(stockHolder.getHoldPl() < 0.0){
             tempPain = mDownPaint;
         }
-        float[] plamt = calcTextPoint(stockHolder.getHoldPl(), 2, contentRect.width() / 2, topSpace+headSpace);
+        float[] plamt = calcTextPoint(stockHolder.getHoldPl(), 2, 1/3.0f, topSpace+headSpace);
         canvas.drawText(
                 CommonUtil.formatNumer(stockHolder.getHoldPl()),
                 plamt[0], plamt[1],
+                tempPain);
+
+        float[] realPlLb = calcTextPoint(stockHolder.getPlLb(), 1, 2/3.0f, topSpace+headSpace);
+        canvas.drawText(
+                stockHolder.getPlLb(),
+                realPlLb[0], realPlLb[1],
+                mLabelPaint);
+        tempPain = mLabelPaint;
+        if(stockHolder.getPl() > 0.01){
+            tempPain = mUpPaint;
+        }
+        if(stockHolder.getPl() < 0.0){
+            tempPain = mDownPaint;
+        }
+        String plString = String.format("%s  %s", CommonUtil.formatNumer(stockHolder.getPl()), stockHolder.getRealRate());
+        float[] realPlamt = calcTextPoint(plString, 2, 2/3.0f, topSpace+headSpace);
+        canvas.drawText(
+                plString,
+                realPlamt[0], realPlamt[1],
                 tempPain);
 
 
@@ -234,9 +272,9 @@ public class StockHolderView extends View {
                 stockHolder.getHead3(),
                 p3[0], p3[1],
                 mLabelPaint);
-        float[] p4 = calcHoldPts(stockHolder.getHead4(), 1, 3/4.0f, orginY);
+        float[] p4 = calcHoldPts(stockHolder.getHoldPlLb(), 1, 3/4.0f, orginY);
         canvas.drawText(
-                stockHolder.getHead4(),
+                stockHolder.getHoldPlLb(),
                 p4[0], p4[1],
                 mLabelPaint);
 
@@ -323,12 +361,6 @@ public class StockHolderView extends View {
 
         float bottom = orginY+headSpace*1.7f;
         canvas.drawLine(contentRect.left, bottom, contentRect.right, bottom, mGridPaint);
-
-        canvas.drawText(
-                stockHolder.getExchangeLb() + CommonUtil.formatNumer(stockHolder.getExchange()),
-                contentRect.left + 30, contentRect.top+bottom+topSpace*6,
-                mLabelPaint);
-
     }
 
 
@@ -349,6 +381,7 @@ public class StockHolderView extends View {
     public void initAccount(Float totalAmount){
         stockHolder.setTotAmt(totalAmount);
         stockHolder.setAvaiAmt(totalAmount);
+        stockHolder.setInitTotAmt(totalAmount);
     }
 
 }

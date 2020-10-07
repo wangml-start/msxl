@@ -161,7 +161,7 @@
                 android:textSize="@dimen/NormalSize"
                 android:layout_marginTop="10dp"
                 android:layout_below="@id/buy_layout"
-                android:text="卖出"
+                android:text="@string/trade_sell"
                 android:background="@drawable/txt_sell_bg"
                 android:textColor="@color/main_text_color"/>
     </LinearLayout>

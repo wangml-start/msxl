@@ -34,5 +34,9 @@
     <string name="need_vol">请填写数量</string>
     <string name="up_stop_reject">涨停状态不可买入</string>
     <string name="down_stop_reject">跌停状态不可卖出</string>
+    <string name="trade_sell">卖出</string>
+    <string name="trade_buy">买入</string>
+    <string name="next">下一步</string>
+    <string name="change_stock">换股</string>
 
 </resources>

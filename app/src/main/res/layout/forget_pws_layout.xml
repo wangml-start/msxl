@@ -113,6 +113,7 @@
                 android:layout_weight="50"
                 android:background="@drawable/bt_back"
                 android:enabled="false"
+                android:textColor="@color/main_blue_color"
                 android:text="@string/signin" />
 
         <Button
@@ -123,6 +124,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_weight="50"
                 android:background="@drawable/bt_back"
+                android:textColor="@color/main_blue_color"
                 android:enabled="true"
                 android:text="@string/send_email" />
     </LinearLayout>

@@ -1,4 +1,4 @@
-package com.cgmn.msxl.comp;
+package com.cgmn.msxl.comp.pop;
 
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
@@ -8,6 +8,7 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.cgmn.msxl.R;
+import com.cgmn.msxl.comp.CustmerToast;
 import com.cgmn.msxl.data.StockHolder;
 import com.cgmn.msxl.service.RealTradeManage;
 import com.cgmn.msxl.utils.CommonUtil;
@@ -155,7 +156,10 @@ public class TradingPop extends PopupWindow
     }
 
     private void onCountChange( int rate){
-        int count = Integer.valueOf(et_count.getText().toString());
+        int count=0;
+        if(!CommonUtil.isEmpty(et_count.getText().toString())){
+            count = Integer.valueOf(et_count.getText().toString());
+        }
         int changed = count + 100*rate;
         float price = CommonUtil.castFloatFromString(manage.getCurenPrice());
         if (this.action.equals("BUY")) {

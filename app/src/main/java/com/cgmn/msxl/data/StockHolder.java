@@ -11,10 +11,10 @@ public class StockHolder {
     private final String head1 = "代码/市值";
     private final String head2 = "持仓/可用";
     private final String head3 = "现价/成本";
-    private final String head4 = "盈亏";
     private final String holdPlLb = "持仓盈亏";
     private final String avaiAmtLb = "可用";
-    private final String exchangeLb = "手续费： ";
+    private final String exchangeLb = "手续费";
+    private final String plLb = "盈亏";
 
     private final float brokerRate = 0.00025f;
     private final float yinhuaRate = 0.001f;
@@ -23,6 +23,8 @@ public class StockHolder {
     LinkedList<Trade> nodes;
 
     private String code = "";
+
+    private Float initTotAmt = 0.0f;
 
     private Float totAmt = 0.0f;
     private Float holdAmt = 0.0f;
@@ -40,6 +42,9 @@ public class StockHolder {
     //违反的原则
     private List<Integer> unprinciple;
 
+    public String getPlLb() {
+        return plLb;
+    }
 
     public String getHead1() {
         return head1;
@@ -51,10 +56,6 @@ public class StockHolder {
 
     public String getHead3() {
         return head3;
-    }
-
-    public String getHead4() {
-        return head4;
     }
 
     public StockHolder() {
@@ -124,7 +125,7 @@ public class StockHolder {
         if(CommonUtil.isEmpty(code)){
             return code;
         }
-        return String.format("%sXX", code.substring(0, 3));
+        return String.format("%sXX", code.substring(0, 4));
     }
 
     public void setCode(String code) {
@@ -187,6 +188,17 @@ public class StockHolder {
         return exchangeLb;
     }
 
+    public Float getInitTotAmt() {
+        return initTotAmt;
+    }
+
+    public void setInitTotAmt(Float initTotAmt) {
+        this.initTotAmt = initTotAmt;
+    }
+
+    public String getRealRate(){
+        return CommonUtil.formatNumer(pl/initTotAmt);
+    }
 
     public void buyStock(int count, Float pri, String scode) {
         code = scode;
@@ -233,6 +245,7 @@ public class StockHolder {
         totAmt -= fee;
         avaiAmt = totAmt - holdAmt;
         if(holdShare == 0){
+            pl += holdPl;
             costPrice = 0f;
             holdPl = 0.f;
         }else{
@@ -266,14 +279,12 @@ public class StockHolder {
         totAmt = holdAmt + avaiAmt;
     }
 
-    public boolean settleTrading(){
-        if(holdShare == 0){
-            Trade trade = new Trade(code, holdPl, exchange, unprinciple);
-            nodes.addLast(trade);
-            return true;
-        }else{
-            return false;
+    public void settleTrading(Float price){
+        if(holdShare > 0){
+            sellStock(holdShare, price);
         }
+        Trade trade = new Trade(code, holdPl, exchange, unprinciple);
+        nodes.addLast(trade);
     }
 
 }
