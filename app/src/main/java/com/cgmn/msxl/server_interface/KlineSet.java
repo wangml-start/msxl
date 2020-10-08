@@ -4,6 +4,8 @@ import java.util.List;
 
 public class KlineSet {
 
+    private float totalAmount = 100000.00f;
+
     private String stockName;
 
     private String stockCode;
@@ -11,6 +13,14 @@ public class KlineSet {
     private String startDate;
 
     private String endDate;
+
+    public float getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(float totalAmount) {
+        this.totalAmount = totalAmount;
+    }
 
     private List<StockDetail> initList;
 

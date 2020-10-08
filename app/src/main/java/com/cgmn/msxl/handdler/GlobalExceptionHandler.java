@@ -12,6 +12,7 @@ import com.cgmn.msxl.db.AppSqlHelper;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.service.OkHttpClientManager;
 import com.cgmn.msxl.service.PropertyService;
+import com.cgmn.msxl.service.TokenHelper;
 import com.cgmn.msxl.utils.CommonUtil;
 import com.cgmn.msxl.utils.MessageUtil;
 import com.squareup.okhttp.Request;
@@ -56,7 +57,7 @@ public class GlobalExceptionHandler {
             }
         }
 
-        String token = AppApplication.getInstance().getToken();
+        final String token = TokenHelper.getToken(mContxt);
         if(CommonUtil.isEmpty(token)){
             Log.d(TAG, "No Find TOKEN When send exception!");
             return;
@@ -65,7 +66,7 @@ public class GlobalExceptionHandler {
             @Override
             public void run() {
                 OkHttpClientManager.Param[] params = new OkHttpClientManager.Param[]{
-                        new OkHttpClientManager.Param("token", AppApplication.getInstance().getToken()),
+                        new OkHttpClientManager.Param("token", token),
                         new OkHttpClientManager.Param("exType", type),
                         new OkHttpClientManager.Param("message", e.getMessage()),
                         new OkHttpClientManager.Param("info", ExceptionUtils.getStackTrace(e))};

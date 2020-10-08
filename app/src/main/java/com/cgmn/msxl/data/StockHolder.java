@@ -26,9 +26,6 @@ public class StockHolder {
 
     LinkedList<Trade> nodes;
 
-    //1:代表已结算
-    private int settlementStatus=0;
-
     //交易相关参数
     private String code = "";
 
@@ -66,10 +63,6 @@ public class StockHolder {
 
     public void setModelRecordId(int modelRecordId) {
         this.modelRecordId = modelRecordId;
-    }
-
-    public int getSettlementStatus() {
-        return settlementStatus;
     }
 
     public String getPlLb() {
@@ -323,10 +316,6 @@ public class StockHolder {
     }
 
     public void settleTrading(Float price){
-        if(settlementStatus == 1){
-            return;
-        }
-        settlementStatus = 1;
         if(CommonUtil.floatNumEqual(exchange , 0)){
             return;
         }

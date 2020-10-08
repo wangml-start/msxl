@@ -18,12 +18,14 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import com.cgmn.msxl.R;
+import com.cgmn.msxl.application.AppApplication;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.CustmerToast;
 import com.cgmn.msxl.comp.StockHolderView;
 import com.cgmn.msxl.comp.pop.TradingPop;
 import com.cgmn.msxl.comp.k.KlineChart;
 import com.cgmn.msxl.data.StockHolder;
+import com.cgmn.msxl.data.Trade;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.server_interface.KlineSet;
@@ -31,8 +33,16 @@ import com.cgmn.msxl.server_interface.StockDetail;
 import com.cgmn.msxl.service.OkHttpClientManager;
 import com.cgmn.msxl.service.PropertyService;
 import com.cgmn.msxl.service.RealTradeManage;
+import com.cgmn.msxl.service.TokenHelper;
 import com.cgmn.msxl.utils.CommonUtil;
+import com.cgmn.msxl.utils.GsonUtil;
 import com.cgmn.msxl.utils.MessageUtil;
+import com.squareup.okhttp.Request;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
 
 public class RealControlActivity extends AppCompatActivity
         implements View.OnClickListener{
@@ -74,9 +84,11 @@ public class RealControlActivity extends AppCompatActivity
         if(trainType == StockHolder.LEADING_STRATEGY){
             action = "/stock/getHigherKlineSet";
         }
+        Map<String, String> params = new HashMap<>();
+        params.put("token", TokenHelper.getToken(mContxt));
         return CommonUtil.buildGetUrl(
                 PropertyService.getInstance().getKey("serverUrl"),
-                action, null);
+                action, params);
     }
 
     private void loadKLineSet(){
@@ -150,7 +162,7 @@ public class RealControlActivity extends AppCompatActivity
 
     private void initStockHolder(){
         stockView.setStockHolder(new StockHolder());
-        stockView.initAccount(100000f);
+        stockView.initAccount(realtradeManage.getKlineset().getTotalAmount());
         stockView.getStockHolder().setModelRecordId(userModelId);
         stockView.getStockHolder().setTrainType(trainType);
         stockView.invalidateView();
@@ -262,13 +274,52 @@ public class RealControlActivity extends AppCompatActivity
     }
 
     private void settleThisTrading(){
+        if(realtradeManage.getkStatus() == null){
+            return;
+        }
         Float price = CommonUtil.castFloatFromString(realtradeManage.getCurenPrice());
         stockView.getStockHolder().settleTrading(price);
-        if(stockView.getStockHolder().getSettlementStatus() == 1 ||
+        if(stockView.getStockHolder().getNodes() == null ||
                 stockView.getStockHolder().getNodes().size() == 0){
             return;
         }
-        //TODO send trade to server
+
+        final LinkedList<Trade> nodes = stockView.getStockHolder().getNodes();
+        if(CommonUtil.isEmpty(nodes)){
+            return;
+        }
+        // send trade to server
+        GlobalTreadPools.getInstance(mContxt).execute(new Runnable() {
+            @Override
+            public void run() {
+                final String token = TokenHelper.getToken(mContxt);
+                OkHttpClientManager.Param[] params = new OkHttpClientManager.Param[]{
+                        new OkHttpClientManager.Param("token", token),
+                        new OkHttpClientManager.Param("content", GsonUtil.toJson(nodes))};
+                String url = String.format("%s%s",
+                        PropertyService.getInstance().getKey("serverUrl"), "/stock/upload_trading");
+                OkHttpClientManager.postAsyn(url,
+                        new OkHttpClientManager.ResultCallback<BaseData>() {
+                            @Override
+                            public void onError(Request request, Exception e) {
+                                Log.d(TAG, "UPLOAD TRADING FAILED!");
+                            }
+                            @Override
+                            public void onResponse(BaseData data) {
+                                if(data.getStatus() == 0){
+                                    nodes.clear();
+                                    Log.d(TAG, "UPLOAD TRADING SUCCESS!");
+                                }else{
+                                    Log.d(TAG, "UPLOAD TRADING FAILED!");
+                                    Log.d(TAG, data.getError());
+                                }
+                            }
+                        },
+                        params);
+                Log.e(TAG,"NAME="+Thread.currentThread().getName());
+            }
+        });
+
     }
 
     public void showPopFormBottom(View view, String action) {
