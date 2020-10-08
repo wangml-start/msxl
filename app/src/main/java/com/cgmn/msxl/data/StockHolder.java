@@ -17,6 +17,9 @@ public class StockHolder {
     private final String plLb = "盈亏";
     private final String rateLb = "盈亏率";
 
+    public final static int LEADING_STRATEGY = 100;
+    public final static int NORMAL_STRATEGY = 101;
+
     private final float brokerRate = 0.00025f;
     private final float yinhuaRate = 0.001f;
     private final float guohuRate = 0.001f;
@@ -26,6 +29,7 @@ public class StockHolder {
     //1:代表已结算
     private int settlementStatus=0;
 
+    //交易相关参数
     private String code = "";
 
     private Float initTotAmt = 0.0f;
@@ -45,6 +49,24 @@ public class StockHolder {
 
     //违反的原则
     private List<Integer> unprinciple;
+    private int trainType;
+    private int modelRecordId;
+
+    public int getTrainType() {
+        return trainType;
+    }
+
+    public void setTrainType(int trainType) {
+        this.trainType = trainType;
+    }
+
+    public int getModelRecordId() {
+        return modelRecordId;
+    }
+
+    public void setModelRecordId(int modelRecordId) {
+        this.modelRecordId = modelRecordId;
+    }
 
     public int getSettlementStatus() {
         return settlementStatus;
@@ -311,7 +333,8 @@ public class StockHolder {
         if(holdShare > 0){
             sellStock(holdShare, price);
         }
-        Trade trade = new Trade(code, holdPl, exchange, unprinciple);
+        Trade trade = new Trade(code, holdPl, exchange,trainType,
+                modelRecordId, unprinciple);
         nodes.addLast(trade);
     }
 

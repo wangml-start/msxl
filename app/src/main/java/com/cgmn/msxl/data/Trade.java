@@ -5,17 +5,23 @@ import java.util.List;
 
 public class Trade {
 
-    private String code;
-    private Date TradeDate;
+    private String stockCode;
+    private Date tradeDate;
     private float pl;
-    private float exchange;
+    private float fee;
     private List<Integer> unprinciple;
+    private int trainType;
+    private int modelRecordId;
 
-    public Trade(String code, float pl, float exchange, List<Integer> list){
-        this.TradeDate = new Date();
-        this.code = code;
+
+    public Trade(String code, float pl, float exchange,
+                 int type, int model, List<Integer> list){
+        this.tradeDate = new Date();
+        this.stockCode = code;
         this.pl = pl;
-        this.exchange = exchange;
+        this.fee = exchange;
+        this.trainType = type;
+        this.modelRecordId = model;
         this.unprinciple = list;
     }
 

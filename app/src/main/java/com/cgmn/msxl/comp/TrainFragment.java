@@ -11,10 +11,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import com.cgmn.msxl.R;
+import com.cgmn.msxl.ac.AppMainActivity;
 import com.cgmn.msxl.ac.RealControlActivity;
 import com.cgmn.msxl.comp.adpter.MutiLayoutAdapter;
 import com.cgmn.msxl.data.PageMainItem;
 import com.cgmn.msxl.data.SplitItem;
+import com.cgmn.msxl.data.StockHolder;
 
 import java.util.ArrayList;
 
@@ -58,11 +60,25 @@ public class TrainFragment extends Fragment{
                 Object object = mData.get(position);
                 if( object instanceof PageMainItem){
                     int type = ((PageMainItem)object).getItemType();
+                    Intent intent = null;
+                    Bundle bundle = null;
                     switch (type){
                         case 0:
                         case 1:
+                            intent = new Intent(mContxt, RealControlActivity.class);
+                            bundle = new Bundle();
+                            bundle.putInt("train_type", StockHolder.LEADING_STRATEGY);
+                            bundle.putInt("user_model_id", 1);
+                            intent.putExtra("datas", bundle);
+                            startActivity(intent);
+                            break;
                         case 2:
-                            startActivity(new Intent(mContxt, RealControlActivity.class));
+                            intent = new Intent(mContxt, RealControlActivity.class);
+                            bundle = new Bundle();
+                            bundle.putInt("train_type", StockHolder.NORMAL_STRATEGY);
+                            bundle.putInt("user_model_id", 1);
+                            intent.putExtra("datas", bundle);
+                            startActivity(intent);
                             break;
                         case 3:
 

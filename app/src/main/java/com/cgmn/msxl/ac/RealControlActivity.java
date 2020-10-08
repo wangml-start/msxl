@@ -2,6 +2,7 @@ package com.cgmn.msxl.ac;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -39,6 +40,9 @@ public class RealControlActivity extends AppCompatActivity
     private Context mContxt;
     private KlineChart chart;
     private StockHolderView stockView;
+
+    private int trainType;
+    private int userModelId;
     //消息处理
     private Handler mHandler;
 
@@ -65,14 +69,22 @@ public class RealControlActivity extends AppCompatActivity
         loadKLineSet();
     }
 
+    private String getUrl(){
+        String action = "/stock/getKlineSet";
+        if(trainType == StockHolder.LEADING_STRATEGY){
+            action = "/stock/getHigherKlineSet";
+        }
+        return CommonUtil.buildGetUrl(
+                PropertyService.getInstance().getKey("serverUrl"),
+                action, null);
+    }
+
     private void loadKLineSet(){
         CustmerToast.makeText(mContxt, R.string.get_stock_datas).show();
         GlobalTreadPools.getInstance(mContxt).execute(new Runnable() {
             @Override
             public void run() {
-                String url = CommonUtil.buildGetUrl(
-                        PropertyService.getInstance().getKey("serverUrl"),
-                        "/stock/getKlineSet", null);
+                String url = getUrl();
                 OkHttpClientManager.getAsyn(url,
                         new OkHttpClientManager.ResultCallback<BaseData>() {
                             @Override
@@ -109,6 +121,7 @@ public class RealControlActivity extends AppCompatActivity
             @Override
             public boolean handleMessage(Message msg) {
                 if (msg.what == MessageUtil.REQUEST_SUCCESS) {
+                    realtradeManage.resetManager();
                     realtradeManage.setKlineset((KlineSet) msg.obj) ;
                     startChartInit();
                 } else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
@@ -132,8 +145,14 @@ public class RealControlActivity extends AppCompatActivity
         chart.setData(realtradeManage.getGroup());
         chart.invalidateView();
         updateTopBar();
+        initStockHolder();
+    }
+
+    private void initStockHolder(){
         stockView.setStockHolder(new StockHolder());
         stockView.initAccount(100000f);
+        stockView.getStockHolder().setModelRecordId(userModelId);
+        stockView.getStockHolder().setTrainType(trainType);
         stockView.invalidateView();
     }
 
@@ -184,6 +203,11 @@ public class RealControlActivity extends AppCompatActivity
         stockView = new StockHolderView(this);
         chartParent.addView(chart);
         holderParent.addView(stockView);
+
+        Intent intent = getIntent();
+        Bundle bundle = intent.getBundleExtra("datas");
+        trainType = bundle.getInt("train_type");
+        userModelId =  bundle.getInt("user_model_id");
     }
 
     private void onNextClick(){
@@ -249,11 +273,11 @@ public class RealControlActivity extends AppCompatActivity
 
     public void showPopFormBottom(View view, String action) {
         int flag = realtradeManage.canTradingStatus();
-        if(flag == 10){
+        if(flag == 10 && action.equals("BUY")){
             CustmerToast.makeText(mContxt, getString(R.string.up_stop_reject)).show();
             return;
         }
-        if(-10 == flag){
+        if(-10 == flag && action.equals("SELL")){
             CustmerToast.makeText(mContxt, getString(R.string.down_stop_reject)).show();
             return;
         }
@@ -286,7 +310,6 @@ public class RealControlActivity extends AppCompatActivity
 
     private void onChageStock(){
         settleThisTrading();
-        realtradeManage.resetManager();
         loadKLineSet();
         bt_buy.setEnabled(true);
         bt_sell.setEnabled(true);
