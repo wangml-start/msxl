@@ -2,6 +2,7 @@ package com.cgmn.msxl.comp.k;
 
 import android.graphics.*;
 import android.view.MotionEvent;
+import com.cgmn.msxl.utils.CommonUtil;
 
 import java.text.DecimalFormat;
 import java.util.LinkedList;
@@ -128,6 +129,13 @@ public class KlinePaint {
         List<KLine> temList = data.getNodes().subList(visibleXMin, visibleXMax);
         for (int i = 0; i < temList.size(); i++) {
             KLine entry = temList.get(i);
+            // draw step 0: set color
+            Paint tempKpint = mLabelPaint;
+            if(entry.open < entry.close){
+                tempKpint= mUpPaint;
+            }else if(entry.open > entry.close){
+                tempKpint = mDownPaint;
+            }
             if (entry.isOpen) {
                 float openKline[] = new float[4];
                 openKline[0] = i + mBarSpace;
@@ -135,13 +143,10 @@ public class KlinePaint {
                 openKline[1] = entry.open;
                 openKline[3] = entry.open;
                 mapPoints(openKline);
-                canvas.drawLine(openKline[0], openKline[1], openKline[2], openKline[3], mLabelPaint);
+                canvas.drawLine(openKline[0], openKline[1], openKline[2], openKline[3], tempKpint);
 
                 continue;
             }
-
-            // draw step 0: set color
-            Boolean isUp = entry.open < entry.close;
 
             // draw step 1: draw shadow 上下引线
             shadowBuffer[0] = i + 0.5f;
@@ -160,11 +165,7 @@ public class KlinePaint {
                 shadowBuffer[7] = entry.low;
             }
             mapPoints(shadowBuffer);
-            if (isUp) {
-                canvas.drawLines(shadowBuffer, mUpPaint);
-            } else {
-                canvas.drawLines(shadowBuffer, mDownPaint);
-            }
+            canvas.drawLines(shadowBuffer, tempKpint);
 
             // draw step 2: draw body
             bodyBuffer[0] = i + mBarSpace;
@@ -176,21 +177,21 @@ public class KlinePaint {
                 bodyBuffer[1] = entry.close;
                 bodyBuffer[3] = entry.open;
             }
-            mapPoints(bodyBuffer);
-            if (isUp) {
-                canvas.drawRect(bodyBuffer[0], bodyBuffer[1], bodyBuffer[2], bodyBuffer[3], mUpPaint);
-            } else {
-                canvas.drawRect(bodyBuffer[0], bodyBuffer[1], bodyBuffer[2], bodyBuffer[3], mDownPaint);
-            }
 
+            mapPoints(bodyBuffer);
+            if(CommonUtil.floatNumEqual(entry.close, entry.open)){
+                canvas.drawLine(bodyBuffer[0], bodyBuffer[1], bodyBuffer[2], bodyBuffer[3], tempKpint);
+            }else{
+                canvas.drawRect(bodyBuffer[0], bodyBuffer[1], bodyBuffer[2], bodyBuffer[3], tempKpint);
+            }
 
             // draw step 3: draw bar
             barBuffer[0] = 0;
             barBuffer[1] = entry.volume;
             mMatrixBar.mapPoints(barBuffer);
-            if (isUp) {
-                canvas.drawRect(bodyBuffer[0], barRect.bottom - barBuffer[1], bodyBuffer[2], barRect.bottom - 1, mUpPaint);
-            } else {
+            if(entry.close >= entry.lastClose){
+                canvas.drawRect(bodyBuffer[0], barRect.bottom - barBuffer[1], bodyBuffer[2], barRect.bottom - 1,mUpPaint);
+            }else{
                 canvas.drawRect(bodyBuffer[0], barRect.bottom - barBuffer[1], bodyBuffer[2], barRect.bottom - 1, mDownPaint);
             }
 

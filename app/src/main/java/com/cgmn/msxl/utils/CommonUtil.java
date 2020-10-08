@@ -107,4 +107,20 @@ public class CommonUtil {
     public static String formatNumer(Object num){
         return format2.format(num);
     }
+
+    public static boolean floatNumEqual(float num1, float num2){
+        float delta = num1 - num2;
+        if(Math.abs(delta) < 0.00001){
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean doubleNumEqual(Double num1, Double num2){
+        Double delta = num1 - num2;
+        if(Math.abs(delta) < 0.00001){
+            return true;
+        }
+        return false;
+    }
 }

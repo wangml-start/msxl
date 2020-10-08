@@ -19,6 +19,14 @@ public class RealTradeManage {
     private StockDetail currentK;
     private String kStatus;
 
+    public void resetManager(){
+        klineset = null;
+        group = null;
+        lastK = null;
+        currentK = null;
+        kStatus = null;
+    }
+
     public KlineSet getKlineset() {
         return klineset;
     }
@@ -31,6 +39,10 @@ public class RealTradeManage {
         return currentK;
     }
 
+    public StockDetail getLastK() {
+        return lastK;
+    }
+
     public KlineGroup getGroup() {
         return group;
     }
@@ -39,19 +51,27 @@ public class RealTradeManage {
         this.group = new KlineGroup();
         for (int i = 0; i < klineset.getInitList().size(); i++) {
             StockDetail detail = klineset.getInitList().get(i);
+            float last = 0;
+            if(lastK != null){
+                last = lastK.getEnd();
+            }
             group.addKline(new KLine(
                     detail.getHigh(),
                     detail.getLow(),
                     detail.getStart(),
                     detail.getEnd(),
+                    last,
                     detail.getVol()));
             lastK = detail;
         }
     }
 
     public boolean showNextOpen() {
-        fixInitDate();
         if (klineset.getFutureList().size() > 0) {
+            fixInitDate();
+            if(currentK != null){
+                lastK = currentK;
+            }
             currentK = klineset.getFutureList().get(0);
             float num = (currentK.getStart() - lastK.getEnd()) / lastK.getEnd();
             if(num > -0.2){
@@ -59,7 +79,7 @@ public class RealTradeManage {
             }else{
                 currentK.setOpenrate("--");
             }
-            group.addKline(new KLine(currentK.getStart()));
+            group.addKline(new KLine(currentK.getStart(), lastK.getEnd()));
 
             kStatus = OPEN;
             setDatas();
@@ -76,12 +96,12 @@ public class RealTradeManage {
                 currentK.getLow(),
                 currentK.getStart(),
                 currentK.getEnd(),
+                lastK.getEnd(),
                 currentK.getVol()
         ));
         klineset.getFutureList().remove(0);
         klineset.getInitList().add(currentK);
         setDatas();
-        lastK = currentK;
         kStatus = CLOSE;
     }
 

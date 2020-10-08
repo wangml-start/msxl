@@ -11,7 +11,7 @@
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:layout_alignParentBottom="true"
-            android:background="@drawable/bt_back"
+            android:background="@drawable/bt_back_nomal"
             android:layout_margin="15dp"
             android:text="@string/signin_register"
             />

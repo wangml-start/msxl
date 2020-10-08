@@ -96,7 +96,7 @@
             >
         <Button
                 android:id="@+id/bt_login"
-                android:background="@drawable/bt_back"
+                android:background="@drawable/bt_back_nomal"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="5dp"
                 android:enabled="false"
@@ -109,7 +109,7 @@
                 android:id="@+id/bt_forget"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bt_back"
+                android:background="@drawable/bt_back_nomal"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="10dp"
                 android:textColor="@color/main_blue_color"

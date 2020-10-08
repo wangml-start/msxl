@@ -38,5 +38,10 @@
     <string name="trade_buy">买入</string>
     <string name="next">下一步</string>
     <string name="change_stock">换股</string>
+    <string name="exit_stock">退出</string>
+    <string name="queding">确定</string>
+    <string name="tips">提示</string>
+    <string name="cancel">取消</string>
+    <string name="sure_to_do_this">确定执行当前操作吗？</string>
 
 </resources>

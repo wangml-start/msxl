@@ -23,6 +23,9 @@ public class StockHolder {
 
     LinkedList<Trade> nodes;
 
+    //1:代表已结算
+    private int settlementStatus=0;
+
     private String code = "";
 
     private Float initTotAmt = 0.0f;
@@ -42,6 +45,10 @@ public class StockHolder {
 
     //违反的原则
     private List<Integer> unprinciple;
+
+    public int getSettlementStatus() {
+        return settlementStatus;
+    }
 
     public String getPlLb() {
         return plLb;
@@ -294,6 +301,13 @@ public class StockHolder {
     }
 
     public void settleTrading(Float price){
+        if(settlementStatus == 1){
+            return;
+        }
+        settlementStatus = 1;
+        if(CommonUtil.floatNumEqual(exchange , 0)){
+            return;
+        }
         if(holdShare > 0){
             sellStock(holdShare, price);
         }

@@ -1,6 +1,7 @@
 package com.cgmn.msxl.ac;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -51,7 +52,7 @@ public class RealControlActivity extends AppCompatActivity
     TextView lb_close_rate;
     TextView lb_left_day;
     TextView lb_left_s;
-    Button bt_next, bt_buy,bt_sell, bt_change;
+    Button bt_next, bt_buy,bt_sell, bt_change, bt_exit;
 
 
 
@@ -162,11 +163,13 @@ public class RealControlActivity extends AppCompatActivity
         bt_buy = findViewById(R.id.bt_buy);
         bt_sell = findViewById(R.id.bt_sell);
         bt_change = findViewById(R.id.bt_change);
+        bt_exit = findViewById(R.id.bt_exit);
 
         bt_next.setOnClickListener(this);
         bt_buy.setOnClickListener(this);
         bt_sell.setOnClickListener(this);
         bt_change.setOnClickListener(this);
+        bt_exit.setOnClickListener(this);
 
         chartParent = findViewById(R.id.chart_parent);
         holderParent = findViewById(R.id.holder_parent);
@@ -176,9 +179,6 @@ public class RealControlActivity extends AppCompatActivity
         LinearLayout.LayoutParams kparams =(LinearLayout.LayoutParams) chartParent.getLayoutParams();
         kparams.height = ((Double)(screenHeight * 0.5)).intValue();
         chartParent.setLayoutParams(kparams);
-        LinearLayout.LayoutParams holder =(LinearLayout.LayoutParams) holderParent.getLayoutParams();
-        holder.height = ((Double)(screenHeight * 0.3)).intValue();
-        holderParent.setLayoutParams(holder);
 
         chart = new KlineChart(this);
         stockView = new StockHolderView(this);
@@ -192,9 +192,10 @@ public class RealControlActivity extends AppCompatActivity
             chart.setData(realtradeManage.getGroup());
             chart.invalidateView();
             StockDetail current = realtradeManage.getCurrentK();
+            StockDetail last = realtradeManage.getLastK();
             lb_close_price.setText("收盘价：" + current.getEnd());
             lb_close_rate.setText("涨跌: " + current.getUpRate());
-            if(current.getEnd() > current.getStart()){
+            if(current.getEnd() > last.getEnd()){
                 lb_close_price.setTextColor(getResources().getColor(R.color.kline_up));
                 lb_close_rate.setTextColor(getResources().getColor(R.color.kline_up));
             }else{
@@ -217,15 +218,13 @@ public class RealControlActivity extends AppCompatActivity
                 }
                 stockView.getStockHolder().nextPrice(current.getStart(), true);
             }else{
-                StockDetail current = realtradeManage.getCurrentK();
-                stockView.getStockHolder().settleTrading(current.getEnd());
+                settleThisTrading();
                 bt_buy.setEnabled(false);
                 bt_sell.setEnabled(false);
                 bt_next.setEnabled(false);
                 bt_change.setEnabled(true);
-                //TODO send trade to server
                 AlertDialog.Builder builder = new AlertDialog.Builder(mContxt);
-                builder.setTitle("提示");
+                builder.setTitle(R.string.tips);
                 builder.setMessage(String.format("该段行情取自: %s(%s)\n日期：%s 至 %s",
                         realtradeManage.getKlineset().getStockName(),
                         realtradeManage.getCurrentK().getStackCode(),
@@ -236,6 +235,16 @@ public class RealControlActivity extends AppCompatActivity
                 builder.show();
             }
         }
+    }
+
+    private void settleThisTrading(){
+        Float price = CommonUtil.castFloatFromString(realtradeManage.getCurenPrice());
+        stockView.getStockHolder().settleTrading(price);
+        if(stockView.getStockHolder().getSettlementStatus() == 1 ||
+                stockView.getStockHolder().getNodes().size() == 0){
+            return;
+        }
+        //TODO send trade to server
     }
 
     public void showPopFormBottom(View view, String action) {
@@ -276,12 +285,18 @@ public class RealControlActivity extends AppCompatActivity
     }
 
     private void onChageStock(){
+        settleThisTrading();
+        realtradeManage.resetManager();
         loadKLineSet();
         bt_buy.setEnabled(true);
         bt_sell.setEnabled(true);
         bt_next.setEnabled(true);
-        bt_change.setEnabled(false);
         //初始资金问题
+    }
+
+    private void onExit(){
+        settleThisTrading();
+        finish();
     }
 
     @Override
@@ -294,7 +309,30 @@ public class RealControlActivity extends AppCompatActivity
         }else if(v.getId() == R.id.bt_sell){
             showPopFormBottom(v, "SELL");
         }else if(v.getId() == R.id.bt_change){
-            onChageStock();
+            AlertDialog.Builder builder = new AlertDialog.Builder(mContxt);
+            builder.setTitle(R.string.tips);
+            builder.setMessage(R.string.sure_to_do_this);
+            builder.setPositiveButton(R.string.queding, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    onChageStock();
+                }
+            });
+            builder.setNegativeButton(R.string.cancel, null);
+            builder.show();
+        }else if(v.getId() == R.id.bt_exit){
+            AlertDialog.Builder builder = new AlertDialog.Builder(mContxt);
+            builder.setTitle(R.string.tips);
+            builder.setMessage(R.string.sure_to_do_this);
+            builder.setPositiveButton(R.string.queding, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    onExit();
+                }
+            });
+            builder.setNegativeButton(R.string.cancel, null);
+            builder.show();
+
         }
     }
 }

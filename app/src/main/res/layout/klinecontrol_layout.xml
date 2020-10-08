@@ -11,14 +11,14 @@
             android:layout_width="match_parent"
             android:layout_height="2px"
             android:layout_above="@id/lb_open_div"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="3dp"
             android:background="@color/div_white" />
 
 
     <LinearLayout
             android:id="@+id/lb_open_div"
             android:layout_width="match_parent"
-            android:layout_height="25dp"
+            android:layout_height="20dp"
             android:background="@color/bg_white"
             android:orientation="horizontal">
 
@@ -30,7 +30,6 @@
                 android:id="@+id/lb_left_day"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="Wating.." />
@@ -43,7 +42,7 @@
     <LinearLayout
             android:id="@+id/lb_close_div"
             android:layout_width="match_parent"
-            android:layout_height="25dp"
+            android:layout_height="20dp"
             android:layout_alignParentTop="true"
             android:background="@color/bg_white"
             android:orientation="horizontal">
@@ -81,7 +80,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
             android:background="@color/bg_white"
-            android:orientation="vertical"/>
+            android:orientation="vertical" />
 
     <View
             android:id="@+id/div_tab_bar"
@@ -95,7 +94,7 @@
     <LinearLayout
             android:id="@+id/holder_parent"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="160dp"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:background="@color/bg_white"
@@ -104,62 +103,70 @@
     </LinearLayout>
     <!--stock holder -->
 
-    <LinearLayout
-            android:id="@+id/ly_bottom_bar"
+    <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_margin="2dp"
-            android:layout_alignParentBottom="true"
-            android:background="@color/bg_white"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
 
-        <Button
-                android:id="@+id/bt_change"
-                android:layout_width="80dp"
-                android:layout_marginRight="5dp"
+        <LinearLayout
+                android:id="@+id/ly_bottom_left"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bt_back"
-                android:textColor="@color/main_blue_color"
-                android:enabled="false"
-                android:text="@string/change_stock" />
+                android:background="@color/bg_white"
+                android:orientation="vertical">
 
-        <Button
-                android:id="@+id/bt_next"
-                android:layout_width="80dp"
-                android:layout_marginRight="5dp"
+            <Button
+                    android:id="@+id/bt_change"
+                    android:text="@string/change_stock"
+                    style="@style/trading_page_btns"
+                     />
+
+            <Button
+                    android:id="@+id/bt_exit"
+                    style="@style/trading_page_btns"
+                    android:text="@string/exit_stock"
+                    />
+        </LinearLayout>
+
+        <LinearLayout
+                android:id="@+id/ly_bottom_right"
+                android:layout_width="170dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bt_back"
-                android:textColor="@color/main_blue_color"
-                android:text="@string/next" />
+                android:layout_alignParentRight="true"
+                android:background="@color/bg_white"
+                android:orientation="vertical">
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                <Button
+                        android:id="@+id/bt_next"
+                        android:layout_width="match_parent"
+                        android:text="@string/next"
+                        style="@style/trading_page_btns"
+                         />
+            </LinearLayout>
 
-        <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="2dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                />
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                <Button
+                        android:id="@+id/bt_buy"
+                        android:background="@drawable/bt_bg_selector"
+                        android:text="@string/trade_buy"
+                        style="@style/trading_page_btns"
+                         />
 
-        <Button
-                android:id="@+id/bt_buy"
-                android:layout_width="80dp"
-                android:layout_marginRight="5dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bt_back"
-                android:textColor="@color/main_blue_color"
-                android:text="@string/trade_buy"
-                />
+                <Button
+                        android:id="@+id/bt_sell"
+                        android:text="@string/trade_sell"
+                        style="@style/trading_page_btns" />
+            </LinearLayout>
 
-        <Button
-                android:id="@+id/bt_sell"
-                android:layout_width="80dp"
-                android:layout_marginRight="5dp"
-                android:layout_height="wrap_content"
-                android:text="@string/trade_sell"
-                android:background="@drawable/bt_back"
-                android:textColor="@color/main_blue_color"
-                />
-    </LinearLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
     <LinearLayout
             android:id="@+id/pop_div"

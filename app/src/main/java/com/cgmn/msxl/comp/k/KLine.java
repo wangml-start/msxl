@@ -5,6 +5,7 @@ public class KLine {
   public final float low;
   public final float open;
   public final float close;
+  public final float lastClose;
 
   public final int volume;
 
@@ -18,20 +19,22 @@ public class KLine {
 
   public boolean isOpen=false;
 
-  public KLine(float high, float low, float open, float close, int volume) {
+  public KLine(float high, float low, float open, float close, float lsclose, int volume) {
     this.high = high;
     this.low = low;
     this.open = open;
     this.close = close;
     this.volume = volume;
+    this.lastClose = lsclose;
   }
 
-  public KLine(float open) {
+  public KLine(float open, float lastClose) {
     this.high = open;
     this.low = open;
     this.open = open;
     this.close = open;
     this.volume = 1;
     this.isOpen = true;
+    this.lastClose = lastClose;
   }
 }

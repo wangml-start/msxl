@@ -8,12 +8,8 @@
     </item>
     <item android:state_enabled="false">
         <shape>
-            <solid android:color="#BDC0C1" />
-            <corners
-                    android:bottomLeftRadius="8dip"
-                    android:bottomRightRadius="8dip"
-                    android:topLeftRadius="8dip"
-                    android:topRightRadius="8dip" />
+            <solid android:color="@color/text_hint" />
+            <corners android:radius="5dp"/>
         </shape>
     </item>
 </selector>

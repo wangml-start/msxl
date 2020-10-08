@@ -111,7 +111,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="5dp"
                 android:layout_weight="50"
-                android:background="@drawable/bt_back"
+                android:background="@drawable/bt_back_nomal"
                 android:enabled="false"
                 android:textColor="@color/main_blue_color"
                 android:text="@string/signin" />
@@ -123,7 +123,7 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="10dp"
                 android:layout_weight="50"
-                android:background="@drawable/bt_back"
+                android:background="@drawable/bt_back_nomal"
                 android:textColor="@color/main_blue_color"
                 android:enabled="true"
                 android:text="@string/send_email" />
