@@ -1,5 +1,6 @@
 package com.cgmn.msxl.server_interface;
 
+import com.cgmn.msxl.data.SettledAccount;
 import com.cgmn.msxl.data.User;
 
 public class BaseData {
@@ -10,6 +11,8 @@ public class BaseData {
     private User user;
 
     private KlineSet klineSet;
+
+    private SettledAccount settledAccount;
 
     public Integer getStatus() {
         return status;
@@ -41,5 +44,13 @@ public class BaseData {
 
     public void setKLineSet(KlineSet klineSet) {
         this.klineSet = klineSet;
+    }
+
+    public SettledAccount getSettledAccount() {
+        return settledAccount;
+    }
+
+    public void setSettledAccount(SettledAccount settledAccount) {
+        this.settledAccount = settledAccount;
     }
 }

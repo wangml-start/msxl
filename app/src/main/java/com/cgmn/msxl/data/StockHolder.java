@@ -44,6 +44,9 @@ public class StockHolder {
 
     private Float exchange = 0.0f;
 
+    //1代表已结算
+    private int settleStatus=0;
+
     //违反的原则
     private List<Integer> unprinciple;
     private int trainType;
@@ -319,10 +322,16 @@ public class StockHolder {
         if(CommonUtil.floatNumEqual(exchange , 0)){
             return;
         }
+        if(settleStatus == 1){
+            nodes.clear();
+            return;
+
+        }
+        settleStatus = 1;
         if(holdShare > 0){
             sellStock(holdShare, price);
         }
-        Trade trade = new Trade(code, holdPl, exchange,trainType,
+        Trade trade = new Trade(code, pl, exchange,trainType,
                 modelRecordId, unprinciple);
         nodes.addLast(trade);
     }

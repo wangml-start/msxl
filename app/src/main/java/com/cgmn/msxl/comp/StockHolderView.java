@@ -374,6 +374,9 @@ public class StockHolderView extends View {
     }
 
     public void initAccount(Float totalAmount){
+        if(totalAmount == null){
+            totalAmount = 0.0f;
+        }
         stockHolder.setTotAmt(totalAmount);
         stockHolder.setAvaiAmt(totalAmount);
         stockHolder.setInitTotAmt(totalAmount);

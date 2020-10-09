@@ -8,6 +8,8 @@ public class MessageUtil {
     //登录相关
     public static int LOAD_USER_INFOR = 0x003;
 
+    public static int GET_CASS_ACC_SUCCESS = 0x004;
+
 
 
 

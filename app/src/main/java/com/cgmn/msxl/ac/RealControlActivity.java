@@ -24,6 +24,7 @@ import com.cgmn.msxl.comp.CustmerToast;
 import com.cgmn.msxl.comp.StockHolderView;
 import com.cgmn.msxl.comp.pop.TradingPop;
 import com.cgmn.msxl.comp.k.KlineChart;
+import com.cgmn.msxl.data.SettledAccount;
 import com.cgmn.msxl.data.StockHolder;
 import com.cgmn.msxl.data.Trade;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
@@ -103,7 +104,7 @@ public class RealControlActivity extends AppCompatActivity
                             public void onError(com.squareup.okhttp.Request request, Exception e) {
                                 Message message = Message.obtain();
                                 message.what = MessageUtil.EXCUTE_EXCEPTION;
-                                message.obj = e;
+                                message.obj = new RuntimeException(getString(R.string.ge_stock_info_failed));
                                 mHandler.sendMessage(message);
                             }
                             @Override
@@ -136,13 +137,15 @@ public class RealControlActivity extends AppCompatActivity
                     realtradeManage.resetManager();
                     realtradeManage.setKlineset((KlineSet) msg.obj) ;
                     startChartInit();
-                } else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
+                } else if(msg.what == MessageUtil.GET_CASS_ACC_SUCCESS){
+                    SettledAccount acc = (SettledAccount) msg.obj;
+                    stockView.initAccount(acc.getCashAmt());
+                    stockView.invalidateView();
+                }
+                else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
                     Exception exception = (Exception) msg.obj;
-                    StringBuffer mes = new StringBuffer();
-                    GlobalExceptionHandler.getInstance(mContxt).handlerException(exception);
-                    mes.append(getString(R.string.ge_stock_info_failed));
                     //TODO: 异常处理
-                    CustmerToast.makeText(mContxt, mes.toString()).show();
+                    CustmerToast.makeText(mContxt, exception.getMessage()).show();
                 }
                 return false;
             }
@@ -158,11 +161,49 @@ public class RealControlActivity extends AppCompatActivity
         chart.invalidateView();
         updateTopBar();
         initStockHolder();
+
+        //获取资金账户信息
+        GlobalTreadPools.getInstance(mContxt).execute(new Runnable() {
+            @Override
+            public void run() {
+                Map<String, String> params = new HashMap<>();
+                params.put("token", TokenHelper.getToken(mContxt));
+                String url = CommonUtil.buildGetUrl(
+                        PropertyService.getInstance().getKey("serverUrl"),
+                        "/stock/account_info", params);
+                OkHttpClientManager.getAsyn(url,
+                        new OkHttpClientManager.ResultCallback<BaseData>() {
+                            @Override
+                            public void onError(com.squareup.okhttp.Request request, Exception e) {
+                                Message message = Message.obtain();
+                                message.what = MessageUtil.EXCUTE_EXCEPTION;
+                                message.obj = new RuntimeException(getString(R.string.get_cash_acc_fail));
+                                mHandler.sendMessage(message);
+                            }
+                            @Override
+                            public void onResponse(BaseData data) {
+                                Message message = Message.obtain();
+                                message.what = MessageUtil.GET_CASS_ACC_SUCCESS;
+                                try {
+                                    message.obj = data.getSettledAccount();
+                                    Integer status = data.getStatus();
+                                    if (status == null || status == -1) {
+                                        throw new Exception(data.getError());
+                                    }
+                                } catch (Exception e) {
+                                    message.what = MessageUtil.EXCUTE_EXCEPTION;
+                                    message.obj = e;
+                                }
+                                mHandler.sendMessage(message);
+                            }
+                        });
+                Log.e(TAG,"NAME="+Thread.currentThread().getName());
+            }
+        });
     }
 
     private void initStockHolder(){
         stockView.setStockHolder(new StockHolder());
-        stockView.initAccount(realtradeManage.getKlineset().getTotalAmount());
         stockView.getStockHolder().setModelRecordId(userModelId);
         stockView.getStockHolder().setTrainType(trainType);
         stockView.invalidateView();
