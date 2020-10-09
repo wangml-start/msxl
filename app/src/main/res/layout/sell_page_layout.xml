@@ -142,13 +142,13 @@
                     android:layout_weight="1"
                     android:layout_marginRight="5dp"
                     style="@style/trade_buy_sell"
-                    android:text="1/3仓" />
+                    android:text="1/5仓" />
             <TextView
                     android:id="@+id/one_fourth_buy"
                     android:layout_width="0dp"
                     android:layout_height="28dp"
                     android:layout_weight="1"
-                    android:text="1/4仓"
+                    android:text="1/10仓"
                     style="@style/trade_buy_sell"
                     />
         </LinearLayout>

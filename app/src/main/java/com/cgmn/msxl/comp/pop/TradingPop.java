@@ -188,9 +188,9 @@ public class TradingPop extends PopupWindow
         }else if(v.getId() == R.id.half_buy){
             positionManage(0.5f);
         }else if(v.getId() == R.id.one_third_buy){
-            positionManage(0.333333f);
+            positionManage(0.2f);
         }else if(v.getId() == R.id.one_fourth_buy){
-            positionManage(0.25f);
+            positionManage(0.1f);
         }else if(v.getId() == R.id.btn_action){
             onAction();
         }else if(v.getId() == R.id.count_minus){
