@@ -28,6 +28,7 @@
         <activity android:name=".ac.ForgetPasswordActivity" />
         <activity android:name=".ac.AppMainActivity" />
         <activity android:name=".ac.RealControlActivity" />
+        <activity android:name=".ac.StatisticActivity"/>
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
 

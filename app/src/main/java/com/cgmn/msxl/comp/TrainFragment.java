@@ -13,6 +13,7 @@ import android.widget.ListView;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.ac.AppMainActivity;
 import com.cgmn.msxl.ac.RealControlActivity;
+import com.cgmn.msxl.ac.StatisticActivity;
 import com.cgmn.msxl.comp.adpter.MutiLayoutAdapter;
 import com.cgmn.msxl.data.PageMainItem;
 import com.cgmn.msxl.data.SplitItem;
@@ -42,6 +43,8 @@ public class TrainFragment extends Fragment{
         mData.add(new PageMainItem(R.mipmap.head, getString(R.string.mode_setting), PageMainItem.MODEL_SETTING));
         mData.add(new PageMainItem(R.mipmap.head, getString(R.string.dragTrain), PageMainItem.LEADING_STRATEGY));
         mData.add(new PageMainItem(R.mipmap.head, getString(R.string.tradTrain), PageMainItem.NORMAL_STRATEGY));
+        mData.add(new SplitItem(getString(R.string.statistic)));
+        mData.add(new PageMainItem(R.mipmap.head, getString(R.string.pl_rate_line), PageMainItem.PL_LINE));
         mData.add(new SplitItem(getString(R.string.ranking)));
         mData.add(new PageMainItem(R.mipmap.head, getString(R.string.day_ranking), PageMainItem.DAY_RANK));
         mData.add(new PageMainItem(R.mipmap.head, getString(R.string.month_ranking), PageMainItem.MONTH_RANK));
@@ -80,8 +83,10 @@ public class TrainFragment extends Fragment{
                             intent.putExtra("datas", bundle);
                             startActivity(intent);
                             break;
-                        case 3:
-
+                        case 6:
+                            intent = new Intent(mContxt, StatisticActivity.class);
+                            startActivity(intent);
+                            break;
                     }
                 }
             }

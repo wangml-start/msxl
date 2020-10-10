@@ -8,6 +8,8 @@
     <string name="dragTrain">龙头战法训练</string>
     <string name="tradTrain">常规训练</string>
     <string name="up_train_txt">进阶训练</string>
+    <string name="statistic">统计</string>
+    <string name="pl_rate_line">查看盈亏曲线</string>
     <string name="ranking">排行</string>
     <string name="total_ranking">总榜</string>
     <string name="month_ranking">月榜</string>

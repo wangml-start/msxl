@@ -285,12 +285,9 @@ public class RealControlActivity extends AppCompatActivity
         }else{
             if(realtradeManage.showNextOpen()){
                 StockDetail current = realtradeManage.getCurrentK();
-                StockDetail last = realtradeManage.getLastK();
                 chart.setData(realtradeManage.getGroup());
                 chart.invalidateView();
                 updateTopBar();
-                Log.e(TAG, "CURRENT START:" + current.getStart());
-                Log.e(TAG, "Last END :" + last.getEnd());
                 if(realtradeManage.openWithUp()){
                     lb_open_price.setTextColor(getResources().getColor(R.color.kline_up));
                     lb_open_rate.setTextColor(getResources().getColor(R.color.kline_up));

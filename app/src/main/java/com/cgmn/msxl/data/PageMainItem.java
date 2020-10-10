@@ -5,6 +5,8 @@ public class PageMainItem {
     public static int LEADING_STRATEGY = 1;
     public static int NORMAL_STRATEGY = 2;
 
+    public static int PL_LINE = 6;
+
     public static int DAY_RANK = 3;
     public static int MONTH_RANK = 4;
     public static int TOTAL_RANK = 5;
