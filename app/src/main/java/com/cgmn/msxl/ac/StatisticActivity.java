@@ -265,7 +265,7 @@ public class StatisticActivity extends AppCompatActivity {
                 return CommonUtil.formatPercent(value);
             }
         });
-//        lineDataSet.setDrawValues(false);
+        lineDataSet.setDrawValues(false);
         if (mode == null) {
             //设置曲线展示为圆滑曲线（如果不设置则默认折线）
             lineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
