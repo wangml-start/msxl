@@ -58,6 +58,9 @@ public class StatisticActivity extends AppCompatActivity {
     private YAxis rightYaxis;           //右侧Y轴
     private Legend legend;              //图例
 
+    private Integer trainType;
+    private Integer userModelId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,8 +76,15 @@ public class StatisticActivity extends AppCompatActivity {
     private void bindView() {
         mContext = this;
         mLineChart = findViewById(R.id.lineChart);
-//显示边界
         initChart(mLineChart);
+
+        Intent intent = getIntent();
+        Bundle bundle = intent.getBundleExtra("datas");
+        if(bundle != null){
+            trainType = bundle.getInt("train_type");
+            userModelId =  bundle.getInt("user_model_id");
+        }
+
     }
 
     private void loadDatas(){
@@ -84,6 +94,12 @@ public class StatisticActivity extends AppCompatActivity {
             public void run() {
                 Map<String, String> params = new HashMap<>();
                 params.put("token", TokenHelper.getToken(mContext));
+                if(trainType != null){
+                    params.put("trainType", trainType+"");
+                }
+                if(userModelId != null){
+                    params.put("userModelId", userModelId+"");
+                }
                 String url = CommonUtil.buildGetUrl(
                         PropertyService.getInstance().getKey("serverUrl"),
                         "/stock/get_statistics", params);
@@ -125,6 +141,9 @@ public class StatisticActivity extends AppCompatActivity {
                 if(msg.what == MessageUtil.REQUEST_SUCCESS){
                     TradeStatistic statistic = (TradeStatistic) msg.obj;
                     List<Float> list = statistic.getList();
+                    if(CommonUtil.isEmpty(list)){
+                        return false;
+                    }
                     showLineChart(list, "X轴代表训练次数", getResources().getColor(R.color.kline_up));
                     Drawable drawable = getResources().getDrawable(R.drawable.fade_blue);
                     setChartFillDrawable(drawable);

@@ -1,4 +1,4 @@
-package com.cgmn.msxl.comp;
+package com.cgmn.msxl.comp.frag;
 
 import android.annotation.SuppressLint;
 import android.app.Fragment;
@@ -10,8 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import com.cgmn.msxl.R;
-import com.cgmn.msxl.ac.AppMainActivity;
 import com.cgmn.msxl.ac.RealControlActivity;
 import com.cgmn.msxl.ac.StatisticActivity;
 import com.cgmn.msxl.comp.adpter.MutiLayoutAdapter;
@@ -22,7 +22,7 @@ import com.cgmn.msxl.data.StockHolder;
 import java.util.ArrayList;
 
 @SuppressLint("ValidFragment")
-public class TrainFragment extends Fragment{
+public class StatisticFragment extends Fragment {
     private Context mContxt;
     private ListView list_content;
     private ArrayList<Object> mData = null;
@@ -30,7 +30,7 @@ public class TrainFragment extends Fragment{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.train_fragment, container, false);
+        View view = inflater.inflate(R.layout.static_fragment, container, false);
         bindView(view);
         initAdpter();
 
@@ -39,16 +39,9 @@ public class TrainFragment extends Fragment{
 
     private void initAdpter(){
         mData = new ArrayList<Object>();
-        mData.add(new SplitItem(getString(R.string.trading)));
-        mData.add(new PageMainItem(R.mipmap.head, getString(R.string.mode_setting), PageMainItem.MODEL_SETTING));
-        mData.add(new PageMainItem(R.mipmap.head, getString(R.string.dragTrain), PageMainItem.LEADING_STRATEGY));
-        mData.add(new PageMainItem(R.mipmap.head, getString(R.string.tradTrain), PageMainItem.NORMAL_STRATEGY));
-        mData.add(new SplitItem(getString(R.string.statistic)));
-        mData.add(new PageMainItem(R.mipmap.head, getString(R.string.pl_rate_line), PageMainItem.PL_LINE));
-        mData.add(new SplitItem(getString(R.string.ranking)));
-        mData.add(new PageMainItem(R.mipmap.head, getString(R.string.day_ranking), PageMainItem.DAY_RANK));
-        mData.add(new PageMainItem(R.mipmap.head, getString(R.string.month_ranking), PageMainItem.MONTH_RANK));
-        mData.add(new PageMainItem(R.mipmap.head, getString(R.string.total_ranking), PageMainItem.TOTAL_RANK));
+        mData.add(new PageMainItem(R.mipmap.head, getString(R.string.train_sum_line), PageMainItem.SUM_PL_LINE));
+        mData.add(new PageMainItem(R.mipmap.head, getString(R.string.leading_line), PageMainItem.LEADING_LINE));
+        mData.add(new PageMainItem(R.mipmap.head, getString(R.string.normal_line), PageMainItem.NORMARL_LINE));
 
         myAdapter = new MutiLayoutAdapter(mContxt, mData);
         list_content.setAdapter(myAdapter);
@@ -66,25 +59,23 @@ public class TrainFragment extends Fragment{
                     Intent intent = null;
                     Bundle bundle = null;
                     switch (type){
-                        case 0:
-                        case 1:
-                            intent = new Intent(mContxt, RealControlActivity.class);
+                        case 6:
+                            intent = new Intent(mContxt, StatisticActivity.class);
+                            startActivity(intent);
+                            break;
+                        case 7:
+                            intent = new Intent(mContxt, StatisticActivity.class);
                             bundle = new Bundle();
                             bundle.putInt("train_type", StockHolder.LEADING_STRATEGY);
-                            bundle.putInt("user_model_id", 1);
                             intent.putExtra("datas", bundle);
                             startActivity(intent);
                             break;
-                        case 2:
-                            intent = new Intent(mContxt, RealControlActivity.class);
+                        case 8:
+                            intent = new Intent(mContxt, StatisticActivity.class);
                             bundle = new Bundle();
                             bundle.putInt("train_type", StockHolder.NORMAL_STRATEGY);
                             bundle.putInt("user_model_id", 1);
                             intent.putExtra("datas", bundle);
-                            startActivity(intent);
-                            break;
-                        case 6:
-                            intent = new Intent(mContxt, StatisticActivity.class);
                             startActivity(intent);
                             break;
                     }

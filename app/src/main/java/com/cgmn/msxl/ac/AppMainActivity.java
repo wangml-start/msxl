@@ -11,7 +11,9 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import com.cgmn.msxl.R;
-import com.cgmn.msxl.comp.TrainFragment;
+import com.cgmn.msxl.comp.frag.MayFragment;
+import com.cgmn.msxl.comp.frag.StatisticFragment;
+import com.cgmn.msxl.comp.frag.TrainFragment;
 import com.cgmn.msxl.utils.MessageUtil;
 
 public class AppMainActivity extends AppCompatActivity
@@ -28,7 +30,9 @@ public class AppMainActivity extends AppCompatActivity
     private Handler mHandler;
 
     //Fragment Object
-    private TrainFragment fg1,fg2,fg3,fg4;
+    private TrainFragment trainFrag;
+    private StatisticFragment statisticFragment;
+    private MayFragment myFrag;
     private FragmentManager fManager;
 
     @Override
@@ -56,7 +60,7 @@ public class AppMainActivity extends AppCompatActivity
     }
 
     //重置所有文本的选中状态
-    private void setSelected(){
+    private void setSelected() {
         txt_xunlian.setSelected(false);
         txt_statistic.setSelected(false);
         txt_may.setSelected(false);
@@ -77,11 +81,10 @@ public class AppMainActivity extends AppCompatActivity
     }
 
     //隐藏所有Fragment
-    private void hideAllFragment(FragmentTransaction fragmentTransaction){
-        if(fg1 != null)fragmentTransaction.hide(fg1);
-        if(fg2 != null)fragmentTransaction.hide(fg2);
-        if(fg3 != null)fragmentTransaction.hide(fg3);
-        if(fg4 != null)fragmentTransaction.hide(fg4);
+    private void hideAllFragment(FragmentTransaction fragmentTransaction) {
+        if (trainFrag != null) fragmentTransaction.hide(trainFrag);
+        if (statisticFragment != null) fragmentTransaction.hide(statisticFragment);
+        if (myFrag != null) fragmentTransaction.hide(myFrag);
     }
 
 
@@ -89,35 +92,35 @@ public class AppMainActivity extends AppCompatActivity
     public void onClick(View v) {
         FragmentTransaction fTransaction = fManager.beginTransaction();
         hideAllFragment(fTransaction);
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.txt_xunlian:
                 setSelected();
                 txt_xunlian.setSelected(true);
-                if(fg1 == null){
-                    fg1 = new TrainFragment();
-                    fTransaction.add(R.id.ly_content,fg1);
-                }else{
-                    fTransaction.show(fg1);
+                if (trainFrag == null) {
+                    trainFrag = new TrainFragment();
+                    fTransaction.add(R.id.ly_content, trainFrag);
+                } else {
+                    fTransaction.show(trainFrag);
                 }
                 break;
             case R.id.txt_statistic:
                 setSelected();
                 txt_statistic.setSelected(true);
-                if(fg2 == null){
-//                    fg2 = new TrainFragment("第二个Fragment");
-                    fTransaction.add(R.id.ly_content,fg2);
-                }else{
-                    fTransaction.show(fg2);
+                if (statisticFragment == null) {
+                    statisticFragment = new StatisticFragment();
+                    fTransaction.add(R.id.ly_content, statisticFragment);
+                } else {
+                    fTransaction.show(statisticFragment);
                 }
                 break;
             case R.id.txt_may:
                 setSelected();
                 txt_may.setSelected(true);
-                if(fg3 == null){
-//                    fg3 = new TrainFragment();
-                    fTransaction.add(R.id.ly_content,fg3);
-                }else{
-                    fTransaction.show(fg3);
+                if (myFrag == null) {
+                    myFrag = new MayFragment();
+                    fTransaction.add(R.id.ly_content, myFrag);
+                } else {
+                    fTransaction.show(myFrag);
                 }
                 break;
         }

@@ -1,4 +1,4 @@
-package com.cgmn.msxl.comp;
+package com.cgmn.msxl.comp.frag;
 
 import android.annotation.SuppressLint;
 import android.app.Fragment;
@@ -10,11 +10,8 @@ import android.widget.TextView;
 import com.cgmn.msxl.R;
 
 @SuppressLint("ValidFragment")
-public class StatisticFragment extends Fragment {
+public class MayFragment extends Fragment {
     private String content;
-    public StatisticFragment(String content) {
-        this.content = content;
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
