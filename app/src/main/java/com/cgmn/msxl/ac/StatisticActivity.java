@@ -144,6 +144,7 @@ public class StatisticActivity extends AppCompatActivity {
                     if(CommonUtil.isEmpty(list)){
                         return false;
                     }
+                    list.add(0, 0f);
                     showLineChart(list, "X轴代表训练次数", getResources().getColor(R.color.kline_up));
                     Drawable drawable = getResources().getDrawable(R.drawable.fade_blue);
                     setChartFillDrawable(drawable);
@@ -194,8 +195,7 @@ public class StatisticActivity extends AppCompatActivity {
         xAxis.setDrawGridLines(false);
 
         //保证Y轴从0开始，不然会上移一点
-        leftYAxis.setAxisMinimum(0f);
-        rightYaxis.setAxisMinimum(0f);
+//        leftYAxis.setAxisMinimum(0f);
 
         rightYaxis.setDrawGridLines(false);
         leftYAxis.setDrawGridLines(true);
