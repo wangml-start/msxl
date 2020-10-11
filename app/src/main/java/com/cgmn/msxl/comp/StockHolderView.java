@@ -111,18 +111,18 @@ public class StockHolderView extends View {
         mMatrixOffset.mapPoints(rowlines);
         canvas.drawLines(rowlines, mGridPaint);
 
-        float[] collines = new float[4];
-        collines[0] = 1/contentRect.width();
+        float[] collines = new float[8];
+        collines[0] = contentRect.width() * 1/3.0f;
         collines[2] = collines[0];
         collines[1] = topSpace*4;
         collines[3] = headSpace*2+topSpace - topSpace*4;
 
-        collines[0] = 2/contentRect.width();
-        collines[2] = collines[0];
-        collines[1] = topSpace*4;
-        collines[3] = headSpace*2+topSpace - topSpace*4;
+        collines[4] = contentRect.width()  * 2/3.0f;
+        collines[6] = collines[4];
+        collines[5] = topSpace*4;
+        collines[7] = headSpace*2+topSpace - topSpace*4;
         mMatrixOffset.mapPoints(collines);
-        canvas.drawLine(collines[0], collines[1], collines[2], collines[3], mGridPaint);
+        canvas.drawLines(collines, mGridPaint);
     }
 
     private float[] calcTextPoint(Object value, int yOrder, float ox_rate, float oY){

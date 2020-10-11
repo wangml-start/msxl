@@ -104,7 +104,7 @@ public class RealControlActivity extends AppCompatActivity
                             public void onError(com.squareup.okhttp.Request request, Exception e) {
                                 Message message = Message.obtain();
                                 message.what = MessageUtil.EXCUTE_EXCEPTION;
-                                message.obj = new RuntimeException(getString(R.string.ge_stock_info_failed));
+                                message.obj = e;
                                 mHandler.sendMessage(message);
                             }
                             @Override
@@ -143,9 +143,7 @@ public class RealControlActivity extends AppCompatActivity
                     stockView.invalidateView();
                 }
                 else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
-                    Exception exception = (Exception) msg.obj;
-                    //TODO: 异常处理
-                    CustmerToast.makeText(mContxt, exception.getMessage()).show();
+                    GlobalExceptionHandler.getInstance(mContxt).handlerException((Exception) msg.obj);
                 }
                 return false;
             }

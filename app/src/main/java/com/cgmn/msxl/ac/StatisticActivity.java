@@ -149,9 +149,7 @@ public class StatisticActivity extends AppCompatActivity {
                     setChartFillDrawable(drawable);
                     setMarkerView();
                 }else if(msg.what == MessageUtil.EXCUTE_EXCEPTION){
-                    Exception exception = (Exception) msg.obj;
-                    //TODO: 异常处理
-                    CustmerToast.makeText(mContext, exception.getMessage()).show();
+                    GlobalExceptionHandler.getInstance(mContext).handlerException((Exception) msg.obj);
                 }
                 return false;
             }
@@ -166,9 +164,14 @@ public class StatisticActivity extends AppCompatActivity {
         //是否展示网格线
         lineChart.setDrawGridBackground(false);
         //是否可以拖动
-        lineChart.setDragEnabled(false);
+        lineChart.setDragEnabled(true);
         //是否有触摸事件
         lineChart.setTouchEnabled(true);
+        //缩放
+        lineChart.setScaleEnabled(true);
+        lineChart.setScaleXEnabled(true);
+        lineChart.setScaleYEnabled(false);
+        lineChart.setDoubleTapToZoomEnabled(false);
         //设置XY轴动画效果
         lineChart.animateY(2500);
         lineChart.animateX(1500);

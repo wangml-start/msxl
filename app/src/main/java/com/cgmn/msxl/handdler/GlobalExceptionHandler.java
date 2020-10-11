@@ -45,7 +45,19 @@ public class GlobalExceptionHandler {
         return handler;
     }
 
-    public void handlerException(final Exception e){
+    public void handlerException(Exception e){
+        try{
+            if((ConnectException)e instanceof ConnectException){
+                CustmerToast.makeText(mContxt, mContxt.getString(R.string.network_loss)).show();
+            }
+        }catch (Exception e1){
+            if(!CommonUtil.isEmpty(e.getMessage())){
+                CustmerToast.makeText(mContxt, e.getMessage()).show();
+            }
+        }
+    }
+
+    public void handlerExceptionUpException(final Exception e){
         final String type = "APP_RUNTIMEERROR";
         try{
             if((ConnectException)e instanceof ConnectException){
