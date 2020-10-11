@@ -35,7 +35,7 @@ public class AppSqlHelper extends SQLiteOpenHelper {
     //软件版本号发生改变时调用
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE temp_data_save;");
+
 
     }
 

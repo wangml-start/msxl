@@ -45,7 +45,7 @@ public class MainActivity extends LoginBaseActivity {
 
 
         if(!NetworkUtil.isNetworkConnected(mContext)){
-            CustmerToast.makeText(mContext, R.string.no_network);
+            CustmerToast.makeText(mContext, R.string.no_network).show();
         }else{
             autoLogin();
         }

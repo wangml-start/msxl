@@ -138,12 +138,12 @@ public class TradingPop extends PopupWindow
     private void onAction(){
         float price = CommonUtil.castFloatFromString(manage.getCurenPrice());
         if(CommonUtil.isEmpty(et_count.getText().toString())){
-            CustmerToast.makeText(mContext, mContext.getString(R.string.need_vol));
+            CustmerToast.makeText(mContext, mContext.getString(R.string.need_vol)).show();
             return;
         }
         int count = Integer.valueOf(et_count.getText().toString());
         if(count == 0){
-            CustmerToast.makeText(mContext, mContext.getString(R.string.need_vol));
+            CustmerToast.makeText(mContext, mContext.getString(R.string.need_vol)).show();
             return;
         }
         if (this.action.equals("BUY")) {
@@ -164,13 +164,13 @@ public class TradingPop extends PopupWindow
         float price = CommonUtil.castFloatFromString(manage.getCurenPrice());
         if (this.action.equals("BUY")) {
             int avaiCount = stoHolder.getAvaiBuyCount(manage.getCurenPrice());
-            if(changed > avaiCount || changed <= 0){
+            if(changed > avaiCount || changed < 0){
                 return;
             }
             et_count.setText(changed + "");
             setAmountText(CommonUtil.formatNumer(changed * price));
         } else {
-            if(changed > stoHolder.getAvaiLabelShare() || changed <= 0){
+            if(changed > stoHolder.getAvaiLabelShare() || changed < 0){
                 return;
             }
             et_count.setText(changed + "");

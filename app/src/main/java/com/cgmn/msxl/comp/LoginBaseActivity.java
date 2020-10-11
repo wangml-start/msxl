@@ -98,6 +98,7 @@ public class LoginBaseActivity extends AppCompatActivity
         values.put("token", token);
         values.put("last_active", 1);
         sqlHeper.upsert("users", values, "phone");
+        sqlHeper.delete("users", String.format("phone <>'%s'", user.getPhone()));
         AppApplication.getInstance().setToken(token);
     }
 }
