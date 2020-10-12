@@ -13,8 +13,8 @@ import java.util.Map;
 
 public class CommonUtil {
     private static DecimalFormat formatP = new DecimalFormat("0.00%");
-    private static DecimalFormat format2 = new DecimalFormat("0.00");
-    private static DecimalFormat format3 = new DecimalFormat("0.000");
+    private static DecimalFormat format2 = new DecimalFormat("#,##0.00");
+    private static DecimalFormat format3 = new DecimalFormat("#,##0.000");
 
     public static boolean isEmpty(Object o){
         if(o == null){

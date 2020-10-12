@@ -61,12 +61,16 @@ public class StatisticFragment extends Fragment {
                     switch (type){
                         case 6:
                             intent = new Intent(mContxt, StatisticActivity.class);
+                            bundle = new Bundle();
+                            bundle.putString("title", getString(R.string.train_sum_line));
+                            intent.putExtra("datas", bundle);
                             startActivity(intent);
                             break;
                         case 7:
                             intent = new Intent(mContxt, StatisticActivity.class);
                             bundle = new Bundle();
                             bundle.putInt("train_type", StockHolder.LEADING_STRATEGY);
+                            bundle.putString("title", getString(R.string.leading_line));
                             intent.putExtra("datas", bundle);
                             startActivity(intent);
                             break;
@@ -74,6 +78,7 @@ public class StatisticFragment extends Fragment {
                             intent = new Intent(mContxt, StatisticActivity.class);
                             bundle = new Bundle();
                             bundle.putInt("train_type", StockHolder.NORMAL_STRATEGY);
+                            bundle.putString("title", getString(R.string.normal_line));
                             bundle.putInt("user_model_id", 1);
                             intent.putExtra("datas", bundle);
                             startActivity(intent);

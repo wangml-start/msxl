@@ -424,17 +424,18 @@ public class RealControlActivity extends AppCompatActivity
         }else if(v.getId() == R.id.bt_sell){
             showPopFormBottom(v, "SELL");
         }else if(v.getId() == R.id.bt_change){
-            AlertDialog.Builder builder = new AlertDialog.Builder(mContxt);
-            builder.setTitle(R.string.tips);
-            builder.setMessage(R.string.sure_to_do_this);
-            builder.setPositiveButton(R.string.queding, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    onChageStock();
-                }
-            });
-            builder.setNegativeButton(R.string.cancel, null);
-            builder.show();
+            onChageStock();
+//            AlertDialog.Builder builder = new AlertDialog.Builder(mContxt);
+//            builder.setTitle(R.string.tips);
+//            builder.setMessage(R.string.sure_to_do_this);
+//            builder.setPositiveButton(R.string.queding, new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialogInterface, int i) {
+//
+//                }
+//            });
+//            builder.setNegativeButton(R.string.cancel, null);
+//            builder.show();
         }else if(v.getId() == R.id.bt_exit){
             AlertDialog.Builder builder = new AlertDialog.Builder(mContxt);
             builder.setTitle(R.string.tips);

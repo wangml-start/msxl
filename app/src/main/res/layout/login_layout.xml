@@ -15,23 +15,30 @@
 
         <Button
                 android:id="@+id/backup_btn"
-                android:layout_width="100dp"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:background="@color/bg_white"
                 android:gravity="center"
                 android:layout_marginTop="2dp"
                 android:visibility="gone"
-                android:text="@string/backup" />
+                android:text=" " />
+<!--        @string/backup-->
 
         <TextView
-                android:layout_width="fill_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:layout_marginTop="2dp"
                 android:text="@string/signin"
                 />
-
+        <Button
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:background="@color/bg_white"
+                android:gravity="center"
+                android:layout_marginTop="2dp"
+                android:text=" " />
     </LinearLayout>
 
     <View

@@ -15,7 +15,7 @@
 
         <Button
                 android:id="@+id/backup_btn"
-                android:layout_width="100dp"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:background="@color/bg_white"
                 android:gravity="center"
@@ -23,12 +23,19 @@
                 android:text="@string/backup" />
 
         <TextView
-                android:layout_width="fill_parent"
+                android:layout_width="0dp"
                 android:gravity="center"
                 android:layout_height="wrap_content"
                 android:text="@string/forget_pws"
                 android:layout_marginTop="2dp"
                 android:layout_weight="1" />
+        <Button
+                android:layout_height="wrap_content"
+                android:background="@color/bg_white"
+                android:gravity="center"
+                android:layout_width="80dp"
+                android:layout_marginTop="2dp"
+                android:text=" " />
 
     </LinearLayout>
 

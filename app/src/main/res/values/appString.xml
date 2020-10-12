@@ -6,7 +6,7 @@
     <string name="trading">操盘</string>
     <string name="mode_setting">创建模式</string>
     <string name="dragTrain">龙头战法训练</string>
-    <string name="tradTrain">常规训练</string>
+    <string name="tradTrain">趋势波段训练</string>
     <string name="up_train_txt">进阶训练</string>
     <string name="statistic">回顾</string>
     <string name="pl_rate_line">盈亏曲线</string>
@@ -14,8 +14,8 @@
     <string name="total_ranking">总榜</string>
     <string name="month_ranking">月榜</string>
     <string name="day_ranking">日榜</string>
-    <string name="train_sum_line">训练总曲线</string>
+    <string name="train_sum_line">收益总曲线</string>
     <string name="leading_line">龙头战法曲线</string>
-    <string name="normal_line">常规训练曲线</string>
+    <string name="normal_line">趋势波段曲线</string>
 
 </resources>

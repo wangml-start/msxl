@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
@@ -61,6 +62,9 @@ public class StatisticActivity extends AppCompatActivity {
     private Integer trainType;
     private Integer userModelId;
 
+    private TextView txt_statist_title, tx_st_pl,
+            tx_st_ex, backup_btn, tx_st_plrate;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,34 +75,46 @@ public class StatisticActivity extends AppCompatActivity {
     }
 
 
-
     @SuppressLint("WrongViewCast")
     private void bindView() {
         mContext = this;
         mLineChart = findViewById(R.id.lineChart);
         initChart(mLineChart);
+        txt_statist_title = findViewById(R.id.txt_statist_title);
+        tx_st_pl = findViewById(R.id.tx_st_pl);
+        tx_st_ex = findViewById(R.id.tx_st_ex);
+        tx_st_plrate = findViewById(R.id.tx_st_plrate);
+        backup_btn = findViewById(R.id.backup_btn);
+        backup_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (v.getId() == R.id.backup_btn) {
+                    finish();
+                }
+            }
+        });
 
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra("datas");
-        if(bundle != null){
+        if (bundle != null) {
             trainType = bundle.getInt("train_type");
-            userModelId =  bundle.getInt("user_model_id");
+            userModelId = bundle.getInt("user_model_id");
+            txt_statist_title.setText(bundle.getString("title"));
         }
-
     }
 
-    private void loadDatas(){
+    private void loadDatas() {
         CustmerToast.makeText(mContext, R.string.get_stock_datas).show();
         GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
             @Override
             public void run() {
                 Map<String, String> params = new HashMap<>();
                 params.put("token", TokenHelper.getToken(mContext));
-                if(trainType != null){
-                    params.put("trainType", trainType+"");
+                if (trainType != null) {
+                    params.put("trainType", trainType + "");
                 }
-                if(userModelId != null){
-                    params.put("userModelId", userModelId+"");
+                if (userModelId != null) {
+                    params.put("userModelId", userModelId + "");
                 }
                 String url = CommonUtil.buildGetUrl(
                         PropertyService.getInstance().getKey("serverUrl"),
@@ -112,6 +128,7 @@ public class StatisticActivity extends AppCompatActivity {
                                 message.obj = e;
                                 mHandler.sendMessage(message);
                             }
+
                             @Override
                             public void onResponse(BaseData data) {
                                 Message message = Message.obtain();
@@ -129,32 +146,47 @@ public class StatisticActivity extends AppCompatActivity {
                                 mHandler.sendMessage(message);
                             }
                         });
-                Log.e(TAG,"NAME="+Thread.currentThread().getName());
+                Log.e(TAG, "NAME=" + Thread.currentThread().getName());
             }
         });
     }
-    private void initMessageHandle(){
 
+    private void initMessageHandle() {
         mHandler = new Handler(new Handler.Callback() {
             @Override
             public boolean handleMessage(Message msg) {
-                if(msg.what == MessageUtil.REQUEST_SUCCESS){
+                if (msg.what == MessageUtil.REQUEST_SUCCESS) {
                     TradeStatistic statistic = (TradeStatistic) msg.obj;
-                    List<Float> list = statistic.getList();
-                    if(CommonUtil.isEmpty(list)){
-                        return false;
-                    }
-                    list.add(0, 0f);
-                    showLineChart(list, "X轴代表训练次数", getResources().getColor(R.color.kline_up));
-                    Drawable drawable = getResources().getDrawable(R.drawable.fade_blue);
-                    setChartFillDrawable(drawable);
-                    setMarkerView();
-                }else if(msg.what == MessageUtil.EXCUTE_EXCEPTION){
+                    showStatisticChart(statistic);
+                } else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
                     GlobalExceptionHandler.getInstance(mContext).handlerException((Exception) msg.obj);
                 }
                 return false;
             }
         });
+    }
+
+    private void showStatisticChart(TradeStatistic statistic) {
+        List<Float> list = statistic.getList();
+        if (CommonUtil.isEmpty(list)) {
+            return;
+        }
+        list.add(0, 0f);
+        showLineChart(list, "我的收益", getResources().getColor(R.color.kline_up));
+        Drawable drawable = getResources().getDrawable(R.drawable.fade_blue);
+        setChartFillDrawable(drawable);
+        setMarkerView();
+
+        tx_st_pl.setText(CommonUtil.formatNumer(statistic.getPl()));
+        tx_st_plrate.setText(CommonUtil.formatPercent(statistic.getPl() / statistic.getBaseAmt()));
+        if (statistic.getPl() > 0) {
+            tx_st_pl.setTextColor(getResources().getColor(R.color.kline_up));
+            tx_st_plrate.setTextColor(getResources().getColor(R.color.kline_up));
+        } else if (statistic.getPl() < 0) {
+            tx_st_pl.setTextColor(getResources().getColor(R.color.kline_down));
+            tx_st_plrate.setTextColor(getResources().getColor(R.color.kline_down));
+        }
+        tx_st_ex.setText(CommonUtil.formatNumer(statistic.getFee()));
     }
 
     /**
@@ -201,7 +233,7 @@ public class StatisticActivity extends AppCompatActivity {
         leftYAxis.setDrawGridLines(true);
         leftYAxis.enableGridDashedLine(10f, 10f, 0f);
         rightYaxis.setEnabled(false);
-        xAxis.setLabelCount(8,false);
+        xAxis.setLabelCount(8, false);
 
         leftYAxis.setValueFormatter(new IAxisValueFormatter() {
             @Override
