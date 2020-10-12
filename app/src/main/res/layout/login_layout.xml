@@ -9,6 +9,7 @@
             android:id="@+id/signin_top_menu"
             android:layout_width="match_parent"
             android:layout_height="30dp"
+            android:layout_marginTop="2dp"
             android:layout_alignParentTop="true"
             android:background="@color/bg_white"
             android:orientation="horizontal">
@@ -16,27 +17,24 @@
         <Button
                 android:id="@+id/backup_btn"
                 android:layout_width="80dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:background="@color/bg_white"
                 android:gravity="center"
-                android:layout_marginTop="2dp"
                 android:text=" " />
 <!--        @string/backup-->
 
         <TextView
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:layout_marginTop="2dp"
                 android:text="@string/signin"
                 />
         <Button
                 android:layout_width="80dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:background="@color/bg_white"
                 android:gravity="center"
-                android:layout_marginTop="2dp"
                 android:text=" " />
     </LinearLayout>
 
