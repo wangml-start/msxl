@@ -70,11 +70,11 @@ public class KlinePaint {
     public KlinePaint() {
         mDownPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mDownPaint.setStyle(Paint.Style.FILL);
-        mDownPaint.setStrokeWidth(2.5f);
+        mDownPaint.setStrokeWidth(3.5f);
 
         mUpPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mUpPaint.setStyle(Paint.Style.STROKE);
-        mUpPaint.setStrokeWidth(2.5f);
+        mUpPaint.setStrokeWidth(3.5f);
 
         mGridPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mGridPaint.setStyle(Paint.Style.STROKE);
@@ -90,9 +90,9 @@ public class KlinePaint {
         mk5Paint.setStyle(Paint.Style.FILL);
         mk10Paint.setStyle(Paint.Style.FILL);
         mk20Paint.setStyle(Paint.Style.FILL);
-        mk5Paint.setStrokeWidth(2.5f);
-        mk10Paint.setStrokeWidth(2.5f);
-        mk20Paint.setStrokeWidth(2.5f);
+        mk5Paint.setStrokeWidth(3.5f);
+        mk10Paint.setStrokeWidth(3.5f);
+        mk20Paint.setStrokeWidth(3.5f);
     }
 
     public void setContentRect(RectF contentRect) {

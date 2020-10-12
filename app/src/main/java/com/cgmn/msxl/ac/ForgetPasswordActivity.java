@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.CustmerToast;
@@ -31,7 +32,7 @@ public class ForgetPasswordActivity extends LoginBaseActivity {
 
     private Button bt_login;
     private Button bt_sent_email;
-    private Button backup_btn;
+    private TextView backup_btn;
     private showPassworCheckBox ck_show;
 
     private Context mContext;
