@@ -20,7 +20,6 @@
                 android:background="@color/bg_white"
                 android:gravity="center"
                 android:layout_marginTop="2dp"
-                android:visibility="gone"
                 android:text=" " />
 <!--        @string/backup-->
 

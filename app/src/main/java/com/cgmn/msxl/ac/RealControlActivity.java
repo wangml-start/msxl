@@ -166,6 +166,7 @@ public class RealControlActivity extends AppCompatActivity
             public void run() {
                 Map<String, String> params = new HashMap<>();
                 params.put("token", TokenHelper.getToken(mContxt));
+                params.put("train_type", trainType+"");
                 String url = CommonUtil.buildGetUrl(
                         PropertyService.getInstance().getKey("serverUrl"),
                         "/stock/account_info", params);

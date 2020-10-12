@@ -62,7 +62,7 @@ public class StatisticActivity extends AppCompatActivity {
     private Integer trainType;
     private Integer userModelId;
 
-    private TextView txt_statist_title, tx_st_pl,
+    private TextView txt_statist_title, tx_st_pl, tx_st_baseAmt,
             tx_st_ex, backup_btn, tx_st_plrate;
 
     @Override
@@ -85,6 +85,7 @@ public class StatisticActivity extends AppCompatActivity {
         tx_st_ex = findViewById(R.id.tx_st_ex);
         tx_st_plrate = findViewById(R.id.tx_st_plrate);
         backup_btn = findViewById(R.id.backup_btn);
+        tx_st_baseAmt = findViewById(R.id.tx_st_baseAmt);
         backup_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -177,6 +178,7 @@ public class StatisticActivity extends AppCompatActivity {
         setChartFillDrawable(drawable);
         setMarkerView();
 
+        tx_st_baseAmt.setText(CommonUtil.formatNumer(statistic.getBaseAmt()));
         tx_st_pl.setText(CommonUtil.formatNumer(statistic.getPl()));
         tx_st_plrate.setText(CommonUtil.formatPercent(statistic.getPl() / statistic.getBaseAmt()));
         if (statistic.getPl() > 0) {

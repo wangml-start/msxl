@@ -17,8 +17,8 @@
 
     <color name="bg_gray">#F1EEEE</color>
 
-    <color name="kline_up">#EF1B0B</color>
-    <color name="kline_down">#27B32C</color>
+    <color name="kline_up">#B81206</color>
+    <color name="kline_down">#05870A</color>
 
     <color name="kline_ave_5">#756D7E</color>
     <color name="kline_ave_10">#FFC800</color>
