@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.ac.AppMainActivity;
+import com.cgmn.msxl.ac.ModeSettingActivity;
 import com.cgmn.msxl.ac.RealControlActivity;
 import com.cgmn.msxl.ac.StatisticActivity;
 import com.cgmn.msxl.comp.adpter.MutiLayoutAdapter;
@@ -65,6 +66,9 @@ public class TrainFragment extends Fragment{
                     Bundle bundle = null;
                     switch (type){
                         case 0:
+                            intent = new Intent(mContxt, ModeSettingActivity.class);
+                            startActivity(intent);
+                            break;
                         case 1:
                             intent = new Intent(mContxt, RealControlActivity.class);
                             bundle = new Bundle();

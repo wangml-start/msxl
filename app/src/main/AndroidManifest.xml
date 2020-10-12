@@ -29,6 +29,7 @@
         <activity android:name=".ac.AppMainActivity" />
         <activity android:name=".ac.RealControlActivity" />
         <activity android:name=".ac.StatisticActivity"/>
+        <activity android:name=".ac.ModeSettingActivity"/>
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
 
