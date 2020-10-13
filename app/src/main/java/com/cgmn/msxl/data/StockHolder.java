@@ -47,6 +47,8 @@ public class StockHolder {
     //1代表已结算
     private int settleStatus=0;
 
+    //设置的模式
+    List<SettingItem> modeList;
     //违反的原则
     private List<Integer> unprinciple;
     private int trainType;
@@ -58,6 +60,14 @@ public class StockHolder {
 
     public void setTrainType(int trainType) {
         this.trainType = trainType;
+    }
+
+    public List<SettingItem> getModeList() {
+        return modeList;
+    }
+
+    public void setModeList(List<SettingItem> modeList) {
+        this.modeList = modeList;
     }
 
     public int getModelRecordId() {

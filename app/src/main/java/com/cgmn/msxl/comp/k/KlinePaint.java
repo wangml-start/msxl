@@ -43,7 +43,8 @@ public class KlinePaint {
     /**
      * the space between the entries, default 0.1f (10%)
      */
-    protected float mBarSpace = 0.1f;
+    protected float mBarSpace = 0.2f;
+    protected float kLineBold = 3f;
 
     /**
      * the max visible entry count.
@@ -70,11 +71,11 @@ public class KlinePaint {
     public KlinePaint() {
         mDownPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mDownPaint.setStyle(Paint.Style.FILL);
-        mDownPaint.setStrokeWidth(3.5f);
+        mDownPaint.setStrokeWidth(kLineBold);
 
         mUpPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mUpPaint.setStyle(Paint.Style.STROKE);
-        mUpPaint.setStrokeWidth(3.5f);
+        mUpPaint.setStrokeWidth(kLineBold);
 
         mGridPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mGridPaint.setStyle(Paint.Style.STROKE);
@@ -90,9 +91,9 @@ public class KlinePaint {
         mk5Paint.setStyle(Paint.Style.FILL);
         mk10Paint.setStyle(Paint.Style.FILL);
         mk20Paint.setStyle(Paint.Style.FILL);
-        mk5Paint.setStrokeWidth(3.5f);
-        mk10Paint.setStrokeWidth(3.5f);
-        mk20Paint.setStrokeWidth(3.5f);
+        mk5Paint.setStrokeWidth(kLineBold);
+        mk10Paint.setStrokeWidth(kLineBold);
+        mk20Paint.setStrokeWidth(kLineBold);
     }
 
     public void setContentRect(RectF contentRect) {

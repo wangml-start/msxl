@@ -23,9 +23,9 @@ import com.cgmn.msxl.comp.CustmerToast;
 import com.cgmn.msxl.comp.StockHolderView;
 import com.cgmn.msxl.comp.pop.TradingPop;
 import com.cgmn.msxl.comp.k.KlineChart;
-import com.cgmn.msxl.data.SettledAccount;
-import com.cgmn.msxl.data.StockHolder;
-import com.cgmn.msxl.data.Trade;
+import com.cgmn.msxl.comp.swb.State;
+import com.cgmn.msxl.data.*;
+import com.cgmn.msxl.db.AppSqlHelper;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.server_interface.KlineSet;
@@ -38,10 +38,9 @@ import com.cgmn.msxl.utils.CommonUtil;
 import com.cgmn.msxl.utils.GsonUtil;
 import com.cgmn.msxl.utils.MessageUtil;
 import com.squareup.okhttp.Request;
+import org.apache.commons.lang3.StringUtils;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 
 public class RealControlActivity extends AppCompatActivity
         implements View.OnClickListener{
@@ -76,6 +75,7 @@ public class RealControlActivity extends AppCompatActivity
         bindView();
         initMessageHandle();
         loadKLineSet();
+        loadUserMode();
     }
 
     private String getUrl(){
@@ -88,6 +88,35 @@ public class RealControlActivity extends AppCompatActivity
         return CommonUtil.buildGetUrl(
                 PropertyService.getInstance().getKey("serverUrl"),
                 action, params);
+    }
+
+    private void loadUserMode(){
+        //获取用户模式
+        GlobalTreadPools.getInstance(mContxt).execute(new Runnable() {
+            @Override
+            public void run() {
+                List<SettingItem> modelList = ModeList.getInstance().getList();
+                List<SettingItem> selects = new ArrayList<>();
+                AppSqlHelper sqlHeper = new AppSqlHelper(mContxt);
+                Map<String, Object> map = GlobalDataHelper.getUser(mContxt);
+                Map<String, String> hash = sqlHeper.getUserModelSettings((String) map.get("id"));
+                if(!CommonUtil.isEmpty(hash)){
+                    for(SettingItem item : modelList){
+                        String type = item.getModedType()+"";
+                        if(hash.containsKey(type)){
+                            item.setState(Integer.valueOf(hash.get(type)));
+                            if(item.getState() == State.OPEN){
+                                selects.add(item);
+                            }
+                        }
+                    }
+                }
+                stockView.getStockHolder().setModeList(selects);
+                Message message = Message.obtain();
+                message.what = MessageUtil.LPAD_USER_MODES_SUCCESS;
+                mHandler.sendMessage(message);
+            }
+        });
     }
 
     private void loadKLineSet(){
@@ -139,6 +168,9 @@ public class RealControlActivity extends AppCompatActivity
                     SettledAccount acc = (SettledAccount) msg.obj;
                     stockView.initAccount(acc.getCashAmt());
                     stockView.invalidateView();
+                }else if(msg.what == MessageUtil.LPAD_USER_MODES_SUCCESS){
+                    //show current mode
+                    showSelectModes();
                 }
                 else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
                     GlobalExceptionHandler.getInstance(mContxt).handlerException((Exception) msg.obj);
@@ -204,6 +236,20 @@ public class RealControlActivity extends AppCompatActivity
         stockView.getStockHolder().setModelRecordId(userModelId);
         stockView.getStockHolder().setTrainType(trainType);
         stockView.invalidateView();
+    }
+
+    private void showSelectModes(){
+        if(stockView.getStockHolder().getModeList().size() > 0){
+            AlertDialog.Builder builder = new AlertDialog.Builder(mContxt);
+            builder.setTitle("您设置的模式如下");
+            List<String> texts = new ArrayList<>();
+            for(SettingItem m : stockView.getStockHolder().getModeList()){
+                texts.add(m.getModeText());
+            }
+            builder.setMessage(StringUtils.join(texts, "\n"));
+            builder.setPositiveButton("Ok", null);
+            builder.show();
+        }
     }
 
     private void updateTopBar(){

@@ -10,6 +10,8 @@ public class MessageUtil {
 
     public static int GET_CASS_ACC_SUCCESS = 0x004;
 
+    public static int LPAD_USER_MODES_SUCCESS = 0x005;
+
 
 
 
