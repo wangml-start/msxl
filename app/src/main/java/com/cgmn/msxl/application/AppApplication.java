@@ -1,6 +1,10 @@
 package com.cgmn.msxl.application;
 
 import android.app.Application;
+import com.cgmn.msxl.data.User;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class AppApplication extends Application {
 
@@ -8,7 +12,8 @@ public class AppApplication extends Application {
 
     private static AppApplication mInstance;
 
-    private String token;
+    private Map<String, Object> user;
+
 
     @Override
     public void onCreate() {
@@ -21,10 +26,14 @@ public class AppApplication extends Application {
     }
 
     public String getToken() {
-        return token;
+        return user.get("token").toString();
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public Map<String, Object> getUser() {
+        return user;
+    }
+
+    public void setUser(Map<String, Object> user) {
+        this.user = user;
     }
 }

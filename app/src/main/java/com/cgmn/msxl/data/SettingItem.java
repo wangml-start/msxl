@@ -16,11 +16,7 @@ public class SettingItem {
     public SettingItem(int type, String txt, int btstats){
         modeText = txt;
         modedType = type;
-        if(State.OPEN.ordinal() == btstats){
-            state = State.OPEN;
-        }else{
-            state = State.CLOSE;
-        }
+        setState(btstats);
     }
 
     public String getModeText() {
@@ -43,7 +39,11 @@ public class SettingItem {
         return state;
     }
 
-    public void setState(State state) {
-        this.state = state;
+    public void setState(int btstats) {
+        if(State.OPEN.ordinal() == btstats){
+            this.state = State.OPEN;
+        }else{
+            this.state = State.CLOSE;
+        }
     }
 }

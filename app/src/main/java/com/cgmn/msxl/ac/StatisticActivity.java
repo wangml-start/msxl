@@ -10,28 +10,20 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.CustmerToast;
 import com.cgmn.msxl.comp.LineChartMarkView;
-import com.cgmn.msxl.comp.LoginBaseActivity;
-import com.cgmn.msxl.comp.showPassworCheckBox;
 import com.cgmn.msxl.data.TradeStatistic;
-import com.cgmn.msxl.data.User;
-import com.cgmn.msxl.db.AppSqlHelper;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.service.OkHttpClientManager;
 import com.cgmn.msxl.service.PropertyService;
-import com.cgmn.msxl.service.TokenHelper;
-import com.cgmn.msxl.utils.AESUtil;
+import com.cgmn.msxl.service.GlobalDataHelper;
 import com.cgmn.msxl.utils.CommonUtil;
 import com.cgmn.msxl.utils.MessageUtil;
-import com.cgmn.msxl.utils.MyPatternUtil;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.*;
 import com.github.mikephil.charting.data.Entry;
@@ -110,7 +102,7 @@ public class StatisticActivity extends AppCompatActivity {
             @Override
             public void run() {
                 Map<String, String> params = new HashMap<>();
-                params.put("token", TokenHelper.getToken(mContext));
+                params.put("token", GlobalDataHelper.getToken(mContext));
                 if (trainType != null) {
                     params.put("trainType", trainType + "");
                 }

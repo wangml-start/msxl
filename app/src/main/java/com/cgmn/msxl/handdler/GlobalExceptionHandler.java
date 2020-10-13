@@ -1,20 +1,15 @@
 package com.cgmn.msxl.handdler;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.os.Message;
 import android.util.Log;
 import com.cgmn.msxl.R;
-import com.cgmn.msxl.application.AppApplication;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.CustmerToast;
-import com.cgmn.msxl.db.AppSqlHelper;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.service.OkHttpClientManager;
 import com.cgmn.msxl.service.PropertyService;
-import com.cgmn.msxl.service.TokenHelper;
+import com.cgmn.msxl.service.GlobalDataHelper;
 import com.cgmn.msxl.utils.CommonUtil;
-import com.cgmn.msxl.utils.MessageUtil;
 import com.squareup.okhttp.Request;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
@@ -69,7 +64,7 @@ public class GlobalExceptionHandler {
             }
         }
 
-        final String token = TokenHelper.getToken(mContxt);
+        final String token = GlobalDataHelper.getToken(mContxt);
         if(CommonUtil.isEmpty(token)){
             Log.d(TAG, "No Find TOKEN When send exception!");
             return;

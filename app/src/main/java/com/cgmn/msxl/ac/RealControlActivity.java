@@ -18,7 +18,6 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import com.cgmn.msxl.R;
-import com.cgmn.msxl.application.AppApplication;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.CustmerToast;
 import com.cgmn.msxl.comp.StockHolderView;
@@ -34,12 +33,11 @@ import com.cgmn.msxl.server_interface.StockDetail;
 import com.cgmn.msxl.service.OkHttpClientManager;
 import com.cgmn.msxl.service.PropertyService;
 import com.cgmn.msxl.service.RealTradeManage;
-import com.cgmn.msxl.service.TokenHelper;
+import com.cgmn.msxl.service.GlobalDataHelper;
 import com.cgmn.msxl.utils.CommonUtil;
 import com.cgmn.msxl.utils.GsonUtil;
 import com.cgmn.msxl.utils.MessageUtil;
 import com.squareup.okhttp.Request;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -86,7 +84,7 @@ public class RealControlActivity extends AppCompatActivity
             action = "/stock/getHigherKlineSet";
         }
         Map<String, String> params = new HashMap<>();
-        params.put("token", TokenHelper.getToken(mContxt));
+        params.put("token", GlobalDataHelper.getToken(mContxt));
         return CommonUtil.buildGetUrl(
                 PropertyService.getInstance().getKey("serverUrl"),
                 action, params);
@@ -165,7 +163,7 @@ public class RealControlActivity extends AppCompatActivity
             @Override
             public void run() {
                 Map<String, String> params = new HashMap<>();
-                params.put("token", TokenHelper.getToken(mContxt));
+                params.put("token", GlobalDataHelper.getToken(mContxt));
                 params.put("train_type", trainType+"");
                 String url = CommonUtil.buildGetUrl(
                         PropertyService.getInstance().getKey("serverUrl"),
@@ -334,7 +332,7 @@ public class RealControlActivity extends AppCompatActivity
         GlobalTreadPools.getInstance(mContxt).execute(new Runnable() {
             @Override
             public void run() {
-                final String token = TokenHelper.getToken(mContxt);
+                final String token = GlobalDataHelper.getToken(mContxt);
                 OkHttpClientManager.Param[] params = new OkHttpClientManager.Param[]{
                         new OkHttpClientManager.Param("token", token),
                         new OkHttpClientManager.Param("content", GsonUtil.toJson(nodes))};

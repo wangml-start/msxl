@@ -1,5 +1,6 @@
 package com.cgmn.msxl.comp.adpter;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,11 +8,15 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import com.cgmn.msxl.R;
+import com.cgmn.msxl.application.GlobalTreadPools;
+import com.cgmn.msxl.comp.swb.State;
 import com.cgmn.msxl.comp.swb.SwitchButton;
 import com.cgmn.msxl.data.SettingItem;
+import com.cgmn.msxl.db.AppSqlHelper;
+import com.cgmn.msxl.service.GlobalDataHelper;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class SettingAdpter extends BaseAdapter {
     private Context mContext;
@@ -54,15 +59,36 @@ public class SettingAdpter extends BaseAdapter {
         //设置下控件的值
         SettingItem item = (SettingItem) obj;
         if(item != null){
+            final String modelType = item.getModedType()+"";
             holder.txt.setText(item.getModeText());
             holder.switchButton.changeStatus(item.getState());
+            holder.switchButton.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(SwitchButton buttonView, final boolean isChecked) {
+                    final int status = isChecked ? State.OPEN.ordinal() :  State.CLOSE.ordinal();
+                    GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            AppSqlHelper sqlHeper = new AppSqlHelper(mContext);
+                            Map<String, Object> map = GlobalDataHelper.getUser(mContext);
+                            ContentValues values = new ContentValues();
+                            values.put("user_id", (String) map.get("id"));
+                            values.put("mode_type", modelType);
+                            values.put("model_status", status+"");
+                            sqlHeper.upsert("user_modes",
+                                    values, "mode_type", String.format(" AND user_id=%s", map.get("id")));
+                        }
+                    });
+                }
+            });
         }
         return convertView;
     }
-
     //两个不同的ViewHolder
     private static class SettingViewHolder{
         TextView txt;
         SwitchButton switchButton;
     }
+
+
 }

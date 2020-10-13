@@ -19,6 +19,7 @@ import com.cgmn.msxl.data.User;
 import com.cgmn.msxl.db.AppSqlHelper;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.cgmn.msxl.server_interface.BaseData;
+import com.cgmn.msxl.service.GlobalDataHelper;
 import com.cgmn.msxl.utils.*;
 
 import java.util.HashMap;
@@ -129,8 +130,7 @@ public class loginActivity extends LoginBaseActivity {
         GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
             @Override
             public void run() {
-                AppSqlHelper sqlHeper = new AppSqlHelper(mContext);
-                Map<String, Object> map = sqlHeper.getActiveUser();
+                Map<String, Object> map = GlobalDataHelper.getUser(mContext);
                 Message message = Message.obtain();
                 message.what = MessageUtil.LOAD_USER_INFOR;
                 message.obj = map;

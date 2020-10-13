@@ -10,7 +10,7 @@ import com.cgmn.msxl.utils.CommonUtil;
 import java.util.*;
 
 public class AppSqlHelper extends SQLiteOpenHelper {
-    private static final int VERSION =7;
+    private static final int VERSION =8;
     public final static String DB_NAME = "app.db";
 
     public AppSqlHelper(Context context) {
@@ -35,8 +35,14 @@ public class AppSqlHelper extends SQLiteOpenHelper {
     //软件版本号发生改变时调用
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
-
+        StringBuffer sql = new StringBuffer();
+        sql.append("CREATE TABLE user_modes(");
+        sql.append("id INTEGER PRIMARY KEY AUTOINCREMENT,");
+        sql.append("user_id INTEGER,");
+        sql.append("mode_type INTEGER,");
+        sql.append("model_status INTEGER");
+        sql.append(");");
+        db.execSQL(sql.toString());
     }
 
     public void upsert(String tableName, ContentValues values, String key) {
@@ -44,6 +50,26 @@ public class AppSqlHelper extends SQLiteOpenHelper {
         try {
             db = getWritableDatabase();
             String sql = String.format("SELECT id FROM %s WHERE %s = ?", tableName, key);
+            Cursor cursor = db.rawQuery(sql, new String[]{(String) values.get(key)});
+            if(cursor.moveToFirst()){
+                Integer id = cursor.getInt(cursor.getColumnIndex("id"));
+                update(tableName, values, String.format("id=%s", id));
+            }else{
+                insert(tableName, values);
+            }
+        } catch (Exception e) {
+            throw e;
+        } finally {
+
+            db.close();
+        }
+    }
+
+    public void upsert(String tableName, ContentValues values, String key, String condition) {
+        SQLiteDatabase db = null;
+        try {
+            db = getWritableDatabase();
+            String sql = String.format("SELECT id FROM %s WHERE %s = ? %s", tableName, key, condition);
             Cursor cursor = db.rawQuery(sql, new String[]{(String) values.get(key)});
             if(cursor.moveToFirst()){
                 Integer id = cursor.getInt(cursor.getColumnIndex("id"));
@@ -141,7 +167,7 @@ public class AppSqlHelper extends SQLiteOpenHelper {
     public Map<String, Object> getActiveUser(){
         String sql = "SELECT * FROM users WHERE last_active=1 LIMIT 1";
         String[] params = new String[]{};
-        String[] fields = new String[]{"user_name", "phone", "password", "token"};
+        String[] fields = new String[]{"id","user_name", "phone", "password", "token"};
         List<Map<String, Object>> list = query(sql, params, fields);
         if(CommonUtil.isEmpty(list) || list.size() == 0){
             return null;
@@ -149,14 +175,20 @@ public class AppSqlHelper extends SQLiteOpenHelper {
         return list.get(0);
     }
 
-    public String getKlinJsonStr(){
-        String sql = "SELECT * FROM temp_data_save LIMIT 1";
+    public Map<String, String> getUserModelSettings(String userId){
+        String sql = "SELECT * FROM user_modes where user_id=" + userId;
         String[] params = new String[]{};
-        String[] fields = new String[]{"content"};
+        String[] fields = new String[]{"mode_type","model_status"};
         List<Map<String, Object>> list = query(sql, params, fields);
-        if(CommonUtil.isEmpty(list) || list.size() == 0){
-            return null;
+        Map<String, String> hash = new HashMap<>();
+        if(!CommonUtil.isEmpty(list)){
+            for(Map<String, Object> item : list){
+                String modType = (String) item.get("mode_type");
+                String modelStatus = (String) item.get("model_status");
+                hash.put(modType, modelStatus);
+            }
         }
-        return (String) list.get(0).get("content");
+
+        return hash;
     }
 }

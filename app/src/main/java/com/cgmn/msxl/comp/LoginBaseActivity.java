@@ -12,6 +12,7 @@ import com.cgmn.msxl.application.AppApplication;
 import com.cgmn.msxl.data.User;
 import com.cgmn.msxl.db.AppSqlHelper;
 import com.cgmn.msxl.server_interface.BaseData;
+import com.cgmn.msxl.service.GlobalDataHelper;
 import com.cgmn.msxl.service.OkHttpClientManager;
 import com.cgmn.msxl.service.PropertyService;
 import com.cgmn.msxl.utils.CommonUtil;
@@ -99,6 +100,6 @@ public class LoginBaseActivity extends AppCompatActivity
         values.put("last_active", 1);
         sqlHeper.upsert("users", values, "phone");
         sqlHeper.delete("users", String.format("phone <>'%s'", user.getPhone()));
-        AppApplication.getInstance().setToken(token);
+        GlobalDataHelper.getUser(context);
     }
 }
