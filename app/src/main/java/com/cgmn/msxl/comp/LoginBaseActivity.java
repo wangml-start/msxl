@@ -100,6 +100,6 @@ public class LoginBaseActivity extends AppCompatActivity
         values.put("last_active", 1);
         sqlHeper.upsert("users", values, "phone");
         sqlHeper.delete("users", String.format("phone <>'%s'", user.getPhone()));
-        GlobalDataHelper.getUser(context);
+        GlobalDataHelper.updateUser(context);
     }
 }

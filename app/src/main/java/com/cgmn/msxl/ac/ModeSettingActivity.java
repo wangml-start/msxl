@@ -16,6 +16,7 @@ import com.cgmn.msxl.data.*;
 import com.cgmn.msxl.db.AppSqlHelper;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.cgmn.msxl.service.GlobalDataHelper;
+import com.cgmn.msxl.service.ModeManager;
 import com.cgmn.msxl.utils.CommonUtil;
 import com.cgmn.msxl.utils.MessageUtil;
 
@@ -49,7 +50,7 @@ public class ModeSettingActivity extends AppCompatActivity {
         GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
             @Override
             public void run() {
-                mData = ModeList.getInstance().getList();
+                mData = ModeManager.getInstance().getList();
                 AppSqlHelper sqlHeper = new AppSqlHelper(mContext);
                 Map<String, Object> map = GlobalDataHelper.getUser(mContext);
                 Map<String, String> hash = sqlHeper.getUserModelSettings((String) map.get("id"));

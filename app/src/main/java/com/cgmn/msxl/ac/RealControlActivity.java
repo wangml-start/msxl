@@ -30,10 +30,7 @@ import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.server_interface.KlineSet;
 import com.cgmn.msxl.server_interface.StockDetail;
-import com.cgmn.msxl.service.OkHttpClientManager;
-import com.cgmn.msxl.service.PropertyService;
-import com.cgmn.msxl.service.RealTradeManage;
-import com.cgmn.msxl.service.GlobalDataHelper;
+import com.cgmn.msxl.service.*;
 import com.cgmn.msxl.utils.CommonUtil;
 import com.cgmn.msxl.utils.GsonUtil;
 import com.cgmn.msxl.utils.MessageUtil;
@@ -95,7 +92,7 @@ public class RealControlActivity extends AppCompatActivity
         GlobalTreadPools.getInstance(mContxt).execute(new Runnable() {
             @Override
             public void run() {
-                List<SettingItem> modelList = ModeList.getInstance().getList();
+                List<SettingItem> modelList = ModeManager.getInstance().getList();
                 List<SettingItem> selects = new ArrayList<>();
                 AppSqlHelper sqlHeper = new AppSqlHelper(mContxt);
                 Map<String, Object> map = GlobalDataHelper.getUser(mContxt);

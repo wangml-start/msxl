@@ -22,6 +22,12 @@ public class GlobalDataHelper {
         return token;
     }
 
+    public static void updateUser(Context context){
+        AppSqlHelper dbHelper = new AppSqlHelper(context);
+        Map<String, Object> user = dbHelper.getActiveUser();
+        AppApplication.getInstance().setUser(user);
+    }
+
     public static Map<String, Object> getUser(Context context){
         Map<String, Object> user = AppApplication.getInstance().getUser();
         if(CommonUtil.isEmpty(user)){
