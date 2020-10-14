@@ -324,6 +324,29 @@ public class RealControlActivity extends AppCompatActivity
             }
             stockView.getStockHolder().nextPrice(current.getEnd(), false);
         }else{
+            //在还未到一下天前检测
+            //交易模式检测
+            List<Integer> holdChecks = ModeManager.getInstance().getHoldCheck();
+            Map<String, Object> values = new HashMap<>();
+            values.put("nodes", realtradeManage.getGroup().getNodes());
+            values.put("kStatus", realtradeManage.getkStatus());
+            values.put("holdDay", stockView.getStockHolder().getHoldDays());
+            values.put("holdStock", stockView.getStockHolder().getAvaiLabelShare() > 0);
+            values.put("lossRate", stockView.getStockHolder().getLossRate());
+            List<String> messges = new ArrayList<>();
+            for(SettingItem sItem : stockView.getStockHolder().getModeList()){
+                if(holdChecks.contains(sItem.getModedType())){
+                    boolean flag = ModeManager.getInstance().assertionOverMode(sItem.getModedType(), values);
+                    if(flag){
+                        stockView.getStockHolder().addOverType(sItem.getModedType());
+                        messges.add(sItem.getModeText());
+                    }
+                }
+            }
+            if(messges.size() > 0){
+                CustmerToast.makeText(mContxt,
+                        "违反规则：\n " + StringUtils.join(messges, "\n"), Toast.LENGTH_LONG).show();
+            }
             if(realtradeManage.showNextOpen()){
                 StockDetail current = realtradeManage.getCurrentK();
                 chart.setData(realtradeManage.getGroup());
@@ -339,22 +362,6 @@ public class RealControlActivity extends AppCompatActivity
                 stockView.getStockHolder().nextPrice(current.getStart(), true);
                 //更新持仓天数
                 stockView.getStockHolder().whenNextDay();
-                //交易模式检测
-                List<Integer> holdChecks = ModeManager.getInstance().getHoldCheck();
-                Map<String, Object> values = new HashMap<>();
-                values.put("nodes", realtradeManage.getGroup().getNodes());
-                values.put("kStatus", realtradeManage.getkStatus());
-                values.put("holdDay", stockView.getStockHolder().getHoldDays());
-                values.put("lossRate", stockView.getStockHolder().getLossRate());
-                for(SettingItem sItem : stockView.getStockHolder().getModeList()){
-                    if(holdChecks.contains(sItem.getModedType())){
-                        boolean flag = ModeManager.getInstance().assertionOverMode(sItem.getModedType(), values);
-                        if(flag){
-                            stockView.getStockHolder().addOverType(sItem.getModedType());
-                            CustmerToast.makeText(mContxt, "违反规则： " +sItem.getModeText(), Toast.LENGTH_LONG).show();
-                        }
-                    }
-                }
             }else{
                 settleThisTrading();
                 bt_buy.setEnabled(false);

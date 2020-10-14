@@ -101,9 +101,7 @@ public class StockHolder {
     }
 
     public void whenNextDay() {
-        if (holdDays == 0) {
-            holdDays = 2;
-        } else {
+        if(holdShare>0){
             holdDays += 1;
         }
     }

@@ -15,7 +15,9 @@ import com.cgmn.msxl.data.StockHolder;
 import com.cgmn.msxl.service.ModeManager;
 import com.cgmn.msxl.service.RealTradeManage;
 import com.cgmn.msxl.utils.CommonUtil;
+import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -155,6 +157,9 @@ public class TradingPop extends PopupWindow
         }
         if (this.action.equals("BUY")) {
             stoHolder.buyStock(count, price, manage.getCurrentK().getStackCode());
+            if(count == stoHolder.getHoldShare()){
+                stoHolder.whenNextDay();
+            }
             List<Integer> bcks = ModeManager.getInstance().getBuyCheck();
             Map<String, Object> values = new HashMap<>();
             values.put("nodes", manage.getGroup().getNodes());
@@ -162,14 +167,19 @@ public class TradingPop extends PopupWindow
             values.put("isCreateHold", count == stoHolder.getHoldShare());
             values.put("startRate", stoHolder.getStartRate(count*price));
             values.put("totalRate", stoHolder.getHoldRate());
+            List<String> messges = new ArrayList<>();
             for(SettingItem sItem : stoHolder.getModeList()){
                 if(bcks.contains(sItem.getModedType())){
                     boolean flag = ModeManager.getInstance().assertionOverMode(sItem.getModedType(), values);
                     if(flag){
                         stoHolder.addOverType(sItem.getModedType());
-                        CustmerToast.makeText(mContext, "违反规则： " +sItem.getModeText(), Toast.LENGTH_LONG).show();
+                        messges.add(sItem.getModeText());
                     }
                 }
+            }
+            if(messges.size() > 0){
+                CustmerToast.makeText(mContext,
+                        "违反规则：\n " + StringUtils.join(messges, "\n"), Toast.LENGTH_LONG).show();
             }
         }else{
             stoHolder.sellStock(count, price);

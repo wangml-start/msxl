@@ -1,5 +1,6 @@
 package com.cgmn.msxl.service;
 
+import android.util.Log;
 import com.cgmn.msxl.comp.k.KLine;
 import com.cgmn.msxl.comp.swb.State;
 import com.cgmn.msxl.data.SettingItem;
@@ -85,8 +86,7 @@ public class ModeManager {
         LinkedList<KLine> nodes = (LinkedList<KLine>) params.get("nodes");
         KLine currentKline = nodes.getLast();
         boolean flag = false;
-        if (currentKline.avg5 > currentKline.avg10
-                && currentKline.avg10 > currentKline.avg20) {
+        if (currentKline.avg10 > currentKline.avg20) {
             flag = true;
         }
         return flag;
@@ -107,11 +107,11 @@ public class ModeManager {
         int length = nodes.size();
         float maxHigh = 0.0f;
         //默认为开盘状态
-        int startIndex = (length - days - 2);
-        int endIndex = (length - 2);
+        int startIndex = (length - days - 3);
+        int endIndex = (length - 3);
         if (status.equals(RealTradeManage.CLOSE)) {
-            startIndex = (length - days - 1);
-            endIndex = (length - 1);
+            startIndex = (length - days - 2);
+            endIndex = (length - 2);
         }
         for (; startIndex <= endIndex; startIndex++) {
             KLine node = nodes.get(startIndex);
@@ -147,7 +147,8 @@ public class ModeManager {
                 minLow = node.low;
             }
         }
-
+        Log.d("############Min:", minLow+"");
+        Log.d("####currentKline.close:", currentKline.close+"");
         return currentKline.close < minLow;
     }
 
@@ -167,30 +168,34 @@ public class ModeManager {
                 isOver = !isBreakThrough(10, params);
                 break;
             case FAIL_BELOW_MIN_TEN:
-                isOver = !isFailBelow(10, params);
+                boolean holdStock1 = (boolean) params.get("holdStock");
+                isOver = isFailBelow(10, params) && holdStock1;
                 break;
             case BREAK_THROUTGH_MAX_TWENTY:
                 isOver = !isBreakThrough(20, params);
                 break;
             case FAIL_BELOW_MIN_TWENTY:
-                isOver = !isFailBelow(20, params);
+                boolean holdStock2 = (boolean) params.get("holdStock");
+                isOver = isFailBelow(20, params) && holdStock2;
                 break;
             case SHORT_HOLD_BELOW_THREE_DAY:
                 int holdDay = (int) params.get("holdDay");
-                isOver = !(holdDay <= 3);
+                boolean holdStock4 = (boolean) params.get("holdStock");
+                isOver = holdDay > 3 && holdStock4;
                 break;
             case START_BUY_BELOW_TEN_PERCENT:
                 boolean isCreateHold = (boolean) params.get("isCreateHold");
                 float startRate = (float) params.get("startRate");
-                isOver = !(startRate <= 0.1) && isCreateHold;
+                isOver = startRate > 0.1 && isCreateHold;
                 break;
             case TOTL_HOLD_BELOW_FOURTYY_PERCENT:
                 float totalRate = (float) params.get("totalRate");
-                isOver = !(totalRate <= 0.4);
+                isOver = totalRate > 0.4;
                 break;
             case STOP_LOSS_BY_TEN_PERCENT:
+                boolean holdStock3 = (boolean) params.get("holdStock");
                 float lossRate = (float) params.get("lossRate");
-                isOver = !(lossRate < 0.1);
+                isOver = lossRate < -0.1 && holdStock3;
                 break;
         }
 
