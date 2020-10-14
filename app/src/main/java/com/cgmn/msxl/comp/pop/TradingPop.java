@@ -7,11 +7,18 @@ import android.view.View;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.comp.CustmerToast;
+import com.cgmn.msxl.data.SettingItem;
 import com.cgmn.msxl.data.StockHolder;
+import com.cgmn.msxl.service.ModeManager;
 import com.cgmn.msxl.service.RealTradeManage;
 import com.cgmn.msxl.utils.CommonUtil;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class TradingPop extends PopupWindow
         implements View.OnClickListener {
@@ -148,6 +155,22 @@ public class TradingPop extends PopupWindow
         }
         if (this.action.equals("BUY")) {
             stoHolder.buyStock(count, price, manage.getCurrentK().getStackCode());
+            List<Integer> bcks = ModeManager.getInstance().getBuyCheck();
+            Map<String, Object> values = new HashMap<>();
+            values.put("nodes", manage.getGroup().getNodes());
+            values.put("kStatus", manage.getkStatus());
+            values.put("isCreateHold", count == stoHolder.getHoldShare());
+            values.put("startRate", stoHolder.getStartRate(count*price));
+            values.put("totalRate", stoHolder.getHoldRate());
+            for(SettingItem sItem : stoHolder.getModeList()){
+                if(bcks.contains(sItem.getModedType())){
+                    boolean flag = ModeManager.getInstance().assertionOverMode(sItem.getModedType(), values);
+                    if(flag){
+                        stoHolder.addOverType(sItem.getModedType());
+                        CustmerToast.makeText(mContext, "违反规则： " +sItem.getModeText(), Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
         }else{
             stoHolder.sellStock(count, price);
         }

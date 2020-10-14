@@ -1,10 +1,13 @@
 package com.cgmn.msxl.service;
 
+import com.cgmn.msxl.comp.k.KLine;
 import com.cgmn.msxl.comp.swb.State;
 import com.cgmn.msxl.data.SettingItem;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class ModeManager {
     private final static int ONLY_UP_TREND = 1001;
@@ -22,7 +25,7 @@ public class ModeManager {
     private List<Integer> buylist = null;
     private List<Integer> holdList = null;
 
-    private ModeManager(){
+    private ModeManager() {
         list = new ArrayList<>();
         list.add(new SettingItem(ONLY_UP_TREND, "只参与多头趋势股票", State.OPEN.ordinal()));
         list.add(new SettingItem(BREAK_THROUTGH_MAX_TEN, "突破10日最高点入场", State.CLOSE.ordinal()));
@@ -35,20 +38,20 @@ public class ModeManager {
         list.add(new SettingItem(STOP_LOSS_BY_TEN_PERCENT, "亏损达到10%止损", State.OPEN.ordinal()));
     }
 
-    public static ModeManager getInstance(){
-        if(model == null){
+    public static ModeManager getInstance() {
+        if (model == null) {
             model = new ModeManager();
         }
 
         return model;
     }
 
-    public List<SettingItem> getList(){
+    public List<SettingItem> getList() {
         return list;
     }
 
-    public List<Integer> getBuyCheck(){
-        if(buylist == null){
+    public List<Integer> getBuyCheck() {
+        if (buylist == null) {
             buylist = new ArrayList<>();
         }
         buylist.add(ONLY_UP_TREND);
@@ -60,8 +63,8 @@ public class ModeManager {
         return buylist;
     }
 
-    public List<Integer> getHoldCheck(){
-        if(holdList == null){
+    public List<Integer> getHoldCheck() {
+        if (holdList == null) {
             holdList = new ArrayList<>();
         }
         holdList.add(FAIL_BELOW_MIN_TEN);
@@ -70,5 +73,127 @@ public class ModeManager {
         holdList.add(SHORT_HOLD_BELOW_THREE_DAY);
 
         return holdList;
+    }
+
+    /**
+     * 判断是否属于多头趋势
+     *
+     * @param params
+     * @return
+     */
+    public boolean isUpTrend(Map<String, Object> params) {
+        LinkedList<KLine> nodes = (LinkedList<KLine>) params.get("nodes");
+        KLine currentKline = nodes.getLast();
+        boolean flag = false;
+        if (currentKline.avg5 > currentKline.avg10
+                && currentKline.avg10 > currentKline.avg20) {
+            flag = true;
+        }
+        return flag;
+    }
+
+    /**
+     * 昨日、当日收盘价突破
+     *
+     * @param days
+     * @param params
+     * @return
+     */
+    public boolean isBreakThrough(int days, Map<String, Object> params) {
+        LinkedList<KLine> nodes = (LinkedList<KLine>) params.get("nodes");
+        KLine yesterdayKline = nodes.get(nodes.size()-2);
+        KLine currentKline = nodes.getLast();
+        String status = (String) params.get("kStatus");
+        int length = nodes.size();
+        float maxHigh = 0.0f;
+        //默认为开盘状态
+        int startIndex = (length - days - 2);
+        int endIndex = (length - 2);
+        if (status.equals(RealTradeManage.CLOSE)) {
+            startIndex = (length - days - 1);
+            endIndex = (length - 1);
+        }
+        for (; startIndex <= endIndex; startIndex++) {
+            KLine node = nodes.get(startIndex);
+            if (node.high > maxHigh) {
+                maxHigh = node.high;
+            }
+        }
+        if (status.equals(RealTradeManage.CLOSE)) {
+            return currentKline.close > maxHigh;
+        } else {
+            return yesterdayKline.close > maxHigh;
+        }
+    }
+
+    /**
+     * 收盘价跌破
+     *
+     * @param days
+     * @param params
+     * @return
+     */
+    public boolean isFailBelow(int days, Map<String, Object> params) {
+        LinkedList<KLine> nodes = (LinkedList<KLine>) params.get("nodes");
+        KLine currentKline = nodes.getLast();
+        int length = nodes.size();
+        float minLow = Float.MAX_VALUE;
+        //默认为开盘状态
+        int startIndex = (length - days - 2);
+        int endIndex = (length - 2);
+        for (; startIndex <= endIndex; startIndex++) {
+            KLine node = nodes.get(startIndex);
+            if (node.low < minLow) {
+                minLow = node.low;
+            }
+        }
+
+        return currentKline.close < minLow;
+    }
+
+    /**
+     * 操盘手在执行操作时是否违反模式规则
+     * @param modeType
+     * @param params
+     * @return
+     */
+    public boolean assertionOverMode(int modeType, Map<String, Object> params) {
+        boolean isOver = false;
+        switch (modeType) {
+            case ONLY_UP_TREND:
+                isOver = !isUpTrend(params);
+                break;
+            case BREAK_THROUTGH_MAX_TEN:
+                isOver = !isBreakThrough(10, params);
+                break;
+            case FAIL_BELOW_MIN_TEN:
+                isOver = !isFailBelow(10, params);
+                break;
+            case BREAK_THROUTGH_MAX_TWENTY:
+                isOver = !isBreakThrough(20, params);
+                break;
+            case FAIL_BELOW_MIN_TWENTY:
+                isOver = !isFailBelow(20, params);
+                break;
+            case SHORT_HOLD_BELOW_THREE_DAY:
+                int holdDay = (int) params.get("holdDay");
+                isOver = !(holdDay <= 3);
+                break;
+            case START_BUY_BELOW_TEN_PERCENT:
+                boolean isCreateHold = (boolean) params.get("isCreateHold");
+                float startRate = (float) params.get("startRate");
+                isOver = !(startRate <= 0.1) && isCreateHold;
+                break;
+            case TOTL_HOLD_BELOW_FOURTYY_PERCENT:
+                float totalRate = (float) params.get("totalRate");
+                isOver = !(totalRate <= 0.4);
+                break;
+            case STOP_LOSS_BY_TEN_PERCENT:
+                float lossRate = (float) params.get("lossRate");
+                isOver = !(lossRate < 0.1);
+                break;
+        }
+
+        return isOver;
     }
 }

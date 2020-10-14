@@ -2,6 +2,7 @@ package com.cgmn.msxl.data;
 
 import com.cgmn.msxl.utils.CommonUtil;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -45,7 +46,8 @@ public class StockHolder {
     private Float exchange = 0.0f;
 
     //1代表已结算
-    private int settleStatus=0;
+    private int settleStatus = 0;
+    private int holdDays = 0;
 
     //设置的模式
     List<SettingItem> modeList;
@@ -92,6 +94,18 @@ public class StockHolder {
 
     public String getHead3() {
         return head3;
+    }
+
+    public int getHoldDays() {
+        return holdDays;
+    }
+
+    public void whenNextDay() {
+        if (holdDays == 0) {
+            holdDays = 2;
+        } else {
+            holdDays += 1;
+        }
     }
 
     public StockHolder() {
@@ -161,7 +175,7 @@ public class StockHolder {
     }
 
     public String getCode() {
-        if(CommonUtil.isEmpty(code)){
+        if (CommonUtil.isEmpty(code)) {
             return code;
         }
         return String.format("%sXX", code.substring(0, 4));
@@ -235,11 +249,11 @@ public class StockHolder {
         this.initTotAmt = initTotAmt;
     }
 
-    public String getRealRate(){
-        if(initTotAmt.intValue() == 0){
+    public String getRealRate() {
+        if (initTotAmt.intValue() == 0) {
             return "";
         }
-        return CommonUtil.formatPercent(pl/initTotAmt);
+        return CommonUtil.formatPercent(pl / initTotAmt);
     }
 
     public void buyStock(int count, Float pri, String scode) {
@@ -248,7 +262,7 @@ public class StockHolder {
         price = pri;
         float buyAmt = pri * count;
         float fee = 0;
-        if(scode.startsWith("6")){
+        if (scode.startsWith("6")) {
             float ghfee = count * guohuRate;
             if (ghfee < 1) {
                 ghfee = 1;
@@ -265,7 +279,7 @@ public class StockHolder {
         holdAmt += buyAmt;
         holdPl -= fee;
         avaiAmt = totAmt - holdAmt;
-        costPrice = (holdAmt-holdPl) / holdShare;
+        costPrice = (holdAmt - holdPl) / holdShare;
         pl = totAmt - initTotAmt;
     }
 
@@ -287,11 +301,12 @@ public class StockHolder {
         holdAmt -= sellAmt;
         totAmt -= fee;
         avaiAmt = totAmt - holdAmt;
-        if(holdShare == 0){
+        if (holdShare == 0) {
             costPrice = 0f;
             holdPl = 0.f;
-        }else{
-            costPrice = (holdAmt-holdPl) / holdShare;
+            holdDays = 0;
+        } else {
+            costPrice = (holdAmt - holdPl) / holdShare;
         }
         pl = totAmt - initTotAmt;
     }
@@ -313,13 +328,13 @@ public class StockHolder {
     }
 
     public int getAvaiSellCount(float percent) {
-        int avaiCount = (int) (avaiLabelShare  * percent / 100);
+        int avaiCount = (int) (avaiLabelShare * percent / 100);
         return 100 * avaiCount;
     }
 
-    public void nextPrice(float pr, Boolean changeDay){
+    public void nextPrice(float pr, Boolean changeDay) {
         price = pr;
-        if(changeDay){
+        if (changeDay) {
             avaiLabelShare = holdShare;
         }
         holdPl = (price - costPrice) * holdShare;
@@ -328,22 +343,42 @@ public class StockHolder {
         pl = totAmt - initTotAmt;
     }
 
-    public void settleTrading(Float price){
-        if(CommonUtil.floatNumEqual(exchange , 0)){
+    public void settleTrading(Float price) {
+        if (CommonUtil.floatNumEqual(exchange, 0)) {
             return;
         }
-        if(settleStatus == 1){
+        if (settleStatus == 1) {
             nodes.clear();
             return;
 
         }
         settleStatus = 1;
-        if(holdShare > 0){
+        if (holdShare > 0) {
             sellStock(holdShare, price);
         }
-        Trade trade = new Trade(code, pl, exchange,trainType,
+        Trade trade = new Trade(code, pl, exchange, trainType,
                 modelRecordId, unprinciple);
         nodes.addLast(trade);
+    }
+
+    public void addOverType(int type) {
+        if (unprinciple == null) {
+            unprinciple = new ArrayList<>();
+        }
+        unprinciple.add(type);
+    }
+
+
+    public float getStartRate(float amt){
+        return amt / totAmt;
+    }
+
+    public float getHoldRate(){
+        return holdAmt / totAmt;
+    }
+
+    public float getLossRate(){
+        return (price - costPrice) / costPrice;
     }
 
 }

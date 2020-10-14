@@ -11,10 +11,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
-import android.widget.TextView;
+import android.widget.*;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import com.cgmn.msxl.R;
@@ -45,6 +42,8 @@ public class RealControlActivity extends AppCompatActivity
     private Context mContxt;
     private KlineChart chart;
     private StockHolderView stockView;
+    //设置的模式
+    List<SettingItem> modeList;
 
     private int trainType;
     private int userModelId;
@@ -108,6 +107,7 @@ public class RealControlActivity extends AppCompatActivity
                         }
                     }
                 }
+                modeList = selects;
                 stockView.getStockHolder().setModeList(selects);
                 Message message = Message.obtain();
                 message.what = MessageUtil.LPAD_USER_MODES_SUCCESS;
@@ -233,14 +233,15 @@ public class RealControlActivity extends AppCompatActivity
         stockView.getStockHolder().setModelRecordId(userModelId);
         stockView.getStockHolder().setTrainType(trainType);
         stockView.invalidateView();
+        stockView.getStockHolder().setModeList(modeList);
     }
 
     private void showSelectModes(){
-        if(stockView.getStockHolder().getModeList().size() > 0){
+        if(modeList.size() > 0){
             AlertDialog.Builder builder = new AlertDialog.Builder(mContxt);
             builder.setTitle("您设置的模式如下");
             List<String> texts = new ArrayList<>();
-            for(SettingItem m : stockView.getStockHolder().getModeList()){
+            for(SettingItem m : modeList){
                 texts.add(m.getModeText());
             }
             builder.setMessage(StringUtils.join(texts, "\n"));
@@ -336,6 +337,24 @@ public class RealControlActivity extends AppCompatActivity
                     lb_open_rate.setTextColor(getResources().getColor(R.color.kline_down));
                 }
                 stockView.getStockHolder().nextPrice(current.getStart(), true);
+                //更新持仓天数
+                stockView.getStockHolder().whenNextDay();
+                //交易模式检测
+                List<Integer> holdChecks = ModeManager.getInstance().getHoldCheck();
+                Map<String, Object> values = new HashMap<>();
+                values.put("nodes", realtradeManage.getGroup().getNodes());
+                values.put("kStatus", realtradeManage.getkStatus());
+                values.put("holdDay", stockView.getStockHolder().getHoldDays());
+                values.put("lossRate", stockView.getStockHolder().getLossRate());
+                for(SettingItem sItem : stockView.getStockHolder().getModeList()){
+                    if(holdChecks.contains(sItem.getModedType())){
+                        boolean flag = ModeManager.getInstance().assertionOverMode(sItem.getModedType(), values);
+                        if(flag){
+                            stockView.getStockHolder().addOverType(sItem.getModedType());
+                            CustmerToast.makeText(mContxt, "违反规则： " +sItem.getModeText(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }
             }else{
                 settleThisTrading();
                 bt_buy.setEnabled(false);
