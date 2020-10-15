@@ -171,7 +171,7 @@ public class TradingPop extends PopupWindow
             for(SettingItem sItem : stoHolder.getModeList()){
                 if(bcks.contains(sItem.getModedType())){
                     boolean flag = ModeManager.getInstance().assertionOverMode(sItem.getModedType(), values);
-                    if(flag){
+                    if(flag && !stoHolder.exists(sItem.getModedType())){
                         stoHolder.addOverType(sItem.getModedType());
                         messges.add(sItem.getModeText());
                     }
@@ -179,7 +179,7 @@ public class TradingPop extends PopupWindow
             }
             if(messges.size() > 0){
                 CustmerToast.makeText(mContext,
-                        "违反规则：\n " + StringUtils.join(messges, "\n"), Toast.LENGTH_LONG).show();
+                        "违背模式\n " + StringUtils.join(messges, "\n"), Toast.LENGTH_LONG).show();
             }
         }else{
             stoHolder.sellStock(count, price);

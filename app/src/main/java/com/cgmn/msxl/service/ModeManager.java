@@ -4,6 +4,7 @@ import android.util.Log;
 import com.cgmn.msxl.comp.k.KLine;
 import com.cgmn.msxl.comp.swb.State;
 import com.cgmn.msxl.data.SettingItem;
+import com.cgmn.msxl.utils.CommonUtil;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -17,9 +18,23 @@ public class ModeManager {
     private final static int BREAK_THROUTGH_MAX_TWENTY = 1004;
     private final static int FAIL_BELOW_MIN_TWENTY = 1005;
     private final static int SHORT_HOLD_BELOW_THREE_DAY = 1006;
+
     private final static int START_BUY_BELOW_TEN_PERCENT = 1007;
-    private final static int TOTL_HOLD_BELOW_FOURTYY_PERCENT = 1008;
+    private final static int START_BUY_BELOW_20_PERCENT = 10071;
+    private final static int START_BUY_BELOW_30_PERCENT = 10072;
+
+    private final static int TOTL_HOLD_BELOW_30_PERCENT = 10081;
+    private final static int TOTL_HOLD_BELOW_40_PERCENT = 1008;
+    private final static int TOTL_HOLD_BELOW_50_PERCENT = 10082;
+
     private final static int STOP_LOSS_BY_TEN_PERCENT = 1009;
+    private final static int STOP_LOSS_BY_7_PERCENT = 10091;
+    private final static int STOP_LOSS_BY_5_PERCENT = 10092;
+
+    private final static int STOP_GAIN_BY_TEN_PERCENT = 1010;
+    private final static int STOP_GAIN_BY_7_PERCENT = 1011;
+    private final static int STOP_GAIN_BY_5_PERCENT = 1012;
+
 
     private List<SettingItem> list = null;
     private static ModeManager model = null;
@@ -28,15 +43,29 @@ public class ModeManager {
 
     private ModeManager() {
         list = new ArrayList<>();
-        list.add(new SettingItem(ONLY_UP_TREND, "只参与多头趋势股票", State.OPEN.ordinal()));
-        list.add(new SettingItem(BREAK_THROUTGH_MAX_TEN, "突破10日最高点入场", State.CLOSE.ordinal()));
-        list.add(new SettingItem(FAIL_BELOW_MIN_TEN, "跌破10日最低点离场", State.CLOSE.ordinal()));
-        list.add(new SettingItem(BREAK_THROUTGH_MAX_TWENTY, "突破20日最高点入场", State.OPEN.ordinal()));
-        list.add(new SettingItem(FAIL_BELOW_MIN_TWENTY, "跌破20日最低点离场", State.OPEN.ordinal()));
-        list.add(new SettingItem(SHORT_HOLD_BELOW_THREE_DAY, "短线持股不超过3天", State.CLOSE.ordinal()));
-        list.add(new SettingItem(START_BUY_BELOW_TEN_PERCENT, "建仓不超过总仓位1/10", State.OPEN.ordinal()));
-        list.add(new SettingItem(TOTL_HOLD_BELOW_FOURTYY_PERCENT, "单只股票不超过总仓位4/10", State.OPEN.ordinal()));
-        list.add(new SettingItem(STOP_LOSS_BY_TEN_PERCENT, "亏损达到10%止损", State.OPEN.ordinal()));
+        list.add(new SettingItem(ONLY_UP_TREND, "只参与多头趋势股票", State.CLOSE));
+        list.add(new SettingItem(STOP_GAIN_BY_TEN_PERCENT, "盈利达到10%止赢", State.CLOSE));
+        list.add(new SettingItem(STOP_GAIN_BY_7_PERCENT, "盈利达到7%止赢", State.CLOSE));
+        list.add(new SettingItem(STOP_GAIN_BY_5_PERCENT, "盈利达到5%止赢", State.CLOSE));
+
+        list.add(new SettingItem(STOP_LOSS_BY_TEN_PERCENT, "亏损达到10%止损", State.CLOSE));
+        list.add(new SettingItem(STOP_LOSS_BY_7_PERCENT, "亏损达到7%止损", State.CLOSE));
+        list.add(new SettingItem(STOP_LOSS_BY_5_PERCENT, "亏损达到5%止损", State.CLOSE));
+
+        list.add(new SettingItem(START_BUY_BELOW_TEN_PERCENT, "建仓不超过总仓位10%", State.CLOSE));
+        list.add(new SettingItem(START_BUY_BELOW_20_PERCENT, "建仓不超过总仓位20%", State.CLOSE));
+        list.add(new SettingItem(START_BUY_BELOW_30_PERCENT, "建仓不超过总仓位30%", State.CLOSE));
+
+        list.add(new SettingItem(TOTL_HOLD_BELOW_30_PERCENT, "单只股票不超过总仓位30%", State.OPEN));
+        list.add(new SettingItem(TOTL_HOLD_BELOW_40_PERCENT, "单只股票不超过总仓位40%", State.CLOSE));
+        list.add(new SettingItem(TOTL_HOLD_BELOW_50_PERCENT, "单只股票不超过总仓位50%", State.CLOSE));
+
+        list.add(new SettingItem(BREAK_THROUTGH_MAX_TEN, "突破10日最高点入场", State.CLOSE));
+        list.add(new SettingItem(FAIL_BELOW_MIN_TEN, "跌破10日最低点离场", State.CLOSE));
+        list.add(new SettingItem(BREAK_THROUTGH_MAX_TWENTY, "突破20日最高点入场", State.CLOSE));
+        list.add(new SettingItem(FAIL_BELOW_MIN_TWENTY, "跌破20日最低点离场", State.CLOSE));
+
+        list.add(new SettingItem(SHORT_HOLD_BELOW_THREE_DAY, "短线持股不超过3天", State.CLOSE));
     }
 
     public static ModeManager getInstance() {
@@ -58,8 +87,14 @@ public class ModeManager {
         buylist.add(ONLY_UP_TREND);
         buylist.add(BREAK_THROUTGH_MAX_TEN);
         buylist.add(BREAK_THROUTGH_MAX_TWENTY);
+
         buylist.add(START_BUY_BELOW_TEN_PERCENT);
-        buylist.add(TOTL_HOLD_BELOW_FOURTYY_PERCENT);
+        buylist.add(START_BUY_BELOW_20_PERCENT);
+        buylist.add(START_BUY_BELOW_30_PERCENT);
+
+        buylist.add(TOTL_HOLD_BELOW_30_PERCENT);
+        buylist.add(TOTL_HOLD_BELOW_40_PERCENT);
+        buylist.add(TOTL_HOLD_BELOW_50_PERCENT);
 
         return buylist;
     }
@@ -70,8 +105,15 @@ public class ModeManager {
         }
         holdList.add(FAIL_BELOW_MIN_TEN);
         holdList.add(FAIL_BELOW_MIN_TWENTY);
-        holdList.add(STOP_LOSS_BY_TEN_PERCENT);
         holdList.add(SHORT_HOLD_BELOW_THREE_DAY);
+
+        holdList.add(STOP_LOSS_BY_TEN_PERCENT);
+        holdList.add(STOP_LOSS_BY_7_PERCENT);
+        holdList.add(STOP_LOSS_BY_5_PERCENT);
+
+        holdList.add(STOP_GAIN_BY_TEN_PERCENT);
+        holdList.add(STOP_GAIN_BY_7_PERCENT);
+        holdList.add(STOP_GAIN_BY_5_PERCENT);
 
         return holdList;
     }
@@ -160,6 +202,26 @@ public class ModeManager {
      */
     public boolean assertionOverMode(int modeType, Map<String, Object> params) {
         boolean isOver = false;
+        boolean holdStock = false;
+        if(!CommonUtil.isEmpty(params.get("holdStock"))){
+            holdStock = (boolean) params.get("holdStock");
+        }
+        boolean isCreateHold = false;
+        if(!CommonUtil.isEmpty(params.get("isCreateHold"))){
+            isCreateHold = (boolean) params.get("isCreateHold");
+        }
+        float startRate = 0f;
+        if(!CommonUtil.isEmpty(params.get("startRate"))){
+            startRate = (float) params.get("startRate");
+        }
+        float totalRate =0f;
+        if(!CommonUtil.isEmpty(params.get("totalRate"))){
+            totalRate = (float) params.get("totalRate");
+        }
+        float lossRate = 0f;
+        if(!CommonUtil.isEmpty(params.get("lossRate"))){
+            lossRate = (float) params.get("lossRate");
+        }
         switch (modeType) {
             case ONLY_UP_TREND:
                 isOver = !isUpTrend(params);
@@ -168,36 +230,56 @@ public class ModeManager {
                 isOver = !isBreakThrough(10, params);
                 break;
             case FAIL_BELOW_MIN_TEN:
-                boolean holdStock1 = (boolean) params.get("holdStock");
-                isOver = isFailBelow(10, params) && holdStock1;
+                isOver = isFailBelow(10, params) && holdStock;
                 break;
             case BREAK_THROUTGH_MAX_TWENTY:
                 isOver = !isBreakThrough(20, params);
                 break;
             case FAIL_BELOW_MIN_TWENTY:
-                boolean holdStock2 = (boolean) params.get("holdStock");
-                isOver = isFailBelow(20, params) && holdStock2;
+                isOver = isFailBelow(20, params) && holdStock;
                 break;
             case SHORT_HOLD_BELOW_THREE_DAY:
                 int holdDay = (int) params.get("holdDay");
-                boolean holdStock4 = (boolean) params.get("holdStock");
-                isOver = holdDay > 3 && holdStock4;
+                isOver = holdDay > 3 && holdStock;
                 break;
             case START_BUY_BELOW_TEN_PERCENT:
-                boolean isCreateHold = (boolean) params.get("isCreateHold");
-                float startRate = (float) params.get("startRate");
                 isOver = startRate > 0.1 && isCreateHold;
                 break;
-            case TOTL_HOLD_BELOW_FOURTYY_PERCENT:
-                float totalRate = (float) params.get("totalRate");
+            case START_BUY_BELOW_20_PERCENT:
+                isOver = startRate > 0.2 && isCreateHold;
+                break;
+            case START_BUY_BELOW_30_PERCENT:
+                isOver = startRate > 0.3 && isCreateHold;
+                break;
+            case TOTL_HOLD_BELOW_30_PERCENT:
+                isOver = totalRate > 0.3;
+                break;
+            case TOTL_HOLD_BELOW_40_PERCENT:
                 isOver = totalRate > 0.4;
                 break;
+            case TOTL_HOLD_BELOW_50_PERCENT:
+                isOver = totalRate > 0.5;
+                break;
             case STOP_LOSS_BY_TEN_PERCENT:
-                boolean holdStock3 = (boolean) params.get("holdStock");
-                float lossRate = (float) params.get("lossRate");
-                isOver = lossRate < -0.1 && holdStock3;
+                isOver = lossRate < -0.1 && holdStock;
+                break;
+            case STOP_LOSS_BY_7_PERCENT:
+                isOver = lossRate < -0.07 && holdStock;
+                break;
+            case STOP_LOSS_BY_5_PERCENT:
+                isOver = lossRate < -0.05 && holdStock;
+                break;
+            case STOP_GAIN_BY_TEN_PERCENT:
+                isOver = lossRate > 0.1 && holdStock;
+                break;
+            case STOP_GAIN_BY_7_PERCENT:
+                isOver = lossRate > 0.07 && holdStock;
+                break;
+            case STOP_GAIN_BY_5_PERCENT:
+                isOver = lossRate > 0.05 && holdStock;
                 break;
         }
+
 
         return isOver;
     }

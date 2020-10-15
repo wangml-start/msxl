@@ -160,14 +160,14 @@ public class SwitchButton extends View implements View.OnClickListener {
 		return paint;
 	}
 
-	private State mCurrentState;
+	private int mCurrentState;
 
 	public interface OnCheckedChangeListener {
 		void onCheckedChanged(SwitchButton buttonView, boolean isChecked);
 	}
 
 	//初始化时使用
-	public void changeStatus(State status){
+	public void changeStatus(int status){
 		mCurrentState = status;
 	}
 

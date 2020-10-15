@@ -359,6 +359,13 @@ public class StockHolder {
         nodes.addLast(trade);
     }
 
+    public boolean exists(int type) {
+        if (unprinciple == null) {
+            unprinciple = new ArrayList<>();
+        }
+        return unprinciple.contains(type);
+    }
+
     public void addOverType(int type) {
         if (unprinciple == null) {
             unprinciple = new ArrayList<>();

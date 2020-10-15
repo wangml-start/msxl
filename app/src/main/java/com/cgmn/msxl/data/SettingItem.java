@@ -5,7 +5,7 @@ import com.cgmn.msxl.comp.swb.State;
 public class SettingItem {
     private String modeText;
     private int modedType;
-    private State state;
+    private int state;
 
     public SettingItem(int type, String txt){
         modeText = txt;
@@ -16,7 +16,7 @@ public class SettingItem {
     public SettingItem(int type, String txt, int btstats){
         modeText = txt;
         modedType = type;
-        setState(btstats);
+        state = btstats;
     }
 
     public String getModeText() {
@@ -35,15 +35,11 @@ public class SettingItem {
         this.modedType = modedType;
     }
 
-    public State getState() {
+    public int getState() {
         return state;
     }
 
     public void setState(int btstats) {
-        if(State.OPEN.ordinal() == btstats){
-            this.state = State.OPEN;
-        }else{
-            this.state = State.CLOSE;
-        }
+        this.state = btstats;
     }
 }

@@ -239,7 +239,7 @@ public class RealControlActivity extends AppCompatActivity
     private void showSelectModes(){
         if(modeList.size() > 0){
             AlertDialog.Builder builder = new AlertDialog.Builder(mContxt);
-            builder.setTitle("您设置的模式如下");
+            builder.setTitle("您设置的模式");
             List<String> texts = new ArrayList<>();
             for(SettingItem m : modeList){
                 texts.add(m.getModeText());
@@ -337,7 +337,7 @@ public class RealControlActivity extends AppCompatActivity
             for(SettingItem sItem : stockView.getStockHolder().getModeList()){
                 if(holdChecks.contains(sItem.getModedType())){
                     boolean flag = ModeManager.getInstance().assertionOverMode(sItem.getModedType(), values);
-                    if(flag){
+                    if(flag && !stockView.getStockHolder().exists(sItem.getModedType())){
                         stockView.getStockHolder().addOverType(sItem.getModedType());
                         messges.add(sItem.getModeText());
                     }
@@ -345,7 +345,7 @@ public class RealControlActivity extends AppCompatActivity
             }
             if(messges.size() > 0){
                 CustmerToast.makeText(mContxt,
-                        "违反规则：\n " + StringUtils.join(messges, "\n"), Toast.LENGTH_LONG).show();
+                        "违背模式\n " + StringUtils.join(messges, "\n"), Toast.LENGTH_LONG).show();
             }
             if(realtradeManage.showNextOpen()){
                 StockDetail current = realtradeManage.getCurrentK();

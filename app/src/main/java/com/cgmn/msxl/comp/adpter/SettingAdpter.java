@@ -15,16 +15,19 @@ import com.cgmn.msxl.data.SettingItem;
 import com.cgmn.msxl.db.AppSqlHelper;
 import com.cgmn.msxl.service.GlobalDataHelper;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class SettingAdpter extends BaseAdapter {
     private Context mContext;
     private List<SettingItem> mData = null;
+    private Map<Integer, View> views = null;
 
     public SettingAdpter(Context mContext, List<SettingItem> mData) {
         this.mContext = mContext;
         this.mData = mData;
+        views = new HashMap<>();
     }
 
     @Override
@@ -45,13 +48,15 @@ public class SettingAdpter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         SettingViewHolder holder = null;
-        if(convertView == null){
+        if(!views.containsKey(position)){
             holder = new SettingViewHolder();
             convertView = LayoutInflater.from(mContext).inflate(R.layout.mode_settin_item, parent, false);
             holder.txt = convertView.findViewById(R.id.txt_des);
             holder.switchButton = convertView.findViewById(R.id.bt_sw);
             convertView.setTag(R.id.Tag_setting_item, holder);
+            views.put(position, convertView);
         }else{
+            convertView = views.get(position);
             holder = (SettingViewHolder) convertView.getTag(R.id.Tag_setting_item);
         }
 
@@ -65,7 +70,7 @@ public class SettingAdpter extends BaseAdapter {
             holder.switchButton.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(SwitchButton buttonView, final boolean isChecked) {
-                    final int status = isChecked ? State.OPEN.ordinal() :  State.CLOSE.ordinal();
+                    final int status = isChecked ? State.OPEN :  State.CLOSE;
                     GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
                         @Override
                         public void run() {
@@ -84,7 +89,7 @@ public class SettingAdpter extends BaseAdapter {
         }
         return convertView;
     }
-    //两个不同的ViewHolder
+
     private static class SettingViewHolder{
         TextView txt;
         SwitchButton switchButton;

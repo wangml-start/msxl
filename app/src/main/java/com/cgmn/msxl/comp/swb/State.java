@@ -1,5 +1,6 @@
 package com.cgmn.msxl.comp.swb;
 
-public enum State {
-    OPEN, CLOSE
+public class State {
+    public static int OPEN = 0;
+    public static int CLOSE = 1;
 }
