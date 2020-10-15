@@ -162,6 +162,8 @@ public class SwitchButton extends View implements View.OnClickListener {
 
 	private int mCurrentState;
 
+	private String name;
+
 	public interface OnCheckedChangeListener {
 		void onCheckedChanged(SwitchButton buttonView, boolean isChecked);
 	}
@@ -172,6 +174,18 @@ public class SwitchButton extends View implements View.OnClickListener {
 	}
 
 	private OnCheckedChangeListener mOnCheckedChangeListener;
+
+	public boolean listenrtIsBlank(){
+		return mOnCheckedChangeListener == null;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public void setOnCheckedChangeListener(OnCheckedChangeListener listener) {
 		this.mOnCheckedChangeListener = listener;
