@@ -12,6 +12,9 @@ public class PageMainItem {
     public static int LEADING_LINE = 7;
     public static int NORMARL_LINE = 8;
 
+    public static int MY_GENERAL_INFO = 9;
+    public static int VIP_INFO = 10;
+
 
     private int aIcon;
     private String aName;

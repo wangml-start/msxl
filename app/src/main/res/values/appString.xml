@@ -3,6 +3,8 @@
     <item name="tag_main_item" type="id"></item>
     <item name="Tag_split_item" type="id"></item>
     <item name="Tag_setting_item" type="id"></item>
+    <item name="tag_edit_item" type="id"></item>
+    <item name="tag_head_item" type="id"></item>
 
     <string name="trading">操盘</string>
     <string name="mode_setting">模式设置</string>
@@ -18,5 +20,14 @@
     <string name="train_sum_line">收益总曲线</string>
     <string name="leading_line">龙头战法曲线</string>
     <string name="normal_line">趋势波段曲线</string>
+
+    <string name="acct_info">账户信息</string>
+    <string name="vip_way">VIP通道</string>
+    <string name="head_img">头像</string>
+    <string name="user_name">昵称</string>
+    <string name="gender">性别</string>
+    <string name="signature">个性签名</string>
+    <string name="ue_email">修改邮箱</string>
+    <string name="ue_psw">修改密码</string>
 
 </resources>

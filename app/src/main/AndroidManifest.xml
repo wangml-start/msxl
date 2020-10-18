@@ -30,6 +30,9 @@
         <activity android:name=".ac.RealControlActivity" />
         <activity android:name=".ac.StatisticActivity"/>
         <activity android:name=".ac.ModeSettingActivity"/>
+        <activity android:name=".ac.VIPActivity"/>
+        <activity android:name=".ac.AccountInfoActivity"/>
+        <activity android:name=".ac.EditDetailActivity"/>
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
 
