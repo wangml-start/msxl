@@ -6,6 +6,9 @@ public class User {
     String password;
     String token;
     String userName;
+    int gender;
+    String signature;
+
 
     public String getPhone() {
         return phone;
@@ -45,5 +48,21 @@ public class User {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public int getGender() {
+        return gender;
+    }
+
+    public void setGender(int gender) {
+        this.gender = gender;
+    }
+
+    public String getSignature() {
+        return signature;
+    }
+
+    public void setSignature(String signature) {
+        this.signature = signature;
     }
 }

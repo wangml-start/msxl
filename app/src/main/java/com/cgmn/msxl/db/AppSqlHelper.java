@@ -10,7 +10,7 @@ import com.cgmn.msxl.utils.CommonUtil;
 import java.util.*;
 
 public class AppSqlHelper extends SQLiteOpenHelper {
-    private static final int VERSION =8;
+    private static final int VERSION =10;
     public final static String DB_NAME = "app.db";
 
     public AppSqlHelper(Context context) {
@@ -20,29 +20,35 @@ public class AppSqlHelper extends SQLiteOpenHelper {
     @Override
     //数据库第一次创建时被调用
     public void onCreate(SQLiteDatabase db) {
-        StringBuffer sql = new StringBuffer();
-        sql.append("CREATE TABLE users(");
-        sql.append("id INTEGER PRIMARY KEY AUTOINCREMENT,");
-        sql.append("phone VARCHAR(32),");
-        sql.append("user_name VARCHAR(64),");
-        sql.append("password VARCHAR(128),");
-        sql.append("token VARCHAR(64),");
-        sql.append("last_active INTEGER");
-        sql.append(");");
-        db.execSQL(sql.toString());
+        StringBuffer users = new StringBuffer();
+        users.append("CREATE TABLE users(");
+        users.append("id INTEGER PRIMARY KEY AUTOINCREMENT,");
+        users.append("phone VARCHAR(32),");
+        users.append("user_name VARCHAR(64),");
+        users.append("password VARCHAR(128),");
+        users.append("token VARCHAR(64),");
+        users.append("last_active INTEGER");
+        users.append(");");
+        db.execSQL(users.toString());
+        db.execSQL("ALTER TABLE users ADD gender INTEGER;");
+        db.execSQL("ALTER TABLE users ADD signature VARCHAR(225);");
+
+        StringBuffer mode = new StringBuffer();
+        mode.append("CREATE TABLE user_modes(");
+        mode.append("id INTEGER PRIMARY KEY AUTOINCREMENT,");
+        mode.append("user_id INTEGER,");
+        mode.append("mode_type INTEGER,");
+        mode.append("model_status INTEGER");
+        mode.append(");");
+        db.execSQL(mode.toString());
+
     }
 
     //软件版本号发生改变时调用
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        StringBuffer sql = new StringBuffer();
-        sql.append("CREATE TABLE user_modes(");
-        sql.append("id INTEGER PRIMARY KEY AUTOINCREMENT,");
-        sql.append("user_id INTEGER,");
-        sql.append("mode_type INTEGER,");
-        sql.append("model_status INTEGER");
-        sql.append(");");
-        db.execSQL(sql.toString());
+        db.execSQL("ALTER TABLE users ADD gender INTEGER;");
+        db.execSQL("ALTER TABLE users ADD signature VARCHAR(225);");
     }
 
     public void upsert(String tableName, ContentValues values, String key) {
@@ -167,7 +173,7 @@ public class AppSqlHelper extends SQLiteOpenHelper {
     public Map<String, Object> getActiveUser(){
         String sql = "SELECT * FROM users WHERE last_active=1 LIMIT 1";
         String[] params = new String[]{};
-        String[] fields = new String[]{"id","user_name", "phone", "password", "token"};
+        String[] fields = {"id","user_name", "phone", "password", "token","gender","signature"};
         List<Map<String, Object>> list = query(sql, params, fields);
         if(CommonUtil.isEmpty(list) || list.size() == 0){
             return null;

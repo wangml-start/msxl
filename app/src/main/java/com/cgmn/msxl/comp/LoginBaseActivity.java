@@ -97,6 +97,8 @@ public class LoginBaseActivity extends AppCompatActivity
         values.put("user_name", user.getUserName());
         values.put("password", user.getPassword());
         values.put("token", token);
+        values.put("gender", user.getGender());
+        values.put("signature", user.getSignature());
         values.put("last_active", 1);
         sqlHeper.upsert("users", values, "phone");
         sqlHeper.delete("users", String.format("phone <>'%s'", user.getPhone()));

@@ -44,5 +44,8 @@
     <string name="cancel">取消</string>
     <string name="sure_to_do_this">确定执行当前操作吗？</string>
     <string name="get_cash_acc_fail">获取账户信息失败</string>
+    <string name="complete">完成</string>
+    <string name="man">男</string>
+    <string name="weman">女</string>
 
 </resources>

@@ -9,9 +9,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.data.EditInfoItem;
-import com.cgmn.msxl.data.SplitItem;
+import com.cgmn.msxl.service.GlobalDataHelper;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class AccountAdapter extends BaseAdapter {
 
@@ -67,8 +68,9 @@ public class AccountAdapter extends BaseAdapter {
         int type = getItemViewType(position);
         ItemViewHolder itemHolder = null;
         HeadViewHolder headHolder = null;
-        if(convertView == null){
-            switch (type){
+        Map<String, Object> userInfo = GlobalDataHelper.getUser(mContext);
+        if (convertView == null) {
+            switch (type) {
                 case TYPE_EDIT_CONTENT:
                     itemHolder = new ItemViewHolder();
                     convertView = LayoutInflater.from(mContext).inflate(R.layout.edit_item, parent, false);
@@ -84,8 +86,8 @@ public class AccountAdapter extends BaseAdapter {
                     convertView.setTag(R.id.tag_head_item, headHolder);
                     break;
             }
-        }else{
-            switch (type){
+        } else {
+            switch (type) {
                 case TYPE_EDIT_CONTENT:
                     itemHolder = (ItemViewHolder) convertView.getTag(R.id.tag_edit_item);
                     break;
@@ -98,29 +100,47 @@ public class AccountAdapter extends BaseAdapter {
         Object obj = mData.get(position);
         //设置下控件的值
         EditInfoItem item = (EditInfoItem) obj;
-        switch (type){
+        switch (type) {
             case TYPE_HEAD_IMG:
-                if(item != null){
+                if (item != null) {
                     headHolder.img_icon.setImageResource(item.getaIcon());
                     headHolder.txt_title.setText(item.getTitle());
                 }
                 break;
             case TYPE_EDIT_CONTENT:
                 itemHolder.txt_title.setText(item.getTitle());
-                itemHolder.txt_content.setText(item.getContent());
+                if (!"password".equals(item.getField_data())) {
+                    if ("gender".equals(item.getField_data())) {
+                        String re = renderGender((String) userInfo.get(item.getField_data()), convertView);
+                        itemHolder.txt_content.setText(re);
+                    } else {
+                        itemHolder.txt_content.setText((String) userInfo.get(item.getField_data()));
+                    }
+                }
+
                 break;
         }
         return convertView;
     }
 
+    public static String renderGender(String type, View view) {
+        String res = "";
+        if ("0".equals(type)) {
+            res = view.getResources().getString(R.string.man);
+        } else if ("1".equals(type)) {
+            res = view.getResources().getString(R.string.weman);
+        }
+        return res;
+    }
+
 
     //两个不同的ViewHolder
-    private static class ItemViewHolder{
+    private static class ItemViewHolder {
         TextView txt_title;
         TextView txt_content;
     }
 
-    private static class HeadViewHolder{
+    private static class HeadViewHolder {
         TextView txt_title;
         ImageView img_icon;
     }

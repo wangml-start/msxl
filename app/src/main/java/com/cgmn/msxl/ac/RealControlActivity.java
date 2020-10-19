@@ -161,7 +161,7 @@ public class RealControlActivity extends AppCompatActivity
                     realtradeManage.resetManager();
                     realtradeManage.setKlineset((KlineSet) msg.obj) ;
                     startChartInit();
-                } else if(msg.what == MessageUtil.GET_CASS_ACC_SUCCESS){
+                } else if(msg.what == MessageUtil.GET_CASH_ACC_SUCCESS){
                     SettledAccount acc = (SettledAccount) msg.obj;
                     stockView.initAccount(acc.getCashAmt());
                     stockView.invalidateView();
@@ -209,7 +209,7 @@ public class RealControlActivity extends AppCompatActivity
                             @Override
                             public void onResponse(BaseData data) {
                                 Message message = Message.obtain();
-                                message.what = MessageUtil.GET_CASS_ACC_SUCCESS;
+                                message.what = MessageUtil.GET_CASH_ACC_SUCCESS;
                                 try {
                                     message.obj = data.getSettledAccount();
                                     Integer status = data.getStatus();
