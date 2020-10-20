@@ -12,6 +12,8 @@ public class MessageUtil {
 
     public static int LPAD_USER_MODES_SUCCESS = 0x005;
 
+    public static int GET_USER_IMAGE_SUCCESS = 0x006;
+
 
 
 

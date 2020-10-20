@@ -47,5 +47,6 @@
     <string name="complete">完成</string>
     <string name="man">男</string>
     <string name="weman">女</string>
+    <string name="selectPh">选择</string>
 
 </resources>

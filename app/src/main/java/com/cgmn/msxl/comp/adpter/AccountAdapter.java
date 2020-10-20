@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.cgmn.msxl.R;
+import com.cgmn.msxl.comp.NetImageView;
 import com.cgmn.msxl.data.EditInfoItem;
 import com.cgmn.msxl.service.GlobalDataHelper;
 
@@ -81,7 +82,7 @@ public class AccountAdapter extends BaseAdapter {
                 case TYPE_HEAD_IMG:
                     headHolder = new HeadViewHolder();
                     convertView = LayoutInflater.from(mContext).inflate(R.layout.head_im_item, parent, false);
-                    headHolder.img_icon = (ImageView) convertView.findViewById(R.id.img_head_img);
+                    headHolder.img_icon = (NetImageView) convertView.findViewById(R.id.img_head_img);
                     headHolder.txt_title = (TextView) convertView.findViewById(R.id.txt_title);
                     convertView.setTag(R.id.tag_head_item, headHolder);
                     break;
@@ -103,7 +104,8 @@ public class AccountAdapter extends BaseAdapter {
         switch (type) {
             case TYPE_HEAD_IMG:
                 if (item != null) {
-                    headHolder.img_icon.setImageResource(item.getaIcon());
+                    headHolder.img_icon.setImageName(GlobalDataHelper.getUserAcc(mContext));
+                    headHolder.img_icon.setImageURL(GlobalDataHelper.getUserPortraitUrl(mContext));
                     headHolder.txt_title.setText(item.getTitle());
                 }
                 break;
@@ -142,7 +144,7 @@ public class AccountAdapter extends BaseAdapter {
 
     private static class HeadViewHolder {
         TextView txt_title;
-        ImageView img_icon;
+        NetImageView img_icon;
     }
 
 }

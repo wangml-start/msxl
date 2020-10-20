@@ -23,15 +23,14 @@
             android:layout_height="match_parent"
             android:background="@color/bg_topbar"
             >
-        <ImageView
+        <com.cgmn.msxl.comp.NetImageView
                 android:id="@+id/img_head_img"
                 android:gravity="center"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:src="@mipmap/head" />
-
+                />
         <TextView
                 android:layout_width="20dp"
                 android:layout_height="match_parent"

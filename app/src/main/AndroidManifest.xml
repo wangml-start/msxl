@@ -4,6 +4,10 @@
         package="com.cgmn.msxl">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
     <application
             android:name=".application.AppApplication"
             android:allowBackup="true"
@@ -13,6 +17,16 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             tools:ignore="Instantiatable">
+        <provider
+                android:name="androidx.core.content.FileProvider"
+                android:authorities="com.cgmn.msxl.fileProvider"
+                android:exported="false"
+                android:grantUriPermissions="true">
+            <meta-data
+                    android:name="android.support.FILE_PROVIDER_PATHS"
+                    android:resource="@xml/provider_paths"/>
+        </provider>
+
         <activity android:name=".ac.MainActivity">
 <!--            <meta-data-->
 <!--                    android:name="android.support.PARENT_ACTIVITY"-->
@@ -36,7 +50,7 @@
         <activity android:name=".ac.EditSignatureActivity"/>
         <activity android:name=".ac.EditPasswordActivity"/>
         <activity android:name=".ac.EditGenderActivity"/>
-        <activity android:name=".ac.EditHeaderActivity"/>
+        <activity android:name=".ac.EditHeaderActivity" android:hardwareAccelerated="false" />
 
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>

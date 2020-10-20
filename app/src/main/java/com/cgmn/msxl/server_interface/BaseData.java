@@ -17,6 +17,8 @@ public class BaseData {
 
     private TradeStatistic statistic;
 
+    private byte[] filebyte;
+
     public Integer getStatus() {
         return status;
     }
@@ -63,5 +65,13 @@ public class BaseData {
 
     public void setStatistic(TradeStatistic statistic) {
         this.statistic = statistic;
+    }
+
+    public byte[] getFilebyte() {
+        return filebyte;
+    }
+
+    public void setFilebyte(byte[] filebyte) {
+        this.filebyte = filebyte;
     }
 }

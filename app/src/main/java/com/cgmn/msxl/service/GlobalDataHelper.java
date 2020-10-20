@@ -1,10 +1,12 @@
 package com.cgmn.msxl.service;
 
 import android.content.Context;
+import android.os.Environment;
 import com.cgmn.msxl.application.AppApplication;
 import com.cgmn.msxl.db.AppSqlHelper;
 import com.cgmn.msxl.utils.CommonUtil;
 
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -39,5 +41,23 @@ public class GlobalDataHelper {
         }
 
         return user;
+    }
+
+    public static String getCachePath(){
+        String storage = Environment.getExternalStorageDirectory().getPath();
+        return storage + "/icon";
+    }
+
+    public static String getUserAcc(Context context){
+        Map<String, Object> u = getUser(context);
+        return (String) u.get("phone");
+    }
+
+    public static String getUserPortraitUrl(Context context){
+        Map<String, String> p = new HashMap<>();
+        p.put("token", getToken(context));
+        return CommonUtil.buildGetUrl(
+                PropertyService.getInstance().getKey("serverUrl"),
+                "/user/portrait_view", p);
     }
 }

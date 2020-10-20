@@ -44,7 +44,7 @@ public class AccountInfoActivity extends AppCompatActivity {
 
     private void initAdpter(){
         mData = new ArrayList<>();
-        mData.add(new EditInfoItem(R.mipmap.head, getString(R.string.head_img), "head_img"));
+        mData.add(new EditInfoItem(1, getString(R.string.head_img), "head_img"));
         mData.add(new EditInfoItem(0, getString(R.string.user_name), "user_name"));
         mData.add(new EditInfoItem(0, getString(R.string.gender),  "gender"));
         mData.add(new EditInfoItem(0, getString(R.string.signature),  "signature"));
