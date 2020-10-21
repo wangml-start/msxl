@@ -16,7 +16,6 @@ import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.service.GlobalDataHelper;
 import com.cgmn.msxl.service.OkHttpClientManager;
 import com.cgmn.msxl.utils.MessageUtil;
-import com.squareup.okhttp.Response;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -52,7 +51,7 @@ public class NetImageView extends ImageView {
     public NetImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
         mContext = context;
-        path = GlobalDataHelper.getCachePath();
+        path = GlobalDataHelper.getPortraitCachePath();
         initHandler();
     }
 
@@ -211,10 +210,7 @@ public class NetImageView extends ImageView {
      * @return 文件名
      */
     public String getURLPath() {
-        StringBuffer sb = new StringBuffer();
-        sb.append(path);
-        sb.append("/portrait");
-        return sb.toString();
+        return path;
     }
 
     public String getFileName(){

@@ -48,6 +48,11 @@ public class GlobalDataHelper {
         return storage + "/icon";
     }
 
+    public static String getPortraitCachePath(){
+        String storage = Environment.getExternalStorageDirectory().getPath();
+        return storage + "/portrait";
+    }
+
     public static String getUserAcc(Context context){
         Map<String, Object> u = getUser(context);
         return (String) u.get("phone");
