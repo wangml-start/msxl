@@ -5,8 +5,6 @@
         android:background="@color/bg_gray"
         android:orientation="vertical">
 
-    <include layout="@layout/edit_detail_header" />
-
     <EditText
             android:id="@+id/txt_content"
             android:layout_width="match_parent"

@@ -13,13 +13,8 @@ import android.net.Uri;
 import android.os.*;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.view.*;
 import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
@@ -40,21 +35,17 @@ import com.cgmn.msxl.utils.MessageUtil;
 import com.squareup.okhttp.Request;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class EditHeaderActivity extends AppCompatActivity
-        implements View.OnClickListener{
+public class EditHeaderActivity extends BaseActivity{
     private static final String TAG = EditHeaderActivity.class.getSimpleName();
-    private Context mContext;
     private static final int REQUEST_IMAGE_GET = 0;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_BIG_IMAGE_CUTTING = 3;
     private static final String IMAGE_FILE_NAME = "icon.jpg";
-    private static final int IMAGE_SIDE = 1000;
+    private int imageSide = 1000;
 
     private NetImageView main_icon;
-    private TextView txt_select, backup_btn;
     private PhotoPop mPhotoPopupWindow;
     private Uri mImageUri;
     private File cutFile;
@@ -64,13 +55,9 @@ public class EditHeaderActivity extends AppCompatActivity
 
 
     @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.backup_btn) {
-            finish();
-        } else if (v.getId() == R.id.txt_select) {
-            showPop();
-        }
-    }
+    protected void onRightTextClick(){
+        showPop();
+    };
 
     private void showPop(){
         mPhotoPopupWindow = new PhotoPop(EditHeaderActivity.this, new View.OnClickListener() {
@@ -122,21 +109,15 @@ public class EditHeaderActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.edit_upic_layout);
+    protected void init() {
         initView();
     }
 
     private void initView(){
-        mContext = this;
         main_icon = findViewById(R.id.main_icon);
-        txt_select = findViewById(R.id.txt_select);
-        backup_btn = findViewById(R.id.backup_btn);
-        txt_select.setOnClickListener(this);
-        backup_btn.setOnClickListener(this);
         main_icon.setImageName(GlobalDataHelper.getUserAcc(mContext));
         main_icon.setImageURL(GlobalDataHelper.getUserPortraitUrl(mContext));
+        imageSide = main_icon.getWidth();
 
         dialog = new ProgressDialog(mContext);
         dialog.setMessage("正在提交...");
@@ -157,6 +138,21 @@ public class EditHeaderActivity extends AppCompatActivity
             }
         });
     }
+
+    @Override
+    protected int getContentView() {
+        return R.layout.edit_upic_layout;
+    }
+
+    @Override
+    protected String setTitle() {
+        return getString(R.string.head_img);
+    }
+
+    @Override
+    protected boolean showComplate(){
+        return false;
+    };
 
     /**
      * 处理回调结果
@@ -271,8 +267,8 @@ public class EditHeaderActivity extends AppCompatActivity
         intent.putExtra("crop", "true");
         intent.putExtra("aspectX", 1); // 裁剪框比例
         intent.putExtra("aspectY", 1);
-        intent.putExtra("outputX", IMAGE_SIDE); // 输出图片大小
-        intent.putExtra("outputY", IMAGE_SIDE);
+        intent.putExtra("outputX", imageSide); // 输出图片大小
+        intent.putExtra("outputY", imageSide);
         intent.putExtra("scale", true);
         intent.putExtra("return-data", false); // 不直接返回数据
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri); // 返回一个文件
@@ -305,8 +301,8 @@ public class EditHeaderActivity extends AppCompatActivity
         intent.putExtra("crop", "true");
         intent.putExtra("aspectX", 1); // 裁剪框比例
         intent.putExtra("aspectY", 1);
-        intent.putExtra("outputX", IMAGE_SIDE); // 输出图片大小
-        intent.putExtra("outputY", IMAGE_SIDE);
+        intent.putExtra("outputX", imageSide); // 输出图片大小
+        intent.putExtra("outputY", imageSide);
         intent.putExtra("scale", true);
         intent.putExtra("return-data", false); // 不直接返回数据
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri); // 返回一个文件
@@ -404,10 +400,10 @@ public class EditHeaderActivity extends AppCompatActivity
     }
 
 
-    @Override
-    public void finish() {
+    protected void onBackUpClick(){
         dialog.cancel();
         dialog.dismiss();
-        super.finish();
-    }
+        finish();
+    };
+
 }

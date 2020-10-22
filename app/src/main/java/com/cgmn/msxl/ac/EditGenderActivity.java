@@ -1,7 +1,5 @@
 package com.cgmn.msxl.ac;
 
-import android.content.Context;
-import android.os.Bundle;
 import android.os.Message;
 import android.view.View;
 import android.widget.ImageView;
@@ -19,20 +17,22 @@ import com.cgmn.msxl.utils.MessageUtil;
 import java.util.HashMap;
 import java.util.Map;
 
-public class EditGenderActivity extends EditBaseActivity {
+public class EditGenderActivity extends EditBaseActivity
+    implements View.OnClickListener{
     private static final String TAG = EditGenderActivity.class.getSimpleName();
-    private Context mContext;
     private ImageView img_man, img_weman;
     private RelativeLayout first_relative, last_relative;
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.edit_ugender_layout);
-        mContext = this;
-        baseBind(mContext);
+    protected void init() {
+        baseBind();
         bindView();
+    }
+
+    @Override
+    protected int getContentView() {
+        return R.layout.edit_ugender_layout;
     }
 
     private void bindView() {
@@ -42,7 +42,6 @@ public class EditGenderActivity extends EditBaseActivity {
         last_relative = findViewById(R.id.last_relative);
         first_relative.setOnClickListener(this);
         last_relative.setOnClickListener(this);
-        txt_complete.setVisibility(View.GONE);
 
         if("0".equals(fieldContent)){
             img_man.setImageResource(R.drawable.check);
@@ -51,7 +50,22 @@ public class EditGenderActivity extends EditBaseActivity {
         }
     }
 
+    @Override
+    protected boolean showRight(){
+        return false;
+    };
+    @Override
+    protected boolean showComplate(){
+        return false;
+    };
+
     private void saveData(final String type){
+        if(fieldContent.equals(type)){
+            Message message = Message.obtain();
+            message.what = MessageUtil.REQUEST_SUCCESS;
+            mHandler.sendMessage(message);
+            return;
+        }
         GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
             @Override
             public void run() {
@@ -81,6 +95,7 @@ public class EditGenderActivity extends EditBaseActivity {
                                     }
                                     Map<String, Object> user = GlobalDataHelper.getUser(mContext);
                                     user.put(p.get("field_data"), p.get("content"));
+                                    updateUser(p);
                                 } catch (Exception e) {
                                     message.what = MessageUtil.EXCUTE_EXCEPTION;
                                     message.obj = e;
@@ -92,11 +107,9 @@ public class EditGenderActivity extends EditBaseActivity {
         });
     }
 
-    @Override
+
     public void onClick(View v) {
-        if (v.getId() == R.id.backup_btn) {
-            finish();
-        } else if (v.getId() == R.id.first_relative) {
+        if (v.getId() == R.id.first_relative) {
             dialog.show();
             saveData("0");
         }else if(v.getId() == R.id.last_relative){

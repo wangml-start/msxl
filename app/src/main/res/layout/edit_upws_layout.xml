@@ -2,10 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/bg_gray"
+        android:background="@color/bg_white"
         android:orientation="vertical">
-
-    <include layout="@layout/edit_detail_header" />
 
     <LinearLayout
             android:background="@color/bg_topbar"

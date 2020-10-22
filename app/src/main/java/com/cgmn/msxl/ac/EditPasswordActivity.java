@@ -1,20 +1,11 @@
 package com.cgmn.msxl.ac;
 
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.text.Editable;
-import android.view.View;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import androidx.appcompat.app.AppCompatActivity;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.comp.EditBaseActivity;
 import com.cgmn.msxl.comp.showPassworCheckBox;
 import com.cgmn.msxl.service.GlobalDataHelper;
 import com.cgmn.msxl.utils.AESUtil;
-import com.cgmn.msxl.utils.CommonUtil;
 import com.cgmn.msxl.utils.MessageUtil;
 
 import java.util.HashMap;
@@ -22,16 +13,18 @@ import java.util.Map;
 
 public class EditPasswordActivity extends EditBaseActivity {
     private static final String TAG = EditPasswordActivity.class.getSimpleName();
-    private Context mContext;
     private EditText tx_user_wd, tx_new_user_wd;
     private showPassworCheckBox ck_show;
 
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.edit_upws_layout);
-        mContext = this;
-        baseBind(mContext);
+    protected int getContentView() {
+        return R.layout.edit_upws_layout;
+    }
+
+    @Override
+    protected void init() {
+        baseBind();
         tx_user_wd = findViewById(R.id.tx_user_wd);
         tx_new_user_wd = findViewById(R.id.tx_new_user_wd);
         ck_show = findViewById(R.id.ck_dis_pws);

@@ -1,7 +1,6 @@
 package com.cgmn.msxl.ac;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
@@ -16,20 +15,20 @@ import java.util.Map;
 public class EditSignatureActivity extends EditBaseActivity
         implements TextWatcher {
     private static final String TAG = EditNameActivity.class.getSimpleName();
-    private Context mContext;
     private EditText txt_content;
 
 
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.edit_usign_layout);
-        mContext = this;
-        baseBind(mContext);
+    protected void init() {
+        baseBind();
         txt_content = findViewById(R.id.txt_content);
         txt_content.setText(fieldContent);
         txt_content.addTextChangedListener(this);
+    }
+
+    @Override
+    protected int getContentView() {
+        return R.layout.edit_usign_layout;
     }
 
 
