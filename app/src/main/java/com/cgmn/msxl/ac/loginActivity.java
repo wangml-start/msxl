@@ -172,4 +172,10 @@ public class loginActivity extends LoginBaseActivity {
     public void finish() {
         super.finish();
     }
+
+    @Override
+    public void onBackPressed() {
+        // super.onBackPressed();//注释掉这行,back键不退出activity
+        Log.i(TAG, "onBackPressed");
+    }
 }

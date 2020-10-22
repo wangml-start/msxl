@@ -24,12 +24,12 @@
             <RelativeLayout
                     android:id="@+id/img_back"
                     android:layout_marginLeft="7dp"
-                    android:layout_width="20dp"
+                    android:layout_width="40dp"
                     android:visibility="gone"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
                 <ImageView
-                        android:layout_width="match_parent"
+                        android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_centerVertical="true"
                         android:gravity="center|center_vertical"
@@ -50,13 +50,12 @@
 
             <RelativeLayout
                     android:id="@+id/img_right"
-                    android:layout_width="20dp"
+                    android:layout_width="40dp"
                     android:visibility="gone"
                     android:layout_height="match_parent"
-                    android:layout_marginRight="7dp"
                     android:orientation="vertical">
                 <ImageView
-                        android:layout_width="match_parent"
+                        android:layout_width="20dp"
                         android:layout_height="4dp"
                         android:layout_centerVertical="true"
                         android:src="@drawable/h3"
