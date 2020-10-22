@@ -111,6 +111,13 @@ public class EditHeaderActivity extends BaseActivity{
     @Override
     protected void init() {
         initView();
+        //清空缓存图片
+        if(FileUtil.DeleteFolder(GlobalDataHelper.getPortraitCachePath())){
+            Log.d(TAG, "Clear portrait catche!");
+        }
+        if(FileUtil.DeleteFolder(GlobalDataHelper.getCachePath())){
+            Log.d(TAG, "Clear catche!");
+        }
     }
 
     private void initView(){
@@ -375,13 +382,6 @@ public class EditHeaderActivity extends BaseActivity{
                                             throw new Exception(data.getError());
                                         }
                                         Log.d(TAG, "UPLOAD TRADING SUCCESS!");
-                                        //清空缓存图片
-                                        if(FileUtil.DeleteFolder(GlobalDataHelper.getPortraitCachePath())){
-                                            Log.d(TAG, "Clear portrait catche!");
-                                        }
-                                        if(FileUtil.DeleteFolder(GlobalDataHelper.getCachePath())){
-                                            Log.d(TAG, "Clear catche!");
-                                        }
                                     } catch (Exception e) {
                                         message.what = MessageUtil.EXCUTE_EXCEPTION;
                                         message.obj = e;

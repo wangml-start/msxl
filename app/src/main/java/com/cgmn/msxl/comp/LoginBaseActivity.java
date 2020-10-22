@@ -101,7 +101,7 @@ public class LoginBaseActivity extends AppCompatActivity
         values.put("signature", user.getSignature());
         values.put("last_active", 1);
         sqlHeper.upsert("users", values, "phone");
-        sqlHeper.delete("users", String.format("phone <>'%s'", user.getPhone()));
+        sqlHeper.excuteSql(String.format("UPDATE users SET last_active=0 WHERE phone <>'%s'", user.getPhone()));
         GlobalDataHelper.updateUser(context);
     }
 }

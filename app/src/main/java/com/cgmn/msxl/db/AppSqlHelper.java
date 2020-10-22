@@ -115,6 +115,18 @@ public class AppSqlHelper extends SQLiteOpenHelper {
         }
     }
 
+    public void excuteSql(String sql) {
+        SQLiteDatabase db = null;
+        try {
+            db = getWritableDatabase();
+            db.execSQL(sql);
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            db.close();
+        }
+    }
+
     public void delete(String tableName, String condition) {
         SQLiteDatabase db = null;
         try {
