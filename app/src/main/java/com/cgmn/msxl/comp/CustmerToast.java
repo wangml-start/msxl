@@ -100,7 +100,7 @@ public class CustmerToast extends Toast {
             toast_text = layout.findViewById(R.id.toast_text);
             toast_text.setText(text);
             toast.setView(layout);
-            toast.setGravity(Gravity.TOP, 0, 50);
+            toast.setGravity(Gravity.TOP, 0, 30);
         } catch (Exception e) {
             e.printStackTrace();
         }

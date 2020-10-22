@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -24,6 +25,7 @@ public class AccountInfoActivity extends BaseActivity {
     private static final String TAG = AccountInfoActivity.class.getSimpleName();
     private Context mContext;
     private ListView list_content;
+    private Button exit_btn;
     private ArrayList<Object> mData = null;
     private AccountAdapter myAdapter = null;
     private BroadcastReceiver receiver;
@@ -71,13 +73,13 @@ public class AccountInfoActivity extends BaseActivity {
     private void bindView(){
         mContext = this;
         list_content = findViewById(R.id.list_content);
-        final Map<String, Object> userInfo = GlobalDataHelper.getUser(mContext);
         list_content.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 EditInfoItem item = (EditInfoItem) mData.get(position);
                 Intent intent = null;
                 Bundle bundle = null;
+                Map<String, Object> userInfo = GlobalDataHelper.getUser(mContext);
                 if("head_img".equals(item.getField_data())){
                     intent = new Intent(mContext, EditHeaderActivity.class);
                     bundle = new Bundle();
@@ -119,6 +121,13 @@ public class AccountInfoActivity extends BaseActivity {
                     intent.putExtra("datas", bundle);
                     startActivity(intent);
                 }
+            }
+        });
+        exit_btn = findViewById(R.id.exit_btn);
+        exit_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(mContext, loginActivity.class));
             }
         });
     }

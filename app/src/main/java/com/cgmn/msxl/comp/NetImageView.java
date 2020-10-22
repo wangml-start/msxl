@@ -109,22 +109,21 @@ public class NetImageView extends ImageView {
                                 Message msg = Message.obtain();
                                 try {
                                     byte[] bytes = data.getFilebyte();
-                                    if(bytes == null || bytes.length == 0){
-                                        bytes = new byte[]{};
-                                    }
-                                    Bitmap bitmap;
-                                    if (isUseCache){
-                                        //复制新的输入流
-                                        InputStream is = new ByteArrayInputStream(bytes);
-                                        InputStream is2 = new ByteArrayInputStream(bytes);
-                                        //调用压缩方法显示图片
-                                        bitmap = getCompressBitmap(is);
-                                        //调用缓存图片方法
-                                        cacheImage(is2);
-                                    }else {
-                                        //调用压缩方法
-                                        InputStream is = new ByteArrayInputStream(bytes);
-                                        bitmap = getCompressBitmap(is);
+                                    Bitmap bitmap=null;
+                                    if(bytes != null && bytes.length > 0){
+                                        if (isUseCache){
+                                            //复制新的输入流
+                                            InputStream is = new ByteArrayInputStream(bytes);
+                                            InputStream is2 = new ByteArrayInputStream(bytes);
+                                            //调用压缩方法显示图片
+                                            bitmap = getCompressBitmap(is);
+                                            //调用缓存图片方法
+                                            cacheImage(is2);
+                                        }else {
+                                            //调用压缩方法
+                                            InputStream is = new ByteArrayInputStream(bytes);
+                                            bitmap = getCompressBitmap(is);
+                                        }
                                     }
                                     msg.obj = bitmap;
                                     msg.what = MessageUtil.GET_USER_IMAGE_SUCCESS;
