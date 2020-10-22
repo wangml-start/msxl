@@ -7,7 +7,7 @@
     <LinearLayout
             android:id="@+id/ly_tab_bar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="45dp"
             android:layout_alignParentBottom="true"
             android:background="@color/bg_white"
             android:orientation="horizontal">
@@ -17,39 +17,39 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/tab_menu_bg"
-                android:drawablePadding="3dp"
+                android:drawablePadding="2dp"
                 android:drawableTop="@drawable/tab_menu_setting"
                 android:gravity="center"
-                android:padding="5dp"
+                android:padding="2dp"
                 android:text="@string/tab_menu_xunlian"
                 android:textColor="@drawable/tab_menu_text"
-                android:textSize="16sp"/>
+                android:textSize="@dimen/miniSize"/>
         <TextView
                 android:id="@+id/txt_statistic"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/tab_menu_bg"
-                android:drawablePadding="3dp"
+                android:drawablePadding="2dp"
                 android:drawableTop="@drawable/tab_menu_channel"
                 android:gravity="center"
-                android:padding="5dp"
+                android:padding="2dp"
                 android:text="@string/statistic"
                 android:textColor="@drawable/tab_menu_text"
-                android:textSize="16sp" />
+                android:textSize="@dimen/miniSize" />
         <TextView
                 android:id="@+id/txt_may"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/tab_menu_bg"
-                android:drawablePadding="3dp"
+                android:drawablePadding="2dp"
                 android:drawableTop="@drawable/tab_menu_better"
                 android:gravity="center"
-                android:padding="5dp"
+                android:padding="2dp"
                 android:text="@string/tab_menu_may"
                 android:textColor="@drawable/tab_menu_text"
-                android:textSize="16sp" />
+                android:textSize="@dimen/miniSize" />
 
     </LinearLayout>
 

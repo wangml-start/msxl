@@ -3,45 +3,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:background="@color/bg_white"
         tools:context=".ac.StatisticActivity">
-
-    <LinearLayout
-            android:id="@+id/frg_tain_top_bar"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:orientation="horizontal"
-            android:background="@color/bg_topbar">
-        <TextView
-                android:id="@+id/backup_btn"
-                android:layout_width="80dp"
-                android:layout_height="match_parent"
-                android:background="@color/bg_white"
-                android:gravity="center"
-                android:layout_marginTop="2dp"
-                android:text="@string/backup" />
-        <TextView
-                android:id="@+id/txt_statist_title"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_centerInParent="true"
-                android:gravity="center"
-                android:layout_weight="1"
-                android:textColor="@color/text_topbar"
-                android:textSize="@dimen/NormalSize" />
-        <TextView
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:background="@color/bg_white"
-                android:gravity="center"
-                android:layout_marginTop="2dp"
-                android:text=" " />
-    </LinearLayout>
-    <View
-            android:layout_width="match_parent"
-            android:layout_below="@id/frg_tain_top_bar"
-            android:layout_height="2px"
-            android:layout_alignParentBottom="true"
-            android:background="@color/div_white" />
 
     <LinearLayout
             android:layout_width="match_parent"

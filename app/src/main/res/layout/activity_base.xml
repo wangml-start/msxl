@@ -23,7 +23,8 @@
                 android:orientation="horizontal">
             <RelativeLayout
                     android:id="@+id/img_back"
-                    android:layout_width="40dp"
+                    android:layout_marginLeft="7dp"
+                    android:layout_width="20dp"
                     android:visibility="gone"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
@@ -50,8 +51,9 @@
             <RelativeLayout
                     android:id="@+id/img_right"
                     android:layout_width="20dp"
-                    android:layout_height="match_parent"
                     android:visibility="gone"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="7dp"
                     android:orientation="vertical">
                 <ImageView
                         android:layout_width="match_parent"
@@ -64,9 +66,10 @@
             <TextView
                     android:id="@+id/txt_complete"
                     android:layout_width="45dp"
+                    android:visibility="gone"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:visibility="gone"
+                    android:textColor="@color/bg_white"
                     android:textSize="@dimen/NormalSize"
                     android:text="@string/complete" />
         </LinearLayout>

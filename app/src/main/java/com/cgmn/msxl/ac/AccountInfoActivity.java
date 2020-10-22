@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.comp.adpter.AccountAdapter;
@@ -21,11 +20,10 @@ import com.cgmn.msxl.service.GlobalDataHelper;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class AccountInfoActivity extends AppCompatActivity {
+public class AccountInfoActivity extends BaseActivity {
     private static final String TAG = AccountInfoActivity.class.getSimpleName();
     private Context mContext;
     private ListView list_content;
-    private TextView backup_btn;
     private ArrayList<Object> mData = null;
     private AccountAdapter myAdapter = null;
     private BroadcastReceiver receiver;
@@ -33,14 +31,30 @@ public class AccountInfoActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.accunt_info_layout);
+    protected int getContentView() {
+        return R.layout.accunt_info_layout;
+    }
+
+    @Override
+    protected void init(){
         bindView();
         initAdpter();
         initReceiver();
-    }
+    };
 
+    @Override
+    protected String setTitle(){
+        return getString(R.string.acct_info);
+    };
+
+    @Override
+    protected boolean showRight(){
+        return false;
+    };
+    @Override
+    protected boolean showComplate(){
+        return false;
+    };
 
     private void initAdpter(){
         mData = new ArrayList<>();
@@ -57,15 +71,6 @@ public class AccountInfoActivity extends AppCompatActivity {
     private void bindView(){
         mContext = this;
         list_content = findViewById(R.id.list_content);
-        backup_btn = findViewById(R.id.backup_btn);
-        backup_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(v.getId() == R.id.backup_btn){
-                    finish();
-                }
-            }
-        });
         final Map<String, Object> userInfo = GlobalDataHelper.getUser(mContext);
         list_content.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override

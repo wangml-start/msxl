@@ -32,7 +32,6 @@ public class MayFragment extends Fragment {
         View view = inflater.inflate(R.layout.my_fragment, container, false);
         bindView(view);
         initAdpter();
-
         return view;
     }
 
@@ -48,6 +47,8 @@ public class MayFragment extends Fragment {
 
     private void bindView(View view){
         mContxt = view.getContext();
+        TextView txt_frg_tain = view.findViewById(R.id.txt_frg_tain);
+        txt_frg_tain.setText(view.getResources().getString(R.string.tab_menu_may));
         list_content = view.findViewById(R.id.list_content);
         list_content.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override

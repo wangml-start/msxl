@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.ac.AppMainActivity;
 import com.cgmn.msxl.ac.ModeSettingActivity;
@@ -55,6 +56,8 @@ public class TrainFragment extends Fragment{
 
     private void bindView(View view){
         mContxt = view.getContext();
+        TextView txt_frg_tain = view.findViewById(R.id.txt_frg_tain);
+        txt_frg_tain.setText(view.getResources().getString(R.string.up_train_txt));
         list_content = view.findViewById(R.id.list_content);
         list_content.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override

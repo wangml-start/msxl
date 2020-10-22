@@ -1,14 +1,9 @@
 package com.cgmn.msxl.ac;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.view.View;
 import android.widget.ListView;
-import android.widget.TextView;
-import androidx.appcompat.app.AppCompatActivity;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.adpter.SettingAdpter;
@@ -23,7 +18,7 @@ import com.cgmn.msxl.utils.MessageUtil;
 import java.util.List;
 import java.util.Map;
 
-public class ModeSettingActivity extends AppCompatActivity {
+public class ModeSettingActivity extends BaseActivity {
     private static final String TAG = ModeSettingActivity.class.getSimpleName();
     private ListView list_content;
     private Context mContext;
@@ -32,17 +27,33 @@ public class ModeSettingActivity extends AppCompatActivity {
     //消息处理
     private Handler mHandler;
     private List<SettingItem> mData=null;
-    private TextView backup_btn;
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.mode_setting_layout);
+    protected int getContentView() {
+        return R.layout.mode_setting_layout;
+    }
+
+    @Override
+    protected void init(){
         initMessageHandle();
         bindView();
         initAdpter();
     }
+
+    @Override
+    protected String setTitle(){
+        return getString(R.string.mode_setting);
+    }
+
+    @Override
+    protected boolean showRight(){
+        return false;
+    };
+    @Override
+    protected boolean showComplate(){
+        return false;
+    };
 
 
     private void initAdpter(){
@@ -69,19 +80,9 @@ public class ModeSettingActivity extends AppCompatActivity {
         });
     }
 
-    @SuppressLint("WrongViewCast")
     private void bindView() {
         mContext = this;
         list_content = findViewById(R.id.list_content);
-        backup_btn = findViewById(R.id.backup_btn);
-        backup_btn.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                if(v.getId() == R.id.backup_btn){
-                    finish();
-                }
-            }
-        });
     }
 
     private void initMessageHandle(){

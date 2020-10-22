@@ -5,46 +5,6 @@
         android:orientation="vertical"
         tools:context=".ac.MainActivity">
 
-    <LinearLayout
-            android:id="@+id/frg_tain_top_bar"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:orientation="horizontal"
-            android:background="@color/bg_topbar">
-
-        <TextView
-                android:id="@+id/backup_btn"
-                android:layout_width="80dp"
-                android:layout_height="match_parent"
-                android:background="@color/bg_white"
-                android:gravity="center"
-                android:layout_marginTop="2dp"
-                android:text="@string/backup" />
-        <TextView
-                android:id="@+id/txt_frg_tain"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="match_parent"
-                android:layout_marginTop="2dp"
-                android:gravity="center"
-                android:text="@string/mode_setting"
-                android:textColor="@color/text_topbar"
-                android:textSize="@dimen/NormalSize" />
-        <TextView
-                android:layout_width="80dp"
-                android:layout_marginTop="2dp"
-                android:layout_height="match_parent"
-                android:background="@color/bg_white"
-                android:gravity="center"
-                android:text=" " />
-
-    </LinearLayout>
-    <View
-            android:layout_width="match_parent"
-            android:layout_height="2px"
-            android:layout_alignParentBottom="true"
-            android:background="@color/div_white" />
-
 
     <ListView
             android:id="@+id/list_content"

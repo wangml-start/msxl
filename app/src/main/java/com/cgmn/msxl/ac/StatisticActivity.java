@@ -1,6 +1,5 @@
 package com.cgmn.msxl.ac;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -9,9 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
-import androidx.appcompat.app.AppCompatActivity;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.CustmerToast;
@@ -38,7 +35,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class StatisticActivity extends AppCompatActivity {
+public class StatisticActivity extends BaseActivity {
     private static final String TAG = StatisticActivity.class.getSimpleName();
     private LineChart mLineChart;
 
@@ -54,45 +51,51 @@ public class StatisticActivity extends AppCompatActivity {
     private Integer trainType;
     private Integer userModelId;
 
-    private TextView txt_statist_title, tx_st_pl, tx_st_baseAmt,
-            tx_st_ex, backup_btn, tx_st_plrate;
+    private TextView  tx_st_pl, tx_st_baseAmt,
+            tx_st_ex,  tx_st_plrate;
+    private String title;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.statistics_layout);
+    protected void init(){
         initMessageHandle();
         bindView();
         loadDatas();
+    };
+
+    @Override
+    protected int getContentView() {
+        return R.layout.statistics_layout;
     }
 
+    @Override
+    protected String setTitle(){
+        return title;
+    }
 
-    @SuppressLint("WrongViewCast")
+    @Override
+    protected boolean showRight(){
+        return false;
+    };
+    @Override
+    protected boolean showComplate(){
+        return false;
+    };
+
     private void bindView() {
         mContext = this;
         mLineChart = findViewById(R.id.lineChart);
         initChart(mLineChart);
-        txt_statist_title = findViewById(R.id.txt_statist_title);
         tx_st_pl = findViewById(R.id.tx_st_pl);
         tx_st_ex = findViewById(R.id.tx_st_ex);
         tx_st_plrate = findViewById(R.id.tx_st_plrate);
-        backup_btn = findViewById(R.id.backup_btn);
         tx_st_baseAmt = findViewById(R.id.tx_st_baseAmt);
-        backup_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (v.getId() == R.id.backup_btn) {
-                    finish();
-                }
-            }
-        });
 
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra("datas");
         if (bundle != null) {
             trainType = bundle.getInt("train_type");
             userModelId = bundle.getInt("user_model_id");
-            txt_statist_title.setText(bundle.getString("title"));
+            title = bundle.getString("title");
         }
     }
 
