@@ -5,7 +5,6 @@
     <string name="register">注册</string>
     <string name="signin_register">登录/注册</string>
     <string name="signin_out">退出</string>
-    <string name="backup"></string>
     <string name="sign_email">注册邮箱</string>
     <string name="sign_user_name">用户名</string>
     <string name="sign_user_wd">密码</string>

@@ -41,11 +41,23 @@ public class loginActivity extends LoginBaseActivity {
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_layout);
+    protected void init(){
         initMessageHandle();
         bindView();
+    }
+
+    protected String setTitle(){
+        return getString(R.string.signin);
+    }
+
+    @Override
+    protected boolean showBackUp(){
+        return false;
+    };
+
+    @Override
+    protected int getContentView() {
+        return R.layout.login_layout;
     }
 
     @Override

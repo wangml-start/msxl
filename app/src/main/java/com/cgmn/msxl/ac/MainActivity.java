@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.os.Bundle;
@@ -42,12 +43,19 @@ public class MainActivity extends LoginBaseActivity {
         btn = findViewById(R.id.register_btn);
         btn.setOnClickListener(this);
 
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
 
         if(!NetworkUtil.isNetworkConnected(mContext)){
             CustmerToast.makeText(mContext, R.string.no_network).show();
         }else{
             autoLogin();
         }
+    }
+
+    @Override
+    protected int getContentView() {
+        return R.layout.activity_main;
     }
 
     private void autoLogin() {

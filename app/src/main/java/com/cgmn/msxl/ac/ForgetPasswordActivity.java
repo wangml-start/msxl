@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.CustmerToast;
@@ -31,7 +30,6 @@ public class ForgetPasswordActivity extends LoginBaseActivity {
 
     private Button bt_login;
     private Button bt_sent_email;
-    private TextView backup_btn;
     private showPassworCheckBox ck_show;
 
     private Context mContext;
@@ -41,11 +39,18 @@ public class ForgetPasswordActivity extends LoginBaseActivity {
     private Handler mHandler;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.forget_pws_layout);
+    protected void init(){
         initMessageHandle();
         bindView();
+    }
+
+    @Override
+    protected int getContentView() {
+        return R.layout.forget_pws_layout;
+    }
+
+    protected String setTitle(){
+        return getString(R.string.forget_pws);
     }
 
     @Override
@@ -84,8 +89,6 @@ public class ForgetPasswordActivity extends LoginBaseActivity {
                 tipes.append("\n");
                 CustmerToast.makeText(mContext, tipes.toString()).show();
             }
-        } else if (v.getId() == R.id.backup_btn) {
-            finish();
         }
     }
 
@@ -138,14 +141,12 @@ public class ForgetPasswordActivity extends LoginBaseActivity {
         tx_valid_code = findViewById(R.id.tx_valid_code);
         bt_login = findViewById(R.id.bt_login);
         bt_sent_email = findViewById(R.id.bt_send_mail);
-        backup_btn = findViewById(R.id.backup_btn);
         time = new MyTimeCount(60000, 1000);
 
         ck_show = findViewById(R.id.ck_dis_pws);
 
         bt_login.setOnClickListener(this);
         bt_sent_email.setOnClickListener(this);
-        backup_btn.setOnClickListener(this);
 
         tx_email.setOnFocusChangeListener(this);
         tx_new_pwd.setOnFocusChangeListener(this);

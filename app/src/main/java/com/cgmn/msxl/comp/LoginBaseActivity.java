@@ -8,6 +8,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
+import com.cgmn.msxl.ac.BaseActivity;
 import com.cgmn.msxl.application.AppApplication;
 import com.cgmn.msxl.data.User;
 import com.cgmn.msxl.db.AppSqlHelper;
@@ -21,7 +22,7 @@ import com.cgmn.msxl.utils.MessageUtil;
 import java.util.Map;
 
 
-public class LoginBaseActivity extends AppCompatActivity
+public abstract class LoginBaseActivity extends BaseActivity
         implements TextWatcher, View.OnClickListener, View.OnFocusChangeListener {
 
     protected String getSourceString(int sourceId) {
@@ -52,6 +53,15 @@ public class LoginBaseActivity extends AppCompatActivity
     public void onFocusChange(View v, boolean hasFocus) {
 
     }
+
+    @Override
+    protected boolean showRight(){
+        return false;
+    };
+    @Override
+    protected boolean showComplate(){
+        return false;
+    };
 
     public void onLoginRequest(Map<String, String> values,
                                final Context mContext, final Handler mHandler) {
