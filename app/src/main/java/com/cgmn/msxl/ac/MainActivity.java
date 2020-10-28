@@ -20,6 +20,7 @@ import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.CustmerToast;
 import com.cgmn.msxl.comp.LoginBaseActivity;
 import com.cgmn.msxl.data.User;
+import com.cgmn.msxl.db.AppSqlHelper;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.service.GlobalDataHelper;
@@ -31,7 +32,6 @@ import java.util.Map;
 
 public class MainActivity extends LoginBaseActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
-    private Button btn;
     private Context mContext;
     private Handler mHandler;
 
@@ -40,17 +40,25 @@ public class MainActivity extends LoginBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mContext = this;
-        btn = findViewById(R.id.register_btn);
-        btn.setOnClickListener(this);
-
+//        btn = findViewById(R.id.register_btn);
+//        btn.setOnClickListener(this);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
 
-        if(!NetworkUtil.isNetworkConnected(mContext)){
-            CustmerToast.makeText(mContext, R.string.no_network).show();
-        }else{
-            autoLogin();
-        }
+        Integer time = 2000;    //设置等待时间，单位为毫秒
+        Handler handler = new Handler();
+        //当计时结束时，跳转至主界面
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(!NetworkUtil.isNetworkConnected(mContext)){
+                    CustmerToast.makeText(mContext, R.string.no_network).show();
+                }else{
+                    autoLogin();
+                }
+            }
+        }, time);
+
     }
 
     @Override
@@ -69,7 +77,7 @@ public class MainActivity extends LoginBaseActivity {
                         p.put("email", (String) map.get("phone"));
                         p.put("pws", (String) map.get("password"));
                         p.put("GENERAL_LOGIN", "1");
-                        CustmerToast.makeText(mContext, R.string.logining).show();
+//                        CustmerToast.makeText(mContext, R.string.logining).show();
                         GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
                             @Override
                             public void run() {
@@ -90,6 +98,9 @@ public class MainActivity extends LoginBaseActivity {
                     finish();
                 }else if(msg.what == MessageUtil.EXCUTE_EXCEPTION){
                     GlobalExceptionHandler.getInstance(mContext).handlerException((Exception) msg.obj);
+                }else if(msg.what == MessageUtil.NEED_TO_LOGIN_PAGE){
+                    startActivity(new Intent(mContext, loginActivity.class));
+                    finish();
                 }
                 return false;
             }
@@ -101,35 +112,33 @@ public class MainActivity extends LoginBaseActivity {
             public void run() {
                 Map<String, Object> map = GlobalDataHelper.getUser(mContext);
                 Message message = Message.obtain();
-                message.what = MessageUtil.LOAD_USER_INFOR;
+                if(map == null){
+                    message.what = MessageUtil.NEED_TO_LOGIN_PAGE;
+                }else{
+                    message.what = MessageUtil.LOAD_USER_INFOR;
+                }
                 message.obj = map;
                 mHandler.sendMessage(message);
             }
         });
     }
 
-    @Override
-    public void onClick(View v) {
-        startActivity(new Intent(this, loginActivity.class));
-        this.finish();
-    }
-
-
-    @SuppressLint("ResourceType")
-    @Override
-    protected void onResume() {
-        super.onResume();
-        RelativeLayout layout = (RelativeLayout)findViewById(R.id.main_layout);
-        InputStream is ;
-        BitmapFactory.Options opt = new BitmapFactory.Options();
-        opt.inPreferredConfig = Bitmap.Config.ARGB_8888;
-        opt.inPurgeable = true;
-        opt.inInputShareable = true;
-        opt.inSampleSize = 2;
-        is= getResources().openRawResource(R.drawable.main);
-        Bitmap bm = BitmapFactory.decodeStream(is, null, opt);
-        BitmapDrawable bd = new BitmapDrawable(getResources(), bm);
-        layout.setBackgroundDrawable(bd);
-    }
+//
+//    @SuppressLint("ResourceType")
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        RelativeLayout layout = (RelativeLayout)findViewById(R.id.main_layout);
+//        InputStream is ;
+//        BitmapFactory.Options opt = new BitmapFactory.Options();
+//        opt.inPreferredConfig = Bitmap.Config.ARGB_8888;
+//        opt.inPurgeable = true;
+//        opt.inInputShareable = true;
+//        opt.inSampleSize = 2;
+//        is= getResources().openRawResource(R.drawable.main);
+//        Bitmap bm = BitmapFactory.decodeStream(is, null, opt);
+//        BitmapDrawable bd = new BitmapDrawable(getResources(), bm);
+//        layout.setBackgroundDrawable(bd);
+//    }
 
 }

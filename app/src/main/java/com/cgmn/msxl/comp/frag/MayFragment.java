@@ -38,8 +38,8 @@ public class MayFragment extends Fragment {
     private void initAdpter(){
 
         mData = new ArrayList<Object>();
-        mData.add(new PageMainItem(R.mipmap.head, getString(R.string.acct_info), PageMainItem.MY_GENERAL_INFO));
-        mData.add(new PageMainItem(R.mipmap.head, getString(R.string.vip_way), PageMainItem.VIP_INFO));
+        mData.add(new PageMainItem(R.drawable.head, getString(R.string.acct_info), PageMainItem.MY_GENERAL_INFO));
+        mData.add(new PageMainItem(R.drawable.head, getString(R.string.vip_way), PageMainItem.VIP_INFO));
 
         myAdapter = new MutiLayoutAdapter(mContxt, mData);
         list_content.setAdapter(myAdapter);

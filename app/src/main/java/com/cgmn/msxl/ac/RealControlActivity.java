@@ -252,7 +252,7 @@ public class RealControlActivity extends AppCompatActivity
 
     private void updateTopBar(){
         StockDetail current = realtradeManage.getCurrentK();
-        lb_open_price.setText("开盘价： " + current.getStart());
+        lb_open_price.setText("开盘价： " + CommonUtil.formatNumer(current.getStart()));
         lb_open_rate.setText("涨跌:  " + current.getOpenrate());
         lb_close_price.setText("收盘价： 00.00");
         lb_close_rate.setText("涨跌:  00.00%");
@@ -273,7 +273,6 @@ public class RealControlActivity extends AppCompatActivity
         lb_open_rate = findViewById(R.id.lb_open_rate);
         lb_close_rate = findViewById(R.id.lb_close_rate);
         lb_left_day = findViewById(R.id.lb_left_day);
-        lb_left_s = findViewById(R.id.lb_left_s);
         bt_next = findViewById(R.id.bt_next);
         bt_buy = findViewById(R.id.bt_buy);
         bt_sell = findViewById(R.id.bt_sell);
@@ -313,7 +312,7 @@ public class RealControlActivity extends AppCompatActivity
             chart.invalidateView();
             StockDetail current = realtradeManage.getCurrentK();
             StockDetail last = realtradeManage.getLastK();
-            lb_close_price.setText("收盘价：" + current.getEnd());
+            lb_close_price.setText("收盘价：" + CommonUtil.formatNumer(current.getEnd()));
             lb_close_rate.setText("涨跌: " + current.getUpRate());
             if(current.getEnd() > last.getEnd()){
                 lb_close_price.setTextColor(getResources().getColor(R.color.kline_up));
@@ -366,7 +365,7 @@ public class RealControlActivity extends AppCompatActivity
                 settleThisTrading();
                 bt_buy.setEnabled(false);
                 bt_sell.setEnabled(false);
-                bt_next.setEnabled(false);
+//                bt_next.setEnabled(false);
                 bt_change.setEnabled(true);
                 AlertDialog.Builder builder = new AlertDialog.Builder(mContxt);
                 builder.setTitle(R.string.tips);
@@ -484,15 +483,20 @@ public class RealControlActivity extends AppCompatActivity
 
     @Override
     public void onClick(View v) {
+        setSelected();
         if(v.getId() == R.id.bt_next){
             onNextClick();
             stockView.invalidateView();
+            bt_next.setSelected(true);
         }else if(v.getId() == R.id.bt_buy){
             showPopFormBottom(v, "BUY");
+            bt_buy.setSelected(true);
         }else if(v.getId() == R.id.bt_sell){
             showPopFormBottom(v, "SELL");
+            bt_sell.setSelected(true);
         }else if(v.getId() == R.id.bt_change){
             onChageStock();
+            bt_change.setSelected(true);
 //            AlertDialog.Builder builder = new AlertDialog.Builder(mContxt);
 //            builder.setTitle(R.string.tips);
 //            builder.setMessage(R.string.sure_to_do_this);
@@ -516,6 +520,7 @@ public class RealControlActivity extends AppCompatActivity
             });
             builder.setNegativeButton(R.string.cancel, null);
             builder.show();
+            bt_exit.setSelected(true);
 
         }
     }
@@ -525,5 +530,14 @@ public class RealControlActivity extends AppCompatActivity
     public void onBackPressed() {
         // super.onBackPressed();//注释掉这行,back键不退出activity
         Log.i(TAG, "onBackPressed");
+    }
+
+    //重置所有文本的选中状态
+    private void setSelected() {
+        bt_next.setSelected(false);
+        bt_buy.setSelected(false);
+        bt_sell.setSelected(false);
+        bt_change.setSelected(false);
+        bt_exit.setSelected(false);
     }
 }

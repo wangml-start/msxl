@@ -14,8 +14,7 @@ public class MessageUtil {
 
     public static int GET_USER_IMAGE_SUCCESS = 0x006;
 
-
-
+    public static int NEED_TO_LOGIN_PAGE = 0x007;
 
 
 

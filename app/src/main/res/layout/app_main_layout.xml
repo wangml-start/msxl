@@ -9,7 +9,7 @@
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_alignParentBottom="true"
-            android:background="@color/bg_white"
+            android:background="@color/div_white"
             android:orientation="horizontal">
         <TextView
                 android:id="@+id/txt_xunlian"
@@ -23,7 +23,7 @@
                 android:padding="2dp"
                 android:text="@string/tab_menu_xunlian"
                 android:textColor="@drawable/tab_menu_text"
-                android:textSize="@dimen/miniSize"/>
+                android:textSize="@dimen/smallSize"/>
         <TextView
                 android:id="@+id/txt_statistic"
                 android:layout_width="0dp"
@@ -36,7 +36,7 @@
                 android:padding="2dp"
                 android:text="@string/statistic"
                 android:textColor="@drawable/tab_menu_text"
-                android:textSize="@dimen/miniSize" />
+                android:textSize="@dimen/smallSize" />
         <TextView
                 android:id="@+id/txt_may"
                 android:layout_width="0dp"
@@ -49,7 +49,7 @@
                 android:padding="2dp"
                 android:text="@string/tab_menu_may"
                 android:textColor="@drawable/tab_menu_text"
-                android:textSize="@dimen/miniSize" />
+                android:textSize="@dimen/smallSize" />
 
     </LinearLayout>
 

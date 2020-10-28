@@ -16,7 +16,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:text="@string/close"
-                android:textSize="@dimen/smallSize" />
+                android:textSize="@dimen/NormalSize" />
     </RelativeLayout>
 
     <LinearLayout

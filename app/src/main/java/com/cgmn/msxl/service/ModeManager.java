@@ -56,7 +56,7 @@ public class ModeManager {
         list.add(new SettingItem(START_BUY_BELOW_20_PERCENT, "建仓不超过总仓位20%", State.CLOSE));
         list.add(new SettingItem(START_BUY_BELOW_30_PERCENT, "建仓不超过总仓位30%", State.CLOSE));
 
-        list.add(new SettingItem(TOTL_HOLD_BELOW_30_PERCENT, "单只股票不超过总仓位30%", State.OPEN));
+        list.add(new SettingItem(TOTL_HOLD_BELOW_30_PERCENT, "单只股票不超过总仓位30%", State.CLOSE));
         list.add(new SettingItem(TOTL_HOLD_BELOW_40_PERCENT, "单只股票不超过总仓位40%", State.CLOSE));
         list.add(new SettingItem(TOTL_HOLD_BELOW_50_PERCENT, "单只股票不超过总仓位50%", State.CLOSE));
 

@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class KlinePaint {
-    protected final Paint mDownPaint, mUpPaint;
+    protected final Paint mDownPaint, mUpPaint,mimdlePaint;
     protected final Paint mGridPaint, mLabelPaint;
     protected final Paint mk5Paint, mk10Paint, mk20Paint;
     private Paint.FontMetrics fontMetrics = new Paint.FontMetrics();
@@ -21,7 +21,7 @@ public class KlinePaint {
     protected RectF barRect = new RectF();
     protected RectF macdRect = new RectF();
 
-    private final float candleBarRatio = 0.7f;
+    private final float candleBarRatio = 0.56f;
     private final float reactUseRate = 0.95f;
 
     // contain 4 points to draw 2 lines.
@@ -49,7 +49,7 @@ public class KlinePaint {
     /**
      * the max visible entry count.
      */
-    protected int visibleCount = 50;
+    protected int visibleCount = 45;
 
     private boolean highlightEnable = false;
     private float[] highlightPoint = new float[2];
@@ -76,6 +76,11 @@ public class KlinePaint {
         mUpPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mUpPaint.setStyle(Paint.Style.STROKE);
         mUpPaint.setStrokeWidth(kLineBold);
+
+        mimdlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mimdlePaint.setStyle(Paint.Style.STROKE);
+        mimdlePaint.setStrokeWidth(kLineBold);
+        mimdlePaint.setColor(Color.GRAY);
 
         mGridPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mGridPaint.setStyle(Paint.Style.STROKE);
@@ -121,8 +126,8 @@ public class KlinePaint {
         calc();
         // DRAW LABELS
         renderLabels(canvas);
-        canvas.drawRect(barRect, mGridPaint);
-        canvas.drawRect(macdRect, mGridPaint);
+        canvas.drawLine(0, macdRect.top, macdRect.right, macdRect.top, mGridPaint);
+        canvas.drawLine(0, macdRect.bottom, macdRect.right, macdRect.bottom, mGridPaint);
 
         // set the entry draw area.
         canvas.save();
@@ -131,7 +136,7 @@ public class KlinePaint {
         for (int i = 0; i < temList.size(); i++) {
             KLine entry = temList.get(i);
             // draw step 0: set color
-            Paint tempKpint = mLabelPaint;
+            Paint tempKpint = mimdlePaint;
             if(entry.open < entry.close){
                 tempKpint= mUpPaint;
             }else if(entry.open > entry.close){
@@ -303,13 +308,12 @@ public class KlinePaint {
         mLabelPaint.setTextSize(10);
         mLabelPaint.setTextSize(candleRect.left * 9 / mLabelPaint.measureText(value));
         mLabelPaint.getFontMetrics(fontMetrics);
+        canvas.drawLine(5, candleRect.top - fontMetrics.top - fontMetrics.bottom, candleRect.right, candleRect.top - fontMetrics.top - fontMetrics.bottom, mGridPaint);
         canvas.drawText(
                 value,
                 candleRect.left * 9 / 10,
-                candleRect.top - fontMetrics.top - fontMetrics.bottom,
+                candleRect.top - fontMetrics.top - fontMetrics.bottom+40,
                 mLabelPaint);
-        canvas.drawLine(candleRect.left, candleRect.top - fontMetrics.top - fontMetrics.bottom, candleRect.right, candleRect.top - fontMetrics.top - fontMetrics.bottom, mGridPaint);
-
         // draw min y value
         calcTemp[1] = candleRect.bottom;
         revertMapPoints(calcTemp);
@@ -317,12 +321,12 @@ public class KlinePaint {
         mLabelPaint.setTextSize(10);
         mLabelPaint.setTextSize(candleRect.left * 10 / mLabelPaint.measureText(value));
         mLabelPaint.getFontMetrics(fontMetrics);
+        canvas.drawLine(5, candleRect.bottom - fontMetrics.bottom, candleRect.right, candleRect.bottom - fontMetrics.bottom, mGridPaint);
         canvas.drawText(
                 value,
                 candleRect.left * 9 / 10,
-                candleRect.bottom - fontMetrics.bottom,
+                candleRect.bottom - fontMetrics.bottom+40,
                 mLabelPaint);
-        canvas.drawLine(candleRect.left, candleRect.bottom - fontMetrics.bottom, candleRect.right, candleRect.bottom - fontMetrics.bottom, mGridPaint);
 
         calcTemp[1] = candleRect.height() / 3 + candleRect.top;
         revertMapPoints(calcTemp);
@@ -330,12 +334,12 @@ public class KlinePaint {
         mLabelPaint.setTextSize(10);
         mLabelPaint.setTextSize(candleRect.left * 10 / mLabelPaint.measureText(value));
         mLabelPaint.getFontMetrics(fontMetrics);
+        canvas.drawLine(5, candleRect.height() / 3 + candleRect.top + fontMetrics.bottom, candleRect.right, candleRect.height() / 3 + candleRect.top + fontMetrics.bottom, mGridPaint);
         canvas.drawText(
                 value,
                 candleRect.left * 9 / 10,
-                candleRect.height() / 3 + candleRect.top + fontMetrics.bottom,
+                candleRect.height() / 3 + candleRect.top + fontMetrics.bottom+40,
                 mLabelPaint);
-        canvas.drawLine(candleRect.left, candleRect.height() / 3 + candleRect.top + fontMetrics.bottom, candleRect.right, candleRect.height() / 3 + candleRect.top + fontMetrics.bottom, mGridPaint);
 
         calcTemp[1] = candleRect.height() * 2 / 3 + candleRect.top;
         revertMapPoints(calcTemp);
@@ -343,12 +347,12 @@ public class KlinePaint {
         mLabelPaint.setTextSize(10);
         mLabelPaint.setTextSize(candleRect.left * 10 / mLabelPaint.measureText(value));
         mLabelPaint.getFontMetrics(fontMetrics);
+        canvas.drawLine(5, candleRect.height() * 2 / 3 + candleRect.top + fontMetrics.bottom, candleRect.right, candleRect.height() * 2 / 3 + candleRect.top + fontMetrics.bottom, mGridPaint);
         canvas.drawText(
                 value,
                 candleRect.left * 9 / 10,
-                candleRect.height() * 2 / 3 + candleRect.top + fontMetrics.bottom,
+                candleRect.height() * 2 / 3 + candleRect.top + fontMetrics.bottom+40,
                 mLabelPaint);
-        canvas.drawLine(candleRect.left, candleRect.height() * 2 / 3 + candleRect.top + fontMetrics.bottom, candleRect.right, candleRect.height() * 2 / 3 + candleRect.top + fontMetrics.bottom, mGridPaint);
 
         mLabelPaint.setTextSize(30);
         canvas.drawText(

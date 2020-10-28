@@ -42,13 +42,13 @@ public class TrainFragment extends Fragment{
     private void initAdpter(){
         mData = new ArrayList<Object>();
         mData.add(new SplitItem(getString(R.string.trading)));
-        mData.add(new PageMainItem(R.mipmap.head, getString(R.string.mode_setting), PageMainItem.MODEL_SETTING));
-        mData.add(new PageMainItem(R.mipmap.head, getString(R.string.dragTrain), PageMainItem.LEADING_STRATEGY));
-        mData.add(new PageMainItem(R.mipmap.head, getString(R.string.tradTrain), PageMainItem.NORMAL_STRATEGY));
+        mData.add(new PageMainItem(R.drawable.head, getString(R.string.mode_setting), PageMainItem.MODEL_SETTING));
+        mData.add(new PageMainItem(R.drawable.head, getString(R.string.dragTrain), PageMainItem.LEADING_STRATEGY));
+        mData.add(new PageMainItem(R.drawable.head, getString(R.string.tradTrain), PageMainItem.NORMAL_STRATEGY));
         mData.add(new SplitItem(getString(R.string.ranking)));
-        mData.add(new PageMainItem(R.mipmap.head, getString(R.string.day_ranking), PageMainItem.DAY_RANK));
-        mData.add(new PageMainItem(R.mipmap.head, getString(R.string.month_ranking), PageMainItem.MONTH_RANK));
-        mData.add(new PageMainItem(R.mipmap.head, getString(R.string.total_ranking), PageMainItem.TOTAL_RANK));
+        mData.add(new PageMainItem(R.drawable.head, getString(R.string.day_ranking), PageMainItem.DAY_RANK));
+        mData.add(new PageMainItem(R.drawable.head, getString(R.string.month_ranking), PageMainItem.MONTH_RANK));
+        mData.add(new PageMainItem(R.drawable.head, getString(R.string.total_ranking), PageMainItem.TOTAL_RANK));
 
         myAdapter = new MutiLayoutAdapter(mContxt, mData);
         list_content.setAdapter(myAdapter);
