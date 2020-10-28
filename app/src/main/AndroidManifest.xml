@@ -51,7 +51,8 @@
         <activity android:name=".ac.EditPasswordActivity"/>
         <activity android:name=".ac.EditGenderActivity"/>
         <activity android:name=".ac.EditHeaderActivity" android:hardwareAccelerated="false" />
-
+        <activity android:name=".ac.UseRankingActivity"/>
+        <activity android:name=".ac.ViolateModeActivity"/>
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
 

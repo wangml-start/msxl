@@ -15,11 +15,12 @@
     <string name="pl_rate_line">盈亏曲线</string>
     <string name="ranking">排行</string>
     <string name="total_ranking">总榜</string>
-    <string name="month_ranking">月榜</string>
     <string name="day_ranking">日榜</string>
     <string name="train_sum_line">收益总曲线</string>
     <string name="leading_line">龙头战法曲线</string>
     <string name="normal_line">趋势波段曲线</string>
+    <string name="mode_detai">模式详情</string>
+    <string name="violate_mode_detai">违背模式</string>
 
     <string name="acct_info">账户信息</string>
     <string name="vip_way">VIP通道</string>
