@@ -7,7 +7,7 @@ import android.os.Bundle;
 import com.cgmn.msxl.R;
 import com.google.android.material.tabs.TabLayout;
 
-public class UseRankingActivity extends BaseActivity {
+public class UserRankingActivity extends BaseActivity {
 
     private Context mContext;
     private TabLayout tabLayout;

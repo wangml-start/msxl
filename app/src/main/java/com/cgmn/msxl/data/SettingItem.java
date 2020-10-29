@@ -6,17 +6,23 @@ public class SettingItem {
     private String modeText;
     private int modedType;
     private int state;
+    private String miss;
 
     public SettingItem(int type, String txt){
-        modeText = txt;
-        modedType = type;
-        state = State.OPEN;
+        this.modeText = txt;
+        this.modedType = type;
+        this.state = State.OPEN;
     }
 
     public SettingItem(int type, String txt, int btstats){
-        modeText = txt;
-        modedType = type;
-        state = btstats;
+        this.modeText = txt;
+        this.modedType = type;
+        this.state = btstats;
+    }
+
+    public SettingItem(String modeText, String miss){
+        this.modeText = modeText;
+        this.miss = miss;
     }
 
     public String getModeText() {
@@ -41,5 +47,13 @@ public class SettingItem {
 
     public void setState(int btstats) {
         this.state = btstats;
+    }
+
+    public String getMiss() {
+        return miss;
+    }
+
+    public void setMiss(String miss) {
+        this.miss = miss;
     }
 }

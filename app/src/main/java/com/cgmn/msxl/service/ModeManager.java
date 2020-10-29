@@ -6,10 +6,7 @@ import com.cgmn.msxl.comp.swb.State;
 import com.cgmn.msxl.data.SettingItem;
 import com.cgmn.msxl.utils.CommonUtil;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ModeManager {
     private final static int ONLY_UP_TREND = 1001;
@@ -40,6 +37,7 @@ public class ModeManager {
     private static ModeManager model = null;
     private List<Integer> buylist = null;
     private List<Integer> holdList = null;
+    private Map<Integer, String> hash = null;
 
     private ModeManager() {
         list = new ArrayList<>();
@@ -66,6 +64,11 @@ public class ModeManager {
         list.add(new SettingItem(FAIL_BELOW_MIN_TWENTY, "跌破20日最低点离场", State.CLOSE));
 
         list.add(new SettingItem(SHORT_HOLD_BELOW_THREE_DAY, "短线持股不超过3天", State.CLOSE));
+
+        hash = new HashMap<>();
+        for(SettingItem item : list){
+            hash.put(item.getModedType(), item.getModeText());
+        }
     }
 
     public static ModeManager getInstance() {
@@ -282,5 +285,10 @@ public class ModeManager {
 
 
         return isOver;
+    }
+
+
+    public String transType(int Type){
+        return hash.get(Type);
     }
 }

@@ -31,13 +31,15 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 />
-        <TextView
+        <ImageView
+                android:tint="@color/colorPrimary"
                 android:layout_width="20dp"
-                android:layout_height="match_parent"
+                android:layout_height="20dp"
                 android:gravity="center"
+                android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="10dp"
-                android:text=">"
+                android:src="@drawable/right"
                 android:textSize="@dimen/NormalSize" />
     </RelativeLayout>
 </RelativeLayout>

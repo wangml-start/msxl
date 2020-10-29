@@ -4,6 +4,9 @@ import com.cgmn.msxl.data.SettledAccount;
 import com.cgmn.msxl.data.TradeStatistic;
 import com.cgmn.msxl.data.User;
 
+import java.util.List;
+import java.util.Map;
+
 public class BaseData {
     private Integer status;
 
@@ -18,6 +21,8 @@ public class BaseData {
     private TradeStatistic statistic;
 
     private byte[] filebyte;
+
+    private List<Map<String, Object>> records;
 
     public Integer getStatus() {
         return status;
@@ -73,5 +78,13 @@ public class BaseData {
 
     public void setFilebyte(byte[] filebyte) {
         this.filebyte = filebyte;
+    }
+
+    public List<Map<String, Object>> getRecords() {
+        return records;
+    }
+
+    public void setRecords(List<Map<String, Object>> records) {
+        this.records = records;
     }
 }

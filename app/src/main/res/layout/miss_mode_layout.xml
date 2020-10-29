@@ -3,17 +3,13 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:background="@color/bg_white"
         android:orientation="vertical"
-        tools:context=".ac.UserRankingActivity">
+        tools:context=".ac.ViolateModeActivity">
 
-    <com.google.android.material.tabs.TabLayout
-            android:id="@+id/ranking_tab"
+    <ListView
+            android:id="@+id/list_content"
             android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:textSize="@dimen/smallSize"
-            app:tabBackground="@drawable/tab_background"
-            />
+            android:layout_height="match_parent"/>
 
 </LinearLayout>

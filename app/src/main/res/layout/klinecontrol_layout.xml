@@ -129,19 +129,6 @@
                 android:textColor="@drawable/tab_menu_text"
                 android:textSize="@dimen/smallSize" />
         <Button
-                android:id="@+id/bt_next"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/tab_menu_bg"
-                android:drawablePadding="2dp"
-                android:drawableTop="@drawable/tab_menu_channel"
-                android:gravity="center"
-                android:padding="2dp"
-                android:text="@string/next"
-                android:textColor="@drawable/tab_menu_text"
-                android:textSize="@dimen/smallSize" />
-        <Button
                 android:id="@+id/bt_buy"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -152,6 +139,19 @@
                 android:gravity="center"
                 android:padding="2dp"
                 android:text="@string/trade_buy"
+                android:textColor="@drawable/tab_menu_text"
+                android:textSize="@dimen/smallSize" />
+        <Button
+                android:id="@+id/bt_next"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/tab_menu_bg"
+                android:drawablePadding="2dp"
+                android:drawableTop="@drawable/tab_menu_channel"
+                android:gravity="center"
+                android:padding="2dp"
+                android:text="@string/next"
                 android:textColor="@drawable/tab_menu_text"
                 android:textSize="@dimen/smallSize" />
         <Button
