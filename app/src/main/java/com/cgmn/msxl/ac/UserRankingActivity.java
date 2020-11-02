@@ -1,17 +1,19 @@
 package com.cgmn.msxl.ac;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import androidx.viewpager.widget.ViewPager;
 import com.cgmn.msxl.R;
+import com.cgmn.msxl.page.ranking.RankPagerAdapter;
 import com.google.android.material.tabs.TabLayout;
+
 
 public class UserRankingActivity extends BaseActivity {
 
-    private Context mContext;
     private TabLayout tabLayout;
-    private String rankType;
+    private ViewPager viewPager;
+
 
     @Override
     protected void init(){
@@ -44,16 +46,13 @@ public class UserRankingActivity extends BaseActivity {
     private void bindView(){
         mContext = this;
         tabLayout = findViewById(R.id.ranking_tab);
-        // 添加 tab item
-        tabLayout.addTab(tabLayout.newTab().setText("排行榜"));
-        tabLayout.addTab(tabLayout.newTab().setText("龙头战法排行"));
-        tabLayout.addTab(tabLayout.newTab().setText("趋势波段排行"));
-
+        viewPager = findViewById(R.id.view_pager);
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra("datas");
-        rankType = bundle.getString("rank_type");
+        String rankType = bundle.getString("rank_type");
+        RankPagerAdapter adapter = new RankPagerAdapter(this, getSupportFragmentManager(), rankType);
+        viewPager.setAdapter(adapter);
+        tabLayout.setupWithViewPager(viewPager);
     }
-
-
 
 }

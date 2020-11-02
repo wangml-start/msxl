@@ -16,6 +16,8 @@ public class CommonUtil {
     private static DecimalFormat format2 = new DecimalFormat("#,##0.00");
     private static DecimalFormat format3 = new DecimalFormat("#,##0.000");
 
+    private static DecimalFormat formatAmt = new DecimalFormat("#,##0");
+
     public static boolean isEmpty(Object o){
         if(o == null){
             return true;
@@ -99,6 +101,11 @@ public class CommonUtil {
             return format2.format(num);
         }
     }
+
+    public static String formatAmt(Object num){
+        return formatAmt.format(num);
+    }
+
     public static String formatNumer(Object num){
         return format2.format(num);
     }

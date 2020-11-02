@@ -1,0 +1,58 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".page.ranking.RankFragment">
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="2px"
+            android:layout_marginTop="8dp"
+            android:background="@color/div_white"
+            android:layout_above="@id/lear_header"/>
+
+    <LinearLayout
+            android:id="@+id/lear_header"
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:background="@color/div_white"
+            android:layout_height="30dp">
+
+        <TextView
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="排名"
+                />
+
+        <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="操盘手"
+                />
+
+        <TextView
+                android:layout_width="120dp"
+                android:layout_height="match_parent"
+                android:gravity="right"
+                android:layout_marginRight="15dp"
+                android:text="盈利资金"
+                />
+    </LinearLayout>
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="2px"
+            android:layout_marginTop="8dp"
+            android:background="@color/div_white"
+            android:layout_above="@id/list_content"/>
+
+    <ListView
+            android:id="@+id/list_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+</LinearLayout>

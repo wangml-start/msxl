@@ -12,8 +12,14 @@
             android:id="@+id/ranking_tab"
             android:layout_width="match_parent"
             android:layout_height="35dp"
+            app:tabGravity="fill"
+            app:tabMode="fixed"
             android:textSize="@dimen/smallSize"
             app:tabBackground="@drawable/tab_background"
             />
-
+    <androidx.viewpager.widget.ViewPager
+            android:id="@+id/view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
 </LinearLayout>
