@@ -5,13 +5,6 @@
         android:orientation="vertical"
         tools:context=".page.ranking.RankFragment">
 
-    <View
-            android:layout_width="match_parent"
-            android:layout_height="2px"
-            android:layout_marginTop="8dp"
-            android:background="@color/div_white"
-            android:layout_above="@id/lear_header"/>
-
     <LinearLayout
             android:id="@+id/lear_header"
             android:orientation="horizontal"
@@ -35,24 +28,31 @@
                 />
 
         <TextView
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:gravity="right|center_vertical"
+                android:text="资金量"
+                />
+        <TextView
                 android:layout_width="120dp"
                 android:layout_height="match_parent"
-                android:gravity="right"
+                android:gravity="right|center_vertical"
                 android:layout_marginRight="15dp"
-                android:text="盈利资金"
+                android:text="收益率"
                 />
     </LinearLayout>
-
-    <View
-            android:layout_width="match_parent"
-            android:layout_height="2px"
-            android:layout_marginTop="8dp"
-            android:background="@color/div_white"
-            android:layout_above="@id/list_content"/>
-
     <ListView
             android:id="@+id/list_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
+            />
+    <TextView
+            android:id="@+id/txt_rank"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:gravity="left|center_vertical"
+            android:layout_marginLeft="15dp"
+            android:text="我的排名"
+            />
 </LinearLayout>

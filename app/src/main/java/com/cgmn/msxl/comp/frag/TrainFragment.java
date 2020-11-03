@@ -47,9 +47,9 @@ public class TrainFragment extends Fragment{
         mData.add(new PageMainItem(R.drawable.head, getString(R.string.leading_line), PageMainItem.LEADING_LINE));
         mData.add(new PageMainItem(R.drawable.head, getString(R.string.normal_line), PageMainItem.NORMARL_LINE));
         mData.add(new SplitItem(getString(R.string.ranking)));
-        mData.add(new PageMainItem(R.drawable.head, getString(R.string.day_ranking), PageMainItem.DAY_RANK));
         mData.add(new PageMainItem(R.drawable.head, getString(R.string.total_ranking), PageMainItem.TOTAL_RANK));
-        mData.add(new SplitItem(getString(R.string.mode_detai)));
+//        mData.add(new PageMainItem(R.drawable.head, getString(R.string.day_ranking), PageMainItem.DAY_RANK));
+        mData.add(new SplitItem(getString(R.string.mode_detail)));
         mData.add(new PageMainItem(R.drawable.head, getString(R.string.violate_mode_detai), PageMainItem.VIOLATE_MODE_DETAI));
 
         myAdapter = new MutiLayoutAdapter(mContxt, mData);
@@ -90,13 +90,13 @@ public class TrainFragment extends Fragment{
                             intent.putExtra("datas", bundle);
                             startActivity(intent);
                             break;
-                        case 3:
-                            intent = new Intent(mContxt, UserRankingActivity.class);
-                            bundle = new Bundle();
-                            bundle.putString("rank_type", "DAY");
-                            intent.putExtra("datas", bundle);
-                            startActivity(intent);
-                            break;
+//                        case 3:
+//                            intent = new Intent(mContxt, UserRankingActivity.class);
+//                            bundle = new Bundle();
+//                            bundle.putString("rank_type", "DAY");
+//                            intent.putExtra("datas", bundle);
+//                            startActivity(intent);
+//                            break;
                         case 4:
                             intent = new Intent(mContxt, ViolateModeActivity.class);
                             startActivity(intent);

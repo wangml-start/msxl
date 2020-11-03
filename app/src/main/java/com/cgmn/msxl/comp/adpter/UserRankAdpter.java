@@ -47,6 +47,7 @@ public class UserRankAdpter extends BaseAdapter {
             holder.txt_no = convertView.findViewById(R.id.txt_no);
             holder.txt_user_name = convertView.findViewById(R.id.txt_user_name);
             holder.txt_amt = convertView.findViewById(R.id.txt_amt);
+            holder.txt_rate = convertView.findViewById(R.id.txt_rate);
 
             convertView.setTag(R.id.tag_main_item,holder);
         }else{
@@ -56,6 +57,7 @@ public class UserRankAdpter extends BaseAdapter {
         holder.txt_no.setText((position+1)+"");
         holder.txt_user_name.setText((String) map.get("user_name"));
         holder.txt_amt.setText(CommonUtil.formatAmt(map.get("st_amt")));
+        holder.txt_rate.setText(CommonUtil.formatPercent(map.get("rate")));
         return convertView;
 
     }
@@ -64,6 +66,7 @@ public class UserRankAdpter extends BaseAdapter {
         TextView txt_no;
         TextView txt_user_name;
         TextView txt_amt;
+        TextView txt_rate;
     }
 
 }

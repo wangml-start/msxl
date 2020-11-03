@@ -1,5 +1,6 @@
 package com.cgmn.msxl.page.ranking;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.cgmn.msxl.R;
@@ -39,6 +41,8 @@ public class RankFragment extends Fragment {
     private Handler mHandler;
     private List<Map<String, Object>> mData = null;
     private UserRankAdpter adpter;
+    protected ProgressDialog dialog;
+    private TextView txt_rank;
 
     public RankFragment() { }
     public static RankFragment newInstance(String trainType, String rankType) {
@@ -73,21 +77,33 @@ public class RankFragment extends Fragment {
     private void bindView(View view){
         mContext = view.getContext();
         listView = view.findViewById(R.id.list_content);
+        txt_rank = view.findViewById(R.id.txt_rank);
         mHandler = new Handler(new Handler.Callback() {
             @Override
             public boolean handleMessage(Message msg) {
                 if (msg.what == MessageUtil.REQUEST_SUCCESS) {
+                    dialog.cancel();
+                    dialog.dismiss();
                     mData = (List<Map<String, Object>>) msg.obj;
                     if(!CommonUtil.isEmpty(mData)){
                         adpter = new UserRankAdpter(mContext, mData);
                         listView.setAdapter(adpter);
+                        if(!CommonUtil.isEmpty(mData.get(0).get("my_rank"))){
+                            String txt = "我的排名： ";
+                            int rankNo= ((Double) mData.get(0).get("my_rank")).intValue();
+                            txt_rank.setText(txt + rankNo);
+                        }
                     }
                 } else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
+                    dialog.cancel();
+                    dialog.dismiss();
                     GlobalExceptionHandler.getInstance(mContext).handlerException((Exception) msg.obj);
                 }
                 return false;
             }
         });
+        dialog = new ProgressDialog(mContext);
+        dialog.setMessage("正在加载...");
     }
 
     @Override
@@ -109,6 +125,7 @@ public class RankFragment extends Fragment {
     }
 
     private void initAdpter() {
+        dialog.show();
         //加载用户信息
         GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
             @Override
@@ -143,4 +160,5 @@ public class RankFragment extends Fragment {
             }
         });
     }
+
 }
