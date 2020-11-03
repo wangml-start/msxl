@@ -39,9 +39,9 @@ public class StatisticFragment extends Fragment {
 
     private void initAdpter(){
         mData = new ArrayList<Object>();
-        mData.add(new PageMainItem(R.drawable.head, getString(R.string.train_sum_line), PageMainItem.SUM_PL_LINE));
-        mData.add(new PageMainItem(R.drawable.head, getString(R.string.leading_line), PageMainItem.LEADING_LINE));
-        mData.add(new PageMainItem(R.drawable.head, getString(R.string.normal_line), PageMainItem.NORMARL_LINE));
+        mData.add(new PageMainItem(R.drawable.main_2, getString(R.string.train_sum_line), PageMainItem.SUM_PL_LINE));
+        mData.add(new PageMainItem(R.drawable.main_2, getString(R.string.leading_line), PageMainItem.LEADING_LINE));
+        mData.add(new PageMainItem(R.drawable.main_2, getString(R.string.normal_line), PageMainItem.NORMARL_LINE));
 
         myAdapter = new MutiLayoutAdapter(mContxt, mData);
         list_content.setAdapter(myAdapter);

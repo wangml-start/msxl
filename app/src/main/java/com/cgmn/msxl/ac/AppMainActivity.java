@@ -11,6 +11,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import com.cgmn.msxl.R;
+import com.cgmn.msxl.comp.GuideIconView;
 import com.cgmn.msxl.comp.frag.MayFragment;
 import com.cgmn.msxl.comp.frag.StatisticFragment;
 import com.cgmn.msxl.comp.frag.TrainFragment;
@@ -21,13 +22,8 @@ public class AppMainActivity extends AppCompatActivity
     private static final String TAG = AppMainActivity.class.getSimpleName();
     private Context mContxt;
     //UI Object
-    private TextView txt_xunlian;
-    private TextView txt_statistic;
-    private TextView txt_may;
+    private GuideIconView txt_xunlian, txt_guba, txt_may;
     private FrameLayout ly_content;
-
-    //消息处理
-    private Handler mHandler;
 
     //Fragment Object
     private TrainFragment trainFrag;
@@ -40,7 +36,6 @@ public class AppMainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.app_main_layout);
         mContxt = this;
-        initMessageHandle();
         bindAppMainView();
         fManager = getFragmentManager();
         txt_xunlian.performClick();
@@ -49,35 +44,21 @@ public class AppMainActivity extends AppCompatActivity
 
     private void bindAppMainView() {
         mContxt = this;
-        txt_xunlian = (TextView) findViewById(R.id.txt_xunlian);
-        txt_statistic = (TextView) findViewById(R.id.txt_statistic);
-        txt_may = (TextView) findViewById(R.id.txt_may);
+        txt_guba =  findViewById(R.id.txt_guba);
+        txt_xunlian = findViewById(R.id.txt_xunlian);
+        txt_may =  findViewById(R.id.txt_may);
         ly_content = (FrameLayout) findViewById(R.id.ly_content);
 
         txt_xunlian.setOnClickListener(this);
-        txt_statistic.setOnClickListener(this);
+        txt_guba.setOnClickListener(this);
         txt_may.setOnClickListener(this);
     }
 
     //重置所有文本的选中状态
-    private void setSelected() {
-        txt_xunlian.setSelected(false);
-        txt_statistic.setSelected(false);
-        txt_may.setSelected(false);
-    }
-
-    private void initMessageHandle() {
-        mHandler = new Handler(new Handler.Callback() {
-            @Override
-            public boolean handleMessage(Message msg) {
-                if (msg.what == MessageUtil.REQUEST_SUCCESS) {
-
-                } else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
-
-                }
-                return false;
-            }
-        });
+    private void reset() {
+        txt_xunlian.setIconAlpha(0);
+        txt_guba.setIconAlpha(0);
+        txt_may.setIconAlpha(0);
     }
 
     //隐藏所有Fragment
@@ -94,8 +75,8 @@ public class AppMainActivity extends AppCompatActivity
         hideAllFragment(fTransaction);
         switch (v.getId()) {
             case R.id.txt_xunlian:
-                setSelected();
-                txt_xunlian.setSelected(true);
+                reset();
+                txt_xunlian.setIconAlpha(1);
                 if (trainFrag == null) {
                     trainFrag = new TrainFragment();
                     fTransaction.add(R.id.ly_content, trainFrag);
@@ -103,9 +84,9 @@ public class AppMainActivity extends AppCompatActivity
                     fTransaction.show(trainFrag);
                 }
                 break;
-            case R.id.txt_statistic:
-                setSelected();
-                txt_statistic.setSelected(true);
+            case R.id.txt_guba:
+                reset();
+                txt_guba.setIconAlpha(1);
                 if (statisticFragment == null) {
                     statisticFragment = new StatisticFragment();
                     fTransaction.add(R.id.ly_content, statisticFragment);
@@ -114,8 +95,8 @@ public class AppMainActivity extends AppCompatActivity
                 }
                 break;
             case R.id.txt_may:
-                setSelected();
-                txt_may.setSelected(true);
+                reset();
+                txt_may.setIconAlpha(1);
                 if (myFrag == null) {
                     myFrag = new MayFragment();
                     fTransaction.add(R.id.ly_content, myFrag);

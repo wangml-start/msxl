@@ -43,13 +43,13 @@ public class KlinePaint {
     /**
      * the space between the entries, default 0.1f (10%)
      */
-    protected float mBarSpace = 0.2f;
+    protected float mBarSpace = 0.15f;
     protected float kLineBold = 3f;
 
     /**
      * the max visible entry count.
      */
-    protected int visibleCount = 45;
+    protected int visibleCount = 40;
 
     private boolean highlightEnable = false;
     private float[] highlightPoint = new float[2];
@@ -298,6 +298,8 @@ public class KlinePaint {
      * Draw x and y labels.
      */
     protected void renderLabels(Canvas canvas) {
+        int marginRight = 16;
+        float textX = canvas.getWidth()-marginRight;
         // DRAW Y LABELS
         mLabelPaint.setTextAlign(Paint.Align.RIGHT);
 
@@ -305,65 +307,58 @@ public class KlinePaint {
         calcTemp[1] = candleRect.top;
         revertMapPoints(calcTemp);
         String value = decimalFormatter.format(calcTemp[1]);
-        mLabelPaint.setTextSize(10);
-        mLabelPaint.setTextSize(candleRect.left * 9 / mLabelPaint.measureText(value));
+        mLabelPaint.setTextSize(30);
         mLabelPaint.getFontMetrics(fontMetrics);
         canvas.drawLine(5, candleRect.top - fontMetrics.top - fontMetrics.bottom, candleRect.right, candleRect.top - fontMetrics.top - fontMetrics.bottom, mGridPaint);
         canvas.drawText(
                 value,
-                candleRect.left * 9 / 10,
-                candleRect.top - fontMetrics.top - fontMetrics.bottom+40,
+                textX,
+                candleRect.top - fontMetrics.top - fontMetrics.bottom,
                 mLabelPaint);
         // draw min y value
         calcTemp[1] = candleRect.bottom;
         revertMapPoints(calcTemp);
         value = decimalFormatter.format(calcTemp[1]);
-        mLabelPaint.setTextSize(10);
-        mLabelPaint.setTextSize(candleRect.left * 10 / mLabelPaint.measureText(value));
         mLabelPaint.getFontMetrics(fontMetrics);
         canvas.drawLine(5, candleRect.bottom - fontMetrics.bottom, candleRect.right, candleRect.bottom - fontMetrics.bottom, mGridPaint);
         canvas.drawText(
                 value,
-                candleRect.left * 9 / 10,
-                candleRect.bottom - fontMetrics.bottom+40,
+                textX,
+                candleRect.bottom - fontMetrics.bottom,
                 mLabelPaint);
 
         calcTemp[1] = candleRect.height() / 3 + candleRect.top;
         revertMapPoints(calcTemp);
         value = decimalFormatter.format(calcTemp[1]);
-        mLabelPaint.setTextSize(10);
-        mLabelPaint.setTextSize(candleRect.left * 10 / mLabelPaint.measureText(value));
         mLabelPaint.getFontMetrics(fontMetrics);
         canvas.drawLine(5, candleRect.height() / 3 + candleRect.top + fontMetrics.bottom, candleRect.right, candleRect.height() / 3 + candleRect.top + fontMetrics.bottom, mGridPaint);
         canvas.drawText(
                 value,
-                candleRect.left * 9 / 10,
-                candleRect.height() / 3 + candleRect.top + fontMetrics.bottom+40,
+                textX,
+                candleRect.height() / 3 + candleRect.top + fontMetrics.bottom,
                 mLabelPaint);
 
         calcTemp[1] = candleRect.height() * 2 / 3 + candleRect.top;
         revertMapPoints(calcTemp);
         value = decimalFormatter.format(calcTemp[1]);
-        mLabelPaint.setTextSize(10);
-        mLabelPaint.setTextSize(candleRect.left * 10 / mLabelPaint.measureText(value));
         mLabelPaint.getFontMetrics(fontMetrics);
         canvas.drawLine(5, candleRect.height() * 2 / 3 + candleRect.top + fontMetrics.bottom, candleRect.right, candleRect.height() * 2 / 3 + candleRect.top + fontMetrics.bottom, mGridPaint);
         canvas.drawText(
                 value,
-                candleRect.left * 9 / 10,
-                candleRect.height() * 2 / 3 + candleRect.top + fontMetrics.bottom+40,
+                textX,
+                candleRect.height() * 2 / 3 + candleRect.top + fontMetrics.bottom,
                 mLabelPaint);
 
         mLabelPaint.setTextSize(30);
         canvas.drawText(
                 "VOL",
-                barRect.left * 9 / 10,
+                textX,
                 barRect.height() * 3 / 5 + candleRect.bottom,
                 mLabelPaint);
 
         canvas.drawText(
                 "MACD",
-                macdRect.left*1.02f,
+                textX,
                 macdRect.height() * 3 / 5 + barRect.bottom,
                 mLabelPaint);
 

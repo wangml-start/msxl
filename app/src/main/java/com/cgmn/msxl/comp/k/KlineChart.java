@@ -43,7 +43,7 @@ public class KlineChart extends View {
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        contentRect.set(contentMinOffset * 6, contentMinOffset, w - contentMinOffset, h - contentMinOffset);
+        contentRect.set(contentMinOffset, contentMinOffset, w - contentMinOffset* 7, h - contentMinOffset);
         klinePaint.setContentRect(contentRect);
         if(mData != null){
             invalidateView();

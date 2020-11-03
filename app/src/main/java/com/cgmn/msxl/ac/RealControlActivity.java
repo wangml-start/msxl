@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.CustmerToast;
+import com.cgmn.msxl.comp.GuideIconView;
 import com.cgmn.msxl.comp.StockHolderView;
 import com.cgmn.msxl.comp.pop.TradingPop;
 import com.cgmn.msxl.comp.k.KlineChart;
