@@ -1,5 +1,6 @@
 <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:sw="http://schemas.android.com/apk/res/com.cgmn.msxl"
         android:layout_width="match_parent"
         android:background="@color/bg_topbar"
         android:layout_height="40dp"
@@ -12,7 +13,8 @@
             android:gravity="center"
             android:layout_alignParentLeft="true"
             android:text="@string/close"
-            android:textSize="@dimen/NormalSize" />
+            android:textColor="@color/text_topbar"
+            android:textSize="@dimen/smallSize" />
     <com.cgmn.msxl.comp.swb.SwitchButton
             android:id="@+id/bt_sw"
             android:layout_marginTop="8dp"
@@ -20,6 +22,7 @@
             android:layout_height="25dp"
             android:gravity="center"
             android:layout_alignParentRight="true"
-            android:layout_width="45dp"
+            sw:switch_bg_color="@color/text_hint"
+            android:layout_width="50dp"
             android:layout_gravity="center"/>
 </RelativeLayout>

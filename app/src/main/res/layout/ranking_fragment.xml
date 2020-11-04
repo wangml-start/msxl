@@ -10,6 +10,7 @@
             android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:background="@color/div_white"
+            android:textColor="@color/text_topbar"
             android:layout_height="30dp">
 
         <TextView

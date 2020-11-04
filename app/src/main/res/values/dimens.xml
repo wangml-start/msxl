@@ -2,6 +2,6 @@
 <resources>
     <dimen name="LargeSize">20sp</dimen>
     <dimen name="NormalSize">18sp</dimen>
-    <dimen name="smallSize">12sp</dimen>
+    <dimen name="smallSize">14sp</dimen>
     <dimen name="miniSize">8sp</dimen>
 </resources>
