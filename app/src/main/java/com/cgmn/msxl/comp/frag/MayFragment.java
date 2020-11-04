@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.ac.AccountInfoActivity;
 import com.cgmn.msxl.ac.StatisticActivity;
+import com.cgmn.msxl.ac.VIPActivity;
 import com.cgmn.msxl.comp.adpter.MutiLayoutAdapter;
 import com.cgmn.msxl.data.PageMainItem;
 import com.cgmn.msxl.data.StockHolder;
@@ -67,11 +68,7 @@ public class MayFragment extends Fragment {
                             startActivity(intent);
                             break;
                         case 10:
-                            intent = new Intent(mContxt, StatisticActivity.class);
-                            bundle = new Bundle();
-                            bundle.putInt("train_type", StockHolder.LEADING_STRATEGY);
-                            bundle.putString("title", getString(R.string.leading_line));
-                            intent.putExtra("datas", bundle);
+                            intent = new Intent(mContxt, VIPActivity.class);
                             startActivity(intent);
                             break;
                     }

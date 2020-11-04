@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#D15129</color>
-    <color name="colorPrimaryDark">#D15129</color>
-    <color name="colorAccent">#D15129</color>
+    <color name="colorPrimary">#D56543</color>
+    <color name="colorPrimaryDark">#D56543</color>
+    <color name="colorAccent">#D56543</color>
+    <color name="vipSelect">#F6E3DC</color>
     <color name="bg_white_title">#FFFFFFFF</color>
     <color name="bg_white">#FFFFFF</color>
     <color name="div_white">#F6F4F4</color>
