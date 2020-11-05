@@ -17,4 +17,9 @@
         <attr name="text_size" />
     </declare-styleable>
 
+    <declare-styleable name="RoundImageView">
+        <attr name="image_type" format="integer"/>
+        <attr name="image_radius" format="dimension"/>
+
+    </declare-styleable>
 </resources>

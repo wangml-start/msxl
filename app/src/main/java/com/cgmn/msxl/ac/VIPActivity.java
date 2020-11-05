@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import com.cgmn.msxl.R;
@@ -23,7 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class VIPActivity extends BaseActivity {
+public class VIPActivity extends BaseOtherActivity {
     private static final String TAG = VIPActivity.class.getSimpleName();
 
     private LinearLayout line_level1, line_level2;
@@ -35,6 +36,7 @@ public class VIPActivity extends BaseActivity {
     private List<VipItem> mData = null;
     private VipAdpter myAdapter = null;
     private Float rate;
+    private VipItem selectedVip = null;
 
     @Override
     protected int getContentView() {
@@ -48,11 +50,11 @@ public class VIPActivity extends BaseActivity {
 
     private void setSelLevel(){
         if(permissionKey.equals("LEVEL2")){
-            line_level2.setBackground(getResources().getDrawable(R.drawable.bt_back_pressed));
-            line_level1.setBackground(getResources().getDrawable(R.drawable.bt_back_nomal));
+            line_level2.setBackgroundResource(R.drawable.bt_back_pressed);
+            line_level1.setBackgroundResource(R.drawable.bt_back_nomal);
         }else if(permissionKey.equals("LEVEL1")){
-            line_level1.setBackground(getResources().getDrawable(R.drawable.bt_back_pressed));
-            line_level2.setBackground(getResources().getDrawable(R.drawable.bt_back_nomal));
+            line_level1.setBackgroundResource(R.drawable.bt_back_pressed);
+            line_level2.setBackgroundResource(R.drawable.bt_back_nomal);
         }
     }
 
@@ -82,7 +84,6 @@ public class VIPActivity extends BaseActivity {
         };
         line_level1.setOnClickListener(listener);
         line_level2.setOnClickListener(listener);
-        grid_view = findViewById(R.id.grid_view);
         mHandler = new Handler(new Handler.Callback() {
             @Override
             public boolean handleMessage(Message msg) {
@@ -101,6 +102,19 @@ public class VIPActivity extends BaseActivity {
                         rate = datas.getRate();
                         myAdapter.setRate(datas.getRate());
                         grid_view.setAdapter(myAdapter);
+                        grid_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                selectedVip = mData.get(position);
+                                for(int i=0;i<parent.getCount();i++){
+                                    View v = parent.getChildAt(i);
+                                    if (position == i) {//当前选中的Item改变背景颜色
+                                        view.setBackgroundResource(R.drawable.bt_back_pressed);
+                                    } else {
+                                        v.setBackgroundResource(R.drawable.bt_back_nomal);
+                                    }
+                                }
+                            }});
                     }
                 } else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
                     GlobalExceptionHandler.getInstance(mContext).handlerException((Exception) msg.obj);
@@ -108,6 +122,8 @@ public class VIPActivity extends BaseActivity {
                 return false;
             }
         });
+
+        grid_view = findViewById(R.id.grid_view);
     }
 
     private void initAdpter(){

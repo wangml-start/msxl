@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:net_image="http://schemas.android.com/apk/res/com.cgmn.msxl"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/bg_white"
@@ -10,5 +11,7 @@
             android:id="@+id/main_icon"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            net_image:image_type="2"
+            net_image:image_radius="30dp"
             />
 </LinearLayout>

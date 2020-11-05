@@ -3,5 +3,6 @@
     <dimen name="LargeSize">20sp</dimen>
     <dimen name="NormalSize">18sp</dimen>
     <dimen name="smallSize">14sp</dimen>
+    <dimen name="size12">12sp</dimen>
     <dimen name="miniSize">10sp</dimen>
 </resources>

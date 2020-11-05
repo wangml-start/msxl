@@ -5,6 +5,12 @@
         android:background="@color/bg_white"
         android:orientation="vertical">
 
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/bg_white"
+            >
+    </RelativeLayout>
 
     <RelativeLayout
             android:layout_width="match_parent"
@@ -27,7 +33,7 @@
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:textColor="@color/text_topbar"
+                    android:textColor="@color/main_bg_orange_light"
                     android:text="Level 1"
                     android:textSize="@dimen/NormalSize" />
             <TextView
@@ -60,7 +66,7 @@
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:textColor="@color/text_topbar"
+                    android:textColor="@color/main_bg_orange_light"
                     android:text="Level 2"
                     android:textSize="@dimen/NormalSize" />
             <TextView
@@ -73,7 +79,12 @@
         </LinearLayout>
 
     </RelativeLayout >
-
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_centerInParent="true"
+            android:background="@color/bg_white"
+            />
     <GridView
             android:id="@+id/grid_view"
             android:layout_width="match_parent"

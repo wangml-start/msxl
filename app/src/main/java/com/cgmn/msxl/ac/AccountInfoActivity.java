@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.comp.adpter.AccountAdapter;
@@ -21,7 +20,7 @@ import com.cgmn.msxl.service.GlobalDataHelper;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class AccountInfoActivity extends BaseActivity {
+public class AccountInfoActivity extends BaseOtherActivity {
     private static final String TAG = AccountInfoActivity.class.getSimpleName();
     private Context mContext;
     private ListView list_content;

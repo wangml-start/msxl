@@ -1,14 +1,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="10dp"
-        android:layout_toLeftOf="@id/center"
+        android:layout_height="match_parent"
         android:background="@drawable/bt_back_nomal"
-        android:focusable="true"
+        android:descendantFocusability="blocksDescendants"
         android:orientation="vertical">
 
     <TextView
+            android:clickable="false"
             android:id="@+id/txt_day_des"
             android:layout_width="match_parent"
             android:layout_height="25dp"
@@ -20,6 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:clickable="false"
             android:focusable="true"
             android:orientation="horizontal">
 
@@ -28,19 +27,20 @@
                 android:layout_height="match_parent"
                 android:gravity="right|center_vertical"
                 android:text="￥"
-                android:textColor="@color/text_topbar"
-                android:textSize="@dimen/miniSize" />
+                android:textColor="@color/main_bg_orange_light"
+                android:textSize="@dimen/size12" />
         <TextView
                 android:id="@+id/txt_amt"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="3dp"
                 android:gravity="left|center_vertical"
-                android:textColor="@color/text_topbar"
+                android:textColor="@color/main_bg_orange_light"
                 android:textSize="@dimen/LargeSize" />
     </LinearLayout>
 
     <TextView
+            android:clickable="false"
             android:id="@+id/txt_gain"
             android:layout_width="match_parent"
             android:layout_height="30dp"
