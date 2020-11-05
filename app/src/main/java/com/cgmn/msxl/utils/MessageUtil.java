@@ -16,7 +16,7 @@ public class MessageUtil {
 
     public static int NEED_TO_LOGIN_PAGE = 0x007;
 
-
+    public static int VIP_CHARGE_RESPONSE = 0x008;
 
 
 

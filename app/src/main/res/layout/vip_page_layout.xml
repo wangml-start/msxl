@@ -1,100 +1,170 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/bg_white"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:context=".ac.VIPActivity">
 
     <RelativeLayout
+            android:layout_margin="10dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/bg_white"
-            >
+            android:layout_height="90dp"
+            android:background="@drawable/vip_user_back">
+
+        <com.cgmn.msxl.comp.NetImageView
+                android:id="@+id/icon_head"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp" />
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/icon_head"
+                android:orientation="vertical">
+
+            <TextView
+                    android:id="@+id/txt_u_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="bottom"
+                    android:text="用户名"
+                    android:textColor="@color/main_bg"
+                    android:textSize="@dimen/smallSize" />
+
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="7dp"
+                     />
+
+            <TextView
+                    android:id="@+id/txt_des"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="top"
+                    android:text="您还没开通Level权限"
+                    android:textColor="@color/main_bg"
+                    android:textSize="@dimen/smallSize" />
+        </LinearLayout>
     </RelativeLayout>
 
     <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:layout_margin="8dp"
-            android:background="@color/bg_white"
-            >
+            android:background="@color/bg_white">
+
         <LinearLayout
                 android:id="@+id/line_level1"
                 android:layout_width="160dp"
                 android:layout_height="match_parent"
-                android:background="@drawable/bt_back_nomal"
-                android:layout_toLeftOf="@id/center"
-                android:layout_marginRight="10dp"
-                android:focusable="true"
                 android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:layout_toLeftOf="@id/center"
+                android:background="@drawable/bt_back_nomal"
+                android:focusable="true"
                 android:orientation="vertical">
+
             <TextView
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:gravity="center"
+                    android:text="level1"
                     android:textColor="@color/main_bg_orange_light"
-                    android:text="Level 1"
                     android:textSize="@dimen/NormalSize" />
+
             <TextView
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:gravity="center"
-                    android:textColor="@color/text_topbar"
                     android:text="除龙头战法训练外的所有功能"
+                    android:textColor="@color/text_topbar"
                     android:textSize="@dimen/miniSize" />
         </LinearLayout>
+
         <View
                 android:id="@+id/center"
                 android:layout_width="1dp"
                 android:layout_height="20dp"
                 android:layout_centerInParent="true"
-                android:background="@color/bg_white"
-                />
+                android:background="@color/bg_white" />
+
         <LinearLayout
                 android:id="@+id/line_level2"
                 android:layout_width="160dp"
                 android:layout_height="match_parent"
-                android:layout_toRightOf="@id/center"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
-                android:clickable="true"
+                android:layout_toRightOf="@id/center"
                 android:background="@drawable/bt_bg_selector"
+                android:clickable="true"
                 android:orientation="vertical">
+
             <TextView
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:gravity="center"
+                    android:text="Level2"
                     android:textColor="@color/main_bg_orange_light"
-                    android:text="Level 2"
                     android:textSize="@dimen/NormalSize" />
+
             <TextView
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:gravity="center"
-                    android:textColor="@color/text_topbar"
                     android:text="可使用所有功能"
+                    android:textColor="@color/text_topbar"
                     android:textSize="@dimen/miniSize" />
         </LinearLayout>
 
-    </RelativeLayout >
+    </RelativeLayout>
+
     <View
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_centerInParent="true"
-            android:background="@color/bg_white"
-            />
+            android:background="@color/bg_white" />
+
     <GridView
             android:id="@+id/grid_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
             android:gravity="center"
             android:horizontalSpacing="10dp"
             android:numColumns="3"
-            android:layout_margin="8dp"
             android:stretchMode="columnWidth"
             android:verticalSpacing="10dp" />
 
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_centerInParent="true"
+            android:background="@color/bg_white" />
+    <RelativeLayout
+            android:layout_margin="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            >
+        <TextView
+                android:id="@+id/btn_pay"
+                android:layout_width="match_parent"
+                android:layout_height="41dp"
+                android:textSize="@dimen/NormalSize"
+                android:gravity="center"
+                android:text="@string/vip_pay"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/pay_bg"
+                android:textColor="@color/main_text_color"/>
+    </RelativeLayout>
 
 </LinearLayout>

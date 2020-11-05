@@ -5,6 +5,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -109,20 +110,18 @@ public class TradingPop extends PopupWindow
         /* 设置弹出窗口特征 */
         // 设置视图
         this.setContentView(this.view);
-        // 设置弹出窗体的宽和高
-        this.setHeight(700);
-        this.setWidth(RelativeLayout.LayoutParams.MATCH_PARENT);
+        // 设置动画效果
+        this.setAnimationStyle(R.style.popwindow_anim_style);
+        this.setWidth(WindowManager.LayoutParams.MATCH_PARENT);
+        this.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
 
         // 设置弹出窗体可点击
         this.setFocusable(true);
 
-        // 实例化一个ColorDrawable颜色为半透明
-        ColorDrawable dw = new ColorDrawable(0xb0000000);
-        // 设置弹出窗体的背景
+        // 设置可触
+        this.setFocusable(true);
+        ColorDrawable dw = new ColorDrawable(0x0000000);
         this.setBackgroundDrawable(dw);
-
-        // 设置弹出窗体显示时的动画，从底部向上弹出
-        this.setAnimationStyle(R.style.take_photo_anim);
     }
 
     private void setAmountText(String amont){

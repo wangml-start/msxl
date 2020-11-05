@@ -58,6 +58,11 @@ public class GlobalDataHelper {
         return (String) u.get("phone");
     }
 
+    public static String getUserName(Context context){
+        Map<String, Object> u = getUser(context);
+        return (String) u.get("user_name");
+    }
+
     public static String getUserPortraitUrl(Context context){
         Map<String, String> p = new HashMap<>();
         p.put("token", getToken(context));
