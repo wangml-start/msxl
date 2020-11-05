@@ -1,5 +1,6 @@
 package com.cgmn.msxl.ac;
 
+import android.app.ProgressDialog;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -47,6 +48,7 @@ public class VIPActivity extends BaseOtherActivity {
     private VipDataSetting setting;
     private VipItem selectedVip = null;
     private PayPop mPayPopWindow;
+    protected ProgressDialog dialog;
 
     @Override
     protected int getContentView() {
@@ -66,6 +68,12 @@ public class VIPActivity extends BaseOtherActivity {
             line_level1.setBackgroundResource(R.drawable.bt_back_pressed);
             line_level2.setBackgroundResource(R.drawable.bt_back_nomal);
         }
+
+        if(getParms() == null){
+            btn_pay.setEnabled(false);
+        }else{
+            btn_pay.setEnabled(true);
+        }
     }
 
     @Override
@@ -80,7 +88,6 @@ public class VIPActivity extends BaseOtherActivity {
         line_level1 = findViewById(R.id.line_level1);
         line_level2 = findViewById(R.id.line_level2);
         btn_pay = findViewById(R.id.btn_pay);
-        btn_pay.setEnabled(false);
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,13 +96,11 @@ public class VIPActivity extends BaseOtherActivity {
                     myAdapter.setRate(1);
                     myAdapter.notifyDataSetChanged();
                     setSelLevel();
-                    getParms();
                 }else if(v.getId() == R.id.line_level2){
                     permissionKey = "LEVEL2";
                     myAdapter.setRate(setting.getRate());
                     myAdapter.notifyDataSetChanged();
                     setSelLevel();
-                    getParms();
                 }else if(v.getId() == R.id.btn_pay){
                     showPayPop();
                 }
@@ -112,7 +117,14 @@ public class VIPActivity extends BaseOtherActivity {
                 if (msg.what == MessageUtil.REQUEST_SUCCESS) {
                     setting = (VipDataSetting) msg.obj;
                     afterLoad();
+                } else if(MessageUtil.VIP_CHARGE_RESPONSE == msg.what){
+                    dialog.cancel();
+                    VipDataSetting res = (VipDataSetting) msg.obj;
+                    setting.setExpireDate(res.getExpireDate());
+                    setting.setLevel(res.getLevel());
+                    setPermission();
                 } else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
+                    dialog.cancel();
                     GlobalExceptionHandler.getInstance(mContext).handlerException((Exception) msg.obj);
                 }
                 return false;
@@ -127,15 +139,20 @@ public class VIPActivity extends BaseOtherActivity {
         icon_head.setImageURL(GlobalDataHelper.getUserPortraitUrl(mContext));
         txt_u_name.setText(GlobalDataHelper.getUserName(mContext));
 
+        dialog = new ProgressDialog(mContext);
+        dialog.setMessage("正在提交...");
+    }
 
+    private void setPermission(){
+        if(setting != null && !CommonUtil.isEmpty(setting.getExpireDate())){
+            String des = String.format("当前权限: %s   到期日: %s",
+                    setting.getLevel(), CommonUtil.formartTimeString(setting.getExpireDate(), "yyyy-MM-dd HH:mm:ss"));
+            txt_des.setText(des);
+        }
     }
 
     private void afterLoad(){
-        if(setting != null && !CommonUtil.isEmpty(setting.getExpireDate())){
-            String des = String.format("当前权限： %s            到期日： %s",
-                    setting.getLevel(), setting.getExpireDate());
-            txt_des.setText(des);
-        }
+        setPermission();
         if (!CommonUtil.isEmpty(setting.getList())) {
             mData = new ArrayList<>();
             for (Map<String, Object> item : setting.getList()) {
@@ -161,7 +178,7 @@ public class VIPActivity extends BaseOtherActivity {
                         v.setBackgroundResource(R.drawable.bt_back_nomal);
                     }
                 }
-                getParms();
+                setSelLevel();
             }});
     }
 
@@ -218,6 +235,9 @@ public class VIPActivity extends BaseOtherActivity {
     }
 
     private Map<String, String> getParms(){
+        if(setting == null){
+            return null;
+        }
         Map<String, String> p = new HashMap<>();
         float rate = 1;
         if(permissionKey.equals(LEVEL_2)){
@@ -228,17 +248,16 @@ public class VIPActivity extends BaseOtherActivity {
             p.put("per_name", "Level1");
             p.put("per_key", LEVEL_1);
         }else {
-            btn_pay.setEnabled(false);
+            return null;
         }
 
         if(selectedVip == null){
-            btn_pay.setEnabled(false);
+            return null;
         }
         p.put("time_type", selectedVip.getTimeType());
         p.put("num", selectedVip.getNum()+"");
         Float menoy = selectedVip.getAmt() * rate;
         p.put("amt", menoy.intValue()+"");
-        btn_pay.setEnabled(true);
 
         return p;
     }
@@ -276,6 +295,7 @@ public class VIPActivity extends BaseOtherActivity {
     }
 
     private void sendToServer(){
+        dialog.show();
         GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
             @Override
             public void run() {
@@ -315,5 +335,11 @@ public class VIPActivity extends BaseOtherActivity {
                 Log.e(TAG, "NAME=" + Thread.currentThread().getName());
             }
         });
+    }
+
+    @Override
+    public void finish() {
+        dialog.dismiss();
+        super.finish();
     }
 }

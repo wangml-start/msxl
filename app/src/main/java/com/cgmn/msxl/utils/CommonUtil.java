@@ -1,15 +1,15 @@
 package com.cgmn.msxl.utils;
 
 import android.net.Uri;
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URLEncoder;
+import java.sql.Timestamp;
 import java.text.DecimalFormat;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class CommonUtil {
     private static DecimalFormat formatP = new DecimalFormat("0.00%");
@@ -124,5 +124,23 @@ public class CommonUtil {
             return true;
         }
         return false;
+    }
+
+    public static String formartTimeString(Object time, String format){
+        if(StringUtils.isEmpty(format)){
+            format = "yyyy-MM-dd";
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        String str = null;
+        try{
+            str = sdf.format((Date)time);
+        }catch (Exception e){
+            try{
+                str = sdf.format((Timestamp)time);
+            }catch (Exception e2){
+            }
+        }
+
+        return str;
     }
 }
