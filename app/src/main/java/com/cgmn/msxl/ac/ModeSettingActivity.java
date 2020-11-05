@@ -18,7 +18,7 @@ import com.cgmn.msxl.utils.MessageUtil;
 import java.util.List;
 import java.util.Map;
 
-public class ModeSettingActivity extends BaseActivity {
+public class ModeSettingActivity extends BaseOtherActivity {
     private static final String TAG = ModeSettingActivity.class.getSimpleName();
     private ListView list_content;
     private Context mContext;

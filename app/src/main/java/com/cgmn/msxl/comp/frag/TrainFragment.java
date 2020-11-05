@@ -136,5 +136,14 @@ public class TrainFragment extends Fragment{
                 }
             }
         });
+
+        TextView txt_to_vip = view.findViewById(R.id.txt_to_vip);
+        txt_to_vip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContxt, VIPActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }

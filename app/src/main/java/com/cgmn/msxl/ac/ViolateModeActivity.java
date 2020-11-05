@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ViolateModeActivity extends BaseActivity {
+public class ViolateModeActivity extends BaseOtherActivity {
     private static String TAG = ViolateModeActivity.class.getSimpleName();
     private ListView list_content;
     private MissModeAdpter myAdapter = null;

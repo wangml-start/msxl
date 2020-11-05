@@ -35,7 +35,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class StatisticActivity extends BaseActivity {
+public class StatisticActivity extends BaseOtherActivity {
     private static final String TAG = StatisticActivity.class.getSimpleName();
     private LineChart mLineChart;
 

@@ -9,7 +9,7 @@ import com.cgmn.msxl.page.ranking.RankPagerAdapter;
 import com.google.android.material.tabs.TabLayout;
 
 
-public class UserRankingActivity extends BaseActivity {
+public class UserRankingActivity extends BaseOtherActivity {
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -25,13 +25,10 @@ public class UserRankingActivity extends BaseActivity {
         return R.layout.user_ranking_layout;
     }
 
-//    @Override
-//    protected String setTitle(){
-//        if("DAY".equals(rankType)){
-//            return getString(R.string.day_ranking);
-//        }
-//        return getString(R.string.total_ranking);
-//    };
+    @Override
+    protected String setTitle(){
+        return getString(R.string.total_ranking);
+    };
 
     @Override
     protected boolean showRight(){

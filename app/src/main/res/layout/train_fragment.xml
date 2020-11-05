@@ -1,11 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+        android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_white">
 
-    <include layout="@layout/frag_header"/>
-
+    <LinearLayout
+            android:id="@+id/frg_tain_top_bar"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:orientation="horizontal"
+            android:background="@color/colorPrimary">
+        <TextView
+                android:id="@+id/blank"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:textColor="@color/bg_white"
+                android:textSize="@dimen/NormalSize" />
+        <TextView
+                android:id="@+id/txt_frg_tain"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:textColor="@color/bg_white"
+                android:textSize="@dimen/NormalSize" />
+        <TextView
+                android:id="@+id/txt_to_vip"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:text="@string/vip_way"
+                android:textColor="@color/bg_white"
+                android:textSize="@dimen/smallSize" />
+    </LinearLayout>
 
     <ListView
             android:id="@+id/list_content"
