@@ -202,6 +202,17 @@ public class NetImageView extends ImageView {
     }
 
 
+    public void setImageContent(byte[] bytes){
+        Bitmap bitmap=null;
+        if(bytes != null && bytes.length > 0){
+            //复制新的输入流
+            InputStream is = new ByteArrayInputStream(bytes);
+            //调用压缩方法显示图片
+            bitmap = getCompressBitmap(is);
+            setImageBitmap(bitmap);
+        }
+    }
+
     //设置网络图片
     public void setImageURL(String path) {
         imagePath = path;

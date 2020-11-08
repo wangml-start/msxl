@@ -4,18 +4,14 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.comp.GuideIconView;
 import com.cgmn.msxl.comp.frag.MayFragment;
-import com.cgmn.msxl.comp.frag.StatisticFragment;
+import com.cgmn.msxl.comp.frag.DisCussFragment;
 import com.cgmn.msxl.comp.frag.TrainFragment;
-import com.cgmn.msxl.utils.MessageUtil;
 
 public class AppMainActivity extends AppCompatActivity
         implements View.OnClickListener {
@@ -27,7 +23,7 @@ public class AppMainActivity extends AppCompatActivity
 
     //Fragment Object
     private TrainFragment trainFrag;
-    private StatisticFragment statisticFragment;
+    private DisCussFragment disCussFragment;
     private MayFragment myFrag;
     private FragmentManager fManager;
 
@@ -64,7 +60,7 @@ public class AppMainActivity extends AppCompatActivity
     //隐藏所有Fragment
     private void hideAllFragment(FragmentTransaction fragmentTransaction) {
         if (trainFrag != null) fragmentTransaction.hide(trainFrag);
-        if (statisticFragment != null) fragmentTransaction.hide(statisticFragment);
+        if (disCussFragment != null) fragmentTransaction.hide(disCussFragment);
         if (myFrag != null) fragmentTransaction.hide(myFrag);
     }
 
@@ -87,11 +83,11 @@ public class AppMainActivity extends AppCompatActivity
             case R.id.txt_guba:
                 reset();
                 txt_guba.setIconAlpha(1);
-                if (statisticFragment == null) {
-                    statisticFragment = new StatisticFragment();
-                    fTransaction.add(R.id.ly_content, statisticFragment);
+                if (disCussFragment == null) {
+                    disCussFragment = new DisCussFragment();
+                    fTransaction.add(R.id.ly_content, disCussFragment);
                 } else {
-                    fTransaction.show(statisticFragment);
+                    fTransaction.show(disCussFragment);
                 }
                 break;
             case R.id.txt_may:
