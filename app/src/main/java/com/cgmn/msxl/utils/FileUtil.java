@@ -1,6 +1,6 @@
 package com.cgmn.msxl.utils;
 
-import java.io.File;
+import java.io.*;
 
 public class FileUtil {
 
@@ -76,5 +76,85 @@ public class FileUtil {
                 return deleteDirectory(filePath);
             }
         }
+    }
+
+    public static byte[] getBytesByFile(String filePath) {
+        try {
+            File file=new File(filePath);
+            //获取输入流
+            FileInputStream fis = new FileInputStream(file);
+
+            //新的 byte 数组输出流，缓冲区容量1024byte
+            ByteArrayOutputStream bos = new ByteArrayOutputStream(1024);
+            //缓存
+            byte[] b = new byte[1024];
+            int n;
+            while ((n = fis.read(b)) != -1) {
+                bos.write(b, 0, n);
+            }
+            fis.close();
+            //改变为byte[]
+            byte[] data = bos.toByteArray();
+            //
+            bos.close();
+            return data;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static byte[] getBytesByFile(File file) {
+        try {
+            //获取输入流
+            FileInputStream fis = new FileInputStream(file);
+
+            //新的 byte 数组输出流，缓冲区容量1024byte
+            ByteArrayOutputStream bos = new ByteArrayOutputStream(1024);
+            //缓存
+            byte[] b = new byte[1024];
+            int n;
+            while ((n = fis.read(b)) != -1) {
+                bos.write(b, 0, n);
+            }
+            fis.close();
+            //改变为byte[]
+            byte[] data = bos.toByteArray();
+            //
+            bos.close();
+            return data;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static File saveFile(String filepath, byte [] data){
+        if(data != null){
+            File file  = new File(filepath);
+            if(file.exists()){
+                file.delete();
+            }
+            FileOutputStream fos = null;
+            try {
+                fos = new FileOutputStream(file);
+                fos.write(data,0,data.length);
+                fos.flush();
+                return file;
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }finally {
+                if(fos != null){
+                    try {
+                        fos.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        return null;
     }
 }

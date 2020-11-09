@@ -4,9 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -46,7 +43,6 @@
             android:id="@+id/comment_item_like"
             android:layout_width="34dp"
             android:layout_height="34dp"
-            android:theme="?android:selectableItemBackgroundBorderless"
             android:src="@drawable/icon_comment_like"
             android:layout_margin="10dp"
             android:padding="8dp"/>
@@ -63,6 +59,4 @@
         android:layout_marginLeft="52dp"
         android:layout_marginRight="24dp"
         android:text="从前有座山，山里有座庙，庙里有个老和尚"/>
-
-
 </LinearLayout>

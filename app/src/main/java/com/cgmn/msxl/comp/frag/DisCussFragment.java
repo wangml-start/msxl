@@ -181,6 +181,7 @@ public class DisCussFragment extends Fragment {
         View commentView = LayoutInflater.from(mContent).inflate(R.layout.comment_dialog_layout,null);
         final EditText commentText = (EditText) commentView.findViewById(R.id.dialog_comment_et);
         final Button bt_comment = (Button) commentView.findViewById(R.id.dialog_comment_bt);
+        final Button dialog_comment_pic = commentView.findViewById(R.id.dialog_comment_pic);
         dialog.setContentView(commentView);
         /**
          * 解决bsd显示不全的情况
@@ -190,10 +191,12 @@ public class DisCussFragment extends Fragment {
         commentView.measure(0,0);
         behavior.setPeekHeight(commentView.getMeasuredHeight());
 
-        bt_comment.setOnClickListener(new View.OnClickListener() {
-
+        View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(view.getId() == R.id.dialog_comment_bt){
+
+                }
                 String commentContent = commentText.getText().toString().trim();
                 if(!TextUtils.isEmpty(commentContent)){
 
@@ -207,7 +210,10 @@ public class DisCussFragment extends Fragment {
                     Toast.makeText(mContent,"评论内容不能为空",Toast.LENGTH_SHORT).show();
                 }
             }
-        });
+        };
+        bt_comment.setOnClickListener(listener);
+        dialog_comment_pic.setOnClickListener(listener);
+
         commentText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -216,7 +222,7 @@ public class DisCussFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(!TextUtils.isEmpty(charSequence) && charSequence.length()>2){
+                if(!TextUtils.isEmpty(charSequence) && charSequence.length()>1){
                     bt_comment.setBackgroundColor(Color.parseColor("#FFB568"));
                 }else {
                     bt_comment.setBackgroundColor(Color.parseColor("#D8D8D8"));

@@ -92,12 +92,12 @@ public class VIPActivity extends BaseOtherActivity {
             @Override
             public void onClick(View v) {
                 if(v.getId() == R.id.line_level1){
-                    permissionKey = "LEVEL1";
+                    permissionKey = LEVEL_1;
                     myAdapter.setRate(1);
                     myAdapter.notifyDataSetChanged();
                     setSelLevel();
                 }else if(v.getId() == R.id.line_level2){
-                    permissionKey = "LEVEL2";
+                    permissionKey = LEVEL_2;
                     myAdapter.setRate(setting.getRate());
                     myAdapter.notifyDataSetChanged();
                     setSelLevel();

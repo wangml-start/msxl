@@ -11,7 +11,7 @@
             android:id="@+id/main_icon"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            net_image:image_type="2"
-            net_image:image_radius="30dp"
+            net_image:image_type="0"
+            net_image:image_size="large"
             />
 </LinearLayout>

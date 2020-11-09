@@ -68,7 +68,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="10dp"
                 android:layout_toLeftOf="@id/center"
-                android:background="@drawable/bt_back_nomal"
+                android:background="@drawable/bt_vip_back"
                 android:focusable="true"
                 android:orientation="vertical">
 

@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.*;
 import android.provider.MediaStore;
@@ -30,12 +29,14 @@ import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.service.GlobalDataHelper;
 import com.cgmn.msxl.service.OkHttpClientManager;
 import com.cgmn.msxl.service.PropertyService;
+import com.cgmn.msxl.utils.CommonUtil;
 import com.cgmn.msxl.utils.FileUtil;
+import com.cgmn.msxl.utils.ImageUtil;
 import com.cgmn.msxl.utils.MessageUtil;
 import com.squareup.okhttp.Request;
+import org.apache.shiro.codec.Base64;
 
 import java.io.File;
-import java.io.IOException;
 
 public class EditHeaderActivity extends BaseActivity{
     private static final String TAG = EditHeaderActivity.class.getSimpleName();
@@ -43,11 +44,10 @@ public class EditHeaderActivity extends BaseActivity{
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_BIG_IMAGE_CUTTING = 3;
     private static final String IMAGE_FILE_NAME = "icon.jpg";
-    private int imageSide = 1000;
+    private static int imageSide = 1200;
 
     private NetImageView main_icon;
     private PhotoPop mPhotoPopupWindow;
-    private Uri mImageUri;
     private File cutFile;
 
     protected Handler mHandler;
@@ -124,7 +124,6 @@ public class EditHeaderActivity extends BaseActivity{
         main_icon = findViewById(R.id.main_icon);
         main_icon.setImageName(GlobalDataHelper.getUserAcc(mContext));
         main_icon.setImageURL(GlobalDataHelper.getUserPortraitUrl(mContext));
-        imageSide = main_icon.getWidth();
 
         dialog = new ProgressDialog(mContext);
         dialog.setMessage("正在提交...");
@@ -172,9 +171,10 @@ public class EditHeaderActivity extends BaseActivity{
             switch (requestCode) {
                 // 大图切割
                 case REQUEST_BIG_IMAGE_CUTTING:
-                    Bitmap bitmap = BitmapFactory.decodeFile(mImageUri.getEncodedPath());
-                    main_icon.setImageBitmap(bitmap);
-                    uploadPortrait(cutFile);
+                    byte[] bs = ImageUtil.getCompressBytes(cutFile.getAbsolutePath());
+                    byte[] small = ImageUtil.getSmallBytes(cutFile.getAbsolutePath());
+                    main_icon.setImageContent(bs);
+                    uploadPortrait(bs, small);
                     break;
                 // 相册选取
                 case REQUEST_IMAGE_GET:
@@ -264,7 +264,6 @@ public class EditHeaderActivity extends BaseActivity{
             }
             cutFile = new File(dirFile, System.currentTimeMillis() + ".jpg");
             imageUri = Uri.fromFile(cutFile);
-            mImageUri = imageUri; // 将 uri 传出，方便设置到视图中
         }
 
         // 开始切割
@@ -298,7 +297,6 @@ public class EditHeaderActivity extends BaseActivity{
             }
             cutFile = new File(dirFile, System.currentTimeMillis() + ".jpg");
             imageUri = Uri.fromFile(cutFile);
-            mImageUri = imageUri; // 将 uri 传出，方便设置到视图中
         }
 
         // 开始切割
@@ -343,20 +341,20 @@ public class EditHeaderActivity extends BaseActivity{
         }
     }
 
-    private void uploadPortrait(File file){
-        if(file == null){
+    private void uploadPortrait(final byte[] normal, final byte[] small){
+        if(CommonUtil.isEmpty(normal) || CommonUtil.isEmpty(small)){
             return;
         }
         //提交操作
         dialog.show();
-        final File[] files = {file};
-        final String[] fileKeys = {"file"};
         GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
             @Override
             public void run() {
                 final String token = GlobalDataHelper.getToken(mContext);
                 OkHttpClientManager.Param[] params = new OkHttpClientManager.Param[]{
-                        new OkHttpClientManager.Param("token", token)
+                        new OkHttpClientManager.Param("token", token),
+                        new OkHttpClientManager.Param("normal", Base64.encodeToString(normal)),
+                        new OkHttpClientManager.Param("small", Base64.encodeToString(small))
                 };
                 String url = String.format("%s%s",
                         PropertyService.getInstance().getKey("serverUrl"), "/user/upload_portrait");
@@ -389,9 +387,8 @@ public class EditHeaderActivity extends BaseActivity{
                                     mHandler.sendMessage(message);
                                 }
                             },
-                            files, fileKeys,
                             params);
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 Log.e(TAG,"NAME="+Thread.currentThread().getName());

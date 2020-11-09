@@ -47,6 +47,8 @@ public class NetImageView extends ImageView {
     private static final int MODE_ROUND = 2;
     private Paint mPaint;
     private int currMode = MODE_CIRCLE;
+
+    private String sizeType = "small";
     /**
      * 圆角半径
      */
@@ -58,7 +60,7 @@ public class NetImageView extends ImageView {
     private String path;
 
     //是否启用缓存
-    public boolean isUseCache = true;
+    public boolean isUseCache = false;
 
     //子线程不能操作UI，通过Handler设置图片
 
@@ -89,6 +91,8 @@ public class NetImageView extends ImageView {
                 currMode = a.hasValue(R.styleable.RoundImageView_image_type) ? a.getInt(R.styleable.RoundImageView_image_type, MODE_NONE) : MODE_CIRCLE;
             }else if(R.styleable.RoundImageView_image_radius == attr){
                 currRound = a.hasValue(R.styleable.RoundImageView_image_radius) ? a.getDimensionPixelSize(R.styleable.RoundImageView_image_radius, currRound) : currRound;
+            }else if(R.styleable.RoundImageView_image_size == attr){
+                sizeType = a.hasValue(R.styleable.RoundImageView_image_size) ? a.getString(R.styleable.RoundImageView_image_size) : sizeType;
             }
         }
         a.recycle();
@@ -223,13 +227,20 @@ public class NetImageView extends ImageView {
         }
     }
 
+    private String getUrl(){
+        StringBuffer bu = new StringBuffer(imagePath);
+        bu.append("&size_type=");
+        bu.append(sizeType);
+        return bu.toString();
+    }
+
     //使用网络图片显示
     public void useNetWorkImage(){
         //开启一个线程用于联网
         GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
             @Override
             public void run() {
-                OkHttpClientManager.getAsyn(imagePath,
+                OkHttpClientManager.getAsyn(getUrl(),
                         new OkHttpClientManager.ResultCallback<BaseData>() {
                             @Override
                             public void onError(com.squareup.okhttp.Request request, Exception e) {
