@@ -1,6 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="80dp"
         android:background="@drawable/bt_vip_back"
         android:descendantFocusability="blocksDescendants"
         android:orientation="vertical">
@@ -38,14 +38,4 @@
                 android:textColor="@color/main_bg_orange_light"
                 android:textSize="@dimen/LargeSize" />
     </LinearLayout>
-
-    <TextView
-            android:clickable="false"
-            android:id="@+id/txt_gain"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:gravity="center"
-            android:text="首次开通送20万"
-            android:textColor="@color/text_topbar"
-            android:textSize="@dimen/miniSize" />
 </LinearLayout>

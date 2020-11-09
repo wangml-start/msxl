@@ -145,6 +145,16 @@
             android:stretchMode="columnWidth"
             android:verticalSpacing="10dp" />
 
+    <TextView
+            android:clickable="false"
+            android:id="@+id/txt_gain"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginLeft="8dp"
+            android:gravity="center|left"
+            android:text="首次开通送20万"
+            android:textColor="@color/text_topbar"
+            android:textSize="@dimen/smallSize" />
     <View
             android:layout_width="match_parent"
             android:layout_height="30dp"

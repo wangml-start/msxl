@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:net_image="http://schemas.android.com/apk/res/com.cgmn.msxl"
+        android:id="@+id/sel_pic_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <com.cgmn.msxl.comp.NetImageView
+            android:id="@+id/com_picture"
+            android:layout_width="100dp"
+            android:layout_height="120dp"
+            android:layout_margin="15dp"
+            android:background="@color/bg_white"
+            net_image:image_type="0"
+            />
+
+    <TextView
+            android:id="@+id/com_picture_close"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="-20dp"
+            android:layout_toRightOf="@id/com_picture"
+            android:gravity="top"
+            android:text="×"
+            android:textColor="@color/kline_ave_5"
+            android:textSize="20sp" />
+</RelativeLayout>

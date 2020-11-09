@@ -36,6 +36,7 @@ public class ImageUtil {
         }
         return null;
     }
+
     /**
      * 根据计算的inSampleSize，得到压缩后图片
      *
