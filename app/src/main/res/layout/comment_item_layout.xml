@@ -1,62 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+        xmlns:net_image="http://schemas.android.com/apk/res/com.cgmn.msxl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginTop="12dp"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="12dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
         <com.cgmn.msxl.comp.NetImageView
-            android:id="@+id/comment_item_logo"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:src="@drawable/buy"
-            android:layout_marginLeft="14dp"
-            android:layout_marginRight="6dp"/>
+                android:id="@+id/comment_item_logo"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginLeft="14dp"
+                android:layout_marginRight="6dp"
+                android:src="@drawable/buy" />
+
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginLeft="6dp"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/comment_item_userName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#5B595A"
-                android:textSize="14sp"
-                android:text="沐风" />
+                android:layout_marginLeft="6dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
             <TextView
-                android:id="@+id/comment_item_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="1小时前"
-                android:textSize="12sp"
-                android:layout_marginTop="3dp"
-                android:textColor="#989898"/>
+                    android:id="@+id/comment_item_userName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="沐风"
+                    android:textColor="#5B595A"
+                    android:textSize="14sp" />
+
+            <TextView
+                    android:id="@+id/comment_item_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:text="1小时前"
+                    android:textColor="#989898"
+                    android:textSize="12sp" />
         </LinearLayout>
+
         <ImageView
-            android:id="@+id/comment_item_like"
-            android:layout_width="34dp"
-            android:layout_height="34dp"
-            android:src="@drawable/icon_comment_like"
-            android:layout_margin="10dp"
-            android:padding="8dp"/>
+                android:id="@+id/comment_item_like"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:layout_margin="10dp"
+                android:padding="8dp"
+                android:src="@drawable/icon_comment_like" />
 
     </LinearLayout>
+
     <TextView
-        android:id="@+id/comment_item_content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="6dp"
-        android:textColor="#484848"
-        android:textSize="14sp"
-        android:layout_marginLeft="52dp"
-        android:layout_marginRight="24dp"
-        android:text="从前有座山，山里有座庙，庙里有个老和尚"/>
+            android:id="@+id/comment_item_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="52dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginBottom="8dp"
+            android:text="从前有座山，山里有座庙，庙里有个老和尚"
+            android:textColor="#484848"
+            android:textSize="14sp" />
+
+    <com.cgmn.msxl.comp.NetImageView
+            android:id="@+id/comment_picture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="52dp"
+            android:layout_marginTop="6dp"
+            android:layout_gravity="top"
+            android:background="@color/colorPrimary"
+            android:layout_marginRight="24dp"
+            android:layout_marginBottom="8dp"
+            android:adjustViewBounds="true"
+            net_image:image_type="0"
+            />
 </LinearLayout>

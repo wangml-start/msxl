@@ -9,7 +9,8 @@ import java.util.List;
 public class CommentDetailBean {
     private int id;
     private String nickName;
-    private String userLogo;
+    private byte[] userLogo;
+    private byte[] picture;
     private String content;
     private String imgId;
     private int replyTotal;
@@ -34,13 +35,6 @@ public class CommentDetailBean {
     }
     public String getNickName() {
         return nickName;
-    }
-
-    public void setUserLogo(String userLogo) {
-        this.userLogo = userLogo;
-    }
-    public String getUserLogo() {
-        return userLogo;
     }
 
     public void setContent(String content) {
@@ -76,5 +70,21 @@ public class CommentDetailBean {
     }
     public List<ReplyDetailBean> getReplyList() {
         return replyList;
+    }
+
+    public byte[] getUserLogo() {
+        return userLogo;
+    }
+
+    public void setUserLogo(byte[] userLogo) {
+        this.userLogo = userLogo;
+    }
+
+    public byte[] getPicture() {
+        return picture;
+    }
+
+    public void setPicture(byte[] picture) {
+        this.picture = picture;
     }
 }

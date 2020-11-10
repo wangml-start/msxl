@@ -6,10 +6,14 @@ import android.graphics.BitmapFactory;
 import java.io.ByteArrayOutputStream;
 
 public class ImageUtil {
+    private static int default_width = 1200;
 
-    public static byte[] getCompressBytes(String pathName){
+    public static byte[] getCompressBytes(String pathName, Integer reqWidth){
         try {
-            Bitmap bmp = decodeSampledBitmapFromFile(pathName, 1200, 1200);
+            if(reqWidth == null){
+                reqWidth = default_width;
+            }
+            Bitmap bmp = decodeSampledBitmapFromFile(pathName, reqWidth, reqWidth);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bmp.compress(Bitmap.CompressFormat.JPEG, 30, baos);
             if(bmp != null && !bmp.isRecycled()){
@@ -80,12 +84,11 @@ public class ImageUtil {
         int height = options.outHeight;
         int inSampleSize = 1;
 
-        // 通过之前的计算方法，在加载类似400*4000这种长图时会内存溢出
         if (width > reqWidth || height > reqHeight) {
-            int widthRadio = Math.round(width * 1.0f / reqWidth);
-            int heightRadio = Math.round(height * 1.0f / reqHeight);
+            int widthRadio = width  / reqWidth;
+            int heightRadio = height / reqHeight;
 
-            inSampleSize = Math.max(widthRadio, heightRadio);
+            inSampleSize = Math.min(widthRadio, heightRadio);
         }
 
         return inSampleSize;

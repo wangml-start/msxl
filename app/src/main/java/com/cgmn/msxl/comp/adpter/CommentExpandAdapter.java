@@ -91,14 +91,22 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
         }else {
             groupHolder = (GroupHolder) convertView.getTag();
         }
-        Glide.with(context).load(R.drawable.app_main)
-                .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                .error(R.mipmap.ic_launcher)
-                .centerCrop()
-                .into(groupHolder.logo);
-        groupHolder.tv_name.setText(commentBeanList.get(groupPosition).getNickName());
-        groupHolder.tv_time.setText(commentBeanList.get(groupPosition).getCreateDate());
-        groupHolder.tv_content.setText(commentBeanList.get(groupPosition).getContent());
+        CommentDetailBean bean = commentBeanList.get(groupPosition);
+        if(bean.getUserLogo() != null && bean.getUserLogo().length > 0){
+            groupHolder.comment_picture.setImageContent(bean.getUserLogo());
+        }else{
+            Glide.with(context).load(R.drawable.user_logo)
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .error(R.mipmap.ic_launcher)
+                    .centerCrop()
+                    .into(groupHolder.logo);
+        }
+        if(bean.getPicture() != null && bean.getPicture().length > 0){
+            groupHolder.comment_picture.setImageContent(bean.getPicture());
+        }
+        groupHolder.tv_name.setText(bean.getNickName());
+        groupHolder.tv_time.setText(bean.getCreateDate());
+        groupHolder.tv_content.setText(bean.getContent());
         groupHolder.iv_like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -145,11 +153,12 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
     }
 
     private class GroupHolder{
-        private NetImageView logo;
+        private NetImageView logo, comment_picture;
         private TextView tv_name, tv_content, tv_time;
         private ImageView iv_like;
         public GroupHolder(View view) {
             logo = (NetImageView) view.findViewById(R.id.comment_item_logo);
+            comment_picture = (NetImageView) view.findViewById(R.id.comment_picture);
             tv_content = (TextView) view.findViewById(R.id.comment_item_content);
             tv_name = (TextView) view.findViewById(R.id.comment_item_userName);
             tv_time = (TextView) view.findViewById(R.id.comment_item_time);

@@ -171,7 +171,7 @@ public class EditHeaderActivity extends BaseActivity{
             switch (requestCode) {
                 // 大图切割
                 case REQUEST_BIG_IMAGE_CUTTING:
-                    byte[] bs = ImageUtil.getCompressBytes(cutFile.getAbsolutePath());
+                    byte[] bs = ImageUtil.getCompressBytes(cutFile.getAbsolutePath(), null);
                     byte[] small = ImageUtil.getSmallBytes(cutFile.getAbsolutePath());
                     main_icon.setImageContent(bs);
                     uploadPortrait(bs, small);
