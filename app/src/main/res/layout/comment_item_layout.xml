@@ -50,7 +50,6 @@
                 android:layout_width="34dp"
                 android:layout_height="34dp"
                 android:padding="8dp"
-                android:text="3"
                 android:src="@drawable/icon_comment_like" />
         <TextView
                 android:id="@+id/comment_approve"
@@ -60,7 +59,6 @@
                 android:layout_marginLeft="-18dp"
                 android:textColor="@color/text_topbar"
                 android:textSize="@dimen/smallSize"
-                android:text="3"
                 />
 
     </LinearLayout>
@@ -73,7 +71,6 @@
             android:layout_marginTop="6dp"
             android:layout_marginRight="24dp"
             android:layout_marginBottom="8dp"
-            android:text="从前有座山，山里有座庙，庙里有个老和尚"
             android:textColor="#484848"
             android:textSize="14sp" />
 

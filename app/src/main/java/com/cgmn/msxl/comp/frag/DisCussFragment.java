@@ -309,6 +309,9 @@ public class DisCussFragment extends Fragment {
         GlobalTreadPools.getInstance(mContent).execute(new Runnable() {
             @Override
             public void run() {
+                if(pictures == null){
+                    pictures = new byte[]{};
+                }
                 final String token = GlobalDataHelper.getToken(mContent);
                 OkHttpClientManager.Param[] params = new OkHttpClientManager.Param[]{
                         new OkHttpClientManager.Param("token", token),
@@ -359,6 +362,9 @@ public class DisCussFragment extends Fragment {
             @Override
             public void run() {
                 final String token = GlobalDataHelper.getToken(mContent);
+                if(pictures == null){
+                    pictures = new byte[]{};
+                }
                 OkHttpClientManager.Param[] params = new OkHttpClientManager.Param[]{
                         new OkHttpClientManager.Param("token", token),
                         new OkHttpClientManager.Param("picture", Base64.encodeToString(pictures)),
