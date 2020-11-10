@@ -18,13 +18,17 @@ public class MessageUtil {
 
     public static int VIP_CHARGE_RESPONSE = 0x008;
 
+    public static int LOAD_COMMENT_LIST = 0x009;
 
+    public static int LOAD_REPLAY_LIST = 0x010;
 
+    public static int PUBLISHED_COMMENT = 0x011;
 
+    public static int APPROVED_COMMENT = 0x012;
 
+    public static int APPEND_LOAD_COMMENT_LIST = 0x013;
 
-
-
+    public static int PUBLISHED_REPLAY_COMMENT = 0x014;
 
 
 

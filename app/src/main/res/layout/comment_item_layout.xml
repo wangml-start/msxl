@@ -14,11 +14,11 @@
 
         <com.cgmn.msxl.comp.NetImageView
                 android:id="@+id/comment_item_logo"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:layout_marginLeft="14dp"
                 android:layout_marginRight="6dp"
-                android:src="@drawable/buy" />
+                />
 
         <LinearLayout
                 android:layout_width="wrap_content"
@@ -49,9 +49,19 @@
                 android:id="@+id/comment_item_like"
                 android:layout_width="34dp"
                 android:layout_height="34dp"
-                android:layout_margin="10dp"
                 android:padding="8dp"
+                android:text="3"
                 android:src="@drawable/icon_comment_like" />
+        <TextView
+                android:id="@+id/comment_approve"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:gravity="center"
+                android:layout_marginLeft="-18dp"
+                android:textColor="@color/text_topbar"
+                android:textSize="@dimen/smallSize"
+                android:text="3"
+                />
 
     </LinearLayout>
 
@@ -74,7 +84,6 @@
             android:layout_marginLeft="52dp"
             android:layout_marginTop="6dp"
             android:layout_gravity="top"
-            android:background="@color/colorPrimary"
             android:layout_marginRight="24dp"
             android:layout_marginBottom="8dp"
             android:adjustViewBounds="true"

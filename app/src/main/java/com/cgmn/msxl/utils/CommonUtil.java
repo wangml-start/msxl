@@ -143,4 +143,41 @@ public class CommonUtil {
 
         return str;
     }
+
+    public static Date parseDateString(String dataStr){
+        String[] formats = {"yyyy-MM-dd", "MM/dd/yyyy", "yyyyMMdd"};
+        Date data = null;
+        if(dataStr == null || "00000000".equals(dataStr)){
+            return null;
+        }
+        for(String f : formats){
+            if (data == null){
+                SimpleDateFormat sf = new SimpleDateFormat(f);
+                try {
+                    data = sf.parse(dataStr);
+                } catch (Exception e) {
+
+                }
+            }else{
+                break;
+            }
+        }
+
+        return data;
+    }
+
+    public static Date parseDateString(String dataStr, String format){
+        Date data = null;
+        if(dataStr == null || "00000000".equals(dataStr)){
+            return null;
+        }
+        SimpleDateFormat sf = new SimpleDateFormat(format);
+        try {
+            data = sf.parse(dataStr);
+        } catch (Exception e) {
+
+        }
+
+        return data;
+    }
 }

@@ -85,10 +85,10 @@ public class ImageUtil {
         int inSampleSize = 1;
 
         if (width > reqWidth || height > reqHeight) {
-            int widthRadio = width  / reqWidth;
-            int heightRadio = height / reqHeight;
+            int widthRadio = Math.round(width * 1.0f / reqWidth);
+            int heightRadio = Math.round(height * 1.0f / reqHeight);
 
-            inSampleSize = Math.min(widthRadio, heightRadio);
+            inSampleSize = Math.max(widthRadio, heightRadio);
         }
 
         return inSampleSize;

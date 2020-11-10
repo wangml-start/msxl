@@ -93,7 +93,7 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
         }
         CommentDetailBean bean = commentBeanList.get(groupPosition);
         if(bean.getUserLogo() != null && bean.getUserLogo().length > 0){
-            groupHolder.comment_picture.setImageContent(bean.getUserLogo());
+            groupHolder.logo.setImageContent(bean.getUserLogo());
         }else{
             Glide.with(context).load(R.drawable.user_logo)
                     .diskCacheStrategy(DiskCacheStrategy.RESULT)
@@ -107,6 +107,12 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
         groupHolder.tv_name.setText(bean.getNickName());
         groupHolder.tv_time.setText(bean.getCreateDate());
         groupHolder.tv_content.setText(bean.getContent());
+        if(!"0".equals(bean.getApprove())){
+            groupHolder.comment_approve.setText(bean.getApprove());
+        }
+        if(bean.getMyApprove() == 1){
+            groupHolder.iv_like.setColorFilter(R.color.like);
+        }
         groupHolder.iv_like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -154,7 +160,7 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
 
     private class GroupHolder{
         private NetImageView logo, comment_picture;
-        private TextView tv_name, tv_content, tv_time;
+        private TextView tv_name, tv_content, tv_time, comment_approve;
         private ImageView iv_like;
         public GroupHolder(View view) {
             logo = (NetImageView) view.findViewById(R.id.comment_item_logo);
@@ -163,6 +169,7 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
             tv_name = (TextView) view.findViewById(R.id.comment_item_userName);
             tv_time = (TextView) view.findViewById(R.id.comment_item_time);
             iv_like = (ImageView) view.findViewById(R.id.comment_item_like);
+            comment_approve = (TextView) view.findViewById(R.id.comment_approve);
         }
     }
 
@@ -192,13 +199,11 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
     }
 
     /**
-     * by moos on 2018/04/20
      * func:回复成功后插入一条数据
      * @param replyDetailBean 新的回复数据
      */
     public void addTheReplyData(ReplyDetailBean replyDetailBean, int groupPosition){
         if(replyDetailBean!=null){
-            Log.e(TAG, "addTheReplyData: >>>>该刷新回复列表了:"+replyDetailBean.toString() );
             if(commentBeanList.get(groupPosition).getReplyList() != null ){
                 commentBeanList.get(groupPosition).getReplyList().add(replyDetailBean);
             }else {

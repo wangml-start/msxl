@@ -11,6 +11,8 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -23,40 +25,99 @@ import android.widget.*;
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import com.cgmn.msxl.R;
+import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.CommentExpandableListView;
 import com.cgmn.msxl.comp.CustmerToast;
 import com.cgmn.msxl.comp.NetImageView;
 import com.cgmn.msxl.comp.adpter.CommentExpandAdapter;
 import com.cgmn.msxl.data.*;
+import com.cgmn.msxl.handdler.GlobalExceptionHandler;
+import com.cgmn.msxl.server_interface.BaseData;
+import com.cgmn.msxl.service.GlobalDataHelper;
+import com.cgmn.msxl.service.OkHttpClientManager;
+import com.cgmn.msxl.service.PropertyService;
+import com.cgmn.msxl.utils.CommonUtil;
 import com.cgmn.msxl.utils.ImageUtil;
+import com.cgmn.msxl.utils.MessageUtil;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.gson.Gson;
+import org.apache.shiro.codec.Base64;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @SuppressLint("ValidFragment")
 public class DisCussFragment extends Fragment {
     private static final String TAG = "DisCussFragment";
     private Context mContent;
+
     private TextView bt_comment;
     private CommentExpandableListView expandableListView;
     private CommentExpandAdapter adapter;
-    private CommentBean commentBean;
-    private List<CommentDetailBean> commentsList;
-    private View commentView=null;
+    private List<CommentDetailBean> commentsList = new ArrayList<>();
+    private View commentView = null;
     private BottomSheetDialog dialog;
+    //消息处理
+    private Handler mHandler;
 
     private static final int REQUEST_IMAGE_GET = 0;
-    private View imageView=null;
-    private byte[] pictures=null;
+    private View imageView = null;
+    private byte[] pictures = null;
+    private String editCommet;
+
+    private int currentSelectedPosition;
+
+    private void initMessageHandle() {
+        mHandler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message msg) {
+                if (msg.what == MessageUtil.LOAD_COMMENT_LIST) {
+                    commentsList.clear();
+                    CommentBean commentBean = new CommentBean(msg.obj);
+                    commentBean.getList(commentsList);
+                    if(adapter == null){
+                        initExpandableListView();
+                    }
+                    adapter.notifyDataSetChanged();
+                } else if (msg.what == MessageUtil.LOAD_REPLAY_LIST) {
+
+                } else if (msg.what == MessageUtil.PUBLISHED_COMMENT) {
+                    String userName = GlobalDataHelper.getUserName(mContent);
+                    String time = CommentBean.analysisTime(new Date());
+                    CommentDetailBean detailBean = new CommentDetailBean(userName, editCommet, time);
+                    detailBean.setPicture(pictures);
+                    adapter.addTheCommentData(detailBean);
+                    resetDialog();
+                } else if(msg.what == MessageUtil.PUBLISHED_REPLAY_COMMENT){
+                    String userName = GlobalDataHelper.getUserName(mContent);
+                    ReplyDetailBean detailBean = new ReplyDetailBean(userName, editCommet);
+                    adapter.addTheReplyData(detailBean, currentSelectedPosition);
+                    expandableListView.expandGroup(currentSelectedPosition);
+                    resetDialog();
+                } else if (msg.what == MessageUtil.APPROVED_COMMENT) {
+
+                } else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
+                    GlobalExceptionHandler.getInstance(mContent).handlerException((Exception) msg.obj);
+                }
+                return false;
+            }
+        });
+    }
+
+    private void resetDialog(){
+        commentView = null;
+        imageView = null;
+        pictures = null;
+        editCommet = null;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.static_fragment, container, false);
         mContent = view.getContext();
         initView(view);
+        initMessageHandle();
+        loadCommentList();
+
         return view;
     }
 
@@ -66,32 +127,30 @@ public class DisCussFragment extends Fragment {
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(v.getId() == R.id.detail_page_do_comment){
+                if (v.getId() == R.id.detail_page_do_comment) {
                     showCommentDialog();
                 }
             }
         };
         bt_comment.setOnClickListener(listener);
-        commentsList = generateTestData();
-        initExpandableListView(commentsList);
     }
 
     /**
      * 初始化评论和回复列表
      */
-    private void initExpandableListView(final List<CommentDetailBean> commentList){
+    private void initExpandableListView() {
         expandableListView.setGroupIndicator(null);
         //默认展开所有回复
-        adapter = new CommentExpandAdapter(mContent, commentList);
+        adapter = new CommentExpandAdapter(mContent, commentsList);
         expandableListView.setAdapter(adapter);
-        for(int i = 0; i<commentList.size(); i++){
+        for (int i = 0; i < commentsList.size(); i++) {
             expandableListView.expandGroup(i);
         }
         expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView expandableListView, View view, int groupPosition, long l) {
                 boolean isExpanded = expandableListView.isGroupExpanded(groupPosition);
-                Log.e(TAG, "onGroupClick: 当前的评论id>>>"+commentList.get(groupPosition).getId());
+                Log.e(TAG, "onGroupClick: 当前的评论id>>>" + commentsList.get(groupPosition).getId());
 //                if(isExpanded){
 //                    expandableListView.collapseGroup(groupPosition);
 //                }else {
@@ -105,7 +164,7 @@ public class DisCussFragment extends Fragment {
         expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPosition, int childPosition, long l) {
-                Toast.makeText(mContent,"点击了回复",Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContent, "点击了回复", Toast.LENGTH_SHORT).show();
                 return false;
             }
         });
@@ -120,22 +179,94 @@ public class DisCussFragment extends Fragment {
 
     }
 
-    /**
-     * by moos on 2018/04/20
-     * func:生成测试数据
-     * @return 评论数据
-     */
-    private List<CommentDetailBean> generateTestData(){
-        Gson gson = new Gson();
-//        commentBean = gson.fromJson(testJson, CommentBean.class);
-        List<CommentDetailBean> commentList = new ArrayList<>();
-        return commentList;
+
+    private void loadCommentList(){
+        GlobalTreadPools.getInstance(mContent).execute(new Runnable() {
+            @Override
+            public void run() {
+                Map<String, String> params = new HashMap<>();
+                params.put("token", GlobalDataHelper.getToken(mContent));
+                String url = CommonUtil.buildGetUrl(
+                        PropertyService.getInstance().getKey("serverUrl"),
+                        "/chat/query_comment_list", params);
+                OkHttpClientManager.getAsyn(url,
+                        new OkHttpClientManager.ResultCallback<BaseData>() {
+                            @Override
+                            public void onError(com.squareup.okhttp.Request request, Exception e) {
+                                Message message = Message.obtain();
+                                message.what = MessageUtil.EXCUTE_EXCEPTION;
+                                message.obj = e;
+                                mHandler.sendMessage(message);
+                            }
+
+                            @Override
+                            public void onResponse(BaseData data) {
+                                Message message = Message.obtain();
+                                message.what = MessageUtil.LOAD_COMMENT_LIST;
+                                try {
+                                    message.obj = data.getRecords();
+                                    Integer status = data.getStatus();
+                                    if (status == null || status == -1) {
+                                        throw new Exception(data.getError());
+                                    }
+                                } catch (Exception e) {
+                                    message.what = MessageUtil.EXCUTE_EXCEPTION;
+                                    message.obj = e;
+                                }
+                                mHandler.sendMessage(message);
+                            }
+                        });
+                Log.e(TAG, "NAME=" + Thread.currentThread().getName());
+            }
+        });
+    }
+
+    private void appendCommentList(){
+        GlobalTreadPools.getInstance(mContent).execute(new Runnable() {
+            @Override
+            public void run() {
+                Map<String, String> params = new HashMap<>();
+                params.put("start", (commentsList.size()-1)+"");
+                params.put("token", GlobalDataHelper.getToken(mContent));
+                String url = CommonUtil.buildGetUrl(
+                        PropertyService.getInstance().getKey("serverUrl"),
+                        "/chat/query_comment_list", params);
+                OkHttpClientManager.getAsyn(url,
+                        new OkHttpClientManager.ResultCallback<BaseData>() {
+                            @Override
+                            public void onError(com.squareup.okhttp.Request request, Exception e) {
+                                Message message = Message.obtain();
+                                message.what = MessageUtil.EXCUTE_EXCEPTION;
+                                message.obj = e;
+                                mHandler.sendMessage(message);
+                            }
+
+                            @Override
+                            public void onResponse(BaseData data) {
+                                Message message = Message.obtain();
+                                message.what = MessageUtil.APPEND_LOAD_COMMENT_LIST;
+                                try {
+                                    message.obj = data.getRecords();
+                                    Integer status = data.getStatus();
+                                    if (status == null || status == -1) {
+                                        throw new Exception(data.getError());
+                                    }
+                                } catch (Exception e) {
+                                    message.what = MessageUtil.EXCUTE_EXCEPTION;
+                                    message.obj = e;
+                                }
+                                mHandler.sendMessage(message);
+                            }
+                        });
+                Log.e(TAG, "NAME=" + Thread.currentThread().getName());
+            }
+        });
     }
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    private void onSelectFromPho(){
-        if(imageView != null){
+    private void onSelectFromPho() {
+        if (imageView != null) {
             TextView dialog_comment_dis = commentView.findViewById(R.id.dialog_comment_dis);
             dialog_comment_dis.setText("只能添加一张图片");
             return;
@@ -145,7 +276,7 @@ public class DisCussFragment extends Fragment {
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             //权限还没有授予，需要在这里写申请权限的代码
-            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},200);
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 200);
         } else {
             // 如果权限已经申请过，直接进行图片选择
             Intent intent = new Intent(Intent.ACTION_PICK);
@@ -160,26 +291,170 @@ public class DisCussFragment extends Fragment {
     }
 
 
-    private void invalidCommentView(){
+    private void invalidCommentView() {
         /**
          * 解决bsd显示不全的情况
          */
         View parent = (View) commentView.getParent();
         BottomSheetBehavior behavior = BottomSheetBehavior.from(parent);
-        commentView.measure(0,0);
+        commentView.measure(0, 0);
         behavior.setPeekHeight(commentView.getMeasuredHeight());
     }
 
     /**
-     * by moos on 2018/04/20
+     * 上传评论
+     */
+    private void publishComment(){
+        CustmerToast.makeText(mContent, "正在评论。。。").show();
+        GlobalTreadPools.getInstance(mContent).execute(new Runnable() {
+            @Override
+            public void run() {
+                final String token = GlobalDataHelper.getToken(mContent);
+                OkHttpClientManager.Param[] params = new OkHttpClientManager.Param[]{
+                        new OkHttpClientManager.Param("token", token),
+                        new OkHttpClientManager.Param("picture", Base64.encodeToString(pictures)),
+                        new OkHttpClientManager.Param("comment", editCommet)
+                };
+                String url = String.format("%s%s",
+                        PropertyService.getInstance().getKey("serverUrl"), "/chat/publish_comment");
+                OkHttpClientManager.postAsyn(url,
+                        new OkHttpClientManager.ResultCallback<BaseData>() {
+                            @Override
+                            public void onError(com.squareup.okhttp.Request request, Exception e) {
+                                Message message = Message.obtain();
+                                message.what = MessageUtil.EXCUTE_EXCEPTION;
+                                message.obj = e;
+                                mHandler.sendMessage(message);
+                            }
+
+                            @Override
+                            public void onResponse(BaseData data) {
+                                Message message = Message.obtain();
+                                message.what = MessageUtil.PUBLISHED_COMMENT;
+                                try {
+                                    message.obj = data.getRecords();
+                                    Integer status = data.getStatus();
+                                    if (status == null || status == -1) {
+                                        throw new Exception(data.getError());
+                                    }
+                                } catch (Exception e) {
+                                    message.what = MessageUtil.EXCUTE_EXCEPTION;
+                                    message.obj = e;
+                                }
+                                mHandler.sendMessage(message);
+                            }
+                        }, params);
+                Log.e(TAG, "NAME=" + Thread.currentThread().getName());
+            }
+        });
+    }
+
+    /**
+     * 回复评论
+     * @param
+     */
+    private void replayComment(){
+        CustmerToast.makeText(mContent, "正在回复。。。").show();
+        GlobalTreadPools.getInstance(mContent).execute(new Runnable() {
+            @Override
+            public void run() {
+                final String token = GlobalDataHelper.getToken(mContent);
+                OkHttpClientManager.Param[] params = new OkHttpClientManager.Param[]{
+                        new OkHttpClientManager.Param("token", token),
+                        new OkHttpClientManager.Param("picture", Base64.encodeToString(pictures)),
+                        new OkHttpClientManager.Param("comment", editCommet),
+                        new OkHttpClientManager.Param("comment_id", commentsList.get(currentSelectedPosition).getId()+""),
+                        new OkHttpClientManager.Param("comment_user_id", commentsList.get(currentSelectedPosition).getUserId()+"")
+                };
+                String url = String.format("%s%s",
+                        PropertyService.getInstance().getKey("serverUrl"), "/chat/replay_comment");
+                OkHttpClientManager.postAsyn(url,
+                        new OkHttpClientManager.ResultCallback<BaseData>() {
+                            @Override
+                            public void onError(com.squareup.okhttp.Request request, Exception e) {
+                                Message message = Message.obtain();
+                                message.what = MessageUtil.EXCUTE_EXCEPTION;
+                                message.obj = e;
+                                mHandler.sendMessage(message);
+                            }
+
+                            @Override
+                            public void onResponse(BaseData data) {
+                                Message message = Message.obtain();
+                                message.what = MessageUtil.PUBLISHED_REPLAY_COMMENT;
+                                try {
+                                    message.obj = data.getRecords();
+                                    Integer status = data.getStatus();
+                                    if (status == null || status == -1) {
+                                        throw new Exception(data.getError());
+                                    }
+                                } catch (Exception e) {
+                                    message.what = MessageUtil.EXCUTE_EXCEPTION;
+                                    message.obj = e;
+                                }
+                                mHandler.sendMessage(message);
+                            }
+                        }, params);
+                Log.e(TAG, "NAME=" + Thread.currentThread().getName());
+            }
+        });
+    }
+    /**
+     * 点赞取消
+     */
+    private void onclickLike(final Map<String, String> params){
+        GlobalTreadPools.getInstance(mContent).execute(new Runnable() {
+            @Override
+            public void run() {
+                params.put("token", GlobalDataHelper.getToken(mContent));
+                if(pictures != null && pictures.length > 0){
+                    params.put("picture", Base64.encodeToString(pictures));
+                }
+                String url = CommonUtil.buildGetUrl(
+                        PropertyService.getInstance().getKey("serverUrl"),
+                        "/chat/approve_comment", params);
+                OkHttpClientManager.getAsyn(url,
+                        new OkHttpClientManager.ResultCallback<BaseData>() {
+                            @Override
+                            public void onError(com.squareup.okhttp.Request request, Exception e) {
+                                Message message = Message.obtain();
+                                message.what = MessageUtil.EXCUTE_EXCEPTION;
+                                message.obj = e;
+                                mHandler.sendMessage(message);
+                            }
+
+                            @Override
+                            public void onResponse(BaseData data) {
+                                Message message = Message.obtain();
+                                message.what = MessageUtil.PUBLISHED_COMMENT;
+                                try {
+                                    message.obj = data.getRecords();
+                                    Integer status = data.getStatus();
+                                    if (status == null || status == -1) {
+                                        throw new Exception(data.getError());
+                                    }
+                                } catch (Exception e) {
+                                    message.what = MessageUtil.EXCUTE_EXCEPTION;
+                                    message.obj = e;
+                                }
+                                mHandler.sendMessage(message);
+                            }
+                        });
+                Log.e(TAG, "NAME=" + Thread.currentThread().getName());
+            }
+        });
+    }
+
+
+    /**
      * func:弹出评论框
      */
-    private void showCommentDialog(){
+    private void showCommentDialog() {
         dialog = new BottomSheetDialog(mContent);
-        if(commentView == null){
-            commentView = LayoutInflater.from(mContent).inflate(R.layout.comment_dialog_layout,null);
+        if (commentView == null) {
+            commentView = LayoutInflater.from(mContent).inflate(R.layout.comment_dialog_layout, null);
         }
-        if(commentView.getParent()!=null){
+        if (commentView.getParent() != null) {
             ((ViewGroup) commentView.getParent()).removeView(commentView);
         }
         final EditText commentText = (EditText) commentView.findViewById(R.id.dialog_comment_et);
@@ -192,22 +467,14 @@ public class DisCussFragment extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View view) {
-                if(view.getId() == R.id.dialog_comment_bt){
-                    String commentContent = commentText.getText().toString().trim();
-                    if(!TextUtils.isEmpty(commentContent)){
-                        //commentOnWork(commentContent);
+                if (view.getId() == R.id.dialog_comment_bt) {
+                    if (!TextUtils.isEmpty(editCommet)) {
                         dialog.dismiss();
-                        CommentDetailBean detailBean = new CommentDetailBean("小明", commentContent,"刚刚");
-                        detailBean.setPicture(pictures);
-                        adapter.addTheCommentData(detailBean);
-                        commentView = null;
-                        imageView = null;
-                        Toast.makeText(mContent,"评论成功",Toast.LENGTH_SHORT).show();
-
-                    }else {
-                        Toast.makeText(mContent,"评论内容不能为空",Toast.LENGTH_SHORT).show();
+                        publishComment();
+                    } else {
+                        CustmerToast.makeText(mContent, "评论内容不能为空").show();
                     }
-                }else if(view.getId() == R.id.dialog_comment_pic){
+                } else if (view.getId() == R.id.dialog_comment_pic) {
                     onSelectFromPho();
                 }
             }
@@ -223,11 +490,12 @@ public class DisCussFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(!TextUtils.isEmpty(charSequence) && charSequence.length()>1){
+                if (!TextUtils.isEmpty(charSequence) && charSequence.length() > 1) {
                     bt_comment.setBackgroundColor(Color.parseColor("#FFB568"));
-                }else {
+                } else {
                     bt_comment.setBackgroundColor(Color.parseColor("#D8D8D8"));
                 }
+                editCommet = commentText.getText().toString().trim();
             }
 
             @Override
@@ -242,29 +510,40 @@ public class DisCussFragment extends Fragment {
      * by moos on 2018/04/20
      * func:弹出回复框
      */
-    private void showReplyDialog(final int position){
+    private void showReplyDialog(final int position) {
+        currentSelectedPosition = position;
         dialog = new BottomSheetDialog(mContent);
-        View commentView = LayoutInflater.from(mContent).inflate(R.layout.comment_dialog_layout,null);
+        if (commentView == null) {
+            commentView = LayoutInflater.from(mContent).inflate(R.layout.comment_dialog_layout, null);
+        }
+        if (commentView.getParent() != null) {
+            ((ViewGroup) commentView.getParent()).removeView(commentView);
+        }
         final EditText commentText = (EditText) commentView.findViewById(R.id.dialog_comment_et);
         final Button bt_comment = (Button) commentView.findViewById(R.id.dialog_comment_bt);
+        final Button dialog_comment_pic = commentView.findViewById(R.id.dialog_comment_pic);
         commentText.setHint("回复 " + commentsList.get(position).getNickName() + " 的评论:");
         dialog.setContentView(commentView);
-        bt_comment.setOnClickListener(new View.OnClickListener() {
+        invalidCommentView();
+
+        View.OnClickListener listener = new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View view) {
-                String replyContent = commentText.getText().toString().trim();
-                if(!TextUtils.isEmpty(replyContent)){
-
-                    dialog.dismiss();
-                    ReplyDetailBean detailBean = new ReplyDetailBean("小红",replyContent);
-                    adapter.addTheReplyData(detailBean, position);
-                    expandableListView.expandGroup(position);
-                    Toast.makeText(mContent,"回复成功",Toast.LENGTH_SHORT).show();
-                }else {
-                    Toast.makeText(mContent,"回复内容不能为空",Toast.LENGTH_SHORT).show();
+                if (view.getId() == R.id.dialog_comment_bt) {
+                    if (!TextUtils.isEmpty(editCommet)) {
+                        dialog.dismiss();
+                        replayComment();
+                    } else {
+                        CustmerToast.makeText(mContent, "评论内容不能为空").show();
+                    }
+                } else if (view.getId() == R.id.dialog_comment_pic) {
+                    onSelectFromPho();
                 }
             }
-        });
+        };
+        bt_comment.setOnClickListener(listener);
+        dialog_comment_pic.setOnClickListener(listener);
         commentText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -273,11 +552,12 @@ public class DisCussFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(!TextUtils.isEmpty(charSequence) && charSequence.length()>2){
+                if (!TextUtils.isEmpty(charSequence) && charSequence.length() > 2) {
                     bt_comment.setBackgroundColor(Color.parseColor("#FFB568"));
-                }else {
+                } else {
                     bt_comment.setBackgroundColor(Color.parseColor("#D8D8D8"));
                 }
+                editCommet = commentText.getText().toString().trim();
             }
 
             @Override
@@ -327,7 +607,7 @@ public class DisCussFragment extends Fragment {
                     int columnIndex = c.getColumnIndex(filePathColumns[0]);
                     String imagePath = c.getString(columnIndex);
                     byte[] bs = ImageUtil.getCompressBytes(imagePath, 800);
-                    if(bs != null && bs.length > 0){
+                    if (bs != null && bs.length > 0) {
                         pictures = bs;
                         imageView = LayoutInflater.from(mContent).inflate(R.layout.comment_image_item, null);
                         final LinearLayout comment_parent_view = commentView.findViewById(R.id.comment_parent_view);

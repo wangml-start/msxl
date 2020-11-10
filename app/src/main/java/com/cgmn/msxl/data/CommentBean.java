@@ -1,54 +1,92 @@
 package com.cgmn.msxl.data;
 
-import java.util.List;
+import com.cgmn.msxl.utils.CommonUtil;
+import org.apache.shiro.codec.Base64;
 
-/**
- * Created by moos on 2018/4/20.
- */
+import java.util.*;
 
 public class CommentBean {
-    private int code;
-    private String message;
-    private Data data;
-    public void setCode(int code) {
-        this.code = code;
-    }
-    public int getCode() {
-        return code;
-    }
+    private List<CommentDetailBean> commentList;
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
-    public String getMessage() {
-        return message;
-    }
-
-    public void setData(Data data) {
-        this.data = data;
-    }
-    public Data getData() {
-        return data;
-    }
-
-    public class Data {
-
-        private int total;
-        private List<CommentDetailBean> list;
-        public void setTotal(int total) {
-            this.total = total;
+    public CommentBean(Object list) {
+        commentList = new ArrayList<>();
+        try {
+            if(list == null){
+                return;
+            }
+            List<Map<String, Object>> mList = (List<Map<String, Object>>) list;
+            for (Map<String, Object> item : mList) {
+                commentList.add(analysisComment(item));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        public int getTotal() {
-            return total;
-        }
+    }
 
-        public void setList(List<CommentDetailBean> list) {
-            this.list = list;
+    public static String analysisTime(Date date) {
+        if (date == null) {
+            return "";
         }
-        public List<CommentDetailBean> getList() {
-            return list;
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        Calendar cNow = Calendar.getInstance();
+        cNow.setTime(new Date());
+
+        String format = null;
+        if (c.get(Calendar.YEAR) == cNow.get(Calendar.YEAR)) {
+            if (c.get(Calendar.DAY_OF_MONTH) == cNow.get(Calendar.DAY_OF_MONTH)) {
+                format = "HH:mm";
+            } else {
+                format = "MM-dd HH:mm";
+            }
+        } else {
+            format = "yyyy-MM-dd";
         }
 
+        return CommonUtil.formartTimeString(date, format);
     }
 
+    private CommentDetailBean analysisComment(Map<String, Object> attr) {
+        String userName = (String) attr.get("user_name");
+        String content = (String) attr.get("content");
+        String date = analysisTime(CommonUtil.parseDateString((String) attr.get("created_at"), "yyyyMMdd HH:mm:ss"));
+        CommentDetailBean comment = new CommentDetailBean(userName, content, date);
+        comment.setId(((Double) attr.get("id")).intValue());
+        comment.setApprove(((Double) attr.get("approve")).intValue() +"");
+        if(CommonUtil.isEmpty(attr.get("my_approve"))){
+            comment.setMyApprove(0);
+        }else {
+            comment.setMyApprove(((Double) attr.get("my_approve")).intValue());
+        }
+        comment.setUserId(((Double) attr.get("creator_id")).intValue());
+        if(!CommonUtil.isEmpty(attr.get("bit_content"))){
+            comment.setPicture(Base64.decode((String) attr.get("bit_content")));
+        }
+        if(!CommonUtil.isEmpty(attr.get("small_cut"))){
+            comment.setUserLogo(Base64.decode((String) attr.get("small_cut")));
+        }
+
+        //解析回复
+        if(!CommonUtil.isEmpty(attr.get("replay"))){
+            List<Map<String, Object>> replay = (List<Map<String, Object>>) attr.get("replay");
+            comment.setReplyTotal(replay.size());
+            List<ReplyDetailBean> reList = new ArrayList<>();
+            comment.setReplyList(reList);
+            for (Map<String, Object> item : replay) {
+                String reuserName = String.format("%回复%s", item.get("user_name"), userName);
+                String recontent = (String) item.get("content");
+                ReplyDetailBean replyDetailBean = new ReplyDetailBean(reuserName, recontent);
+                reList.add(replyDetailBean);
+            }
+        }
+
+        return comment;
+
+    }
+
+    public void getList(List<CommentDetailBean> tempList) {
+        for (CommentDetailBean bean : commentList) {
+            tempList.add(bean);
+        }
+    }
 }

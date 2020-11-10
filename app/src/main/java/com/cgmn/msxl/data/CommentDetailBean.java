@@ -12,9 +12,11 @@ public class CommentDetailBean {
     private byte[] userLogo;
     private byte[] picture;
     private String content;
-    private String imgId;
+    private String approve;
     private int replyTotal;
     private String createDate;
+    private int myApprove;
+    private int userId;
     private List<ReplyDetailBean> replyList;
 
     public CommentDetailBean(String nickName, String content, String createDate) {
@@ -42,13 +44,6 @@ public class CommentDetailBean {
     }
     public String getContent() {
         return content;
-    }
-
-    public void setImgId(String imgId) {
-        this.imgId = imgId;
-    }
-    public String getImgId() {
-        return imgId;
     }
 
     public void setReplyTotal(int replyTotal) {
@@ -86,5 +81,29 @@ public class CommentDetailBean {
 
     public void setPicture(byte[] picture) {
         this.picture = picture;
+    }
+
+    public String getApprove() {
+        return approve;
+    }
+
+    public void setApprove(String approve) {
+        this.approve = approve;
+    }
+
+    public int getMyApprove() {
+        return myApprove;
+    }
+
+    public void setMyApprove(int myApprove) {
+        this.myApprove = myApprove;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 }
