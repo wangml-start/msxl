@@ -32,6 +32,7 @@ import com.cgmn.msxl.comp.view.NetImageView;
 import com.cgmn.msxl.data.CommentBean;
 import com.cgmn.msxl.data.CommentDetailBean;
 import com.cgmn.msxl.data.ReplyDetailBean;
+import com.cgmn.msxl.data.StockHolder;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.cgmn.msxl.in.RefreshListener;
 import com.cgmn.msxl.server_interface.BaseData;
@@ -98,11 +99,13 @@ public class DisgussActivity extends Activity implements RefreshListener {
                     String time = CommentBean.analysisTime(new Date());
                     CommentDetailBean detailBean = new CommentDetailBean(userName, editCommet, time);
                     detailBean.setPicture(pictures);
+                    detailBean.setId((Integer) msg.obj);
                     adapter.addTheCommentData(detailBean);
                     resetDialog();
                 } else if(msg.what == MessageUtil.PUBLISHED_REPLAY_COMMENT){
                     String userName = GlobalDataHelper.getUserName(mContent);
                     ReplyDetailBean detailBean = new ReplyDetailBean(userName, editCommet);
+                    detailBean.setId((Integer) msg.obj);
                     adapter.addTheReplyData(detailBean, currentSelectedPosition);
                     expandableListView.expandGroup(currentSelectedPosition);
                     resetDialog();
@@ -164,6 +167,7 @@ public class DisgussActivity extends Activity implements RefreshListener {
         expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView expandableListView, View view, int groupPosition, long l) {
+                jump2Sub(commentsList.get(groupPosition));
                 boolean isExpanded = expandableListView.isGroupExpanded(groupPosition);
                 Log.e(TAG, "onGroupClick: 当前的评论id>>>" + commentsList.get(groupPosition).getId());
 //                if(isExpanded){
@@ -179,7 +183,7 @@ public class DisgussActivity extends Activity implements RefreshListener {
         expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPosition, int childPosition, long l) {
-                Toast.makeText(mContent, "点击了回复", Toast.LENGTH_SHORT).show();
+                jump2Sub(commentsList.get(groupPosition));
                 return false;
             }
         });
@@ -350,7 +354,7 @@ public class DisgussActivity extends Activity implements RefreshListener {
                                 Message message = Message.obtain();
                                 message.what = MessageUtil.PUBLISHED_COMMENT;
                                 try {
-                                    message.obj = data.getRecords();
+                                    message.obj = data.getRecordId();
                                     Integer status = data.getStatus();
                                     if (status == null || status == -1) {
                                         throw new Exception(data.getError());
@@ -404,7 +408,7 @@ public class DisgussActivity extends Activity implements RefreshListener {
                                 Message message = Message.obtain();
                                 message.what = MessageUtil.PUBLISHED_REPLAY_COMMENT;
                                 try {
-                                    message.obj = data.getRecords();
+                                    message.obj = data.getRecordId();
                                     Integer status = data.getStatus();
                                     if (status == null || status == -1) {
                                         throw new Exception(data.getError());
@@ -671,5 +675,13 @@ public class DisgussActivity extends Activity implements RefreshListener {
     @Override
     public void setWidthX(int x) {
 
+    }
+
+    private void jump2Sub(CommentDetailBean bean){
+        Intent intent = new Intent(mContent, DisgussSubActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("comment", bean);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 }

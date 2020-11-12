@@ -56,7 +56,6 @@ public class EditHeaderActivity extends BaseActivity{
     protected Handler mHandler;
     protected ProgressDialog dialog;
 
-
     @Override
     protected void onRightTextClick(){
         showPop();

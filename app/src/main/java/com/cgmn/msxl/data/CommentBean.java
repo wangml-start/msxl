@@ -15,8 +15,11 @@ public class CommentBean {
                 return;
             }
             List<Map<String, Object>> mList = (List<Map<String, Object>>) list;
+            Integer index = 0;
             for (Map<String, Object> item : mList) {
-                commentList.add(analysisComment(item));
+                CommentDetailBean bean = analysisComment(item);
+                bean.setNo(index++);
+                commentList.add(bean);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -58,6 +61,11 @@ public class CommentBean {
         }else {
             comment.setMyApprove(((Double) attr.get("my_approve")).intValue());
         }
+        if(CommonUtil.isEmpty(attr.get("my_comment"))){
+            comment.setMyComment(0);
+        }else {
+            comment.setMyComment(((Double) attr.get("my_comment")).intValue());
+        }
         comment.setUserId(((Double) attr.get("creator_id")).intValue());
         if(!CommonUtil.isEmpty(attr.get("bit_content"))){
             comment.setPicture(Base64.decode((String) attr.get("bit_content")));
@@ -72,10 +80,12 @@ public class CommentBean {
             comment.setReplyTotal(replay.size());
             List<ReplyDetailBean> reList = new ArrayList<>();
             comment.setReplyList(reList);
+            Integer index = 0;
             for (Map<String, Object> item : replay) {
-                String reuserName = String.format("%回复%s", item.get("user_name"), userName);
+                String reuserName = String.format("%s回复%s", item.get("user_name"), userName);
                 String recontent = (String) item.get("content");
                 ReplyDetailBean replyDetailBean = new ReplyDetailBean(reuserName, recontent);
+                replyDetailBean.setNo(index++);
                 reList.add(replyDetailBean);
             }
         }

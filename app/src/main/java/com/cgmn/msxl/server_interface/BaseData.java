@@ -10,6 +10,8 @@ import java.util.Map;
 public class BaseData {
     private Integer status;
 
+    private Integer recordId;
+
     private String error;
 
     private User user;
@@ -86,5 +88,13 @@ public class BaseData {
 
     public void setRecords(List<Map<String, Object>> records) {
         this.records = records;
+    }
+
+    public Integer getRecordId() {
+        return recordId;
+    }
+
+    public void setRecordId(Integer recordId) {
+        this.recordId = recordId;
     }
 }

@@ -8,7 +8,9 @@
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="6dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -16,8 +18,6 @@
                 android:id="@+id/comment_item_logo"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:layout_marginLeft="14dp"
-                android:layout_marginRight="6dp"
                 />
 
         <LinearLayout
@@ -45,45 +45,94 @@
                     android:textSize="12sp" />
         </LinearLayout>
 
-        <ImageView
-                android:id="@+id/comment_item_like"
-                android:layout_width="34dp"
+        <TextView
+                android:id="@+id/comment_delete"
+                android:layout_width="wrap_content"
                 android:layout_height="34dp"
                 android:padding="8dp"
-                android:src="@drawable/icon_comment_like" />
-        <TextView
-                android:id="@+id/comment_approve"
-                android:layout_width="34dp"
-                android:layout_height="34dp"
-                android:gravity="center"
-                android:layout_marginLeft="-18dp"
+                android:visibility="gone"
+                android:textSize="@dimen/size12"
                 android:textColor="@color/text_topbar"
-                android:textSize="@dimen/smallSize"
-                />
-
+                android:text="删除" />
     </LinearLayout>
 
-    <TextView
-            android:id="@+id/comment_item_content"
-            android:layout_width="wrap_content"
+    <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="52dp"
-            android:layout_marginTop="6dp"
-            android:layout_marginRight="24dp"
-            android:layout_marginBottom="8dp"
-            android:textColor="#484848"
-            android:textSize="14sp" />
+            android:layout_marginTop="4dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="6dp"
+            android:orientation="vertical"
+            >
+        <TextView
+                android:id="@+id/comment_item_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:layout_marginRight="24dp"
+                android:layout_marginBottom="2dp"
+                android:text="从前有座山"
+                android:textColor="#484848"
+                android:textSize="14sp" />
 
-    <com.cgmn.msxl.comp.view.NetImageView
-            android:id="@+id/comment_picture"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="52dp"
-            android:layout_marginTop="6dp"
-            android:layout_gravity="top"
-            android:layout_marginRight="24dp"
-            android:layout_marginBottom="8dp"
-            android:adjustViewBounds="true"
-            net_image:image_type="0"
-            />
+        <com.cgmn.msxl.comp.view.NetImageView
+                android:id="@+id/comment_picture"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:layout_gravity="top"
+                android:visibility="gone"
+                android:layout_marginRight="24dp"
+                android:layout_marginBottom="8dp"
+                android:adjustViewBounds="true"
+                net_image:image_type="0"
+                />
+
+        <RelativeLayout
+                android:layout_marginTop="-5dp"
+                android:layout_width="match_parent"
+                android:layout_height="34dp">
+            <ImageView
+                    android:id="@+id/comment_icon"
+                    android:layout_width="34dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="18dp"
+                    android:padding="8dp"
+                    android:src="@drawable/comment_icon" />
+            <TextView
+                    android:id="@+id/comment_num"
+                    android:layout_width="34dp"
+                    android:layout_height="match_parent"
+                    android:layout_toRightOf="@id/comment_icon"
+                    android:gravity="center"
+                    android:layout_marginLeft="-18dp"
+                    android:text="1"
+                    android:textColor="@color/text_topbar"
+                    android:textSize="@dimen/size12"
+                    />
+            <ImageView
+                    android:id="@+id/comment_item_like"
+                    android:layout_width="34dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_height="match_parent"
+                    android:padding="8dp"
+                    android:layout_marginRight="35dp"
+                    android:src="@drawable/icon_comment_like" />
+            <TextView
+                    android:id="@+id/comment_approve"
+                    android:layout_width="34dp"
+                    android:layout_height="match_parent"
+                    android:layout_toRightOf="@id/comment_item_like"
+                    android:gravity="center"
+                    android:layout_marginLeft="-50dp"
+                    android:text="赞"
+                    android:textColor="@color/text_topbar"
+                    android:textSize="@dimen/size12"
+                    />
+        </RelativeLayout>
+    </LinearLayout>
+
+
+
 </LinearLayout>

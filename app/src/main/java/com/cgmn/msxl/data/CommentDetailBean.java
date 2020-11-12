@@ -1,13 +1,15 @@
 package com.cgmn.msxl.data;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by moos on 2018/4/20.
  */
 
-public class CommentDetailBean {
+public class CommentDetailBean implements Serializable {
     private int id;
+    private int no;
     private String nickName;
     private byte[] userLogo;
     private byte[] picture;
@@ -16,6 +18,7 @@ public class CommentDetailBean {
     private int replyTotal;
     private String createDate;
     private int myApprove;
+    private int myComment;
     private int userId;
     private List<ReplyDetailBean> replyList;
 
@@ -105,5 +108,21 @@ public class CommentDetailBean {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public int getNo() {
+        return no;
+    }
+
+    public void setNo(int no) {
+        this.no = no;
+    }
+
+    public int getMyComment() {
+        return myComment;
+    }
+
+    public void setMyComment(int myComment) {
+        this.myComment = myComment;
     }
 }

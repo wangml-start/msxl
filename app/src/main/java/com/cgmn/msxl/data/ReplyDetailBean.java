@@ -8,6 +8,7 @@ public class ReplyDetailBean {
     private String nickName;
     private String userLogo;
     private int id;
+    private int no;
     private String commentId;
     private String content;
     private String status;
@@ -67,4 +68,11 @@ public class ReplyDetailBean {
         return createDate;
     }
 
+    public int getNo() {
+        return no;
+    }
+
+    public void setNo(int no) {
+        this.no = no;
+    }
 }

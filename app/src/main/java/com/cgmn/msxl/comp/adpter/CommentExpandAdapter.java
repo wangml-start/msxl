@@ -17,7 +17,9 @@ import com.cgmn.msxl.data.CommentDetailBean;
 import com.cgmn.msxl.data.ReplyDetailBean;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Author: Moos
@@ -31,11 +33,14 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
     private List<CommentDetailBean> commentBeanList;
     private List<ReplyDetailBean> replyBeanList;
     private Context context;
-    private int pageIndex = 1;
+    private Map<Integer, View> views = null;
+    private Map<String, View> subViews = null;
 
     public CommentExpandAdapter(Context context, List<CommentDetailBean> commentBeanList) {
         this.context = context;
         this.commentBeanList = commentBeanList;
+        views = new HashMap<>();
+        subViews = new HashMap<>();
     }
 
     @Override
@@ -45,10 +50,10 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int i) {
-        if(commentBeanList.get(i).getReplyList() == null){
+        if (commentBeanList.get(i).getReplyList() == null) {
             return 0;
-        }else {
-            return commentBeanList.get(i).getReplyList().size()>0 ? commentBeanList.get(i).getReplyList().size():0;
+        } else {
+            return commentBeanList.get(i).getReplyList().size() > 0 ? commentBeanList.get(i).getReplyList().size() : 0;
         }
 
     }
@@ -77,78 +82,85 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
     public boolean hasStableIds() {
         return true;
     }
+
     boolean isLike = false;
 
     @Override
     public View getGroupView(final int groupPosition, boolean isExpand, View convertView, ViewGroup viewGroup) {
-        final GroupHolder groupHolder;
-
-        if(convertView == null){
-            convertView = LayoutInflater.from(context).inflate(R.layout.comment_item_layout, viewGroup, false);
-            groupHolder = new GroupHolder(convertView);
-            convertView.setTag(groupHolder);
-        }else {
-            groupHolder = (GroupHolder) convertView.getTag();
-        }
         CommentDetailBean bean = commentBeanList.get(groupPosition);
-        if(bean.getUserLogo() != null && bean.getUserLogo().length > 0){
-            groupHolder.logo.setImageContent(bean.getUserLogo());
-        }else{
-            Glide.with(context).load(R.drawable.user_logo)
-                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                    .error(R.mipmap.ic_launcher)
-                    .centerCrop()
-                    .into(groupHolder.logo);
-        }
-        if(bean.getPicture() != null && bean.getPicture().length > 0){
-            groupHolder.comment_picture.setImageContent(bean.getPicture());
-        }
-        groupHolder.tv_name.setText(bean.getNickName());
-        groupHolder.tv_time.setText(bean.getCreateDate());
-        groupHolder.tv_content.setText(bean.getContent());
-        if(!"0".equals(bean.getApprove())){
-            groupHolder.comment_approve.setText(bean.getApprove());
-        }
-        if(bean.getMyApprove() == 1){
-            groupHolder.iv_like.setColorFilter(R.color.like);
-        }
-        groupHolder.iv_like.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(isLike){
-                    isLike = false;
-                    groupHolder.iv_like.setColorFilter(Color.parseColor("#aaaaaa"));
-                }else {
-                    isLike = true;
-                    groupHolder.iv_like.setColorFilter(Color.parseColor("#FF5C5C"));
-                }
+        if (!views.containsKey(bean.getNo())) {
+            convertView = LayoutInflater.from(context).inflate(R.layout.comment_item_layout, viewGroup, false);
+            final GroupHolder groupHolder = new GroupHolder(convertView);
+            views.put(bean.getNo(), convertView);
+            if (bean.getUserLogo() != null && bean.getUserLogo().length > 0) {
+                groupHolder.logo.setImageContent(bean.getUserLogo());
+            } else {
+                Glide.with(context).load(R.drawable.user_logo)
+                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                        .error(R.mipmap.ic_launcher)
+                        .centerCrop()
+                        .into(groupHolder.logo);
             }
-        });
+            if (bean.getPicture() != null && bean.getPicture().length > 0) {
+                groupHolder.comment_picture.setImageContent(bean.getPicture());
+                groupHolder.comment_delete.setVisibility(View.VISIBLE);
+            }
+            if(bean.getMyComment() == 1){
+                groupHolder.comment_delete.setVisibility(View.VISIBLE);
+            }
+
+            groupHolder.tv_name.setText(bean.getNickName());
+            groupHolder.tv_time.setText(bean.getCreateDate());
+            groupHolder.tv_content.setText(bean.getContent());
+            groupHolder.comment_num.setText("");
+            if(bean.getReplyList() != null && bean.getReplyList().size() > 0){
+                groupHolder.comment_num.setText(bean.getReplyList().size()+"");
+            }
+            if (!"0".equals(bean.getApprove())) {
+                groupHolder.comment_approve.setText(bean.getApprove());
+            }
+            if (bean.getMyApprove() == 1) {
+                groupHolder.iv_like.setImageResource(R.drawable.liked);
+            }
+            groupHolder.iv_like.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (isLike) {
+                        isLike = false;
+                        groupHolder.iv_like.setImageResource(R.drawable.icon_comment_like);
+                    } else {
+                        isLike = true;
+                        groupHolder.iv_like.setImageResource(R.drawable.liked);
+                    }
+                }
+            });
+        } else {
+            convertView = views.get(groupPosition);
+        }
 
         return convertView;
     }
 
     @Override
     public View getChildView(final int groupPosition, int childPosition, boolean b, View convertView, ViewGroup viewGroup) {
-        final ChildHolder childHolder;
-        if(convertView == null){
-            convertView = LayoutInflater.from(context).inflate(R.layout.comment_reply_item_layout,viewGroup, false);
-            childHolder = new ChildHolder(convertView);
-            convertView.setTag(childHolder);
-        }
-        else {
-            childHolder = (ChildHolder) convertView.getTag();
-        }
+        CommentDetailBean bean = commentBeanList.get(groupPosition);
+        ReplyDetailBean subbean = bean.getReplyList().get(childPosition);
+        String key = String.format("%s-%s", bean.getNo(), subbean.getNo());
+        if (!subViews.containsKey(key)) {
+            convertView = LayoutInflater.from(context).inflate(R.layout.comment_reply_item_layout, viewGroup, false);
+            final ChildHolder childHolder = new ChildHolder(convertView);
+            String replyUser = subbean.getNickName();
+            subViews.put(key, convertView);
+            if (!TextUtils.isEmpty(replyUser)) {
+                childHolder.tv_name.setText(replyUser + ":");
+            } else {
+                childHolder.tv_name.setText("无名" + ":");
+            }
 
-        String replyUser = commentBeanList.get(groupPosition).getReplyList().get(childPosition).getNickName();
-        if(!TextUtils.isEmpty(replyUser)){
-            childHolder.tv_name.setText(replyUser + ":");
-        }else {
-            childHolder.tv_name.setText("无名"+":");
+            childHolder.tv_content.setText(commentBeanList.get(groupPosition).getReplyList().get(childPosition).getContent());
+        } else {
+            convertView = subViews.get(key);
         }
-
-        childHolder.tv_content.setText(commentBeanList.get(groupPosition).getReplyList().get(childPosition).getContent());
-
         return convertView;
     }
 
@@ -157,10 +169,11 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
         return true;
     }
 
-    private class GroupHolder{
+    private class GroupHolder {
         private NetImageView logo, comment_picture;
-        private TextView tv_name, tv_content, tv_time, comment_approve;
+        private TextView tv_name, tv_content, tv_time, comment_approve,comment_delete,comment_num;
         private ImageView iv_like;
+
         public GroupHolder(View view) {
             logo = (NetImageView) view.findViewById(R.id.comment_item_logo);
             comment_picture = (NetImageView) view.findViewById(R.id.comment_picture);
@@ -169,11 +182,14 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
             tv_time = (TextView) view.findViewById(R.id.comment_item_time);
             iv_like = (ImageView) view.findViewById(R.id.comment_item_like);
             comment_approve = (TextView) view.findViewById(R.id.comment_approve);
+            comment_delete = (TextView) view.findViewById(R.id.comment_delete);
+            comment_num = (TextView) view.findViewById(R.id.comment_num);
         }
     }
 
-    private class ChildHolder{
+    private class ChildHolder {
         private TextView tv_name, tv_content;
+
         public ChildHolder(View view) {
             tv_name = (TextView) view.findViewById(R.id.reply_item_user);
             tv_content = (TextView) view.findViewById(R.id.reply_item_content);
@@ -184,14 +200,15 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
     /**
      * by moos on 2018/04/20
      * func:评论成功后插入一条数据
+     *
      * @param commentDetailBean 新的评论数据
      */
-    public void addTheCommentData(CommentDetailBean commentDetailBean){
-        if(commentDetailBean!=null){
-
-            commentBeanList.add(commentDetailBean);
+    public void addTheCommentData(CommentDetailBean commentDetailBean) {
+        if (commentDetailBean != null) {
+            commentDetailBean.setNo(commentBeanList.size());
+            commentBeanList.add(0, commentDetailBean);
             notifyDataSetChanged();
-        }else {
+        } else {
             throw new IllegalArgumentException("评论数据为空!");
         }
 
@@ -199,19 +216,23 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
 
     /**
      * func:回复成功后插入一条数据
+     *
      * @param replyDetailBean 新的回复数据
      */
-    public void addTheReplyData(ReplyDetailBean replyDetailBean, int groupPosition){
-        if(replyDetailBean!=null){
-            if(commentBeanList.get(groupPosition).getReplyList() != null ){
-                commentBeanList.get(groupPosition).getReplyList().add(replyDetailBean);
-            }else {
+    public void addTheReplyData(ReplyDetailBean replyDetailBean, int groupPosition) {
+        if (replyDetailBean != null) {
+            CommentDetailBean bean = commentBeanList.get(groupPosition);
+            if (bean.getReplyList() != null) {
+                replyDetailBean.setNo(bean.getReplyList().size());
+                bean.getReplyList().add(replyDetailBean);
+            } else {
+                replyDetailBean.setNo(0);
                 List<ReplyDetailBean> replyList = new ArrayList<>();
                 replyList.add(replyDetailBean);
-                commentBeanList.get(groupPosition).setReplyList(replyList);
+                bean.setReplyList(replyList);
             }
             notifyDataSetChanged();
-        }else {
+        } else {
             throw new IllegalArgumentException("回复数据为空!");
         }
 
@@ -220,14 +241,15 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
     /**
      * by moos on 2018/04/20
      * func:添加和展示所有回复
+     *
      * @param replyBeanList 所有回复数据
      * @param groupPosition 当前的评论
      */
-    private void addReplyList(List<ReplyDetailBean> replyBeanList, int groupPosition){
-        if(commentBeanList.get(groupPosition).getReplyList() != null ){
+    private void addReplyList(List<ReplyDetailBean> replyBeanList, int groupPosition) {
+        if (commentBeanList.get(groupPosition).getReplyList() != null) {
             commentBeanList.get(groupPosition).getReplyList().clear();
             commentBeanList.get(groupPosition).getReplyList().addAll(replyBeanList);
-        }else {
+        } else {
 
             commentBeanList.get(groupPosition).setReplyList(replyBeanList);
         }
