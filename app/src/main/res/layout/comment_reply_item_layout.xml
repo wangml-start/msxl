@@ -36,7 +36,7 @@
                 android:maxLines="10"
                 android:paddingLeft="4dp"
                 android:paddingRight="8dp"
-                android:letterSpacing="0.2"
+                android:letterSpacing="0.1"
                 android:text="世上本没有路，走的人多了，也就成了路"
                 android:textColor="@color/text_topbar"
                 android:textSize="14sp" />

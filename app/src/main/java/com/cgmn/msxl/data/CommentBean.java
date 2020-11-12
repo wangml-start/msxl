@@ -89,10 +89,12 @@ public class CommentBean {
                     replayUserId = ((Double) item.get("reply_user_id")).intValue();
                 }
                 Object pre = "";
+                String reuserName = "";
                 if(replayUserId != comment.getUserId()){
-                    pre = item.get("user_name")+"回复";
+                    reuserName = String.format("%s回复%s", item.get("user_name"), item.get("replay_uname"));
+                }else{
+                    reuserName = String.format("%s", item.get("user_name"));
                 }
-                String reuserName = String.format("%s%s", pre, userName);
                 String recontent = (String) item.get("content");
                 ReplyDetailBean replyDetailBean = new ReplyDetailBean(reuserName, recontent);
                 replyDetailBean.setNo(index++);

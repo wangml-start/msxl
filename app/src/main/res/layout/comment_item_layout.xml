@@ -72,7 +72,7 @@
                 android:layout_marginTop="6dp"
                 android:layout_marginRight="24dp"
                 android:layout_marginBottom="2dp"
-                android:letterSpacing="0.2"
+                android:letterSpacing="0.1"
                 android:text="从前有座山"
                 android:textColor="#484848"
                 android:textSize="14sp" />
