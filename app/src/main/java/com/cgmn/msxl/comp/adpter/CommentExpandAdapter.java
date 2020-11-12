@@ -15,6 +15,7 @@ import com.cgmn.msxl.R;
 import com.cgmn.msxl.comp.view.NetImageView;
 import com.cgmn.msxl.data.CommentDetailBean;
 import com.cgmn.msxl.data.ReplyDetailBean;
+import com.cgmn.msxl.in.CommentListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,6 +36,11 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
     private Context context;
     private Map<Integer, View> views = null;
     private Map<String, View> subViews = null;
+    private CommentListener commentListener;
+
+    public void setCommentListener(CommentListener commentListener) {
+        this.commentListener = commentListener;
+    }
 
     public CommentExpandAdapter(Context context, List<CommentDetailBean> commentBeanList) {
         this.context = context;
@@ -83,11 +89,9 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
         return true;
     }
 
-    boolean isLike = false;
-
     @Override
     public View getGroupView(final int groupPosition, boolean isExpand, View convertView, ViewGroup viewGroup) {
-        CommentDetailBean bean = commentBeanList.get(groupPosition);
+        final CommentDetailBean bean = commentBeanList.get(groupPosition);
         if (!views.containsKey(bean.getNo())) {
             convertView = LayoutInflater.from(context).inflate(R.layout.comment_item_layout, viewGroup, false);
             final GroupHolder groupHolder = new GroupHolder(convertView);
@@ -103,7 +107,7 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
             }
             if (bean.getPicture() != null && bean.getPicture().length > 0) {
                 groupHolder.comment_picture.setImageContent(bean.getPicture());
-                groupHolder.comment_delete.setVisibility(View.VISIBLE);
+                groupHolder.comment_picture.setVisibility(View.VISIBLE);
             }
             if(bean.getMyComment() == 1){
                 groupHolder.comment_delete.setVisibility(View.VISIBLE);
@@ -122,18 +126,28 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
             if (bean.getMyApprove() == 1) {
                 groupHolder.iv_like.setImageResource(R.drawable.liked);
             }
-            groupHolder.iv_like.setOnClickListener(new View.OnClickListener() {
+            View.OnClickListener listener = new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (isLike) {
-                        isLike = false;
-                        groupHolder.iv_like.setImageResource(R.drawable.icon_comment_like);
-                    } else {
-                        isLike = true;
-                        groupHolder.iv_like.setImageResource(R.drawable.liked);
+                    if (view.getId() == R.id.comment_item_like){
+                        if(bean.getMyApprove() == 1){
+                            groupHolder.iv_like.setImageResource(R.drawable.icon_comment_like);
+                            bean.setMyApprove(0);
+                            groupHolder.comment_approve.setText(bean.getApprove());
+                            commentListener.onApproveClick(groupPosition,"unapprove");
+                        }else {
+                            groupHolder.iv_like.setImageResource(R.drawable.liked);
+                            bean.setMyApprove(1);
+                            groupHolder.comment_approve.setText((Integer.valueOf(bean.getApprove()) + 1)+"");
+                            commentListener.onApproveClick(groupPosition,"approve");
+                        }
+                    } else if(view.getId() == R.id.comment_icon){
+                        commentListener.onCommentClick(groupPosition);
                     }
                 }
-            });
+            };
+            groupHolder.iv_like.setOnClickListener(listener);
+            groupHolder.comment_icon.setOnClickListener(listener);
         } else {
             convertView = views.get(groupPosition);
         }
@@ -172,7 +186,7 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
     private class GroupHolder {
         private NetImageView logo, comment_picture;
         private TextView tv_name, tv_content, tv_time, comment_approve,comment_delete,comment_num;
-        private ImageView iv_like;
+        private ImageView iv_like, comment_icon;
 
         public GroupHolder(View view) {
             logo = (NetImageView) view.findViewById(R.id.comment_item_logo);
@@ -181,6 +195,7 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
             tv_name = (TextView) view.findViewById(R.id.comment_item_userName);
             tv_time = (TextView) view.findViewById(R.id.comment_item_time);
             iv_like = (ImageView) view.findViewById(R.id.comment_item_like);
+            comment_icon = (ImageView) view.findViewById(R.id.comment_icon);
             comment_approve = (TextView) view.findViewById(R.id.comment_approve);
             comment_delete = (TextView) view.findViewById(R.id.comment_delete);
             comment_num = (TextView) view.findViewById(R.id.comment_num);

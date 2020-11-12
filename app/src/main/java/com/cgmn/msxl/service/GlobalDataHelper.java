@@ -12,6 +12,7 @@ import java.util.Map;
 
 
 public class GlobalDataHelper {
+    private static Map<String, Object> pageTranfer = new HashMap<>();
 
     public static String getToken(Context context){
         String token = AppApplication.getInstance().getToken();
@@ -81,4 +82,15 @@ public class GlobalDataHelper {
                 PropertyService.getInstance().getKey("serverUrl"),
                 "/user/portrait_view", p);
     }
+
+    public static void setDate(String key, Object obj){
+        pageTranfer.put(key, obj);
+    }
+
+    public static Object getDate(String key){
+        Object obj = pageTranfer.get(key);
+        pageTranfer.remove(key);
+        return obj;
+    }
+
 }

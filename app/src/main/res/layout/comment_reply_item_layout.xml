@@ -6,13 +6,13 @@
         android:orientation="vertical">
     <View
             android:layout_width="match_parent"
-            android:background="#F6F6F6"
+            android:background="@color/replay_bg"
             android:layout_height="4dp"
             android:layout_marginLeft="35dp"
             android:layout_marginRight="35dp"
             />
     <LinearLayout
-            android:background="#F6F6F6"
+            android:background="@color/replay_bg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="35dp"
@@ -36,6 +36,7 @@
                 android:maxLines="10"
                 android:paddingLeft="4dp"
                 android:paddingRight="8dp"
+                android:letterSpacing="0.2"
                 android:text="世上本没有路，走的人多了，也就成了路"
                 android:textColor="@color/text_topbar"
                 android:textSize="14sp" />

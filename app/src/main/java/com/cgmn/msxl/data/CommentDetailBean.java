@@ -1,13 +1,12 @@
 package com.cgmn.msxl.data;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by moos on 2018/4/20.
  */
 
-public class CommentDetailBean implements Serializable {
+public class CommentDetailBean {
     private int id;
     private int no;
     private String nickName;

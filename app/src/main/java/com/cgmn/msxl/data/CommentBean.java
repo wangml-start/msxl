@@ -8,6 +8,7 @@ import java.util.*;
 public class CommentBean {
     private List<CommentDetailBean> commentList;
 
+
     public CommentBean(Object list) {
         commentList = new ArrayList<>();
         try {
@@ -55,6 +56,7 @@ public class CommentBean {
         String date = analysisTime(CommonUtil.parseDateString((String) attr.get("created_at"), "yyyyMMdd HH:mm:ss"));
         CommentDetailBean comment = new CommentDetailBean(userName, content, date);
         comment.setId(((Double) attr.get("id")).intValue());
+        comment.setUserId(((Double) attr.get("creator_id")).intValue());
         comment.setApprove(((Double) attr.get("approve")).intValue() +"");
         if(CommonUtil.isEmpty(attr.get("my_approve"))){
             comment.setMyApprove(0);
@@ -82,10 +84,19 @@ public class CommentBean {
             comment.setReplyList(reList);
             Integer index = 0;
             for (Map<String, Object> item : replay) {
-                String reuserName = String.format("%s回复%s", item.get("user_name"), userName);
+                Integer replayUserId = 0;
+                if(item.get("reply_user_id") != null){
+                    replayUserId = ((Double) item.get("reply_user_id")).intValue();
+                }
+                Object pre = "";
+                if(replayUserId != comment.getUserId()){
+                    pre = item.get("user_name")+"回复";
+                }
+                String reuserName = String.format("%s%s", pre, userName);
                 String recontent = (String) item.get("content");
                 ReplyDetailBean replyDetailBean = new ReplyDetailBean(reuserName, recontent);
                 replyDetailBean.setNo(index++);
+                replyDetailBean.setUserId(((Double) item.get("creator_id")).intValue());
                 reList.add(replyDetailBean);
             }
         }

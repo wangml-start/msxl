@@ -51,6 +51,7 @@
                 android:layout_height="34dp"
                 android:padding="8dp"
                 android:visibility="gone"
+                android:layout_marginRight="35dp"
                 android:textSize="@dimen/size12"
                 android:textColor="@color/text_topbar"
                 android:text="删除" />
@@ -71,6 +72,7 @@
                 android:layout_marginTop="6dp"
                 android:layout_marginRight="24dp"
                 android:layout_marginBottom="2dp"
+                android:letterSpacing="0.2"
                 android:text="从前有座山"
                 android:textColor="#484848"
                 android:textSize="14sp" />

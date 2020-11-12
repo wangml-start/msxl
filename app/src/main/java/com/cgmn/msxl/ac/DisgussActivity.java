@@ -32,8 +32,8 @@ import com.cgmn.msxl.comp.view.NetImageView;
 import com.cgmn.msxl.data.CommentBean;
 import com.cgmn.msxl.data.CommentDetailBean;
 import com.cgmn.msxl.data.ReplyDetailBean;
-import com.cgmn.msxl.data.StockHolder;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
+import com.cgmn.msxl.in.CommentListener;
 import com.cgmn.msxl.in.RefreshListener;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.service.GlobalDataHelper;
@@ -48,7 +48,8 @@ import org.apache.shiro.codec.Base64;
 
 import java.util.*;
 
-public class DisgussActivity extends Activity implements RefreshListener {
+public class DisgussActivity extends Activity
+        implements RefreshListener, CommentListener {
     private static final String TAG = "DisgussActivity";
 
     private Context mContent;
@@ -92,13 +93,15 @@ public class DisgussActivity extends Activity implements RefreshListener {
                         initExpandableListView();
                     }
                     adapter.notifyDataSetChanged();
-                } else if (msg.what == MessageUtil.LOAD_REPLAY_LIST) {
-
                 } else if (msg.what == MessageUtil.PUBLISHED_COMMENT) {
                     String userName = GlobalDataHelper.getUserName(mContent);
                     String time = CommentBean.analysisTime(new Date());
                     CommentDetailBean detailBean = new CommentDetailBean(userName, editCommet, time);
                     detailBean.setPicture(pictures);
+                    byte[] cut = GlobalDataHelper.getUserCut(mContent);
+                    if(cut != null && cut.length > 0){
+                        detailBean.setUserLogo(cut);
+                    }
                     detailBean.setId((Integer) msg.obj);
                     adapter.addTheCommentData(detailBean);
                     resetDialog();
@@ -160,6 +163,7 @@ public class DisgussActivity extends Activity implements RefreshListener {
         expandableListView.setGroupIndicator(null);
         //默认展开所有回复
         adapter = new CommentExpandAdapter(mContent, commentsList);
+        adapter.setCommentListener(this);
         expandableListView.setAdapter(adapter);
         for (int i = 0; i < commentsList.size(); i++) {
             expandableListView.expandGroup(i);
@@ -168,14 +172,12 @@ public class DisgussActivity extends Activity implements RefreshListener {
             @Override
             public boolean onGroupClick(ExpandableListView expandableListView, View view, int groupPosition, long l) {
                 jump2Sub(commentsList.get(groupPosition));
-                boolean isExpanded = expandableListView.isGroupExpanded(groupPosition);
-                Log.e(TAG, "onGroupClick: 当前的评论id>>>" + commentsList.get(groupPosition).getId());
+//                boolean isExpanded = expandableListView.isGroupExpanded(groupPosition);
 //                if(isExpanded){
 //                    expandableListView.collapseGroup(groupPosition);
 //                }else {
 //                    expandableListView.expandGroup(groupPosition, true);
 //                }
-                showReplyDialog(groupPosition);
                 return true;
             }
         });
@@ -184,7 +186,7 @@ public class DisgussActivity extends Activity implements RefreshListener {
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPosition, int childPosition, long l) {
                 jump2Sub(commentsList.get(groupPosition));
-                return false;
+                return true;
             }
         });
 
@@ -424,56 +426,7 @@ public class DisgussActivity extends Activity implements RefreshListener {
             }
         });
     }
-    /**
-     * 点赞取消
-     */
-    private void onclickLike(final Map<String, String> params){
-        GlobalTreadPools.getInstance(mContent).execute(new Runnable() {
-            @Override
-            public void run() {
-                params.put("token", GlobalDataHelper.getToken(mContent));
-                if(pictures != null && pictures.length > 0){
-                    params.put("picture", Base64.encodeToString(pictures));
-                }
-                String url = CommonUtil.buildGetUrl(
-                        PropertyService.getInstance().getKey("serverUrl"),
-                        "/chat/approve_comment", params);
-                OkHttpClientManager.getAsyn(url,
-                        new OkHttpClientManager.ResultCallback<BaseData>() {
-                            @Override
-                            public void onError(com.squareup.okhttp.Request request, Exception e) {
-                                Message message = Message.obtain();
-                                message.what = MessageUtil.EXCUTE_EXCEPTION;
-                                message.obj = e;
-                                mHandler.sendMessage(message);
-                            }
 
-                            @Override
-                            public void onResponse(BaseData data) {
-                                Message message = Message.obtain();
-                                message.what = MessageUtil.PUBLISHED_COMMENT;
-                                try {
-                                    message.obj = data.getRecords();
-                                    Integer status = data.getStatus();
-                                    if (status == null || status == -1) {
-                                        throw new Exception(data.getError());
-                                    }
-                                } catch (Exception e) {
-                                    message.what = MessageUtil.EXCUTE_EXCEPTION;
-                                    message.obj = e;
-                                }
-                                mHandler.sendMessage(message);
-                            }
-                        });
-                Log.e(TAG, "NAME=" + Thread.currentThread().getName());
-            }
-        });
-    }
-
-
-    /**
-     * func:弹出评论框
-     */
     private void showCommentDialog() {
         dialog = new BottomSheetDialog(mContent);
         if (commentView == null) {
@@ -531,10 +484,6 @@ public class DisgussActivity extends Activity implements RefreshListener {
         dialog.show();
     }
 
-    /**
-     * by moos on 2018/04/20
-     * func:弹出回复框
-     */
     private void showReplyDialog(final int position) {
         currentSelectedPosition = position;
         dialog = new BottomSheetDialog(mContent);
@@ -679,9 +628,41 @@ public class DisgussActivity extends Activity implements RefreshListener {
 
     private void jump2Sub(CommentDetailBean bean){
         Intent intent = new Intent(mContent, DisgussSubActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("comment", bean);
-        intent.putExtras(bundle);
+        GlobalDataHelper.setDate("comment", bean);
         startActivity(intent);
+    }
+
+    @Override
+    public void onApproveClick(final Integer position, final String type) {
+        GlobalTreadPools.getInstance(mContent).execute(new Runnable() {
+            @Override
+            public void run() {
+                Map<String, String> params = new HashMap<>();
+                params.put("token", GlobalDataHelper.getToken(mContent));
+                params.put("type", type);
+                params.put("comment_id", commentsList.get(position).getId()+"");
+                params.put("comment_user_id", commentsList.get(position).getUserId()+"");
+
+                String url = CommonUtil.buildGetUrl(
+                        PropertyService.getInstance().getKey("serverUrl"),
+                        "/chat/approve_comment", params);
+                OkHttpClientManager.getAsyn(url,
+                        new OkHttpClientManager.ResultCallback<BaseData>() {
+                            @Override
+                            public void onError(com.squareup.okhttp.Request request, Exception e) {
+                            }
+
+                            @Override
+                            public void onResponse(BaseData data) {
+                            }
+                        });
+                Log.e(TAG, "NAME=" + Thread.currentThread().getName());
+            }
+        });
+    }
+
+    @Override
+    public void onCommentClick(Integer position) {
+        showReplyDialog(position);
     }
 }
