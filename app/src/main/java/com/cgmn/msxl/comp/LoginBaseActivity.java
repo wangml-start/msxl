@@ -109,6 +109,7 @@ public abstract class LoginBaseActivity extends BaseActivity
         values.put("token", token);
         values.put("gender", user.getGender());
         values.put("signature", user.getSignature());
+        values.put("image_cut", user.getImageCut());
         values.put("last_active", 1);
         sqlHeper.upsert("users", values, "phone");
         sqlHeper.excuteSql(String.format("UPDATE users SET last_active=0 WHERE phone <>'%s'", user.getPhone()));

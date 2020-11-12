@@ -1,9 +1,8 @@
-package com.cgmn.msxl.comp;
+package com.cgmn.msxl.comp.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.*;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;

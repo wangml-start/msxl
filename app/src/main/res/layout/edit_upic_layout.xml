@@ -7,7 +7,7 @@
         android:layout_marginTop="40dp"
         android:orientation="vertical">
 
-    <com.cgmn.msxl.comp.NetImageView
+    <com.cgmn.msxl.comp.view.NetImageView
             android:id="@+id/main_icon"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

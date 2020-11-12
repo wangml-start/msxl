@@ -1,4 +1,4 @@
-package com.cgmn.msxl.comp;
+package com.cgmn.msxl.comp.view;
 
 import android.content.Context;
 import android.os.Build;

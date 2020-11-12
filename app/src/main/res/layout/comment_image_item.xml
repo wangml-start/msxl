@@ -5,7 +5,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    <com.cgmn.msxl.comp.NetImageView
+    <com.cgmn.msxl.comp.view.NetImageView
             android:id="@+id/com_picture"
             android:layout_width="100dp"
             android:layout_height="120dp"

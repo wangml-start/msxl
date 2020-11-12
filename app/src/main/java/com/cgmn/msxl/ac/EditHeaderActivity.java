@@ -21,8 +21,9 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.CustmerToast;
-import com.cgmn.msxl.comp.NetImageView;
+import com.cgmn.msxl.comp.view.NetImageView;
 import com.cgmn.msxl.comp.pop.PhotoPop;
+import com.cgmn.msxl.db.AppSqlHelper;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.cgmn.msxl.receiver.ReceiverMessage;
 import com.cgmn.msxl.server_interface.BaseData;
@@ -37,6 +38,8 @@ import com.squareup.okhttp.Request;
 import org.apache.shiro.codec.Base64;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 public class EditHeaderActivity extends BaseActivity{
     private static final String TAG = EditHeaderActivity.class.getSimpleName();
@@ -351,10 +354,11 @@ public class EditHeaderActivity extends BaseActivity{
             @Override
             public void run() {
                 final String token = GlobalDataHelper.getToken(mContext);
+                final String cut = Base64.encodeToString(small);
                 OkHttpClientManager.Param[] params = new OkHttpClientManager.Param[]{
                         new OkHttpClientManager.Param("token", token),
                         new OkHttpClientManager.Param("normal", Base64.encodeToString(normal)),
-                        new OkHttpClientManager.Param("small", Base64.encodeToString(small))
+                        new OkHttpClientManager.Param("small", cut)
                 };
                 String url = String.format("%s%s",
                         PropertyService.getInstance().getKey("serverUrl"), "/user/upload_portrait");
@@ -379,6 +383,12 @@ public class EditHeaderActivity extends BaseActivity{
                                             Log.d(TAG, "UPLOAD TRADING FAILED!");
                                             throw new Exception(data.getError());
                                         }
+                                        Map<String, Object> user = GlobalDataHelper.getUser(mContext);
+                                        user.put("image_cut", cut);
+                                        Map<String, String> p = new HashMap<>();
+                                        p.put("field_data", "image_cut");
+                                        p.put("content", cut);
+                                        updateUser(p);
                                         Log.d(TAG, "UPLOAD TRADING SUCCESS!");
                                     } catch (Exception e) {
                                         message.what = MessageUtil.EXCUTE_EXCEPTION;
@@ -396,6 +406,17 @@ public class EditHeaderActivity extends BaseActivity{
         });
     }
 
+    protected void updateUser(Map<String, String> p){
+        Map<String, Object> user = GlobalDataHelper.getUser(mContext);
+        user.put(p.get("field_data"), p.get("content"));
+        //存数据
+        AppSqlHelper sqlHeper = new AppSqlHelper(mContext);
+        ContentValues values = new ContentValues();
+        values.put(p.get("field_data"), p.get("content"));
+        values.put("phone", (String)user.get("phone"));
+        sqlHeper.upsert("users", values, "phone");
+        GlobalDataHelper.updateUser(mContext);
+    }
 
     protected void onBackUpClick(){
         dialog.cancel();

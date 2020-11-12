@@ -1,8 +1,7 @@
-package com.cgmn.msxl.comp.frag;
+package com.cgmn.msxl.ac;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.Fragment;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -26,12 +25,15 @@ import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
-import com.cgmn.msxl.comp.CommentExpandableListView;
 import com.cgmn.msxl.comp.CustmerToast;
-import com.cgmn.msxl.comp.NetImageView;
 import com.cgmn.msxl.comp.adpter.CommentExpandAdapter;
-import com.cgmn.msxl.data.*;
+import com.cgmn.msxl.comp.view.CommentExpandableListView;
+import com.cgmn.msxl.comp.view.NetImageView;
+import com.cgmn.msxl.data.CommentBean;
+import com.cgmn.msxl.data.CommentDetailBean;
+import com.cgmn.msxl.data.ReplyDetailBean;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
+import com.cgmn.msxl.in.RefreshListener;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.service.GlobalDataHelper;
 import com.cgmn.msxl.service.OkHttpClientManager;
@@ -45,9 +47,9 @@ import org.apache.shiro.codec.Base64;
 
 import java.util.*;
 
-@SuppressLint("ValidFragment")
-public class DisCussFragment extends Fragment {
-    private static final String TAG = "DisCussFragment";
+public class DisgussActivity extends Activity implements RefreshListener {
+    private static final String TAG = "DisgussActivity";
+
     private Context mContent;
 
     private TextView bt_comment;
@@ -55,7 +57,9 @@ public class DisCussFragment extends Fragment {
     private CommentExpandAdapter adapter;
     private List<CommentDetailBean> commentsList = new ArrayList<>();
     private View commentView = null;
+    private RelativeLayout img_back;
     private BottomSheetDialog dialog;
+    private View.OnClickListener clickListener;
     //消息处理
     private Handler mHandler;
 
@@ -65,6 +69,15 @@ public class DisCussFragment extends Fragment {
     private String editCommet;
 
     private int currentSelectedPosition;
+
+
+    private void onCustmerClick(View v){
+        if (v.getId() == R.id.detail_page_do_comment) {
+            showCommentDialog();
+        }else if(v.getId() == R.id.img_back){
+            finish();
+        }
+    }
 
     private void initMessageHandle() {
         mHandler = new Handler(new Handler.Callback() {
@@ -111,29 +124,31 @@ public class DisCussFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.static_fragment, container, false);
-        mContent = view.getContext();
-        initView(view);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.disguss_fragment);
+        mContent = this;
+        initView();
         initMessageHandle();
         loadCommentList();
-
-        return view;
     }
 
-    private void initView(View view) {
-        expandableListView = (CommentExpandableListView) view.findViewById(R.id.detail_page_lv_comment);
-        bt_comment = (TextView) view.findViewById(R.id.detail_page_do_comment);
-        View.OnClickListener listener = new View.OnClickListener() {
+
+    private void initView() {
+        expandableListView = (CommentExpandableListView)findViewById(R.id.detail_page_lv_comment);
+        bt_comment = (TextView) findViewById(R.id.detail_page_do_comment);
+        clickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (v.getId() == R.id.detail_page_do_comment) {
-                    showCommentDialog();
-                }
+                onCustmerClick(v);
             }
         };
-        bt_comment.setOnClickListener(listener);
+        bt_comment.setOnClickListener(clickListener);
+        img_back = findViewById(R.id.img_back);
+        img_back.setOnClickListener(clickListener);
     }
+
+
 
     /**
      * 初始化评论和回复列表
@@ -315,7 +330,7 @@ public class DisCussFragment extends Fragment {
                 final String token = GlobalDataHelper.getToken(mContent);
                 OkHttpClientManager.Param[] params = new OkHttpClientManager.Param[]{
                         new OkHttpClientManager.Param("token", token),
-                        new OkHttpClientManager.Param("picture", Base64.encodeToString(pictures)),
+                        new OkHttpClientManager.Param("picture", org.apache.shiro.codec.Base64.encodeToString(pictures)),
                         new OkHttpClientManager.Param("comment", editCommet)
                 };
                 String url = String.format("%s%s",
@@ -367,7 +382,7 @@ public class DisCussFragment extends Fragment {
                 }
                 OkHttpClientManager.Param[] params = new OkHttpClientManager.Param[]{
                         new OkHttpClientManager.Param("token", token),
-                        new OkHttpClientManager.Param("picture", Base64.encodeToString(pictures)),
+                        new OkHttpClientManager.Param("picture", org.apache.shiro.codec.Base64.encodeToString(pictures)),
                         new OkHttpClientManager.Param("comment", editCommet),
                         new OkHttpClientManager.Param("comment_id", commentsList.get(currentSelectedPosition).getId()+""),
                         new OkHttpClientManager.Param("comment_user_id", commentsList.get(currentSelectedPosition).getUserId()+"")
@@ -636,5 +651,25 @@ public class DisCussFragment extends Fragment {
                     break;
             }
         }
+    }
+
+    @Override
+    public void startRefresh() {
+
+    }
+
+    @Override
+    public void loadMore() {
+
+    }
+
+    @Override
+    public void hintChange(String hint) {
+
+    }
+
+    @Override
+    public void setWidthX(int x) {
+
     }
 }

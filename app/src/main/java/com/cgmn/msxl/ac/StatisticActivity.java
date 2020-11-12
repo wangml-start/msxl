@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.CustmerToast;
-import com.cgmn.msxl.comp.LineChartMarkView;
+import com.cgmn.msxl.comp.view.LineChartMarkView;
 import com.cgmn.msxl.data.TradeStatistic;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.cgmn.msxl.server_interface.BaseData;

@@ -1,4 +1,4 @@
-package com.cgmn.msxl.comp;
+package com.cgmn.msxl.comp.view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

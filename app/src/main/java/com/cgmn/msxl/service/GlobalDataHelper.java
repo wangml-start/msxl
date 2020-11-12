@@ -5,6 +5,7 @@ import android.os.Environment;
 import com.cgmn.msxl.application.AppApplication;
 import com.cgmn.msxl.db.AppSqlHelper;
 import com.cgmn.msxl.utils.CommonUtil;
+import org.apache.shiro.codec.Base64;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -56,6 +57,16 @@ public class GlobalDataHelper {
     public static String getUserAcc(Context context){
         Map<String, Object> u = getUser(context);
         return (String) u.get("phone");
+    }
+
+    public static byte[] getUserCut(Context context){
+        Map<String, Object> u = getUser(context);
+        String content = (String) u.get("image_cut");
+        if(CommonUtil.isEmpty(content)){
+            return null;
+        }else{
+            return Base64.decode(content);
+        }
     }
 
     public static String getUserName(Context context){

@@ -3,7 +3,6 @@ package com.cgmn.msxl.comp.adpter;
 import android.content.Context;
 import android.graphics.Color;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.cgmn.msxl.R;
-import com.cgmn.msxl.comp.NetImageView;
+import com.cgmn.msxl.comp.view.NetImageView;
 import com.cgmn.msxl.data.CommentDetailBean;
 import com.cgmn.msxl.data.ReplyDetailBean;
 

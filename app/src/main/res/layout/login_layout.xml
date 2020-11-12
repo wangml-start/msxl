@@ -39,7 +39,7 @@
                 android:id="@+id/lb_dis_pws"
                 style="@style/register_label"
                 android:text="@string/show_pws" />
-        <com.cgmn.msxl.comp.showPassworCheckBox
+        <com.cgmn.msxl.comp.view.showPassworCheckBox
                 android:id="@+id/ck_dis_pws"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

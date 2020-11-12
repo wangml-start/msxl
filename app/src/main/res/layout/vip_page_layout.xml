@@ -13,7 +13,7 @@
             android:layout_height="90dp"
             android:background="@drawable/vip_user_back">
 
-        <com.cgmn.msxl.comp.NetImageView
+        <com.cgmn.msxl.comp.view.NetImageView
                 android:id="@+id/icon_head"
                 android:layout_width="50dp"
                 android:layout_height="50dp"

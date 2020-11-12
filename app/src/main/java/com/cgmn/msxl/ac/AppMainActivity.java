@@ -1,20 +1,16 @@
 package com.cgmn.msxl.ac;
 
-import android.Manifest;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.pm.PackageManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import com.cgmn.msxl.R;
-import com.cgmn.msxl.comp.GuideIconView;
+import com.cgmn.msxl.comp.view.GuideIconView;
 import com.cgmn.msxl.comp.frag.MayFragment;
-import com.cgmn.msxl.comp.frag.DisCussFragment;
 import com.cgmn.msxl.comp.frag.TrainFragment;
 
 public class AppMainActivity extends AppCompatActivity
@@ -27,7 +23,6 @@ public class AppMainActivity extends AppCompatActivity
 
     //Fragment Object
     private TrainFragment trainFrag;
-    private DisCussFragment disCussFragment;
     private MayFragment myFrag;
     private FragmentManager fManager;
 
@@ -57,14 +52,12 @@ public class AppMainActivity extends AppCompatActivity
     //重置所有文本的选中状态
     private void reset() {
         txt_xunlian.setIconAlpha(0);
-        txt_guba.setIconAlpha(0);
         txt_may.setIconAlpha(0);
     }
 
     //隐藏所有Fragment
     private void hideAllFragment(FragmentTransaction fragmentTransaction) {
         if (trainFrag != null) fragmentTransaction.hide(trainFrag);
-        if (disCussFragment != null) fragmentTransaction.hide(disCussFragment);
         if (myFrag != null) fragmentTransaction.hide(myFrag);
     }
 
@@ -72,9 +65,9 @@ public class AppMainActivity extends AppCompatActivity
     @Override
     public void onClick(View v) {
         FragmentTransaction fTransaction = fManager.beginTransaction();
-        hideAllFragment(fTransaction);
         switch (v.getId()) {
             case R.id.txt_xunlian:
+                hideAllFragment(fTransaction);
                 reset();
                 txt_xunlian.setIconAlpha(1);
                 if (trainFrag == null) {
@@ -85,16 +78,11 @@ public class AppMainActivity extends AppCompatActivity
                 }
                 break;
             case R.id.txt_guba:
-                reset();
-                txt_guba.setIconAlpha(1);
-                if (disCussFragment == null) {
-                    disCussFragment = new DisCussFragment();
-                    fTransaction.add(R.id.ly_content, disCussFragment);
-                } else {
-                    fTransaction.show(disCussFragment);
-                }
+                Intent intent = new Intent(mContxt, DisgussActivity.class);
+                startActivity(intent);
                 break;
             case R.id.txt_may:
+                hideAllFragment(fTransaction);
                 reset();
                 txt_may.setIconAlpha(1);
                 if (myFrag == null) {

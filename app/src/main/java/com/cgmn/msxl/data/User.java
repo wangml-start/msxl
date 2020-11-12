@@ -8,6 +8,7 @@ public class User {
     String userName;
     int gender;
     String signature;
+    String imageCut;
 
 
     public String getPhone() {
@@ -60,6 +61,14 @@ public class User {
 
     public String getSignature() {
         return signature;
+    }
+
+    public String getImageCut() {
+        return imageCut;
+    }
+
+    public void setImageCut(String imageCut) {
+        this.imageCut = imageCut;
     }
 
     public void setSignature(String signature) {

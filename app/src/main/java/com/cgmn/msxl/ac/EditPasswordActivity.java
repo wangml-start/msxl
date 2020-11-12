@@ -3,7 +3,7 @@ package com.cgmn.msxl.ac;
 import android.widget.EditText;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.comp.EditBaseActivity;
-import com.cgmn.msxl.comp.showPassworCheckBox;
+import com.cgmn.msxl.comp.view.showPassworCheckBox;
 import com.cgmn.msxl.service.GlobalDataHelper;
 import com.cgmn.msxl.utils.AESUtil;
 import com.cgmn.msxl.utils.MessageUtil;

@@ -5,10 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 import com.cgmn.msxl.R;
-import com.cgmn.msxl.comp.NetImageView;
+import com.cgmn.msxl.comp.view.NetImageView;
 import com.cgmn.msxl.data.EditInfoItem;
 import com.cgmn.msxl.service.GlobalDataHelper;
 
@@ -104,8 +103,13 @@ public class AccountAdapter extends BaseAdapter {
         switch (type) {
             case TYPE_HEAD_IMG:
                 if (item != null) {
-                    headHolder.img_icon.setImageName(GlobalDataHelper.getUserAcc(mContext));
-                    headHolder.img_icon.setImageURL(GlobalDataHelper.getUserPortraitUrl(mContext));
+                    byte[] cut = GlobalDataHelper.getUserCut(mContext);
+                    if(cut != null && cut.length > 0){
+                        headHolder.img_icon.setImageContent(cut);
+                    }else{
+                        headHolder.img_icon.setImageName(GlobalDataHelper.getUserAcc(mContext));
+                        headHolder.img_icon.setImageURL(GlobalDataHelper.getUserPortraitUrl(mContext));
+                    }
                     headHolder.txt_title.setText(item.getTitle());
                 }
                 break;

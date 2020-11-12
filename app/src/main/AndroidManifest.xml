@@ -53,6 +53,8 @@
         <activity android:name=".ac.EditHeaderActivity" android:hardwareAccelerated="false" />
         <activity android:name=".ac.UserRankingActivity"/>
         <activity android:name=".ac.ViolateModeActivity"/>
+        <activity android:name=".ac.DisgussActivity"/>
+
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
 

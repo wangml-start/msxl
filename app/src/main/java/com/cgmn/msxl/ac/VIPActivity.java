@@ -13,7 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
-import com.cgmn.msxl.comp.NetImageView;
+import com.cgmn.msxl.comp.view.NetImageView;
 import com.cgmn.msxl.comp.adpter.VipAdpter;
 import com.cgmn.msxl.comp.pop.PayPop;
 import com.cgmn.msxl.data.VipItem;
@@ -135,8 +135,13 @@ public class VIPActivity extends BaseOtherActivity {
         txt_u_name = findViewById(R.id.txt_u_name);
         txt_des = findViewById(R.id.txt_des);
         icon_head = findViewById(R.id.icon_head);
-        icon_head.setImageName(GlobalDataHelper.getUserAcc(mContext));
-        icon_head.setImageURL(GlobalDataHelper.getUserPortraitUrl(mContext));
+        byte[] cut = GlobalDataHelper.getUserCut(mContext);
+        if(cut != null && cut.length > 0){
+            icon_head.setImageContent(cut);
+        }else{
+            icon_head.setImageName(GlobalDataHelper.getUserAcc(mContext));
+            icon_head.setImageURL(GlobalDataHelper.getUserPortraitUrl(mContext));
+        }
         txt_u_name.setText(GlobalDataHelper.getUserName(mContext));
 
         dialog = new ProgressDialog(mContext);
