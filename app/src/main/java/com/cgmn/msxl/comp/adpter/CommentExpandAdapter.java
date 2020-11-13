@@ -310,4 +310,9 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
         notifyDataSetChanged();
     }
 
+    public void clearCache(){
+        views.clear();
+        subViews.clear();
+    }
+
 }

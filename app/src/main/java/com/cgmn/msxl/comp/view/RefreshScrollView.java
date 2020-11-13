@@ -79,7 +79,7 @@ public class RefreshScrollView extends ScrollView {
         scroll_y = scrollY;  //监听赋值，监听scrollView的滑动状态，当滑动到顶部的时候才可以下拉刷新
         if(scrollY == 0){
 
-        }else if(scrollY+this.getMeasuredHeight() == this.getChildAt(0).getMeasuredHeight()){  //滑动距离+scrollView的高度如果等于scrollView的内部子view的高度则证明滑动到了底部，则自动加载更多数据
+        }else if(this.getChildAt(0).getMeasuredHeight() - (scrollY+this.getMeasuredHeight()) < 800 ){  //滑动距离+scrollView的高度如果等于scrollView的内部子view的高度则证明滑动到了底部，则自动加载更多数据
             listsner.loadMore();  //加载更多
         }
     }
@@ -107,7 +107,6 @@ public class RefreshScrollView extends ScrollView {
                         listsner.hintChange("下拉刷新");
                         b_down = false; //不可以刷新
                     }
-                    listsner.setWidthX((int)event.getX()); //设置触摸点的横坐标，用来优化头布局效果，不是非必须的
                     return true;   //拦截触摸事件，scrollView不可响应触摸事件，否则会造成松手滑动跳动错位
                 }else{ //手势判断：小于0则是上滑，此时按正常程序走
                     b_down = false; //不可以刷新
@@ -126,6 +125,7 @@ public class RefreshScrollView extends ScrollView {
                 headViewRefresh.setLayoutParams(params);
                 listsner.hintChange("正在刷新");
                 listsner.startRefresh();
+                return true;
             }else{    //如果不可以刷新，停止刷新
                 stopRefresh();
             }

@@ -29,6 +29,7 @@ import com.cgmn.msxl.comp.CustmerToast;
 import com.cgmn.msxl.comp.adpter.CommentExpandAdapter;
 import com.cgmn.msxl.comp.view.CommentExpandableListView;
 import com.cgmn.msxl.comp.view.NetImageView;
+import com.cgmn.msxl.comp.view.RefreshScrollView;
 import com.cgmn.msxl.data.CommentBean;
 import com.cgmn.msxl.data.CommentDetailBean;
 import com.cgmn.msxl.data.ReplyDetailBean;
@@ -44,7 +45,6 @@ import com.cgmn.msxl.utils.ImageUtil;
 import com.cgmn.msxl.utils.MessageUtil;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import org.apache.shiro.codec.Base64;
 
 import java.util.*;
 
@@ -54,8 +54,9 @@ public class DisgussActivity extends Activity
 
     private Context mContent;
 
-    private TextView bt_comment;
-    private ScrollView scrollView;
+    private RelativeLayout headView;
+    private TextView bt_comment,head_view_tv;
+    private RefreshScrollView scrollView;
     private CommentExpandableListView expandableListView;
     private CommentExpandAdapter adapter;
     private List<CommentDetailBean> commentsList = new ArrayList<>();
@@ -70,6 +71,7 @@ public class DisgussActivity extends Activity
     private View imageView = null;
     private byte[] pictures = null;
     private String editCommet;
+    private boolean appendList = false;
 
     private int currentSelectedPosition;
 
@@ -88,13 +90,21 @@ public class DisgussActivity extends Activity
             public boolean handleMessage(Message msg) {
                 if (msg.what == MessageUtil.LOAD_COMMENT_LIST) {
                     commentsList.clear();
-                    CommentBean commentBean = new CommentBean(msg.obj);
+                    CommentBean commentBean = new CommentBean(msg.obj, commentsList.size());
                     commentBean.getList(commentsList);
                     if(adapter == null){
                         initExpandableListView();
                     }
+                    adapter.clearCache();
                     adapter.notifyDataSetChanged();
-                } else if (msg.what == MessageUtil.PUBLISHED_COMMENT) {
+                    scrollView.stopRefresh();
+                } else if(msg.what == MessageUtil.APPEND_LOAD_COMMENT_LIST){
+                    CommentBean commentBean = new CommentBean(msg.obj, commentsList.size());
+                    commentBean.getList(commentsList);
+                    adapter.notifyDataSetChanged();
+                    expandList();
+                    appendList = false;
+                }else if (msg.what == MessageUtil.PUBLISHED_COMMENT) {
                     String userName = GlobalDataHelper.getUserName(mContent);
                     String time = CommentBean.analysisTime(new Date());
                     CommentDetailBean detailBean = new CommentDetailBean(userName, editCommet, time);
@@ -157,8 +167,18 @@ public class DisgussActivity extends Activity
         img_back = findViewById(R.id.img_back);
         img_back.setOnClickListener(clickListener);
         scrollView = findViewById(R.id.scrollView);
+
+        headView = (RelativeLayout) findViewById(R.id.head_view);
+        head_view_tv = (TextView) findViewById(R.id.head_view_tv);
+        scrollView.setListsner(this);
+        scrollView.setHeadView(headView);
     }
 
+    private void expandList(){
+        for (int i = 0; i < commentsList.size(); i++) {
+            expandableListView.expandGroup(i);
+        }
+    }
 
 
     /**
@@ -170,16 +190,14 @@ public class DisgussActivity extends Activity
         adapter = new CommentExpandAdapter(mContent, commentsList);
         adapter.setCommentListener(this);
         expandableListView.setAdapter(adapter);
-        for (int i = 0; i < commentsList.size(); i++) {
-            expandableListView.expandGroup(i);
-        }
-        expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-            @Override
-            public boolean onGroupClick(ExpandableListView expandableListView, View view, int groupPosition, long l) {
-                jump2Sub(commentsList.get(groupPosition));
-                return true;
-            }
-        });
+        expandList();
+//        expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+//            @Override
+//            public boolean onGroupClick(ExpandableListView expandableListView, View view, int groupPosition, long l) {
+//                jump2Sub(commentsList.get(groupPosition));
+//                return true;
+//            }
+//        });
 
         expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
@@ -246,7 +264,7 @@ public class DisgussActivity extends Activity
             @Override
             public void run() {
                 Map<String, String> params = new HashMap<>();
-                params.put("start", (commentsList.size()-1)+"");
+                params.put("start", (commentsList.size())+"");
                 params.put("token", GlobalDataHelper.getToken(mContent));
                 String url = CommonUtil.buildGetUrl(
                         PropertyService.getInstance().getKey("serverUrl"),
@@ -607,23 +625,22 @@ public class DisgussActivity extends Activity
 
     @Override
     public void startRefresh() {
-
+        loadCommentList();
     }
 
     @Override
     public void loadMore() {
-
+        if(!appendList){
+            appendList = true;
+            appendCommentList();
+        }
     }
 
     @Override
     public void hintChange(String hint) {
-
+        head_view_tv.setText(hint);
     }
 
-    @Override
-    public void setWidthX(int x) {
-
-    }
 
     private void jump2Sub(CommentDetailBean bean){
         Intent intent = new Intent(mContent, DisgussSubActivity.class);

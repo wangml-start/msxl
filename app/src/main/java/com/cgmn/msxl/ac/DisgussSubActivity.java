@@ -25,11 +25,13 @@ import com.cgmn.msxl.comp.CustmerToast;
 import com.cgmn.msxl.comp.adpter.CommentExpandAdapter;
 import com.cgmn.msxl.comp.view.CommentExpandableListView;
 import com.cgmn.msxl.comp.view.NetImageView;
+import com.cgmn.msxl.comp.view.RefreshScrollView;
 import com.cgmn.msxl.data.CommentBean;
 import com.cgmn.msxl.data.CommentDetailBean;
 import com.cgmn.msxl.data.ReplyDetailBean;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.cgmn.msxl.in.CommentListener;
+import com.cgmn.msxl.in.RefreshListener;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.service.GlobalDataHelper;
 import com.cgmn.msxl.service.OkHttpClientManager;
@@ -42,14 +44,16 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import java.util.*;
 
 public class DisgussSubActivity extends BaseOtherActivity
-        implements CommentListener,View.OnClickListener {
+        implements CommentListener,View.OnClickListener, RefreshListener {
     private CommentDetailBean comment;
     private static final String TAG = "DisgussSubActivity";
 
+    private RelativeLayout headView;
     private NetImageView comment_item_logo, comment_picture;
-    private TextView userName, time, content,detail_page_do_comment,comment_total,approve_total;
+    private TextView userName, time, content,detail_page_do_comment,
+            comment_total,approve_total, head_view_tv;
 
-    private ScrollView scrollView;
+    private RefreshScrollView scrollView;
     private CommentExpandableListView sub_list_comment;
     private CommentExpandAdapter adapter;
     private BottomSheetDialog dialog;
@@ -65,6 +69,7 @@ public class DisgussSubActivity extends BaseOtherActivity
     private String editCommet;
     private int currentSelectedPosition=-1;
     private int subPosition=-1;
+    private boolean appendList = false;
 
     @Override
     protected int getContentView() {
@@ -91,6 +96,10 @@ public class DisgussSubActivity extends BaseOtherActivity
         approve_total = findViewById(R.id.approve_total);
 
         detail_page_do_comment.setOnClickListener(this);
+        headView = (RelativeLayout) findViewById(R.id.head_view);
+        head_view_tv = (TextView) findViewById(R.id.head_view_tv);
+        scrollView.setListsner(this);
+        scrollView.setHeadView(headView);
 
         comment  = (CommentDetailBean) GlobalDataHelper.getDate("comment");
         if(comment != null){
@@ -123,12 +132,21 @@ public class DisgussSubActivity extends BaseOtherActivity
             public boolean handleMessage(Message msg) {
                 if (msg.what == MessageUtil.LOAD_REPLAY_LIST) {
                     commentsList.clear();
-                    CommentBean commentBean = new CommentBean(msg.obj);
+                    CommentBean commentBean = new CommentBean(msg.obj, commentsList.size());
                     commentBean.getList(commentsList);
                     if(adapter == null){
                         initExpandableListView();
                     }
+                    scrollView.stopRefresh();
+                    adapter.clearCache();
                     adapter.notifyDataSetChanged();
+                    comment_total.setText("评论 "+ commentsList.size());
+                } else if(msg.what == MessageUtil.APPEND_LOAD_COMMENT_LIST){
+                    CommentBean commentBean = new CommentBean(msg.obj, commentsList.size());
+                    commentBean.getList(commentsList);
+                    adapter.notifyDataSetChanged();
+                    expandList();
+                    appendList = false;
                     comment_total.setText("评论 "+ commentsList.size());
                 } else if (msg.what == MessageUtil.PUBLISHED_COMMENT) {
                     String userName = GlobalDataHelper.getUserName(mContext);
@@ -152,8 +170,6 @@ public class DisgussSubActivity extends BaseOtherActivity
                     adapter.addTheReplyData(detailBean, currentSelectedPosition);
                     sub_list_comment.expandGroup(currentSelectedPosition);
                     resetDialog();
-                } else if (msg.what == MessageUtil.APPROVED_COMMENT) {
-
                 } else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
                     GlobalExceptionHandler.getInstance(mContext).handlerException((Exception) msg.obj);
                 }
@@ -169,6 +185,12 @@ public class DisgussSubActivity extends BaseOtherActivity
         editCommet = null;
     }
 
+    private void expandList(){
+        for (int i = 0; i < commentsList.size(); i++) {
+            sub_list_comment.expandGroup(i);
+        }
+    }
+
     private void initExpandableListView() {
         sub_list_comment.setGroupIndicator(null);
         //默认展开所有回复
@@ -176,9 +198,7 @@ public class DisgussSubActivity extends BaseOtherActivity
         adapter.setCommentListener(this);
         adapter.setExpandAll(true);
         sub_list_comment.setAdapter(adapter);
-        for (int i = 0; i < commentsList.size(); i++) {
-            sub_list_comment.expandGroup(i);
-        }
+        expandList();
         sub_list_comment.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView expandableListView, View view, int groupPosition, long l) {
@@ -275,6 +295,49 @@ public class DisgussSubActivity extends BaseOtherActivity
                             public void onResponse(BaseData data) {
                                 Message message = Message.obtain();
                                 message.what = MessageUtil.LOAD_REPLAY_LIST;
+                                try {
+                                    message.obj = data.getRecords();
+                                    Integer status = data.getStatus();
+                                    if (status == null || status == -1) {
+                                        throw new Exception(data.getError());
+                                    }
+                                } catch (Exception e) {
+                                    message.what = MessageUtil.EXCUTE_EXCEPTION;
+                                    message.obj = e;
+                                }
+                                mHandler.sendMessage(message);
+                            }
+                        });
+                Log.e(TAG, "NAME=" + Thread.currentThread().getName());
+            }
+        });
+    }
+
+    private void appendreplayComment(){
+        GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
+            @Override
+            public void run() {
+                Map<String, String> params = new HashMap<>();
+                params.put("start", (commentsList.size())+"");
+                params.put("comment_id", comment.getId()+"");
+                params.put("token", GlobalDataHelper.getToken(mContext));
+                String url = CommonUtil.buildGetUrl(
+                        PropertyService.getInstance().getKey("serverUrl"),
+                        "/chat/query_replay_list", params);
+                OkHttpClientManager.getAsyn(url,
+                        new OkHttpClientManager.ResultCallback<BaseData>() {
+                            @Override
+                            public void onError(com.squareup.okhttp.Request request, Exception e) {
+                                Message message = Message.obtain();
+                                message.what = MessageUtil.EXCUTE_EXCEPTION;
+                                message.obj = e;
+                                mHandler.sendMessage(message);
+                            }
+
+                            @Override
+                            public void onResponse(BaseData data) {
+                                Message message = Message.obtain();
+                                message.what = MessageUtil.APPEND_LOAD_COMMENT_LIST;
                                 try {
                                     message.obj = data.getRecords();
                                     Integer status = data.getStatus();
@@ -457,4 +520,21 @@ public class DisgussSubActivity extends BaseOtherActivity
         showReplyDialog();
     }
 
+    @Override
+    public void startRefresh() {
+        loadReplayList();
+    }
+
+    @Override
+    public void loadMore() {
+        if(!appendList){
+            appendList = true;
+            appendreplayComment();
+        }
+    }
+
+    @Override
+    public void hintChange(String hint) {
+
+    }
 }

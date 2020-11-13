@@ -9,14 +9,14 @@ public class CommentBean {
     private List<CommentDetailBean> commentList;
 
 
-    public CommentBean(Object list) {
+    public CommentBean(Object list, Integer baseIndex) {
         commentList = new ArrayList<>();
         try {
             if(list == null){
                 return;
             }
             List<Map<String, Object>> mList = (List<Map<String, Object>>) list;
-            Integer index = 0;
+            Integer index = baseIndex;
             for (Map<String, Object> item : mList) {
                 CommentDetailBean bean = analysisComment(item);
                 bean.setNo(index++);

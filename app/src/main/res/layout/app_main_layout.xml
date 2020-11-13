@@ -13,6 +13,18 @@
             android:background="@color/div_white"
             android:orientation="horizontal">
         <com.cgmn.msxl.comp.view.GuideIconView
+                android:id="@+id/txt_guba"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawablePadding="2dp"
+                android:gravity="center"
+                android:padding="2dp"
+                guide:icon="@drawable/guba"
+                guide:text="@string/statistic"
+                guide:color="@color/colorAccent"
+                guide:text_size="@dimen/smallSize" />
+        <com.cgmn.msxl.comp.view.GuideIconView
                 android:id="@+id/txt_xunlian"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -25,18 +37,6 @@
                 guide:text_size="@dimen/smallSize"
                 guide:color="@color/colorAccent"
                 />
-        <com.cgmn.msxl.comp.view.GuideIconView
-                android:id="@+id/txt_guba"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:drawablePadding="2dp"
-                android:gravity="center"
-                android:padding="2dp"
-                guide:icon="@drawable/guba"
-                guide:text="@string/statistic"
-                guide:color="@color/colorAccent"
-                guide:text_size="@dimen/smallSize" />
         <com.cgmn.msxl.comp.view.GuideIconView
                 android:id="@+id/txt_may"
                 android:layout_width="0dp"

@@ -74,4 +74,5 @@ public class CommentExpandableListView extends ExpandableListView implements Nes
     public boolean dispatchNestedPreFling(float velocityX, float velocityY) {
         return mScrollingChildHelper.dispatchNestedPreFling(velocityX, velocityY);
     }
+
 }

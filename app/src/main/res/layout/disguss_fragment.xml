@@ -48,7 +48,7 @@
             android:layout_height="0dp"
             android:layout_weight="1">
 
-        <ScrollView
+        <com.cgmn.msxl.comp.view.RefreshScrollView
                 android:id="@+id/scrollView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -61,6 +61,8 @@
                     android:layout_marginTop="3dp"
                     android:orientation="vertical">
 
+                <include layout="@layout/refresh_header"/>
+
                 <com.cgmn.msxl.comp.view.CommentExpandableListView
                         android:id="@+id/detail_page_lv_comment"
                         android:layout_width="match_parent"
@@ -71,7 +73,7 @@
                         android:scrollbars="none" />
 
             </LinearLayout>
-        </ScrollView>
+        </com.cgmn.msxl.comp.view.RefreshScrollView>
 
         <LinearLayout
                 android:id="@+id/comments"
