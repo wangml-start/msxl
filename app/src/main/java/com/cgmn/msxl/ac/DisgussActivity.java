@@ -100,9 +100,12 @@ public class DisgussActivity extends Activity
                     scrollView.stopRefresh();
                 } else if(msg.what == MessageUtil.APPEND_LOAD_COMMENT_LIST){
                     CommentBean commentBean = new CommentBean(msg.obj, commentsList.size());
+                    int baseSize = commentsList.size();
                     commentBean.getList(commentsList);
-                    adapter.notifyDataSetChanged();
-                    expandList();
+                    if(baseSize < commentsList.size()){
+                        adapter.notifyDataSetChanged();
+                        expandList();
+                    }
                     appendList = false;
                 }else if (msg.what == MessageUtil.PUBLISHED_COMMENT) {
                     String userName = GlobalDataHelper.getUserName(mContent);
@@ -680,6 +683,11 @@ public class DisgussActivity extends Activity
     @Override
     public void onCommentClick(Integer position) {
         showReplyDialog(position);
+    }
+
+    @Override
+    public void onSettingClick(View view, Integer position) {
+
     }
 
 }

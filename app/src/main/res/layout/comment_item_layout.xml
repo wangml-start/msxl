@@ -51,15 +51,14 @@
         </LinearLayout>
 
         <TextView
-                android:id="@+id/comment_delete"
-                android:layout_width="wrap_content"
-                android:layout_height="34dp"
-                android:padding="8dp"
-                android:visibility="gone"
-                android:layout_marginRight="35dp"
-                android:textSize="@dimen/size12"
+                android:id="@+id/comment_setting"
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="15dp"
+                android:gravity="bottom|center"
+                android:textSize="@dimen/LargeSize"
                 android:textColor="@color/text_topbar"
-                android:text="删除" />
+                android:text="..." />
     </LinearLayout>
 
     <LinearLayout

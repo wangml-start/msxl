@@ -99,6 +99,10 @@ public class CommentBean {
                 ReplyDetailBean replyDetailBean = new ReplyDetailBean(reuserName, recontent);
                 replyDetailBean.setNo(index++);
                 replyDetailBean.setUserId(((Double) item.get("creator_id")).intValue());
+                if(!CommonUtil.isEmpty(item.get("bit_content"))){
+                    replyDetailBean.setPicture(Base64.decode((String) attr.get("bit_content")));
+                }
+
                 reList.add(replyDetailBean);
             }
         }

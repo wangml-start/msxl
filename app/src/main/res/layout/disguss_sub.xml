@@ -7,6 +7,7 @@
 
     <com.cgmn.msxl.comp.view.RefreshScrollView
             android:id="@+id/scrollView"
+            android:scrollbars="vertical"
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:layout_above="@id/comments"
@@ -74,7 +75,7 @@
                         android:layout_marginTop="6dp"
                         android:layout_marginRight="24dp"
                         android:layout_marginBottom="8dp"
-                        android:letterSpacing="0.2"
+                        android:letterSpacing="0.1"
                         android:textColor="@color/text_topbar"
                         android:textSize="@dimen/size16" />
 
@@ -121,12 +122,6 @@
                         android:textColor="@color/text_topbar"
                         android:textSize="@dimen/size16" />
             </LinearLayout>
-
-            <View
-                    android:layout_width="match_parent"
-                    android:layout_height="3dp"
-                    android:layout_marginTop="2dp"
-                    android:background="@color/div_white" />
 
             <LinearLayout
                     android:id="@+id/detail_page_comment_container"

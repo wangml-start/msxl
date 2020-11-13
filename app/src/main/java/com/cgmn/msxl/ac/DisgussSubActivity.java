@@ -3,10 +3,13 @@ package com.cgmn.msxl.ac;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -37,6 +40,7 @@ import com.cgmn.msxl.service.GlobalDataHelper;
 import com.cgmn.msxl.service.OkHttpClientManager;
 import com.cgmn.msxl.service.PropertyService;
 import com.cgmn.msxl.utils.CommonUtil;
+import com.cgmn.msxl.utils.ImageUtil;
 import com.cgmn.msxl.utils.MessageUtil;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -167,6 +171,7 @@ public class DisgussSubActivity extends BaseOtherActivity
                     ReplyDetailBean detailBean = new ReplyDetailBean(userName, editCommet);
                     detailBean.setId((Integer) msg.obj);
                     detailBean.setUserId(GlobalDataHelper.getUserId(mContext));
+                    detailBean.setPicture(pictures);
                     adapter.addTheReplyData(detailBean, currentSelectedPosition);
                     sub_list_comment.expandGroup(currentSelectedPosition);
                     resetDialog();
@@ -521,6 +526,11 @@ public class DisgussSubActivity extends BaseOtherActivity
     }
 
     @Override
+    public void onSettingClick(View view, Integer position) {
+
+    }
+
+    @Override
     public void startRefresh() {
         loadReplayList();
     }
@@ -536,5 +546,69 @@ public class DisgussSubActivity extends BaseOtherActivity
     @Override
     public void hintChange(String hint) {
 
+    }
+
+    /**
+     * 处理权限回调结果
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case 200:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Intent intent = new Intent(Intent.ACTION_PICK);
+                    intent.setType("image/*");
+                    // 判断系统中是否有处理该 Intent 的 Activity
+                    if (intent.resolveActivity(mContext.getPackageManager()) != null) {
+                        startActivityForResult(intent, REQUEST_IMAGE_GET);
+                    } else {
+                        Toast.makeText(mContext, "未找到图片查看器", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                break;
+        }
+    }
+
+    /**
+     * 处理回调结果
+     */
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // 回调成功
+        if (resultCode == -1) {
+            switch (requestCode) {
+                // 相册选取
+                case REQUEST_IMAGE_GET:
+                    Uri selectedImage = data.getData();
+                    String[] filePathColumns = {MediaStore.Images.Media.DATA};
+                    Cursor c = mContext.getContentResolver().query(selectedImage, filePathColumns, null, null, null);
+                    c.moveToFirst();
+                    int columnIndex = c.getColumnIndex(filePathColumns[0]);
+                    String imagePath = c.getString(columnIndex);
+                    byte[] bs = ImageUtil.getCompressBytes(imagePath, 800);
+                    if (bs != null && bs.length > 0) {
+                        pictures = bs;
+                        imageView = LayoutInflater.from(mContext).inflate(R.layout.comment_image_item, null);
+                        final LinearLayout comment_parent_view = commentView.findViewById(R.id.comment_parent_view);
+                        comment_parent_view.addView(imageView);
+                        NetImageView im = imageView.findViewById(R.id.com_picture);
+                        im.setImageContent(bs);
+                        TextView com_picture_close = imageView.findViewById(R.id.com_picture_close);
+                        com_picture_close.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                comment_parent_view.removeView(imageView);
+                                imageView = null;
+                                pictures = null;
+                                TextView dialog_comment_dis = commentView.findViewById(R.id.dialog_comment_dis);
+                                dialog_comment_dis.setText("");
+                            }
+                        });
+                        invalidCommentView();
+                    }
+                    break;
+            }
+        }
     }
 }

@@ -14,6 +14,7 @@ public class ReplyDetailBean {
     private String status;
     private String createDate;
     private int userId;
+    private byte[] picture;
 
     public ReplyDetailBean(String nickName, String content) {
         this.nickName = nickName;
@@ -83,5 +84,13 @@ public class ReplyDetailBean {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public byte[] getPicture() {
+        return picture;
+    }
+
+    public void setPicture(byte[] picture) {
+        this.picture = picture;
     }
 }

@@ -38,8 +38,8 @@
                 android:textColor="@android:color/white" />
         <TextView
                 android:id="@+id/dialog_comment_dis"
-                android:layout_width="wrap_content"
-                android:layout_height="32dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginTop="6dp"
                 android:layout_marginLeft="12dp"
                 android:layout_marginBottom="14dp"
