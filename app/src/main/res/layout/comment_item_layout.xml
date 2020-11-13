@@ -55,7 +55,7 @@
                 android:layout_width="30dp"
                 android:layout_height="match_parent"
                 android:layout_marginRight="15dp"
-                android:gravity="bottom|center"
+                android:gravity="top|center"
                 android:textSize="@dimen/LargeSize"
                 android:textColor="@color/text_topbar"
                 android:text="..." />

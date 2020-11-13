@@ -1,15 +1,9 @@
 package com.cgmn.msxl.ac;
 
-import android.Manifest;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -19,64 +13,39 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import androidx.annotation.RequiresApi;
-import androidx.core.content.ContextCompat;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.CustmerToast;
 import com.cgmn.msxl.comp.adpter.CommentExpandAdapter;
-import com.cgmn.msxl.comp.view.CommentExpandableListView;
 import com.cgmn.msxl.comp.view.NetImageView;
-import com.cgmn.msxl.comp.view.RefreshScrollView;
 import com.cgmn.msxl.data.CommentBean;
 import com.cgmn.msxl.data.CommentDetailBean;
 import com.cgmn.msxl.data.ReplyDetailBean;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
-import com.cgmn.msxl.in.CommentListener;
-import com.cgmn.msxl.in.RefreshListener;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.service.GlobalDataHelper;
 import com.cgmn.msxl.service.OkHttpClientManager;
 import com.cgmn.msxl.service.PropertyService;
 import com.cgmn.msxl.utils.CommonUtil;
-import com.cgmn.msxl.utils.ImageUtil;
 import com.cgmn.msxl.utils.MessageUtil;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.*;
 
-public class DisgussSubActivity extends BaseOtherActivity
-        implements CommentListener,View.OnClickListener, RefreshListener {
+public class DisgussSubActivity extends DisgussBaseActivity {
     private CommentDetailBean comment;
     private static final String TAG = "DisgussSubActivity";
 
-    private RelativeLayout headView;
     private NetImageView comment_item_logo, comment_picture;
-    private TextView userName, time, content,detail_page_do_comment,
-            comment_total,approve_total, head_view_tv;
+    private TextView userName, time, content,comment_total,approve_total;
 
-    private RefreshScrollView scrollView;
-    private CommentExpandableListView sub_list_comment;
-    private CommentExpandAdapter adapter;
-    private BottomSheetDialog dialog;
-
-    //消息处理
-    private Handler mHandler;
-    private List<CommentDetailBean> commentsList = new ArrayList<>();
-
-    private static final int REQUEST_IMAGE_GET = 0;
-    private View commentView = null;
-    private View imageView = null;
-    private byte[] pictures = null;
-    private String editCommet;
     private int currentSelectedPosition=-1;
     private int subPosition=-1;
-    private boolean appendList = false;
 
     @Override
-    protected int getContentView() {
+    protected int getView() {
         return R.layout.disguss_sub;
     }
 
@@ -87,23 +56,35 @@ public class DisgussSubActivity extends BaseOtherActivity
         loadReplayList();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    protected void onCustmerClick(View view) {
+        if (view.getId() == R.id.dialog_comment_bt) {
+            if (!TextUtils.isEmpty(editCommet)) {
+                dialog.dismiss();
+                replayComment();
+            } else {
+                CustmerToast.makeText(mContext, "评论内容不能为空").show();
+            }
+        } else if (view.getId() == R.id.dialog_comment_pic) {
+            onSelectFromPho();
+        } else if(view.getId() == R.id.detail_page_do_comment){
+            currentSelectedPosition = -1;
+            subPosition = -1;
+            showReplyDialog();
+        }else if(view.getId() == R.id.img_back){
+            finish();
+        }
+    }
+
     private void bindView(){
         comment_item_logo = findViewById(R.id.comment_item_logo);
         comment_picture = findViewById(R.id.comment_picture);
         userName = findViewById(R.id.userName);
         time = findViewById(R.id.time);
         content = findViewById(R.id.content);
-        detail_page_do_comment = findViewById(R.id.detail_page_do_comment);
-        scrollView = findViewById(R.id.scrollView);
-        sub_list_comment = findViewById(R.id.sub_list_comment);
         comment_total = findViewById(R.id.comment_total);
         approve_total = findViewById(R.id.approve_total);
-
-        detail_page_do_comment.setOnClickListener(this);
-        headView = (RelativeLayout) findViewById(R.id.head_view);
-        head_view_tv = (TextView) findViewById(R.id.head_view_tv);
-        scrollView.setListsner(this);
-        scrollView.setHeadView(headView);
 
         comment  = (CommentDetailBean) GlobalDataHelper.getDate("comment");
         if(comment != null){
@@ -173,7 +154,7 @@ public class DisgussSubActivity extends BaseOtherActivity
                     detailBean.setUserId(GlobalDataHelper.getUserId(mContext));
                     detailBean.setPicture(pictures);
                     adapter.addTheReplyData(detailBean, currentSelectedPosition);
-                    sub_list_comment.expandGroup(currentSelectedPosition);
+                    expandableListView.expandGroup(currentSelectedPosition);
                     resetDialog();
                 } else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
                     GlobalExceptionHandler.getInstance(mContext).handlerException((Exception) msg.obj);
@@ -183,28 +164,16 @@ public class DisgussSubActivity extends BaseOtherActivity
         });
     }
 
-    private void resetDialog(){
-        commentView = null;
-        imageView = null;
-        pictures = null;
-        editCommet = null;
-    }
-
-    private void expandList(){
-        for (int i = 0; i < commentsList.size(); i++) {
-            sub_list_comment.expandGroup(i);
-        }
-    }
 
     private void initExpandableListView() {
-        sub_list_comment.setGroupIndicator(null);
+        expandableListView.setGroupIndicator(null);
         //默认展开所有回复
         adapter = new CommentExpandAdapter(mContext, commentsList);
         adapter.setCommentListener(this);
         adapter.setExpandAll(true);
-        sub_list_comment.setAdapter(adapter);
+        expandableListView.setAdapter(adapter);
         expandList();
-        sub_list_comment.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+        expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView expandableListView, View view, int groupPosition, long l) {
                 currentSelectedPosition = groupPosition;
@@ -213,7 +182,7 @@ public class DisgussSubActivity extends BaseOtherActivity
             }
         });
 
-        sub_list_comment.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+        expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPosition, int childPosition, long l) {
                 currentSelectedPosition = groupPosition;
@@ -250,8 +219,8 @@ public class DisgussSubActivity extends BaseOtherActivity
         dialog.setContentView(commentView);
         invalidCommentView();
 
-        bt_comment.setOnClickListener(this);
-        dialog_comment_pic.setOnClickListener(this);
+        bt_comment.setOnClickListener(clickListener);
+        dialog_comment_pic.setOnClickListener(clickListener);
         commentText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -361,16 +330,6 @@ public class DisgussSubActivity extends BaseOtherActivity
         });
     }
 
-    private void invalidCommentView() {
-        /**
-         * 解决bsd显示不全的情况
-         */
-        View parent = (View) commentView.getParent();
-        BottomSheetBehavior behavior = BottomSheetBehavior.from(parent);
-        commentView.measure(0, 0);
-        behavior.setPeekHeight(commentView.getMeasuredHeight());
-    }
-
     /**
      * 回复评论
      * @param
@@ -444,80 +403,6 @@ public class DisgussSubActivity extends BaseOtherActivity
         });
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    private void onSelectFromPho() {
-        if (imageView != null) {
-            TextView dialog_comment_dis = commentView.findViewById(R.id.dialog_comment_dis);
-            dialog_comment_dis.setText("只能添加一张图片");
-            return;
-        }
-        // 权限申请
-        if (ContextCompat.checkSelfPermission(mContext,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            //权限还没有授予，需要在这里写申请权限的代码
-            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 200);
-        } else {
-            // 如果权限已经申请过，直接进行图片选择
-            Intent intent = new Intent(Intent.ACTION_PICK);
-            intent.setType("image/*");
-            // 判断系统中是否有处理该 Intent 的 Activity
-            if (intent.resolveActivity(mContext.getPackageManager()) != null) {
-                startActivityForResult(intent, REQUEST_IMAGE_GET);
-            } else {
-                CustmerToast.makeText(mContext, "未找到图片查看器").show();
-            }
-        }
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    @Override
-    public void onClick(View view) {
-        if (view.getId() == R.id.dialog_comment_bt) {
-            if (!TextUtils.isEmpty(editCommet)) {
-                dialog.dismiss();
-                replayComment();
-            } else {
-                CustmerToast.makeText(mContext, "评论内容不能为空").show();
-            }
-        } else if (view.getId() == R.id.dialog_comment_pic) {
-            onSelectFromPho();
-        } else if(view.getId() == R.id.detail_page_do_comment){
-            currentSelectedPosition = -1;
-            subPosition = -1;
-            showReplyDialog();
-        }
-    }
-
-    @Override
-    public void onApproveClick(final Integer position, final String type) {
-        GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
-            @Override
-            public void run() {
-                Map<String, String> params = new HashMap<>();
-                params.put("token", GlobalDataHelper.getToken(mContext));
-                params.put("type", type);
-                params.put("comment_id", commentsList.get(position).getId()+"");
-                params.put("comment_user_id", commentsList.get(position).getUserId()+"");
-
-                String url = CommonUtil.buildGetUrl(
-                        PropertyService.getInstance().getKey("serverUrl"),
-                        "/chat/approve_comment", params);
-                OkHttpClientManager.getAsyn(url,
-                        new OkHttpClientManager.ResultCallback<BaseData>() {
-                            @Override
-                            public void onError(com.squareup.okhttp.Request request, Exception e) {
-                            }
-
-                            @Override
-                            public void onResponse(BaseData data) {
-                            }
-                        });
-                Log.e(TAG, "NAME=" + Thread.currentThread().getName());
-            }
-        });
-    }
-
     @Override
     public void onCommentClick(Integer position) {
         currentSelectedPosition = position;
@@ -543,72 +428,4 @@ public class DisgussSubActivity extends BaseOtherActivity
         }
     }
 
-    @Override
-    public void hintChange(String hint) {
-
-    }
-
-    /**
-     * 处理权限回调结果
-     */
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case 200:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Intent intent = new Intent(Intent.ACTION_PICK);
-                    intent.setType("image/*");
-                    // 判断系统中是否有处理该 Intent 的 Activity
-                    if (intent.resolveActivity(mContext.getPackageManager()) != null) {
-                        startActivityForResult(intent, REQUEST_IMAGE_GET);
-                    } else {
-                        Toast.makeText(mContext, "未找到图片查看器", Toast.LENGTH_SHORT).show();
-                    }
-                }
-                break;
-        }
-    }
-
-    /**
-     * 处理回调结果
-     */
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        // 回调成功
-        if (resultCode == -1) {
-            switch (requestCode) {
-                // 相册选取
-                case REQUEST_IMAGE_GET:
-                    Uri selectedImage = data.getData();
-                    String[] filePathColumns = {MediaStore.Images.Media.DATA};
-                    Cursor c = mContext.getContentResolver().query(selectedImage, filePathColumns, null, null, null);
-                    c.moveToFirst();
-                    int columnIndex = c.getColumnIndex(filePathColumns[0]);
-                    String imagePath = c.getString(columnIndex);
-                    byte[] bs = ImageUtil.getCompressBytes(imagePath, 800);
-                    if (bs != null && bs.length > 0) {
-                        pictures = bs;
-                        imageView = LayoutInflater.from(mContext).inflate(R.layout.comment_image_item, null);
-                        final LinearLayout comment_parent_view = commentView.findViewById(R.id.comment_parent_view);
-                        comment_parent_view.addView(imageView);
-                        NetImageView im = imageView.findViewById(R.id.com_picture);
-                        im.setImageContent(bs);
-                        TextView com_picture_close = imageView.findViewById(R.id.com_picture_close);
-                        com_picture_close.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                comment_parent_view.removeView(imageView);
-                                imageView = null;
-                                pictures = null;
-                                TextView dialog_comment_dis = commentView.findViewById(R.id.dialog_comment_dis);
-                                dialog_comment_dis.setText("");
-                            }
-                        });
-                        invalidCommentView();
-                    }
-                    break;
-            }
-        }
-    }
 }
