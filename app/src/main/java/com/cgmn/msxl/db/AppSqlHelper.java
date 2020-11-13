@@ -10,7 +10,7 @@ import com.cgmn.msxl.utils.CommonUtil;
 import java.util.*;
 
 public class AppSqlHelper extends SQLiteOpenHelper {
-    private static final int VERSION =11;
+    private static final int VERSION =12;
     public final static String DB_NAME = "app.db";
 
     public AppSqlHelper(Context context) {
@@ -33,6 +33,7 @@ public class AppSqlHelper extends SQLiteOpenHelper {
         db.execSQL("ALTER TABLE users ADD gender INTEGER;");
         db.execSQL("ALTER TABLE users ADD signature VARCHAR(225);");
         db.execSQL("ALTER TABLE users ADD image_cut text;");
+        db.execSQL("ALTER TABLE users ADD user_id INTEGER;");
 
         StringBuffer mode = new StringBuffer();
         mode.append("CREATE TABLE user_modes(");
@@ -48,7 +49,7 @@ public class AppSqlHelper extends SQLiteOpenHelper {
     //软件版本号发生改变时调用
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("ALTER TABLE users ADD image_cut text;");
+        db.execSQL("ALTER TABLE users ADD user_id INTEGER;");
     }
 
     public void upsert(String tableName, ContentValues values, String key) {
@@ -185,7 +186,7 @@ public class AppSqlHelper extends SQLiteOpenHelper {
     public Map<String, Object> getActiveUser(){
         String sql = "SELECT * FROM users WHERE last_active=1 LIMIT 1";
         String[] params = new String[]{};
-        String[] fields = {"id","user_name", "phone", "password", "token","gender","signature", "image_cut"};
+        String[] fields = {"id","user_name", "phone", "password", "token","gender","signature", "image_cut", "user_id"};
         List<Map<String, Object>> list = query(sql, params, fields);
         if(CommonUtil.isEmpty(list) || list.size() == 0){
             return null;

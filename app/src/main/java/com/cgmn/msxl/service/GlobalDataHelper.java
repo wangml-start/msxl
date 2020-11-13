@@ -60,6 +60,11 @@ public class GlobalDataHelper {
         return (String) u.get("phone");
     }
 
+    public static Integer getUserId(Context context){
+        Map<String, Object> u = getUser(context);
+        return Integer.valueOf((String) u.get("user_id"));
+    }
+
     public static byte[] getUserCut(Context context){
         Map<String, Object> u = getUser(context);
         String content = (String) u.get("image_cut");

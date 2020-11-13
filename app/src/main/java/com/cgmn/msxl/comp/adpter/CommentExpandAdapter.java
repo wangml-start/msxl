@@ -37,9 +37,19 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
     private Map<Integer, View> views = null;
     private Map<String, View> subViews = null;
     private CommentListener commentListener;
+    private boolean expandAll = false;
+    private Integer expandNum = 2;
 
     public void setCommentListener(CommentListener commentListener) {
         this.commentListener = commentListener;
+    }
+
+    public void setExpandAll(boolean expandAll) {
+        this.expandAll = expandAll;
+    }
+
+    public void setExpandNum(Integer expandNum) {
+        this.expandNum = expandNum;
     }
 
     public CommentExpandAdapter(Context context, List<CommentDetailBean> commentBeanList) {
@@ -59,7 +69,8 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
         if (commentBeanList.get(i).getReplyList() == null) {
             return 0;
         } else {
-            return commentBeanList.get(i).getReplyList().size() > 0 ? commentBeanList.get(i).getReplyList().size() : 0;
+            Integer count = commentBeanList.get(i).getReplyList().size();
+            return (expandAll) ? count : Math.min(count, expandNum+1);
         }
 
     }
@@ -133,12 +144,14 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
                         if(bean.getMyApprove() == 1){
                             groupHolder.iv_like.setImageResource(R.drawable.icon_comment_like);
                             bean.setMyApprove(0);
+                            bean.setApprove((Integer.valueOf(bean.getApprove()) - 1)+"");
                             groupHolder.comment_approve.setText(bean.getApprove());
                             commentListener.onApproveClick(groupPosition,"unapprove");
                         }else {
                             groupHolder.iv_like.setImageResource(R.drawable.liked);
                             bean.setMyApprove(1);
-                            groupHolder.comment_approve.setText((Integer.valueOf(bean.getApprove()) + 1)+"");
+                            bean.setApprove((Integer.valueOf(bean.getApprove()) + 1)+"");
+                            groupHolder.comment_approve.setText(bean.getApprove());
                             commentListener.onApproveClick(groupPosition,"approve");
                         }
                     } else if(view.getId() == R.id.comment_icon){
@@ -149,7 +162,7 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
             groupHolder.iv_like.setOnClickListener(listener);
             groupHolder.comment_icon.setOnClickListener(listener);
         } else {
-            convertView = views.get(groupPosition);
+            convertView = views.get(bean.getNo());
         }
 
         return convertView;
@@ -157,25 +170,29 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(final int groupPosition, int childPosition, boolean b, View convertView, ViewGroup viewGroup) {
-        CommentDetailBean bean = commentBeanList.get(groupPosition);
-        ReplyDetailBean subbean = bean.getReplyList().get(childPosition);
-        String key = String.format("%s-%s", bean.getNo(), subbean.getNo());
-        if (!subViews.containsKey(key)) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.comment_reply_item_layout, viewGroup, false);
-            final ChildHolder childHolder = new ChildHolder(convertView);
-            String replyUser = subbean.getNickName();
-            subViews.put(key, convertView);
-            if (!TextUtils.isEmpty(replyUser)) {
-                childHolder.tv_name.setText(replyUser + ":");
+        if(!expandAll && childPosition >= expandNum){
+            convertView = LayoutInflater.from(context).inflate(R.layout.show_more_item, viewGroup, false);
+            return convertView;
+        }else{
+            CommentDetailBean bean = commentBeanList.get(groupPosition);
+            ReplyDetailBean subbean = bean.getReplyList().get(childPosition);
+            String key = String.format("%s-%s", bean.getNo(), subbean.getNo());
+            if (!subViews.containsKey(key)) {
+                convertView = LayoutInflater.from(context).inflate(R.layout.comment_reply_item_layout, viewGroup, false);
+                final ChildHolder childHolder = new ChildHolder(convertView);
+                String replyUser = subbean.getNickName();
+                subViews.put(key, convertView);
+                if (!TextUtils.isEmpty(replyUser)) {
+                    childHolder.tv_name.setText(replyUser + ":");
+                } else {
+                    childHolder.tv_name.setText("无名" + ":");
+                }
+                childHolder.tv_content.setText(commentBeanList.get(groupPosition).getReplyList().get(childPosition).getContent());
             } else {
-                childHolder.tv_name.setText("无名" + ":");
+                convertView = subViews.get(key);
             }
-
-            childHolder.tv_content.setText(commentBeanList.get(groupPosition).getReplyList().get(childPosition).getContent());
-        } else {
-            convertView = subViews.get(key);
+            return convertView;
         }
-        return convertView;
     }
 
     @Override
@@ -222,6 +239,7 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
         if (commentDetailBean != null) {
             commentDetailBean.setNo(commentBeanList.size());
             commentBeanList.add(0, commentDetailBean);
+            views.clear(); //重新绑定事件
             notifyDataSetChanged();
         } else {
             throw new IllegalArgumentException("评论数据为空!");
@@ -252,6 +270,26 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
         }
 
     }
+
+    public void addReplyDataTofirst(ReplyDetailBean replyDetailBean, int groupPosition) {
+        if (replyDetailBean != null) {
+            CommentDetailBean bean = commentBeanList.get(groupPosition);
+            if (bean.getReplyList() != null) {
+                replyDetailBean.setNo(bean.getReplyList().size());
+                bean.getReplyList().add(0, replyDetailBean);
+            } else {
+                replyDetailBean.setNo(0);
+                List<ReplyDetailBean> replyList = new ArrayList<>();
+                replyList.add(replyDetailBean);
+                bean.setReplyList(replyList);
+            }
+            notifyDataSetChanged();
+        } else {
+            throw new IllegalArgumentException("回复数据为空!");
+        }
+
+    }
+
 
     /**
      * by moos on 2018/04/20

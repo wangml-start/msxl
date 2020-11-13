@@ -1,128 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:net_image="http://schemas.android.com/apk/res/com.cgmn.msxl"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:background="@color/bg_white">
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginLeft="20dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
 
-        <com.cgmn.msxl.comp.view.NetImageView
-                android:id="@+id/comment_item_logo"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_marginRight="6dp"
-                />
+    <ScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_above="@id/comments"
+            android:layout_weight="1">
 
         <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="6dp"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-            <TextView
-                    android:id="@+id/userName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="沐风"
-                    android:textColor="#5B595A"
-                    android:textSize="14sp" />
-
-            <TextView
-                    android:id="@+id/time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="3dp"
-                    android:text="1小时前"
-                    android:textColor="#989898"
-                    android:textSize="12sp" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="6dp"
-            android:orientation="vertical"
-            >
-        <TextView
-                android:id="@+id/content"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:layout_marginRight="24dp"
-                android:layout_marginBottom="8dp"
-                android:textColor="@color/text_topbar"
-                android:letterSpacing="0.2"
-                android:textSize="@dimen/size16" />
-
-        <com.cgmn.msxl.comp.view.NetImageView
-                android:id="@+id/comment_picture"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:layout_gravity="top"
-                android:visibility="gone"
-                android:layout_marginRight="24dp"
-                android:layout_marginBottom="8dp"
-                android:adjustViewBounds="true"
-                net_image:image_type="0"
-                />
-    </LinearLayout>
-
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="6dp"
-            android:orientation="horizontal"
-            >
-        <TextView
-                android:id="@+id/comment_total"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:layout_marginRight="24dp"
-                android:layout_marginBottom="8dp"
-                android:text="评论"
-                android:textColor="@color/text_topbar"
-                android:textSize="@dimen/smallSize" />
-        <TextView
-                android:id="@+id/approve_total"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:text="赞"
-                android:layout_marginRight="24dp"
-                android:layout_marginBottom="8dp"
-                android:textColor="@color/text_topbar"
-                android:textSize="@dimen/size16" />
-    </LinearLayout>
-    <View
-            android:layout_marginTop="2dp"
-            android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:background="@color/div_white"
-            />
-    <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
-        <ScrollView
-                android:id="@+id/scrollView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_above="@id/comments">
+                android:orientation="vertical">
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="12dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                <com.cgmn.msxl.comp.view.NetImageView
+                        android:id="@+id/comment_item_logo"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_marginRight="6dp" />
+
+                <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="6dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                    <TextView
+                            android:id="@+id/userName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="沐风"
+                            android:textColor="#5B595A"
+                            android:textSize="14sp" />
+
+                    <TextView
+                            android:id="@+id/time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            android:text="1小时前"
+                            android:textColor="#989898"
+                            android:textSize="12sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="6dp"
+                    android:orientation="vertical">
+
+                <TextView
+                        android:id="@+id/content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:layout_marginRight="24dp"
+                        android:layout_marginBottom="8dp"
+                        android:letterSpacing="0.2"
+                        android:textColor="@color/text_topbar"
+                        android:textSize="@dimen/size16" />
+
+                <com.cgmn.msxl.comp.view.NetImageView
+                        android:id="@+id/comment_picture"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top"
+                        android:layout_marginTop="6dp"
+                        android:layout_marginRight="24dp"
+                        android:layout_marginBottom="8dp"
+                        android:adjustViewBounds="true"
+                        android:visibility="gone"
+                        net_image:image_type="0" />
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginRight="6dp"
+                    android:orientation="horizontal">
+
+                <TextView
+                        android:id="@+id/comment_total"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:layout_marginRight="24dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="评论"
+                        android:textColor="@color/text_topbar"
+                        android:textSize="@dimen/smallSize" />
+
+                <TextView
+                        android:id="@+id/approve_total"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:layout_marginRight="24dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="赞"
+                        android:textColor="@color/text_topbar"
+                        android:textSize="@dimen/size16" />
+            </LinearLayout>
+
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"
+                    android:layout_marginTop="2dp"
+                    android:background="@color/div_white" />
 
             <LinearLayout
                     android:id="@+id/detail_page_comment_container"
@@ -141,31 +143,31 @@
                         android:scrollbars="none" />
 
             </LinearLayout>
-        </ScrollView>
-
-        <LinearLayout
-                android:id="@+id/comments"
-                android:layout_width="match_parent"
-                android:layout_height="58dp"
-                android:layout_alignParentBottom="true"
-                android:background="@android:color/white"
-                android:elevation="2dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-            <TextView
-                    android:id="@+id/detail_page_do_comment"
-                    android:layout_width="0dp"
-                    android:layout_height="34dp"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginRight="22dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/comment_bt_selector"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="18dp"
-                    android:text="说点什么吧..."
-                    android:textColor="#B6B6B6"
-                    android:textSize="12sp" />
         </LinearLayout>
-    </RelativeLayout>
-</LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+            android:id="@+id/comments"
+            android:layout_width="match_parent"
+            android:layout_height="58dp"
+            android:layout_alignParentBottom="true"
+            android:background="@android:color/white"
+            android:elevation="2dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+        <TextView
+                android:id="@+id/detail_page_do_comment"
+                android:layout_width="0dp"
+                android:layout_height="34dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="22dp"
+                android:layout_weight="1"
+                android:background="@drawable/comment_bt_selector"
+                android:gravity="center_vertical"
+                android:paddingLeft="18dp"
+                android:text="说点什么吧..."
+                android:textColor="#B6B6B6"
+                android:textSize="12sp" />
+    </LinearLayout>
+</RelativeLayout>

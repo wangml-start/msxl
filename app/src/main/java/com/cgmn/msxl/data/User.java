@@ -1,7 +1,7 @@
 package com.cgmn.msxl.data;
 
 public class User {
-    int userId;
+    int id;
     String phone;
     String password;
     String token;
@@ -43,12 +43,12 @@ public class User {
         this.userName = userName;
     }
 
-    public int getUserId() {
-        return userId;
+    public int getId() {
+        return id;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getGender() {

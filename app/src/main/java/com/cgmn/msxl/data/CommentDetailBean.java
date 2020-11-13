@@ -86,7 +86,11 @@ public class CommentDetailBean {
     }
 
     public String getApprove() {
-        return approve;
+        if(approve == null){
+            return "0";
+        }else{
+            return approve;
+        }
     }
 
     public void setApprove(String approve) {

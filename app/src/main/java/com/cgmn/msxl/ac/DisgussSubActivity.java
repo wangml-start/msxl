@@ -136,16 +136,19 @@ public class DisgussSubActivity extends BaseOtherActivity
                     CommentDetailBean detailBean = new CommentDetailBean(userName, editCommet, time);
                     detailBean.setPicture(pictures);
                     detailBean.setId((Integer) msg.obj);
+                    detailBean.setUserId(GlobalDataHelper.getUserId(mContext));
                     byte[] cut = GlobalDataHelper.getUserCut(mContext);
                     if(cut != null && cut.length > 0){
                         detailBean.setUserLogo(cut);
                     }
                     adapter.addTheCommentData(detailBean);
                     resetDialog();
+                    scrollView.setScrollY(0);
                 } else if(msg.what == MessageUtil.PUBLISHED_REPLAY_COMMENT){
                     String userName = GlobalDataHelper.getUserName(mContext);
                     ReplyDetailBean detailBean = new ReplyDetailBean(userName, editCommet);
                     detailBean.setId((Integer) msg.obj);
+                    detailBean.setUserId(GlobalDataHelper.getUserId(mContext));
                     adapter.addTheReplyData(detailBean, currentSelectedPosition);
                     sub_list_comment.expandGroup(currentSelectedPosition);
                     resetDialog();
@@ -171,6 +174,7 @@ public class DisgussSubActivity extends BaseOtherActivity
         //默认展开所有回复
         adapter = new CommentExpandAdapter(mContext, commentsList);
         adapter.setCommentListener(this);
+        adapter.setExpandAll(true);
         sub_list_comment.setAdapter(adapter);
         for (int i = 0; i < commentsList.size(); i++) {
             sub_list_comment.expandGroup(i);
@@ -323,11 +327,15 @@ public class DisgussSubActivity extends BaseOtherActivity
                         beReplayUserId = bean.getReplyList().get(subPosition).getUserId();
                     }
                 }
+                Integer commentId = comment.getId();
+                if(currentSelectedPosition > 0){
+                    commentId = commentsList.get(currentSelectedPosition).getId();
+                }
                 OkHttpClientManager.Param[] params = new OkHttpClientManager.Param[]{
                         new OkHttpClientManager.Param("token", token),
                         new OkHttpClientManager.Param("picture", org.apache.shiro.codec.Base64.encodeToString(pictures)),
                         new OkHttpClientManager.Param("comment", editCommet),
-                        new OkHttpClientManager.Param("comment_id", commentsList.get(currentSelectedPosition).getId()+""),
+                        new OkHttpClientManager.Param("comment_id", commentId+""),
                         new OkHttpClientManager.Param("comment_user_id", beReplayUserId+"")
                 };
                 String url = String.format("%s%s",
@@ -448,4 +456,5 @@ public class DisgussSubActivity extends BaseOtherActivity
         subPosition = -1;
         showReplyDialog();
     }
+
 }

@@ -55,6 +55,7 @@ public class DisgussActivity extends Activity
     private Context mContent;
 
     private TextView bt_comment;
+    private ScrollView scrollView;
     private CommentExpandableListView expandableListView;
     private CommentExpandAdapter adapter;
     private List<CommentDetailBean> commentsList = new ArrayList<>();
@@ -102,14 +103,17 @@ public class DisgussActivity extends Activity
                     if(cut != null && cut.length > 0){
                         detailBean.setUserLogo(cut);
                     }
+                    detailBean.setUserId(GlobalDataHelper.getUserId(mContent));
                     detailBean.setId((Integer) msg.obj);
                     adapter.addTheCommentData(detailBean);
                     resetDialog();
+                    scrollView.setScrollY(0);
                 } else if(msg.what == MessageUtil.PUBLISHED_REPLAY_COMMENT){
                     String userName = GlobalDataHelper.getUserName(mContent);
                     ReplyDetailBean detailBean = new ReplyDetailBean(userName, editCommet);
                     detailBean.setId((Integer) msg.obj);
-                    adapter.addTheReplyData(detailBean, currentSelectedPosition);
+                    detailBean.setUserId(GlobalDataHelper.getUserId(mContent));
+                    adapter.addReplyDataTofirst(detailBean, currentSelectedPosition);
                     expandableListView.expandGroup(currentSelectedPosition);
                     resetDialog();
                 } else if (msg.what == MessageUtil.APPROVED_COMMENT) {
@@ -152,6 +156,7 @@ public class DisgussActivity extends Activity
         bt_comment.setOnClickListener(clickListener);
         img_back = findViewById(R.id.img_back);
         img_back.setOnClickListener(clickListener);
+        scrollView = findViewById(R.id.scrollView);
     }
 
 
@@ -172,12 +177,6 @@ public class DisgussActivity extends Activity
             @Override
             public boolean onGroupClick(ExpandableListView expandableListView, View view, int groupPosition, long l) {
                 jump2Sub(commentsList.get(groupPosition));
-//                boolean isExpanded = expandableListView.isGroupExpanded(groupPosition);
-//                if(isExpanded){
-//                    expandableListView.collapseGroup(groupPosition);
-//                }else {
-//                    expandableListView.expandGroup(groupPosition, true);
-//                }
                 return true;
             }
         });
@@ -190,13 +189,13 @@ public class DisgussActivity extends Activity
             }
         });
 
-        expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
-            @Override
-            public void onGroupExpand(int groupPosition) {
-                //toast("展开第"+groupPosition+"个分组");
-
-            }
-        });
+//        expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+//            @Override
+//            public void onGroupExpand(int groupPosition) {
+//                //toast("展开第"+groupPosition+"个分组");
+//
+//            }
+//        });
 
     }
 
@@ -665,4 +664,5 @@ public class DisgussActivity extends Activity
     public void onCommentClick(Integer position) {
         showReplyDialog(position);
     }
+
 }

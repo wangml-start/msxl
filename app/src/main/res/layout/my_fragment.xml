@@ -8,6 +8,8 @@
 
     <ListView
             android:id="@+id/list_content"
+            android:divider="@drawable/list_item_divider_left_blank"
+            android:dividerHeight="2dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
