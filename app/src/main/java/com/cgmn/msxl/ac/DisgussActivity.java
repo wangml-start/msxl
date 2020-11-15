@@ -129,6 +129,7 @@ public class DisgussActivity extends DisgussBaseActivity {
         //默认展开所有回复
         adapter = new CommentExpandAdapter(mContent, commentsList);
         adapter.setCommentListener(this);
+        adapter.setExpandAllContent(false);
         expandableListView.setAdapter(adapter);
         expandList();
 //        expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
@@ -494,6 +495,11 @@ public class DisgussActivity extends DisgussBaseActivity {
     @Override
     public void onSettingClick(View view, Integer position) {
 
+    }
+
+    @Override
+    public void onShowMoreClick(Integer position) {
+        jump2Sub(commentsList.get(position));
     }
 
 }

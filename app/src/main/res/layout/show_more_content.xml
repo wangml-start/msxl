@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/show_more"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="35dp"
+        android:layout_marginRight="6dp"
+        android:text="查看全文>"
+        android:textColor="@color/link_color"
+        android:textSize="14sp" />

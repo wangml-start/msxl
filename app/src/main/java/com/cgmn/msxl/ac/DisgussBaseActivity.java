@@ -246,4 +246,7 @@ public abstract class DisgussBaseActivity  extends Activity
         head_view_tv.setText(hint);
     }
 
+    @Override
+    public void onShowMoreClick(Integer position) {
+    }
 }

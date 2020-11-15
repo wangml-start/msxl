@@ -9,7 +9,7 @@
             android:background="@color/replay_bg"
             android:layout_height="4dp"
             android:layout_marginLeft="35dp"
-            android:layout_marginRight="35dp"
+            android:layout_marginRight="6dp"
             />
     <LinearLayout
             android:background="@color/replay_bg"

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -39,6 +40,8 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
     private CommentListener commentListener;
     private boolean expandAll = false;
     private Integer expandNum = 2;
+    private boolean expandAllContent = true;
+    private Integer allContentLength = 150;
 
     public void setCommentListener(CommentListener commentListener) {
         this.commentListener = commentListener;
@@ -48,8 +51,8 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
         this.expandAll = expandAll;
     }
 
-    public void setExpandNum(Integer expandNum) {
-        this.expandNum = expandNum;
+    public void setExpandAllContent(boolean expandAllContent) {
+        this.expandAllContent = expandAllContent;
     }
 
     public CommentExpandAdapter(Context context, List<CommentDetailBean> commentBeanList) {
@@ -107,33 +110,7 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
             convertView = LayoutInflater.from(context).inflate(R.layout.comment_item_layout, viewGroup, false);
             final GroupHolder groupHolder = new GroupHolder(convertView);
             views.put(bean.getNo(), convertView);
-            if (bean.getUserLogo() != null && bean.getUserLogo().length > 0) {
-                groupHolder.logo.setImageContent(bean.getUserLogo());
-            } else {
-                Glide.with(context).load(R.drawable.user_logo)
-                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                        .error(R.mipmap.ic_launcher)
-                        .centerCrop()
-                        .into(groupHolder.logo);
-            }
-            if (bean.getPicture() != null && bean.getPicture().length > 0) {
-                groupHolder.comment_picture.setImageContent(bean.getPicture());
-                groupHolder.comment_picture.setVisibility(View.VISIBLE);
-            }
 
-            groupHolder.tv_name.setText(bean.getNickName());
-            groupHolder.tv_time.setText(bean.getCreateDate());
-            groupHolder.tv_content.setText(bean.getContent());
-            groupHolder.comment_num.setText("");
-            if(bean.getReplyList() != null && bean.getReplyList().size() > 0){
-                groupHolder.comment_num.setText(bean.getReplyList().size()+"");
-            }
-            if (!"0".equals(bean.getApprove())) {
-                groupHolder.comment_approve.setText(bean.getApprove());
-            }
-            if (bean.getMyApprove() == 1) {
-                groupHolder.iv_like.setImageResource(R.drawable.liked);
-            }
             View.OnClickListener listener = new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -155,9 +132,53 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
                         commentListener.onCommentClick(groupPosition);
                     } else if(view.getId() == R.id.comment_setting){
                         commentListener.onSettingClick(view, groupPosition);
+                    }else if(view.getId() == R.id.show_more){
+                        commentListener.onShowMoreClick(groupPosition);
                     }
                 }
             };
+            //init content
+            //head
+            if (bean.getUserLogo() != null && bean.getUserLogo().length > 0) {
+                groupHolder.logo.setImageContent(bean.getUserLogo());
+            } else {
+                Glide.with(context).load(R.drawable.user_logo)
+                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                        .error(R.mipmap.ic_launcher)
+                        .centerCrop()
+                        .into(groupHolder.logo);
+            }
+            groupHolder.tv_name.setText(bean.getNickName());
+            groupHolder.tv_time.setText(bean.getCreateDate());
+
+            //content
+            if(!expandAllContent && bean.getContent() != null && bean.getContent().length() > allContentLength){
+                groupHolder.tv_content.setText(bean.getContent().substring(0, allContentLength) + "...");
+                View moreContent = LayoutInflater.from(context).inflate(R.layout.show_more_content, viewGroup, false);
+                TextView more = (TextView) moreContent;
+                more.setOnClickListener(listener);
+                groupHolder.content_view.addView(moreContent);
+            }else{
+                groupHolder.tv_content.setText(bean.getContent());
+            }
+
+            if (bean.getPicture() != null && bean.getPicture().length > 0) {
+                View picContent  = LayoutInflater.from(context).inflate(R.layout.content_picture, viewGroup, false);
+                NetImageView comment_picture = (NetImageView) picContent;
+                groupHolder.content_view.addView(picContent);
+                comment_picture.setImageContent(bean.getPicture());
+            }
+
+            groupHolder.comment_num.setText("");
+            if(bean.getReplyList() != null && bean.getReplyList().size() > 0){
+                groupHolder.comment_num.setText(bean.getReplyList().size()+"");
+            }
+            if (!"0".equals(bean.getApprove())) {
+                groupHolder.comment_approve.setText(bean.getApprove());
+            }
+            if (bean.getMyApprove() == 1) {
+                groupHolder.iv_like.setImageResource(R.drawable.liked);
+            }
             groupHolder.iv_like.setOnClickListener(listener);
             groupHolder.comment_icon.setOnClickListener(listener);
             if(bean.getMyComment() == 1){
@@ -205,13 +226,13 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
     }
 
     private class GroupHolder {
-        private NetImageView logo, comment_picture;
+        private NetImageView logo;
         private TextView tv_name, tv_content, tv_time, comment_approve,comment_setting,comment_num;
         private ImageView iv_like, comment_icon;
+        private LinearLayout content_view;
 
         public GroupHolder(View view) {
             logo = (NetImageView) view.findViewById(R.id.comment_item_logo);
-            comment_picture = (NetImageView) view.findViewById(R.id.comment_picture);
             tv_content = (TextView) view.findViewById(R.id.comment_item_content);
             tv_name = (TextView) view.findViewById(R.id.comment_item_userName);
             tv_time = (TextView) view.findViewById(R.id.comment_item_time);
@@ -220,6 +241,7 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
             comment_approve = (TextView) view.findViewById(R.id.comment_approve);
             comment_setting = (TextView) view.findViewById(R.id.comment_setting);
             comment_num = (TextView) view.findViewById(R.id.comment_num);
+            content_view = view.findViewById(R.id.content_view);
         }
     }
 
