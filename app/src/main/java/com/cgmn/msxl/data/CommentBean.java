@@ -88,19 +88,17 @@ public class CommentBean {
                 if(item.get("reply_user_id") != null){
                     replayUserId = ((Double) item.get("reply_user_id")).intValue();
                 }
-                Object pre = "";
-                String reuserName = "";
-                if(replayUserId != comment.getUserId()){
-                    reuserName = String.format("%s回复%s", item.get("user_name"), item.get("replay_uname"));
-                }else{
-                    reuserName = String.format("%s", item.get("user_name"));
-                }
                 String recontent = (String) item.get("content");
-                ReplyDetailBean replyDetailBean = new ReplyDetailBean(reuserName, recontent);
+                ReplyDetailBean replyDetailBean = new ReplyDetailBean(recontent);
+                replyDetailBean.setReplayFrom((String) item.get("user_name"));
+                if(replayUserId != comment.getUserId()){
+                    replyDetailBean.setReplayTo((String) item.get("replay_uname"));
+                }
                 replyDetailBean.setNo(index++);
                 replyDetailBean.setUserId(((Double) item.get("creator_id")).intValue());
+                replyDetailBean.setReplayUserId(replayUserId);
                 if(!CommonUtil.isEmpty(item.get("bit_content"))){
-                    replyDetailBean.setPicture(Base64.decode((String) attr.get("bit_content")));
+                    replyDetailBean.setPicture(Base64.decode((String) item.get("bit_content")));
                 }
 
                 reList.add(replyDetailBean);

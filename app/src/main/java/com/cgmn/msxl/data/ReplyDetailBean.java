@@ -5,7 +5,8 @@ package com.cgmn.msxl.data;
  */
 
 public class ReplyDetailBean {
-    private String nickName;
+    private String replayFrom;
+    private String replayTo;
     private String userLogo;
     private int id;
     private int no;
@@ -14,18 +15,27 @@ public class ReplyDetailBean {
     private String status;
     private String createDate;
     private int userId;
+    private int replayUserId;
     private byte[] picture;
 
-    public ReplyDetailBean(String nickName, String content) {
-        this.nickName = nickName;
+    public ReplyDetailBean(String content) {
         this.content = content;
     }
 
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
+    public String getReplayFrom() {
+        return replayFrom;
     }
-    public String getNickName() {
-        return nickName;
+
+    public void setReplayFrom(String replayFrom) {
+        this.replayFrom = replayFrom;
+    }
+
+    public String getReplayTo() {
+        return replayTo;
+    }
+
+    public void setReplayTo(String replayTo) {
+        this.replayTo = replayTo;
     }
 
     public void setUserLogo(String userLogo) {
@@ -92,5 +102,21 @@ public class ReplyDetailBean {
 
     public void setPicture(byte[] picture) {
         this.picture = picture;
+    }
+
+    public int getReplayUserId() {
+        return replayUserId;
+    }
+
+    public void setReplayUserId(int replayUserId) {
+        this.replayUserId = replayUserId;
+    }
+
+    public String getReplayUserName(Integer userId){
+        if(userId == this.getUserId()){
+            return this.getReplayFrom();
+        }else{
+            return this.getReplayTo();
+        }
     }
 }

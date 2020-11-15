@@ -99,9 +99,11 @@ public class DisgussActivity extends DisgussBaseActivity {
                     scrollView.setScrollY(0);
                 } else if(msg.what == MessageUtil.PUBLISHED_REPLAY_COMMENT){
                     String userName = GlobalDataHelper.getUserName(mContent);
-                    ReplyDetailBean detailBean = new ReplyDetailBean(userName, editCommet);
+                    ReplyDetailBean detailBean = new ReplyDetailBean(editCommet);
+                    detailBean.setReplayFrom(userName);
                     detailBean.setId((Integer) msg.obj);
                     detailBean.setUserId(GlobalDataHelper.getUserId(mContent));
+                    detailBean.setPicture(pictures);
                     adapter.addReplyDataTofirst(detailBean, currentSelectedPosition);
                     expandableListView.expandGroup(currentSelectedPosition);
                     resetDialog();
@@ -132,18 +134,18 @@ public class DisgussActivity extends DisgussBaseActivity {
         adapter.setExpandAllContent(false);
         expandableListView.setAdapter(adapter);
         expandList();
-//        expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-//            @Override
-//            public boolean onGroupClick(ExpandableListView expandableListView, View view, int groupPosition, long l) {
+        expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView expandableListView, View view, int groupPosition, long l) {
 //                jump2Sub(commentsList.get(groupPosition));
-//                return true;
-//            }
-//        });
+                return true;
+            }
+        });
 
         expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPosition, int childPosition, long l) {
-                jump2Sub(commentsList.get(groupPosition));
+//                jump2Sub(commentsList.get(groupPosition));
                 return true;
             }
         });
@@ -388,12 +390,13 @@ public class DisgussActivity extends DisgussBaseActivity {
 
             }
 
+            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (!TextUtils.isEmpty(charSequence) && charSequence.length() > 1) {
-                    bt_comment.setBackgroundColor(Color.parseColor("#FFB568"));
+                    bt_comment.setBackgroundColor(getColor(R.color.grey_dark_bg));
                 } else {
-                    bt_comment.setBackgroundColor(Color.parseColor("#D8D8D8"));
+                    bt_comment.setBackgroundColor(getColor(R.color.replay_bg));
                 }
                 editCommet = commentText.getText().toString().trim();
             }
@@ -499,6 +502,11 @@ public class DisgussActivity extends DisgussBaseActivity {
 
     @Override
     public void onShowMoreClick(Integer position) {
+        jump2Sub(commentsList.get(position));
+    }
+
+    @Override
+    public void onChildReplayClick(Integer position, Integer childPos, Integer replayUserId) {
         jump2Sub(commentsList.get(position));
     }
 

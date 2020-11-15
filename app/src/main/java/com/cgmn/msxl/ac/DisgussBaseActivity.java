@@ -249,4 +249,11 @@ public abstract class DisgussBaseActivity  extends Activity
     @Override
     public void onShowMoreClick(Integer position) {
     }
+
+    @Override
+    public void onShowPicture(byte[] bytes) {
+        GlobalDataHelper.setDate("content", bytes);
+        Intent  intent = new Intent(mContext, ImageViewActivity.class);
+        startActivity(intent);
+    }
 }

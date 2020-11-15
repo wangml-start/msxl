@@ -55,6 +55,7 @@
         <activity android:name=".ac.ViolateModeActivity"/>
         <activity android:name=".ac.DisgussActivity"/>
         <activity android:name=".ac.DisgussSubActivity"/>
+        <activity android:name=".ac.ImageViewActivity"/>
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
 

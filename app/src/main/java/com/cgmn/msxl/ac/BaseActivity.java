@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +17,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected RelativeLayout img_back,img_right;
     protected TextView txt_title,txt_complete;
     protected Toolbar toolbar;
+    protected LinearLayout base_bg;
+    protected FrameLayout container;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +43,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         };
         // 绑定控件
         toolbar = findViewById(R.id.toolbar);
-        FrameLayout container = findViewById(R.id.container);
+        container = findViewById(R.id.container);
 
         img_back = findViewById(R.id.img_back);
         txt_title = findViewById(R.id.txt_title);

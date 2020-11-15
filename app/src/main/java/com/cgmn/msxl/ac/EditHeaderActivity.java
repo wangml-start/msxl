@@ -14,6 +14,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.*;
 import android.widget.Toast;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
@@ -59,7 +60,7 @@ public class EditHeaderActivity extends BaseActivity{
     @Override
     protected void onRightTextClick(){
         showPop();
-    };
+    }
 
     private void showPop(){
         mPhotoPopupWindow = new PhotoPop(EditHeaderActivity.this, new View.OnClickListener() {
@@ -110,6 +111,19 @@ public class EditHeaderActivity extends BaseActivity{
                 Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    protected void changeTooBarColor(){
+        toolbar.setBackgroundColor(getColor(R.color.text_topbar));
+        base_bg.setBackgroundColor(getColor(R.color.text_topbar));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            //因为不是所有的系统都可以设置颜色的，在4.4以下就不可以。。有的说4.1，所以在设置的时候要检查一下系统版本是否是4.1以上
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(getResources().getColor(R.color.text_topbar));
+        }
+    }
+
     @Override
     protected void init() {
         initView();
@@ -145,6 +159,8 @@ public class EditHeaderActivity extends BaseActivity{
                 return false;
             }
         });
+
+        base_bg = findViewById(R.id.base_bg);
     }
 
     @Override

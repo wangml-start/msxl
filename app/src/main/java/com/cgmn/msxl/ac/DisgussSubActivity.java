@@ -1,6 +1,6 @@
 package com.cgmn.msxl.ac;
 
-import android.graphics.Color;
+import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
@@ -39,10 +39,11 @@ public class DisgussSubActivity extends DisgussBaseActivity {
     private static final String TAG = "DisgussSubActivity";
 
     private NetImageView comment_item_logo, comment_picture;
-    private TextView userName, time, content,comment_total,approve_total;
+    private TextView userName, time, content, comment_total, approve_total;
 
-    private int currentSelectedPosition=-1;
-    private int subPosition=-1;
+    private int currentSelectedPosition = -1;
+    private int subPosition = -1;
+    private int replayUserId = -1;
 
     @Override
     protected int getView() {
@@ -68,16 +69,17 @@ public class DisgussSubActivity extends DisgussBaseActivity {
             }
         } else if (view.getId() == R.id.dialog_comment_pic) {
             onSelectFromPho();
-        } else if(view.getId() == R.id.detail_page_do_comment){
+        } else if (view.getId() == R.id.detail_page_do_comment) {
             currentSelectedPosition = -1;
             subPosition = -1;
+            replayUserId = -1;
             showReplyDialog();
-        }else if(view.getId() == R.id.img_back){
+        } else if (view.getId() == R.id.img_back) {
             finish();
         }
     }
 
-    private void bindView(){
+    private void bindView() {
         comment_item_logo = findViewById(R.id.comment_item_logo);
         comment_picture = findViewById(R.id.comment_picture);
         userName = findViewById(R.id.userName);
@@ -86,27 +88,27 @@ public class DisgussSubActivity extends DisgussBaseActivity {
         comment_total = findViewById(R.id.comment_total);
         approve_total = findViewById(R.id.approve_total);
 
-        comment  = (CommentDetailBean) GlobalDataHelper.getDate("comment");
-        if(comment != null){
-            if(comment.getUserLogo() != null){
+        comment = (CommentDetailBean) GlobalDataHelper.getDate("comment");
+        if (comment != null) {
+            if (comment.getUserLogo() != null) {
                 comment_item_logo.setImageContent(comment.getUserLogo());
-            }else{
+            } else {
                 Glide.with(mContext).load(R.drawable.user_logo)
                         .diskCacheStrategy(DiskCacheStrategy.RESULT)
                         .error(R.mipmap.ic_launcher)
                         .centerCrop()
                         .into(comment_item_logo);
             }
-            if(comment.getPicture() != null){
+            if (comment.getPicture() != null) {
                 comment_picture.setImageContent(comment.getPicture());
                 comment_picture.setVisibility(View.VISIBLE);
             }
             userName.setText(comment.getNickName());
             time.setText(comment.getCreateDate());
             content.setText(comment.getContent());
-            approve_total.setText("赞 "+comment.getApprove());
-            if(comment.getReplyList() != null){
-                comment_total.setText("评论 "+comment.getReplyList().size());
+            approve_total.setText("赞 " + comment.getApprove());
+            if (comment.getReplyList() != null) {
+                comment_total.setText("评论 " + comment.getReplyList().size());
             }
         }
     }
@@ -119,20 +121,20 @@ public class DisgussSubActivity extends DisgussBaseActivity {
                     commentsList.clear();
                     CommentBean commentBean = new CommentBean(msg.obj, commentsList.size());
                     commentBean.getList(commentsList);
-                    if(adapter == null){
+                    if (adapter == null) {
                         initExpandableListView();
                     }
                     scrollView.stopRefresh();
                     adapter.clearCache();
                     adapter.notifyDataSetChanged();
-                    comment_total.setText("评论 "+ commentsList.size());
-                } else if(msg.what == MessageUtil.APPEND_LOAD_COMMENT_LIST){
+                    comment_total.setText("评论 " + commentsList.size());
+                } else if (msg.what == MessageUtil.APPEND_LOAD_COMMENT_LIST) {
                     CommentBean commentBean = new CommentBean(msg.obj, commentsList.size());
                     commentBean.getList(commentsList);
                     adapter.notifyDataSetChanged();
                     expandList();
                     appendList = false;
-                    comment_total.setText("评论 "+ commentsList.size());
+                    comment_total.setText("评论 " + commentsList.size());
                 } else if (msg.what == MessageUtil.PUBLISHED_COMMENT) {
                     String userName = GlobalDataHelper.getUserName(mContext);
                     String time = CommentBean.analysisTime(new Date());
@@ -141,15 +143,23 @@ public class DisgussSubActivity extends DisgussBaseActivity {
                     detailBean.setId((Integer) msg.obj);
                     detailBean.setUserId(GlobalDataHelper.getUserId(mContext));
                     byte[] cut = GlobalDataHelper.getUserCut(mContext);
-                    if(cut != null && cut.length > 0){
+                    if (cut != null && cut.length > 0) {
                         detailBean.setUserLogo(cut);
                     }
                     adapter.addTheCommentData(detailBean);
                     resetDialog();
                     scrollView.setScrollY(0);
-                } else if(msg.what == MessageUtil.PUBLISHED_REPLAY_COMMENT){
+                } else if (msg.what == MessageUtil.PUBLISHED_REPLAY_COMMENT) {
                     String userName = GlobalDataHelper.getUserName(mContext);
-                    ReplyDetailBean detailBean = new ReplyDetailBean(userName, editCommet);
+                    ReplyDetailBean detailBean = new ReplyDetailBean(editCommet);
+                    detailBean.setReplayFrom(userName);
+                    if(replayUserId > 0){
+                        detailBean.setReplayUserId(replayUserId);
+                        List<ReplyDetailBean> replyList = commentsList.get(currentSelectedPosition).getReplyList();
+                        if(!CommonUtil.isEmpty(replyList)){
+                            detailBean.setReplayTo(replyList.get(subPosition).getReplayUserName(replayUserId));
+                        }
+                    }
                     detailBean.setId((Integer) msg.obj);
                     detailBean.setUserId(GlobalDataHelper.getUserId(mContext));
                     detailBean.setPicture(pictures);
@@ -172,12 +182,10 @@ public class DisgussSubActivity extends DisgussBaseActivity {
         adapter.setCommentListener(this);
         adapter.setExpandAll(true);
         expandableListView.setAdapter(adapter);
-        expandList();
+
         expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView expandableListView, View view, int groupPosition, long l) {
-                currentSelectedPosition = groupPosition;
-                subPosition = -1;
                 return true;
             }
         });
@@ -185,12 +193,11 @@ public class DisgussSubActivity extends DisgussBaseActivity {
         expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPosition, int childPosition, long l) {
-                currentSelectedPosition = groupPosition;
-                subPosition = childPosition;
-                showReplyDialog();
-                return false;
+                return true;
             }
         });
+
+        expandList();
     }
 
     private void showReplyDialog() {
@@ -204,15 +211,15 @@ public class DisgussSubActivity extends DisgussBaseActivity {
         final EditText commentText = (EditText) commentView.findViewById(R.id.dialog_comment_et);
         final Button bt_comment = (Button) commentView.findViewById(R.id.dialog_comment_bt);
         final Button dialog_comment_pic = commentView.findViewById(R.id.dialog_comment_pic);
-        String text=null;
-        if(currentSelectedPosition < 0){
+        String text = null;
+        if (currentSelectedPosition < 0) {
             text = String.format("回复%s的评论:", comment.getNickName());
-        }else {
+        } else {
             CommentDetailBean bean = commentsList.get(currentSelectedPosition);
-            if(subPosition < 0){
+            if (subPosition < 0) {
                 text = String.format("回复%s的评论:", bean.getNickName());
-            }else {
-                text = String.format("回复%s的评论:", bean.getReplyList().get(subPosition).getNickName());
+            } else {
+                text = String.format("回复%s的评论:", bean.getReplyList().get(subPosition).getReplayUserName(replayUserId));
             }
         }
         commentText.setHint(text);
@@ -227,12 +234,13 @@ public class DisgussSubActivity extends DisgussBaseActivity {
 
             }
 
+            @SuppressLint("ResourceAsColor")
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (!TextUtils.isEmpty(charSequence) && charSequence.length() > 1) {
-                    bt_comment.setBackgroundColor(Color.parseColor("#FFB568"));
+                    bt_comment.setBackgroundColor(getColor(R.color.grey_dark_bg));
                 } else {
-                    bt_comment.setBackgroundColor(Color.parseColor("#D8D8D8"));
+                    bt_comment.setBackgroundColor(getColor(R.color.replay_bg));
                 }
                 editCommet = commentText.getText().toString().trim();
             }
@@ -245,13 +253,13 @@ public class DisgussSubActivity extends DisgussBaseActivity {
         dialog.show();
     }
 
-    private void loadReplayList(){
+    private void loadReplayList() {
         GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
             @Override
             public void run() {
                 Map<String, String> params = new HashMap<>();
                 params.put("token", GlobalDataHelper.getToken(mContext));
-                params.put("comment_id", comment.getId()+"");
+                params.put("comment_id", comment.getId() + "");
                 String url = CommonUtil.buildGetUrl(
                         PropertyService.getInstance().getKey("serverUrl"),
                         "/chat/query_replay_list", params);
@@ -287,13 +295,13 @@ public class DisgussSubActivity extends DisgussBaseActivity {
         });
     }
 
-    private void appendreplayComment(){
+    private void appendreplayComment() {
         GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
             @Override
             public void run() {
                 Map<String, String> params = new HashMap<>();
-                params.put("start", (commentsList.size())+"");
-                params.put("comment_id", comment.getId()+"");
+                params.put("start", (commentsList.size()) + "");
+                params.put("comment_id", comment.getId() + "");
                 params.put("token", GlobalDataHelper.getToken(mContext));
                 String url = CommonUtil.buildGetUrl(
                         PropertyService.getInstance().getKey("serverUrl"),
@@ -332,38 +340,39 @@ public class DisgussSubActivity extends DisgussBaseActivity {
 
     /**
      * 回复评论
+     *
      * @param
      */
-    private void replayComment(){
+    private void replayComment() {
         CustmerToast.makeText(mContext, "正在回复。。。").show();
         GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
             @Override
             public void run() {
                 final String token = GlobalDataHelper.getToken(mContext);
-                if(pictures == null){
+                if (pictures == null) {
                     pictures = new byte[]{};
                 }
-                Integer beReplayUserId=null;
-                if(currentSelectedPosition < 0){
+                Integer beReplayUserId = null;
+                if (currentSelectedPosition < 0) {
                     beReplayUserId = comment.getUserId();
-                }else {
+                } else {
                     CommentDetailBean bean = commentsList.get(currentSelectedPosition);
-                    if(subPosition < 0){
+                    if (subPosition < 0) {
                         beReplayUserId = bean.getUserId();
-                    }else {
-                        beReplayUserId = bean.getReplyList().get(subPosition).getUserId();
+                    } else {
+                        beReplayUserId = replayUserId;
                     }
                 }
                 Integer commentId = comment.getId();
-                if(currentSelectedPosition > 0){
+                if (currentSelectedPosition > 0) {
                     commentId = commentsList.get(currentSelectedPosition).getId();
                 }
                 OkHttpClientManager.Param[] params = new OkHttpClientManager.Param[]{
                         new OkHttpClientManager.Param("token", token),
                         new OkHttpClientManager.Param("picture", org.apache.shiro.codec.Base64.encodeToString(pictures)),
                         new OkHttpClientManager.Param("comment", editCommet),
-                        new OkHttpClientManager.Param("comment_id", commentId+""),
-                        new OkHttpClientManager.Param("comment_user_id", beReplayUserId+"")
+                        new OkHttpClientManager.Param("comment_id", commentId + ""),
+                        new OkHttpClientManager.Param("comment_user_id", beReplayUserId + "")
                 };
                 String url = String.format("%s%s",
                         PropertyService.getInstance().getKey("serverUrl"), "/chat/replay_comment");
@@ -380,9 +389,9 @@ public class DisgussSubActivity extends DisgussBaseActivity {
                             @Override
                             public void onResponse(BaseData data) {
                                 Message message = Message.obtain();
-                                if(currentSelectedPosition < 0){
+                                if (currentSelectedPosition < 0) {
                                     message.what = MessageUtil.PUBLISHED_COMMENT;
-                                }else {
+                                } else {
                                     message.what = MessageUtil.PUBLISHED_REPLAY_COMMENT;
                                 }
                                 try {
@@ -416,13 +425,21 @@ public class DisgussSubActivity extends DisgussBaseActivity {
     }
 
     @Override
+    public void onChildReplayClick(Integer position, Integer childPos, Integer replayId) {
+        currentSelectedPosition = position;
+        subPosition = childPos;
+        replayUserId = replayId;
+        showReplyDialog();
+    }
+
+    @Override
     public void startRefresh() {
         loadReplayList();
     }
 
     @Override
     public void loadMore() {
-        if(!appendList){
+        if (!appendList) {
             appendList = true;
             appendreplayComment();
         }

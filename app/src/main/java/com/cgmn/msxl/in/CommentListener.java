@@ -7,4 +7,6 @@ public interface CommentListener {
     void onCommentClick(Integer position);
     void onSettingClick(View view, Integer position);
     void onShowMoreClick(Integer position);
+    void onShowPicture(byte[] bytes);
+    void onChildReplayClick(Integer position, Integer childPos, Integer replayUserId);
 }
