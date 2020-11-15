@@ -143,6 +143,8 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
                         commentListener.onCommentClick(groupPosition);
                     } else if(view.getId() == R.id.comment_setting){
                         commentListener.onSettingClick(view, groupPosition);
+                    } else if(view.getId() == R.id.content_view){
+                        commentListener.onShowPicture(bean.getPicture());
                     }
                 }
             };
@@ -173,6 +175,7 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
                 NetImageView comment_picture = (NetImageView) picContent;
                 groupHolder.content_view.addView(picContent);
                 comment_picture.setImageContent(bean.getPicture());
+                groupHolder.content_view.setOnClickListener(listener);
             }
 
             groupHolder.comment_num.setText("");
