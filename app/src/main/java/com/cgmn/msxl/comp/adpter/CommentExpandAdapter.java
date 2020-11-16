@@ -190,10 +190,7 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
             }
             groupHolder.iv_like.setOnClickListener(listener);
             groupHolder.comment_icon.setOnClickListener(listener);
-            if(bean.getMyComment() == 1){
-                groupHolder.comment_setting.setVisibility(View.VISIBLE);
-                groupHolder.comment_setting.setOnClickListener(listener);
-            }
+            groupHolder.comment_setting.setOnClickListener(listener);
 
         } else {
             convertView = views.get(bean.getNo());

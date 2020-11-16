@@ -1,7 +1,9 @@
 package com.cgmn.msxl.ac;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -10,14 +12,16 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.core.content.ContextCompat;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
@@ -35,6 +39,7 @@ import com.cgmn.msxl.service.OkHttpClientManager;
 import com.cgmn.msxl.service.PropertyService;
 import com.cgmn.msxl.utils.CommonUtil;
 import com.cgmn.msxl.utils.ImageUtil;
+import com.cgmn.msxl.utils.MessageUtil;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
@@ -43,7 +48,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class DisgussBaseActivity  extends Activity
+public abstract class DisgussBaseActivity extends Activity
         implements RefreshListener, CommentListener {
 
     protected static final int REQUEST_IMAGE_GET = 0;
@@ -54,7 +59,7 @@ public abstract class DisgussBaseActivity  extends Activity
     protected View imageView = null;
     protected RelativeLayout headView;
     private RelativeLayout img_back;
-    protected TextView bt_comment,head_view_tv;
+    protected TextView bt_comment, head_view_tv;
     protected RefreshScrollView scrollView;
     protected CommentExpandableListView expandableListView;
     protected CommentExpandAdapter adapter;
@@ -65,6 +70,7 @@ public abstract class DisgussBaseActivity  extends Activity
     protected String editCommet;
     protected boolean appendList = false;
     protected List<CommentDetailBean> commentsList = new ArrayList<>();
+    protected CommentDetailBean deletedBaen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,11 +81,13 @@ public abstract class DisgussBaseActivity  extends Activity
     }
 
     protected abstract int getView();
+
     protected abstract void init();
+
     protected abstract void onCustmerClick(View v);
 
-    private void initailize(){
-        expandableListView = (CommentExpandableListView)findViewById(R.id.detail_page_lv_comment);
+    private void initailize() {
+        expandableListView = (CommentExpandableListView) findViewById(R.id.detail_page_lv_comment);
         bt_comment = (TextView) findViewById(R.id.detail_page_do_comment);
         clickListener = new View.OnClickListener() {
             @Override
@@ -182,8 +190,8 @@ public abstract class DisgussBaseActivity  extends Activity
                 Map<String, String> params = new HashMap<>();
                 params.put("token", GlobalDataHelper.getToken(mContext));
                 params.put("type", type);
-                params.put("comment_id", commentsList.get(position).getId()+"");
-                params.put("comment_user_id", commentsList.get(position).getUserId()+"");
+                params.put("comment_id", commentsList.get(position).getId() + "");
+                params.put("comment_user_id", commentsList.get(position).getUserId() + "");
 
                 String url = CommonUtil.buildGetUrl(
                         PropertyService.getInstance().getKey("serverUrl"),
@@ -202,14 +210,14 @@ public abstract class DisgussBaseActivity  extends Activity
         });
     }
 
-    protected void resetDialog(){
+    protected void resetDialog() {
         commentView = null;
         imageView = null;
         pictures = null;
         editCommet = null;
     }
 
-    protected void expandList(){
+    protected void expandList() {
         for (int i = 0; i < commentsList.size(); i++) {
             expandableListView.expandGroup(i);
         }
@@ -253,7 +261,100 @@ public abstract class DisgussBaseActivity  extends Activity
     @Override
     public void onShowPicture(byte[] bytes) {
         GlobalDataHelper.setDate("content", bytes);
-        Intent  intent = new Intent(mContext, ImageViewActivity.class);
+        Intent intent = new Intent(mContext, ImageViewActivity.class);
         startActivity(intent);
     }
+
+    @Override
+    public void onSettingClick(View view, Integer position) {
+        CommentDetailBean bean = commentsList.get(position);
+        showPopupMenu(view, bean);
+    }
+
+    @SuppressLint("RestrictedApi")
+    protected void showPopupMenu(View view, final CommentDetailBean bean) {
+        // View当前PopupMenu显示的相对View的位置
+        PopupMenu popupMenu = new PopupMenu(this, view);
+        // menu布局
+        popupMenu.getMenuInflater().inflate(R.menu.comment_menu, popupMenu.getMenu());
+        // menu的item点击事件
+        if (bean.getMyComment() != 1) {
+            popupMenu.getMenu().findItem(R.id.remove).setVisible(false);
+        }
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.remove:
+                        if (bean.getMyComment() == 1) {
+                            deleteComment(bean.getId());
+                            deletedBaen = bean;
+                        }
+                        break;
+                    case R.id.copy:
+                        ClipboardManager cmb = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                        cmb.setText(bean.getContent());
+                        CustmerToast.makeText(mContext, "复制成功").show();
+                        break;
+                }
+                return true;
+            }
+        });
+
+//        try {
+//            Field field = popupMenu.getClass().getDeclaredField("mPopup");
+//            field.setAccessible(true);
+//            MenuPopupHelper helper = (MenuPopupHelper) field.get(popupMenu);
+//            helper.setForceShowIcon(true);
+//        } catch (NoSuchFieldException e) {
+//            e.printStackTrace();
+//        } catch (IllegalAccessException e) {
+//            e.printStackTrace();
+//        }
+
+        popupMenu.show();
+    }
+
+
+    private void deleteComment(final Integer commentId) {
+        GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
+            @Override
+            public void run() {
+                Map<String, String> params = new HashMap<>();
+                params.put("token", GlobalDataHelper.getToken(mContext));
+                params.put("comment_id", commentId + "");
+
+                String url = CommonUtil.buildGetUrl(
+                        PropertyService.getInstance().getKey("serverUrl"),
+                        "/chat/delete_comment", params);
+                OkHttpClientManager.getAsyn(url,
+                        new OkHttpClientManager.ResultCallback<BaseData>() {
+                            @Override
+                            public void onError(com.squareup.okhttp.Request request, Exception e) {
+                                Message message = Message.obtain();
+                                message.what = MessageUtil.EXCUTE_EXCEPTION;
+                                message.obj = e;
+                                mHandler.sendMessage(message);
+                            }
+
+                            @Override
+                            public void onResponse(BaseData data) {
+                                Message message = Message.obtain();
+                                message.what = MessageUtil.DELETED_COMMENT;
+                                try {
+                                    Integer status = data.getStatus();
+                                    if (status == null || status == -1) {
+                                        throw new Exception(data.getError());
+                                    }
+                                } catch (Exception e) {
+                                    message.what = MessageUtil.EXCUTE_EXCEPTION;
+                                    message.obj = e;
+                                }
+                                mHandler.sendMessage(message);
+                            }
+                        });
+            }
+        });
+    }
+
 }

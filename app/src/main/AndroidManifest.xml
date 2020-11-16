@@ -53,7 +53,7 @@
         <activity android:name=".ac.EditHeaderActivity" android:hardwareAccelerated="false" />
         <activity android:name=".ac.UserRankingActivity"/>
         <activity android:name=".ac.ViolateModeActivity"/>
-        <activity android:name=".ac.DisgussActivity"/>
+        <activity android:name=".ac.DisgussActivity" />
         <activity android:name=".ac.DisgussSubActivity"/>
         <activity android:name=".ac.ImageViewActivity"/>
     </application>

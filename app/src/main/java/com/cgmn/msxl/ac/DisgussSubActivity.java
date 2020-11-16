@@ -166,6 +166,15 @@ public class DisgussSubActivity extends DisgussBaseActivity {
                     adapter.addTheReplyData(detailBean, currentSelectedPosition);
                     expandableListView.expandGroup(currentSelectedPosition);
                     resetDialog();
+                } else if (msg.what == MessageUtil.DELETED_COMMENT) {
+                    CustmerToast.makeText(mContext, "删除成功").show();
+                    if(deletedBaen != null){
+                        commentsList.remove(deletedBaen);
+                        deletedBaen = null;
+                        adapter.clearCache();
+                        adapter.notifyDataSetChanged();
+                    }
+
                 } else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
                     GlobalExceptionHandler.getInstance(mContext).handlerException((Exception) msg.obj);
                 }
@@ -417,11 +426,6 @@ public class DisgussSubActivity extends DisgussBaseActivity {
         currentSelectedPosition = position;
         subPosition = -1;
         showReplyDialog();
-    }
-
-    @Override
-    public void onSettingClick(View view, Integer position) {
-
     }
 
     @Override

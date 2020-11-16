@@ -30,7 +30,7 @@ public class MessageUtil {
 
     public static int PUBLISHED_REPLAY_COMMENT = 0x014;
 
-
+    public static int DELETED_COMMENT = 0x015;
 
     public static int EXCUTE_EXCEPTION = 0x999;
 
