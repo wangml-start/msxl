@@ -8,7 +8,6 @@ import android.graphics.drawable.Drawable;
 import android.text.*;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
-import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
 import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
@@ -32,13 +31,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Author: Moos
- * E-mail: moosphon@gmail.com
- * Date:  18/4/20.
- * Desc: 评论与回复列表的适配器
- */
-
 public class CommentExpandAdapter extends BaseExpandableListAdapter {
     private static final String TAG = "CommentExpandAdapter";
     private List<CommentDetailBean> commentBeanList;
@@ -48,7 +40,7 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
     private Map<String, View> subViews = null;
     private CommentListener commentListener;
     private boolean expandAll = false;
-    private Integer expandNum = 2;
+    private Integer expandNum = 3;
     private boolean expandAllContent = true;
     private Integer allContentLength = 150;
 
