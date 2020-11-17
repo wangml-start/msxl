@@ -31,17 +31,35 @@
                         android:src="@drawable/left"
                         android:tint="@color/bg_white" />
             </RelativeLayout>
-            <TextView
-                    android:id="@+id/txt_complete"
-                    android:layout_width="wrap_content"
+            <com.cgmn.msxl.comp.view.NumImageView
+                    android:id="@+id/img_mail"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding="10dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/mail"
                     android:layout_alignParentRight="true"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="8dp"
-                    android:gravity="center"
-                    android:textColor="@color/bg_white"
-                    android:text="与我相关" />
+                    android:tint="@color/bg_white"
+                    android:layout_marginRight="5dp"
+                    />
         </RelativeLayout>
     </androidx.appcompat.widget.Toolbar>
+
+    <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab"
+            android:layout_width="match_parent"
+            android:layout_height="28dp"
+            app:tabGravity="fill"
+            app:tabMode="fixed"
+            android:textSize="@dimen/size12"
+            app:tabMaxWidth="0dp"
+            app:tabIndicatorColor="@color/colorAccent"
+            app:tabSelectedTextColor="@color/colorPrimary"
+            app:tabTextColor="@color/text_topbar"
+            app:tabIndicatorFullWidth="false"
+            app:tabBackground="@color/transparent"
+            app:tabRippleColor="@color/transparent"
+            />
 
     <RelativeLayout
             android:layout_width="match_parent"
@@ -79,7 +97,7 @@
         <LinearLayout
                 android:id="@+id/comments"
                 android:layout_width="match_parent"
-                android:layout_height="58dp"
+                android:layout_height="45dp"
                 android:layout_alignParentBottom="true"
                 android:background="@android:color/white"
                 android:elevation="2dp"
@@ -90,8 +108,8 @@
                     android:id="@+id/detail_page_do_comment"
                     android:layout_width="0dp"
                     android:layout_height="34dp"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginRight="22dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
                     android:layout_weight="1"
                     android:background="@drawable/comment_bt_selector"
                     android:gravity="center_vertical"

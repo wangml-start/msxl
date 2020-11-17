@@ -19,17 +19,20 @@ import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.CustmerToast;
 import com.cgmn.msxl.comp.adpter.CommentExpandAdapter;
+import com.cgmn.msxl.comp.view.NumImageView;
 import com.cgmn.msxl.data.CommentBean;
 import com.cgmn.msxl.data.CommentDetailBean;
 import com.cgmn.msxl.data.ReplyDetailBean;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.cgmn.msxl.server_interface.BaseData;
+import com.cgmn.msxl.server_interface.SimpleResponse;
 import com.cgmn.msxl.service.GlobalDataHelper;
 import com.cgmn.msxl.service.OkHttpClientManager;
 import com.cgmn.msxl.service.PropertyService;
 import com.cgmn.msxl.utils.CommonUtil;
 import com.cgmn.msxl.utils.MessageUtil;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.*;
 
@@ -37,6 +40,9 @@ public class DisgussActivity extends DisgussBaseActivity {
     private static final String TAG = "DisgussActivity";
     private Context mContent;
     private int currentSelectedPosition;
+    private TabLayout tabLayout;
+    private NumImageView mail;
+    private Integer tabPosition=0;
 
     @Override
     protected int getView() {
@@ -49,13 +55,16 @@ public class DisgussActivity extends DisgussBaseActivity {
         initView();
         initMessageHandle();
         loadCommentList();
+        loadRaleatedTome();
     }
 
     @Override
     protected void onCustmerClick(View v){
         if (v.getId() == R.id.detail_page_do_comment) {
             showCommentDialog();
-        }else if(v.getId() == R.id.img_back){
+        } else if(v.getId() == R.id.img_mail){
+
+        } else if(v.getId() == R.id.img_back){
             finish();
         }
     }
@@ -74,6 +83,7 @@ public class DisgussActivity extends DisgussBaseActivity {
                     adapter.clearCache();
                     adapter.notifyDataSetChanged();
                     scrollView.stopRefresh();
+                    scrollView.setScrollY(0);
                 } else if(msg.what == MessageUtil.APPEND_LOAD_COMMENT_LIST){
                     CommentBean commentBean = new CommentBean(msg.obj, commentsList.size());
                     int baseSize = commentsList.size();
@@ -116,6 +126,9 @@ public class DisgussActivity extends DisgussBaseActivity {
                         adapter.notifyDataSetChanged();
                     }
 
+                } else if(MessageUtil.LOAD_RELATED_TO_ME == msg.what){
+                    SimpleResponse res = (SimpleResponse) msg.obj;
+                    mail.setNum(res.getApproveToMe()+res.getCommentToMe());
                 } else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
                     GlobalExceptionHandler.getInstance(mContent).handlerException((Exception) msg.obj);
                 }
@@ -125,7 +138,32 @@ public class DisgussActivity extends DisgussBaseActivity {
     }
 
     private void initView() {
+        tabLayout = (TabLayout) findViewById(R.id.tab);
+        tabLayout.addTab(tabLayout.newTab().setText("最新"));
+        tabLayout.addTab(tabLayout.newTab().setText("热门"));
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            //选中的时候
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                tabPosition = tab.getPosition();
+                loadCommentList();
+            }
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
 
+            }
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+        mail = findViewById(R.id.img_mail);
+        mail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onCustmerClick(v);
+            }
+        });
     }
 
 
@@ -167,6 +205,13 @@ public class DisgussActivity extends DisgussBaseActivity {
 
     }
 
+    private String getCommentType(){
+        String type = "lastest";
+        if(tabPosition == 1){
+            type = "hot";
+        }
+        return type;
+    }
 
     private void loadCommentList(){
         GlobalTreadPools.getInstance(mContent).execute(new Runnable() {
@@ -174,6 +219,7 @@ public class DisgussActivity extends DisgussBaseActivity {
             public void run() {
                 Map<String, String> params = new HashMap<>();
                 params.put("token", GlobalDataHelper.getToken(mContent));
+                params.put("load_type", getCommentType());
                 String url = CommonUtil.buildGetUrl(
                         PropertyService.getInstance().getKey("serverUrl"),
                         "/chat/query_comment_list", params);
@@ -216,6 +262,7 @@ public class DisgussActivity extends DisgussBaseActivity {
                 Map<String, String> params = new HashMap<>();
                 params.put("start", (commentsList.size())+"");
                 params.put("token", GlobalDataHelper.getToken(mContent));
+                params.put("load_type", getCommentType());
                 String url = CommonUtil.buildGetUrl(
                         PropertyService.getInstance().getKey("serverUrl"),
                         "/chat/query_comment_list", params);
@@ -251,6 +298,47 @@ public class DisgussActivity extends DisgussBaseActivity {
         });
     }
 
+
+    private void loadRaleatedTome(){
+        GlobalTreadPools.getInstance(mContent).execute(new Runnable() {
+            @Override
+            public void run() {
+                Map<String, String> params = new HashMap<>();
+                params.put("token", GlobalDataHelper.getToken(mContent));
+                String url = CommonUtil.buildGetUrl(
+                        PropertyService.getInstance().getKey("serverUrl"),
+                        "/chat/related_to_me", params);
+                OkHttpClientManager.getAsyn(url,
+                        new OkHttpClientManager.ResultCallback<SimpleResponse>() {
+                            @Override
+                            public void onError(com.squareup.okhttp.Request request, Exception e) {
+                                Message message = Message.obtain();
+                                message.what = MessageUtil.EXCUTE_EXCEPTION;
+                                message.obj = e;
+                                mHandler.sendMessage(message);
+                            }
+
+                            @Override
+                            public void onResponse(SimpleResponse data) {
+                                Message message = Message.obtain();
+                                message.what = MessageUtil.LOAD_RELATED_TO_ME;
+                                try {
+                                    message.obj = data;
+                                    Integer status = data.getStatus();
+                                    if (status == null || status == -1) {
+                                        throw new Exception(data.getError());
+                                    }
+                                } catch (Exception e) {
+                                    message.what = MessageUtil.EXCUTE_EXCEPTION;
+                                    message.obj = e;
+                                }
+                                mHandler.sendMessage(message);
+                            }
+                        });
+                Log.e(TAG, "NAME=" + Thread.currentThread().getName());
+            }
+        });
+    }
 
 
     /**

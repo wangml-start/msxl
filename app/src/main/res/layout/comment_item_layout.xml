@@ -86,13 +86,13 @@
     <RelativeLayout
             android:layout_marginTop="1dp"
             android:layout_width="match_parent"
+            android:layout_marginLeft="35dp"
             android:layout_height="34dp">
         <ImageView
                 android:id="@+id/comment_icon"
                 android:layout_width="34dp"
                 android:layout_alignParentLeft="true"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="18dp"
                 android:padding="8dp"
                 android:src="@drawable/comment_icon" />
         <TextView

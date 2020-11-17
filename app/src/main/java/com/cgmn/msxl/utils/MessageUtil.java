@@ -32,6 +32,12 @@ public class MessageUtil {
 
     public static int DELETED_COMMENT = 0x015;
 
+    public static int LOAD_RELATED_TO_ME = 0x016;
+
+
+
+
+
     public static int EXCUTE_EXCEPTION = 0x999;
 
 
