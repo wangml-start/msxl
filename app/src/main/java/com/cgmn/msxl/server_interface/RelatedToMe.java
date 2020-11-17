@@ -11,6 +11,8 @@ public class RelatedToMe {
     String himContent;
     Integer myContentParent;
     Integer himContentParent;
+    Integer userId;
+    Integer myApprove;
 
     public Integer getCommentId() {
         return commentId;
@@ -74,5 +76,21 @@ public class RelatedToMe {
 
     public void setHimContentParent(Integer himContentParent) {
         this.himContentParent = himContentParent;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public Integer getMyApprove() {
+        return myApprove;
+    }
+
+    public void setMyApprove(Integer myApprove) {
+        this.myApprove = myApprove;
     }
 }

@@ -210,6 +210,7 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
             if (!subViews.containsKey(key)) {
                 convertView = LayoutInflater.from(context).inflate(R.layout.comment_reply_item_layout, viewGroup, false);
                 final ChildHolder childHolder = new ChildHolder(convertView);
+                subViews.put(key, convertView);
 
                 View.OnClickListener listener = new View.OnClickListener() {
                     @Override

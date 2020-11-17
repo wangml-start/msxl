@@ -114,4 +114,12 @@ public class CommentBean {
             tempList.add(bean);
         }
     }
+
+    public CommentDetailBean getFirst(){
+        if(!CommonUtil.isEmpty(commentList)){
+            return commentList.get(0);
+        }
+
+        return null;
+    }
 }

@@ -12,6 +12,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.comp.view.NetImageView;
 import com.cgmn.msxl.data.CommentBean;
+import com.cgmn.msxl.in.CommentListener;
 import com.cgmn.msxl.server_interface.RelatedToMe;
 import com.cgmn.msxl.utils.CommonUtil;
 
@@ -23,12 +24,18 @@ public class CommentsAdpter extends BaseAdapter {
     private Context mContext;
     private List<RelatedToMe> mData = null;
     private Map<Integer, View> views = null;
+//    private CommentListener commentListener;
 
     public CommentsAdpter(Context mContext, List<RelatedToMe> mData) {
         this.mContext = mContext;
         this.mData = mData;
         views = new HashMap<>();
     }
+
+//    public void setCommentListener(CommentListener commentListener) {
+//        this.commentListener = commentListener;
+//    }
+
 
     @Override
     public int getCount() {
@@ -46,13 +53,13 @@ public class CommentsAdpter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        RelatedToMe item = mData.get(position);
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        final RelatedToMe item = mData.get(position);
         //设置下控件的值
         if(!views.containsKey(position)){
             convertView = LayoutInflater.from(mContext).inflate(R.layout.comments_item, parent, false);
             views.put(position, convertView);
-            CommentViewHolder holder = new CommentViewHolder(convertView);
+            final CommentViewHolder holder = new CommentViewHolder(convertView);
             if (item.getSmallCut() != null && item.getSmallCut().length > 0) {
                 holder.comment_item_logo.setImageContent(item.getSmallCut());
             } else {
@@ -68,6 +75,30 @@ public class CommentsAdpter extends BaseAdapter {
             holder.txt_app_des.setText(item.getHimContent());
             holder.txt_mycontent.setText(item.getMyContent());
             holder.txt_re_user.setText(item.getUserName());
+
+//            View.OnClickListener listener = new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    if (view.getId() == R.id.comment_item_like){
+//                        if(item.getMyApprove() == 1){
+//                            holder.comment_item_like.setImageResource(R.drawable.icon_comment_like);
+//                            item.setMyApprove(0);
+//                            commentListener.onApproveClick(position,"unapprove");
+//                        }else {
+//                            holder.comment_item_like.setImageResource(R.drawable.liked);
+//                            item.setMyApprove(1);
+//                            commentListener.onApproveClick(position,"approve");
+//                        }
+//                    } else if(view.getId() == R.id.comment_icon){
+//                        commentListener.onCommentClick(position);
+//                    }
+//                }
+//            };
+//            if (item.getMyApprove() == 1) {
+//                holder.comment_item_like.setImageResource(R.drawable.liked);
+//            }
+//            holder.comment_item_like.setOnClickListener(listener);
+//            holder.comment_icon.setOnClickListener(listener);
         }else{
             convertView = views.get(position);
         }
@@ -78,14 +109,14 @@ public class CommentsAdpter extends BaseAdapter {
 
     private class CommentViewHolder{
         private NetImageView comment_item_logo;
-        private ImageView comment_item_like, comment_icon;
+//        private ImageView comment_item_like, comment_icon;
         private TextView comment_item_userName, comment_item_time,txt_app_des;
         private TextView txt_mycontent,txt_re_user;
 
         public CommentViewHolder(View view){
             comment_item_logo = view.findViewById(R.id.comment_item_logo);
-            comment_item_like = view.findViewById(R.id.comment_item_like);
-            comment_icon = view.findViewById(R.id.comment_icon);
+//            comment_item_like = view.findViewById(R.id.comment_item_like);
+//            comment_icon = view.findViewById(R.id.comment_icon);
             comment_item_userName = view.findViewById(R.id.comment_item_userName);
             comment_item_time = view.findViewById(R.id.comment_item_time);
             txt_app_des = view.findViewById(R.id.txt_app_des);

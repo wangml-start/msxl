@@ -44,6 +44,7 @@ public class DisgussSubActivity extends DisgussBaseActivity {
     private int currentSelectedPosition = -1;
     private int subPosition = -1;
     private int replayUserId = -1;
+    private int recordId = 0;
 
     @Override
     protected int getView() {
@@ -54,7 +55,11 @@ public class DisgussSubActivity extends DisgussBaseActivity {
     protected void init() {
         bindView();
         initMessageHandle();
-        loadReplayList();
+        if(recordId > 0){
+            loadCommentInfo();
+        }else{
+            loadReplayList();
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -87,8 +92,15 @@ public class DisgussSubActivity extends DisgussBaseActivity {
         content = findViewById(R.id.content);
         comment_total = findViewById(R.id.comment_total);
         approve_total = findViewById(R.id.approve_total);
-
         comment = (CommentDetailBean) GlobalDataHelper.getDate("comment");
+        setHeader();
+        Object obj = GlobalDataHelper.getDate("viewId");
+        if(!CommonUtil.isEmpty(obj)){
+            recordId = (int) obj;
+        }
+    }
+
+    private void setHeader(){
         if (comment != null) {
             if (comment.getUserLogo() != null) {
                 comment_item_logo.setImageContent(comment.getUserLogo());
@@ -135,7 +147,12 @@ public class DisgussSubActivity extends DisgussBaseActivity {
                     expandList();
                     appendList = false;
                     comment_total.setText("评论 " + commentsList.size());
-                } else if (msg.what == MessageUtil.PUBLISHED_COMMENT) {
+                } else if(msg.what == MessageUtil.LOAD_COMMENT_INFO){
+                    CommentBean commentBean = new CommentBean(msg.obj, 0);
+                    comment = commentBean.getFirst();
+                    loadReplayList();
+                    setHeader();
+                }else if (msg.what == MessageUtil.PUBLISHED_COMMENT) {
                     String userName = GlobalDataHelper.getUserName(mContext);
                     String time = CommentBean.analysisTime(new Date());
                     CommentDetailBean detailBean = new CommentDetailBean(userName, editCommet, time);
@@ -243,6 +260,7 @@ public class DisgussSubActivity extends DisgussBaseActivity {
 
             }
 
+            @RequiresApi(api = Build.VERSION_CODES.M)
             @SuppressLint("ResourceAsColor")
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -286,6 +304,48 @@ public class DisgussSubActivity extends DisgussBaseActivity {
                             public void onResponse(BaseData data) {
                                 Message message = Message.obtain();
                                 message.what = MessageUtil.LOAD_REPLAY_LIST;
+                                try {
+                                    message.obj = data.getRecords();
+                                    Integer status = data.getStatus();
+                                    if (status == null || status == -1) {
+                                        throw new Exception(data.getError());
+                                    }
+                                } catch (Exception e) {
+                                    message.what = MessageUtil.EXCUTE_EXCEPTION;
+                                    message.obj = e;
+                                }
+                                mHandler.sendMessage(message);
+                            }
+                        });
+                Log.e(TAG, "NAME=" + Thread.currentThread().getName());
+            }
+        });
+    }
+
+    private void loadCommentInfo(){
+        GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
+            @Override
+            public void run() {
+                Map<String, String> params = new HashMap<>();
+                params.put("token", GlobalDataHelper.getToken(mContext));
+                params.put("view_record_id", recordId + "");
+                String url = CommonUtil.buildGetUrl(
+                        PropertyService.getInstance().getKey("serverUrl"),
+                        "/chat/query_comment_info", params);
+                OkHttpClientManager.getAsyn(url,
+                        new OkHttpClientManager.ResultCallback<BaseData>() {
+                            @Override
+                            public void onError(com.squareup.okhttp.Request request, Exception e) {
+                                Message message = Message.obtain();
+                                message.what = MessageUtil.EXCUTE_EXCEPTION;
+                                message.obj = e;
+                                mHandler.sendMessage(message);
+                            }
+
+                            @Override
+                            public void onResponse(BaseData data) {
+                                Message message = Message.obtain();
+                                message.what = MessageUtil.LOAD_COMMENT_INFO;
                                 try {
                                     message.obj = data.getRecords();
                                     Integer status = data.getStatus();

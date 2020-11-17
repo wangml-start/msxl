@@ -1,16 +1,19 @@
 package com.cgmn.msxl.page.related;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.cgmn.msxl.R;
+import com.cgmn.msxl.ac.DisgussSubActivity;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.adpter.CommentsAdpter;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
@@ -21,17 +24,19 @@ import com.cgmn.msxl.service.OkHttpClientManager;
 import com.cgmn.msxl.service.PropertyService;
 import com.cgmn.msxl.utils.CommonUtil;
 import com.cgmn.msxl.utils.MessageUtil;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CommentFragment extends Fragment {
+public class CommentFragment extends Fragment{
     private ListView listView;
     private Context mContext;
     private Handler mHandler;
     private List<RelatedToMe> mData = null;
     private CommentsAdpter adpter;
+    protected BottomSheetDialog dialog;
 
     public CommentFragment() { }
     public static CommentFragment newInstance() {
@@ -57,6 +62,17 @@ public class CommentFragment extends Fragment {
     private void bindView(View view){
         mContext = view.getContext();
         listView = view.findViewById(R.id.list_content);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                RelatedToMe entity = mData.get(position);
+                Intent intent = new Intent(mContext, DisgussSubActivity.class);
+                GlobalDataHelper.setDate("viewId", entity.getCommentId());
+                startActivity(intent);
+            }
+        });
+
+
         mHandler = new Handler(new Handler.Callback() {
             @Override
             public boolean handleMessage(Message msg) {
