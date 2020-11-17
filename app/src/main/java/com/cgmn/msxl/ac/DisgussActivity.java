@@ -63,7 +63,9 @@ public class DisgussActivity extends DisgussBaseActivity {
         if (v.getId() == R.id.detail_page_do_comment) {
             showCommentDialog();
         } else if(v.getId() == R.id.img_mail){
-
+            mail.setNum(0);
+            Intent intent = new Intent(mContext, RelatedToMeActivity.class);
+            startActivity(intent);
         } else if(v.getId() == R.id.img_back){
             finish();
         }
