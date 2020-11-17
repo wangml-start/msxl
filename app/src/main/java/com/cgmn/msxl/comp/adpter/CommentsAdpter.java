@@ -67,6 +67,7 @@ public class CommentsAdpter extends BaseAdapter {
             holder.comment_item_time.setText(CommentBean.analysisTime(item.getCreatedAt()));
             holder.txt_app_des.setText(item.getHimContent());
             holder.txt_mycontent.setText(item.getMyContent());
+            holder.txt_re_user.setText(item.getUserName());
         }else{
             convertView = views.get(position);
         }
@@ -79,7 +80,7 @@ public class CommentsAdpter extends BaseAdapter {
         private NetImageView comment_item_logo;
         private ImageView comment_item_like, comment_icon;
         private TextView comment_item_userName, comment_item_time,txt_app_des;
-        private TextView txt_mycontent;
+        private TextView txt_mycontent,txt_re_user;
 
         public CommentViewHolder(View view){
             comment_item_logo = view.findViewById(R.id.comment_item_logo);
@@ -89,6 +90,7 @@ public class CommentsAdpter extends BaseAdapter {
             comment_item_time = view.findViewById(R.id.comment_item_time);
             txt_app_des = view.findViewById(R.id.txt_app_des);
             txt_mycontent = view.findViewById(R.id.txt_mycontent);
+            txt_re_user = view.findViewById(R.id.txt_re_user);
         }
     }
 
