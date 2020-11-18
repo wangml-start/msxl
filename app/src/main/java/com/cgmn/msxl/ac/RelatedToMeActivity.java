@@ -1,21 +1,25 @@
 package com.cgmn.msxl.ac;
 
 import android.annotation.SuppressLint;
-import androidx.viewpager.widget.ViewPager;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import com.cgmn.msxl.R;
-import com.cgmn.msxl.page.related.RelatedPagerAdapter;
+import com.cgmn.msxl.comp.frag.ApproveFragment;
+import com.cgmn.msxl.comp.frag.CommentFragment;
 import com.google.android.material.tabs.TabLayout;
 
 
 public class RelatedToMeActivity extends BaseOtherActivity {
-
     private TabLayout tabLayout;
-    private ViewPager viewPager;
+    private ApproveFragment approveFragment;
+    private CommentFragment commentFragment;
+    private FragmentManager fManager;
 
 
     @Override
     protected void init(){
         bindView();
+        onSelected(0);
     };
 
     @Override
@@ -40,11 +44,49 @@ public class RelatedToMeActivity extends BaseOtherActivity {
     @SuppressLint("WrongViewCast")
     private void bindView(){
         mContext = this;
-        tabLayout = findViewById(R.id.ranking_tab);
-        viewPager = findViewById(R.id.view_pager);
-        RelatedPagerAdapter adapter = new RelatedPagerAdapter(this, getSupportFragmentManager());
-        viewPager.setAdapter(adapter);
-        tabLayout.setupWithViewPager(viewPager);
+        tabLayout = findViewById(R.id.about_me_tab);
+        fManager = getFragmentManager();
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener(){
+            @Override
+            public void onTabSelected(TabLayout.Tab tab){
+                onSelected(tab.getPosition());
+            }
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab){
+            }
+            @Override
+            public void onTabReselected(TabLayout.Tab tab){
+            }
+        });
+
     }
+
+    //隐藏所有Fragment
+    private void hideAllFragment(FragmentTransaction fragmentTransaction) {
+        if (approveFragment != null) fragmentTransaction.hide(approveFragment);
+        if (commentFragment != null) fragmentTransaction.hide(commentFragment);
+    }
+
+    private void onSelected(Integer position){
+        FragmentTransaction trian = fManager.beginTransaction();
+        hideAllFragment(trian);
+        if(position == 0){
+            if (approveFragment == null) {
+                approveFragment = ApproveFragment.newInstance();
+                trian.add(R.id.ly_content, approveFragment);
+            } else {
+                trian.show(approveFragment);
+            }
+        }else if(position == 1){
+            if (commentFragment == null) {
+                commentFragment = CommentFragment.newInstance();
+                trian.add(R.id.ly_content, commentFragment);
+            } else {
+                trian.show(commentFragment);
+            }
+        }
+        trian.commit();
+    }
+
 
 }

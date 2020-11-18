@@ -1,19 +1,8 @@
-package com.cgmn.msxl.page.related;
+package com.cgmn.msxl.comp.frag;
 
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import com.cgmn.msxl.R;
-import com.cgmn.msxl.ac.DisgussSubActivity;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.adpter.CommentsAdpter;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
@@ -24,19 +13,13 @@ import com.cgmn.msxl.service.OkHttpClientManager;
 import com.cgmn.msxl.service.PropertyService;
 import com.cgmn.msxl.utils.CommonUtil;
 import com.cgmn.msxl.utils.MessageUtil;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CommentFragment extends Fragment{
-    private ListView listView;
-    private Context mContext;
-    private Handler mHandler;
-    private List<RelatedToMe> mData = null;
+public class CommentFragment extends RelatedFrgment {
     private CommentsAdpter adpter;
-    protected BottomSheetDialog dialog;
 
     public CommentFragment() { }
     public static CommentFragment newInstance() {
@@ -44,43 +27,27 @@ public class CommentFragment extends Fragment{
         return fragment;
     }
 
+
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View  view = inflater.inflate(R.layout.related_to_me_fragment, container, false);
-        bindView(view);
-        loadList(0);
-        return view;
-    }
-
-    private void bindView(View view){
-        mContext = view.getContext();
-        listView = view.findViewById(R.id.list_content);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                RelatedToMe entity = mData.get(position);
-                Intent intent = new Intent(mContext, DisgussSubActivity.class);
-                GlobalDataHelper.setDate("viewId", entity.getCommentId());
-                startActivity(intent);
-            }
-        });
-
+    protected void bindView(View view){
+        adpter = new CommentsAdpter(mContext, mData);
+        listView.setAdapter(adpter);
 
         mHandler = new Handler(new Handler.Callback() {
             @Override
             public boolean handleMessage(Message msg) {
                 if (msg.what == MessageUtil.REQUEST_SUCCESS) {
-                    mData = (List<RelatedToMe>) msg.obj;
-                    if (!CommonUtil.isEmpty(mData)) {
-                        adpter = new CommentsAdpter(mContext, mData);
-                        listView.setAdapter(adpter);
+                    if (!CommonUtil.isEmpty(msg.obj)) {
+                        if(action.equals(REFRESH)){
+                            mData.clear();
+                            adpter.resetCache();
+                            scrollView.stopRefresh();
+                            scrollView.setScrollY(0);
+                        }else{
+                            appendList = false;
+                        }
+                        mData.addAll((List<RelatedToMe>) msg.obj);
+                        adpter.notifyDataSetChanged();
                     }
                 } else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
                     GlobalExceptionHandler.getInstance(mContext).handlerException((Exception) msg.obj);
@@ -88,11 +55,6 @@ public class CommentFragment extends Fragment{
                 return false;
             }
         });
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
     }
 
     private String getUrl(Integer start) {
@@ -105,7 +67,8 @@ public class CommentFragment extends Fragment{
                 action, params);
     }
 
-    private void loadList(final Integer start) {
+    @Override
+    protected void loadList(final Integer start) {
         //加载用户信息
         GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
             @Override

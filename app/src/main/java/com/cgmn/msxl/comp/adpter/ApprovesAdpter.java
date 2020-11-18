@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -15,12 +14,8 @@ import com.cgmn.msxl.server_interface.RelatedToMe;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class ApprovesAdpter extends BaseAdapter {
-    private Context mContext;
-    private List<RelatedToMe> mData = null;
-    private Map<Integer, View> views = null;
+public class ApprovesAdpter extends RelatedBaseAdapter {
 
     public ApprovesAdpter(Context mContext, List<RelatedToMe> mData) {
         this.mContext = mContext;
@@ -29,27 +24,12 @@ public class ApprovesAdpter extends BaseAdapter {
     }
 
     @Override
-    public int getCount() {
-        return mData.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return mData.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        RelatedToMe item = mData.get(position);
+    public View getGroupView(final int groupPosition, boolean isExpand, View convertView, ViewGroup viewGroup) {
+        RelatedToMe item = mData.get(groupPosition);
         //设置下控件的值
-        if(!views.containsKey(position)){
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.approves_item, parent, false);
-            views.put(position, convertView);
+        if(!views.containsKey(groupPosition)){
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.approves_item, viewGroup, false);
+            views.put(groupPosition, convertView);
             ApproveViewHolder holder = new ApproveViewHolder(convertView);
             if (item.getSmallCut() != null && item.getSmallCut().length > 0) {
                 holder.comment_item_logo.setImageContent(item.getSmallCut());
@@ -66,7 +46,7 @@ public class ApprovesAdpter extends BaseAdapter {
             holder.txt_app_des.setText(String.format("%s赞了我的帖子", item.getUserName()));
             holder.txt_mycontent.setText(item.getMyContent());
         }else{
-            convertView = views.get(position);
+            convertView = views.get(groupPosition);
         }
 
         return convertView;

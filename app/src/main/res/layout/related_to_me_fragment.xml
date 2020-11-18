@@ -1,13 +1,26 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.cgmn.msxl.comp.view.RefreshScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
+        android:fillViewport="true"
+        android:scrollbars="vertical">
 
-    <ListView
-            android:id="@+id/list_content"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+    <LinearLayout
             android:layout_width="match_parent"
-            />
-</LinearLayout>
+            android:layout_height="match_parent"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="vertical">
+
+        <include layout="@layout/refresh_header" />
+
+        <com.cgmn.msxl.comp.view.CommentExpandableListView
+                android:id="@+id/list_content"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:divider="@null"
+                android:listSelector="@android:color/transparent"
+                android:scrollbars="none" />
+    </LinearLayout>
+</com.cgmn.msxl.comp.view.RefreshScrollView>

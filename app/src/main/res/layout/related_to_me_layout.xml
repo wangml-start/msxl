@@ -2,14 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:background="@color/bg_white"
+        android:background="@color/div_white"
         android:orientation="vertical"
         tools:context=".ac.RelatedToMeActivity">
 
     <com.google.android.material.tabs.TabLayout
-            android:id="@+id/ranking_tab"
+            android:id="@+id/about_me_tab"
             android:layout_width="match_parent"
             android:layout_height="28dp"
             app:tabGravity="fill"
@@ -22,10 +22,25 @@
             app:tabIndicatorFullWidth="false"
             app:tabBackground="@color/transparent"
             app:tabRippleColor="@color/transparent"
-            />
-    <androidx.viewpager.widget.ViewPager
-            android:id="@+id/view_pager"
+            >
+        <com.google.android.material.tabs.TabItem
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="点赞我的" />
+
+        <com.google.android.material.tabs.TabItem
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="评论我的" />
+    </com.google.android.material.tabs.TabLayout>
+
+
+    <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_below="@id/about_me_tab"
+            android:id="@+id/ly_content">
+
+    </FrameLayout>
 </LinearLayout>

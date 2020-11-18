@@ -13,11 +13,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.ac.AccountInfoActivity;
-import com.cgmn.msxl.ac.StatisticActivity;
 import com.cgmn.msxl.ac.VIPActivity;
 import com.cgmn.msxl.comp.adpter.MutiLayoutAdapter;
 import com.cgmn.msxl.data.PageMainItem;
-import com.cgmn.msxl.data.StockHolder;
 
 import java.util.ArrayList;
 
