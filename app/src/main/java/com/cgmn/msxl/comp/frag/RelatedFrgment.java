@@ -8,7 +8,7 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.widget.ExpandableListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
@@ -51,15 +51,18 @@ public abstract class RelatedFrgment  extends Fragment implements RefreshListene
         View  view = inflater.inflate(R.layout.related_to_me_fragment, container, false);
         mContext = view.getContext();
         listView = view.findViewById(R.id.list_content);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        listView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                RelatedToMe entity = mData.get(position);
+            public boolean onGroupClick(ExpandableListView expandableListView, View view, int groupPosition, long l) {
+                RelatedToMe entity = mData.get(groupPosition);
                 Intent intent = new Intent(mContext, DisgussSubActivity.class);
                 GlobalDataHelper.setDate("viewId", entity.getCommentId());
                 startActivity(intent);
+                return true;
             }
         });
+
+        listView.setGroupIndicator(null);
         scrollView = view.findViewById(R.id.scrollView);
         headView = view.findViewById(R.id.head_view);
         head_view_tv = view.findViewById(R.id.head_view_tv);
