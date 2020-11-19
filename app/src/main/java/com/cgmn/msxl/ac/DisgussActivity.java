@@ -43,6 +43,7 @@ public class DisgussActivity extends DisgussBaseActivity {
     private TabLayout tabLayout;
     private NumImageView mail;
     private Integer tabPosition=0;
+    private SimpleResponse response;
 
     @Override
     protected int getView() {
@@ -64,8 +65,10 @@ public class DisgussActivity extends DisgussBaseActivity {
             showCommentDialog();
         } else if(v.getId() == R.id.img_mail){
             Intent intent = new Intent(mContext, RelatedToMeActivity.class);
+            GlobalDataHelper.setDate("relate", response);
             startActivity(intent);
             mail.setNum(0);
+            response = null;
         } else if(v.getId() == R.id.img_back){
             finish();
         }
@@ -129,8 +132,10 @@ public class DisgussActivity extends DisgussBaseActivity {
                     }
 
                 } else if(MessageUtil.LOAD_RELATED_TO_ME == msg.what){
-                    SimpleResponse res = (SimpleResponse) msg.obj;
-                    mail.setNum(res.getApproveToMe()+res.getCommentToMe());
+                    response = (SimpleResponse) msg.obj;
+                    if(response != null){
+                        mail.setNum(response.getApproveToMe()+response.getCommentToMe());
+                    }
                 } else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
                     GlobalExceptionHandler.getInstance(mContent).handlerException((Exception) msg.obj);
                 }

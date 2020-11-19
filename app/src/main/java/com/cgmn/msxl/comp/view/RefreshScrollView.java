@@ -91,7 +91,7 @@ public class RefreshScrollView extends ScrollView {
         }
         if(event.getAction() == MotionEvent.ACTION_MOVE){   //滑动事件
             if(scroll_y == 0){   //如果scroll_y == 0,在顶部，可以刷新
-                if(event.getY() - down_y > 0){  //手势判断：向下滑动,可以刷新
+                if(event.getY() - down_y > 5){  //手势判断：向下滑动,可以刷新
                     //event.getY()-down_y是手指滑动的纵向距离，为什么乘1/3?为了让下拉刷新更肉一点，这样手指下滑300像素，头布局高度增高100像素，可根据个人喜好做出调整
                     int downRange = (int) ((event.getY()-down_y)*1/3);   //给headView动态设置高度，动态高度是手指向下滑动距离的1/3
 //                    headViewRefresh.setVisibility(View.VISIBLE);  //显示刷新的根视图  显示headView控件
@@ -110,7 +110,7 @@ public class RefreshScrollView extends ScrollView {
                     return true;   //拦截触摸事件，scrollView不可响应触摸事件，否则会造成松手滑动跳动错位
                 }else{ //手势判断：小于0则是上滑，此时按正常程序走
                     b_down = false; //不可以刷新
-                    return super.dispatchTouchEvent(event);  //向上滑动，不拦截
+                    return super.dispatchTouchEvent(event);  //向上滑动，不    拦截
                 }
             }else{ //scroll_y不等于0则是上滑，此时按正常程序走
                 b_down = false; //不可以刷新
@@ -125,9 +125,12 @@ public class RefreshScrollView extends ScrollView {
                 headViewRefresh.setLayoutParams(params);
                 listsner.hintChange("正在刷新");
                 listsner.startRefresh();
-                return true;
+                return false;
             }else{    //如果不可以刷新，停止刷新
                 stopRefresh();
+                if(event.getY() - down_y > 5){
+                    return false;
+                }
             }
         }
 
