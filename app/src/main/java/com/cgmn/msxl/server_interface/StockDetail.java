@@ -1,5 +1,7 @@
 package com.cgmn.msxl.server_interface;
 
+import com.cgmn.msxl.utils.CommonUtil;
+
 import java.util.Date;
 
 public class StockDetail {
@@ -118,7 +120,11 @@ public class StockDetail {
     }
 
     public String getExchageRate() {
-        return exchageRate;
+        if(exchageRate!=null){
+            Double num = Double.valueOf(exchageRate.replace("%", "")) / 100;
+            return CommonUtil.formatPercent(num);
+        }
+        return "";
     }
 
     public void setExchageRate(String exchageRate) {

@@ -5,10 +5,16 @@
         android:fitsSystemWindows="true"
         >
 
+    <View
+            android:id="@+id/top_div"
+            android:layout_width="match_parent"
+            android:layout_height="8px"
+            android:background="@color/bg_white" />
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:clipToPadding="true"
+            android:layout_below="@id/top_div"
             android:fitsSystemWindows="true"
             android:orientation="vertical">
         <!--top bar-->
@@ -24,15 +30,21 @@
                     style="@style/kline_top_bar" />
 
             <TextView
+                    android:id="@+id/lb_last_rate"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
                     android:layout_weight="1"
-                    android:gravity="center"
-                     />
+                    android:textSize="@dimen/size12"
+                    android:textColor="@color/text_topbar"
+                    android:text="Wating.."
+                    android:gravity="center" />
 
             <TextView
                     android:id="@+id/lb_close_price"
-                    style="@style/kline_top_bar" />
+                    style="@style/kline_top_bar"
+                    android:layout_marginRight="15dp"
+                    />
         </LinearLayout>
 
         <LinearLayout
@@ -53,12 +65,16 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
                     android:layout_weight="1"
+                    android:textSize="@dimen/size12"
+                    android:textColor="@color/text_topbar"
                     android:text="Wating.."
                     android:gravity="center" />
 
             <TextView
                     android:id="@+id/lb_close_rate"
-                    style="@style/kline_top_bar" />
+                    style="@style/kline_top_bar"
+                    android:layout_marginRight="15dp"
+                    />
         </LinearLayout>
 
         <View
@@ -98,74 +114,70 @@
     <LinearLayout
             android:id="@+id/pop_div"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="40dp"
             android:layout_alignParentBottom="true"
-            android:background="@color/div_white"
+            android:background="@color/bg_white"
             android:orientation="horizontal">
-        <Button
-                android:id="@+id/bt_exit"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/tab_menu_bg"
-                android:drawablePadding="2dp"
-                android:drawableTop="@drawable/tab_menu_channel"
-                android:gravity="center"
-                android:padding="2dp"
-                android:text="@string/exit_stock"
-                android:textColor="@drawable/tab_menu_text"
-                android:textSize="@dimen/smallSize" />
-        <Button
-                android:id="@+id/bt_change"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/tab_menu_bg"
-                android:drawablePadding="2dp"
-                android:drawableTop="@drawable/tab_menu_channel"
-                android:gravity="center"
-                android:padding="2dp"
-                android:text="@string/change_stock"
-                android:textColor="@drawable/tab_menu_text"
-                android:textSize="@dimen/smallSize" />
         <Button
                 android:id="@+id/bt_buy"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/tab_menu_bg"
                 android:drawablePadding="2dp"
-                android:drawableTop="@drawable/tab_menu_channel"
                 android:gravity="center"
-                android:padding="2dp"
+                android:layout_margin="6dp"
                 android:text="@string/trade_buy"
-                android:textColor="@drawable/tab_menu_text"
-                android:textSize="@dimen/smallSize" />
-        <Button
-                android:id="@+id/bt_next"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/tab_menu_bg"
-                android:drawablePadding="2dp"
-                android:drawableTop="@drawable/tab_menu_channel"
-                android:gravity="center"
-                android:padding="2dp"
-                android:text="@string/next"
-                android:textColor="@drawable/tab_menu_text"
-                android:textSize="@dimen/smallSize" />
+                android:textColor="@color/main_red_color"
+                android:background="@color/div_white"
+                android:textSize="@dimen/LargeSize" />
         <Button
                 android:id="@+id/bt_sell"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/tab_menu_bg"
                 android:drawablePadding="2dp"
-                android:drawableTop="@drawable/tab_menu_channel"
                 android:gravity="center"
-                android:padding="2dp"
+                android:layout_margin="6dp"
+                android:background="@color/div_white"
                 android:text="@string/trade_sell"
-                android:textColor="@drawable/tab_menu_text"
-                android:textSize="@dimen/smallSize" />
+                android:textColor="@color/main_blue_color"
+                android:textSize="@dimen/LargeSize" />
+        <Button
+                android:id="@+id/bt_next"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawablePadding="2dp"
+                android:gravity="center"
+                android:layout_margin="6dp"
+                android:background="@color/div_white"
+                android:text="@string/next"
+                android:textColor="@color/text_topbar"
+                android:textSize="@dimen/size14" />
+        <Button
+                android:id="@+id/bt_change"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawablePadding="2dp"
+                android:gravity="center"
+                android:layout_margin="6dp"
+                android:background="@color/div_white"
+                android:text="@string/change_stock"
+                android:textColor="@color/text_topbar"
+                android:textSize="@dimen/size14" />
+        <Button
+                android:id="@+id/bt_exit"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawablePadding="2dp"
+                android:gravity="center"
+                android:layout_margin="6dp"
+                android:background="@color/div_white"
+                android:text="@string/exit_stock"
+                android:textColor="@color/text_topbar"
+                android:textSize="@dimen/size14" />
+
     </LinearLayout>
 </RelativeLayout>

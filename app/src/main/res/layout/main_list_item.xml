@@ -13,8 +13,6 @@
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
              />
-           />
-
     <TextView
             android:id="@+id/txt_aname"
             android:layout_width="match_parent"
@@ -24,5 +22,5 @@
             android:layout_marginLeft="40dp"
             android:gravity="left|center_vertical"
             android:textColor="@color/text_topbar"
-            android:textSize="@dimen/NormalSize" />
+            android:textSize="@dimen/size16" />
 </RelativeLayout>

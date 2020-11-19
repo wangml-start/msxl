@@ -16,13 +16,13 @@
     <style name='kline_top_bar'>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_margin">1dp</item>
         <item name="android:background">@color/bg_white</item>
         <item name="android:gravity">center</item>
-        <item name="android:layout_marginTop">1dp</item>
+        <item name="android:layout_marginTop">3dp</item>
+        <item name="android:layout_marginLeft">10dp</item>
         <item name="android:text">Wating..</item>
         <item name="android:textColor">@color/text_topbar</item>
-        <item name="android:textSize">@dimen/smallSize</item>
+        <item name="android:textSize">@dimen/size12</item>
     </style>
 
     <style name="take_photo_anim" parent="android:Animation">

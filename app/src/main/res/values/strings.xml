@@ -23,7 +23,7 @@
     <string name="so_many_task">当前执行的任务过多，请稍后再试</string>
 
 
-    <string name="tab_menu_xunlian">训练</string>
+    <string name="tab_menu_xunlian">训练区</string>
     <string name="tab_menu_statistic">统计</string>
     <string name="tab_menu_alert">提醒</string>
     <string name="tab_menu_may">我的</string>
@@ -34,8 +34,8 @@
     <string name="need_vol">请填写合适的数量</string>
     <string name="up_stop_reject">涨停状态不可买入</string>
     <string name="down_stop_reject">跌停状态不可卖出</string>
-    <string name="trade_sell">卖出</string>
-    <string name="trade_buy">买入</string>
+    <string name="trade_sell">卖</string>
+    <string name="trade_buy">买</string>
     <string name="next">下一步</string>
     <string name="change_stock">换股</string>
     <string name="exit_stock">退出</string>

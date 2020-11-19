@@ -59,7 +59,7 @@ public class RealControlActivity extends AppCompatActivity
     TextView lb_open_rate;
     TextView lb_close_rate;
     TextView lb_left_day;
-    TextView lb_left_s;
+    TextView lb_left_s,lb_last_rate;
     Button bt_next, bt_buy,bt_sell, bt_change, bt_exit;
 
 
@@ -252,16 +252,18 @@ public class RealControlActivity extends AppCompatActivity
 
     private void updateTopBar(){
         StockDetail current = realtradeManage.getCurrentK();
+        StockDetail last = realtradeManage.getLastK();
         lb_open_price.setText("开盘价： " + CommonUtil.formatNumer(current.getStart()));
         lb_open_rate.setText("涨跌:  " + current.getOpenrate());
         lb_close_price.setText("收盘价： 00.00");
         lb_close_rate.setText("涨跌:  00.00%");
         lb_left_day.setText("剩余: " + realtradeManage.getLeftDay() + " 天");
+        lb_last_rate.setText("昨换手: "+last.getExchageRate());
 
-        lb_close_price.setTextColor(getResources().getColor(R.color.kline_ave_5));
-        lb_close_rate.setTextColor(getResources().getColor(R.color.kline_ave_5));
-        lb_open_price.setTextColor(getResources().getColor(R.color.kline_ave_5));
-        lb_open_rate.setTextColor(getResources().getColor(R.color.kline_ave_5));
+        lb_close_price.setTextColor(getResources().getColor(R.color.text_topbar));
+        lb_close_rate.setTextColor(getResources().getColor(R.color.text_topbar));
+        lb_open_price.setTextColor(getResources().getColor(R.color.text_topbar));
+        lb_open_rate.setTextColor(getResources().getColor(R.color.text_topbar));
     }
 
     private void bindView(){
@@ -273,6 +275,7 @@ public class RealControlActivity extends AppCompatActivity
         lb_open_rate = findViewById(R.id.lb_open_rate);
         lb_close_rate = findViewById(R.id.lb_close_rate);
         lb_left_day = findViewById(R.id.lb_left_day);
+        lb_last_rate = findViewById(R.id.lb_last_rate);
         bt_next = findViewById(R.id.bt_next);
         bt_buy = findViewById(R.id.bt_buy);
         bt_sell = findViewById(R.id.bt_sell);

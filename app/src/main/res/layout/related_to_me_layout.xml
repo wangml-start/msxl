@@ -11,10 +11,10 @@
     <com.google.android.material.tabs.TabLayout
             android:id="@+id/about_me_tab"
             android:layout_width="match_parent"
-            android:layout_height="28dp"
+            android:layout_height="32dp"
             app:tabGravity="fill"
             app:tabMode="fixed"
-            android:textSize="@dimen/size12"
+            android:textSize="@dimen/size14"
             app:tabMaxWidth="0dp"
             app:tabIndicatorColor="@color/colorAccent"
             app:tabSelectedTextColor="@color/colorPrimary"

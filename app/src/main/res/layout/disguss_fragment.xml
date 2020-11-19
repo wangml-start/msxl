@@ -48,10 +48,10 @@
     <com.google.android.material.tabs.TabLayout
             android:id="@+id/tab"
             android:layout_width="match_parent"
-            android:layout_height="28dp"
+            android:layout_height="32dp"
             app:tabGravity="fill"
             app:tabMode="fixed"
-            android:textSize="@dimen/size12"
+            android:textSize="@dimen/size14"
             app:tabMaxWidth="0dp"
             app:tabIndicatorColor="@color/colorAccent"
             app:tabSelectedTextColor="@color/colorPrimary"
@@ -114,9 +114,9 @@
                     android:background="@drawable/comment_bt_selector"
                     android:gravity="center_vertical"
                     android:paddingLeft="18dp"
-                    android:text="说点什么吧..."
+                    android:text="发帖..."
                     android:textColor="#B6B6B6"
-                    android:textSize="12sp" />
+                    android:textSize="@dimen/size16" />
         </LinearLayout>
     </RelativeLayout>
 

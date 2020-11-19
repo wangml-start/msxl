@@ -2,7 +2,7 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <!-- 背景色 -->
-    <solid android:color="@color/bg_white" />
+    <solid android:color="@color/text_topbar" />
 
     <!-- 圆角 -->
     <corners android:radius="8dp"/>
