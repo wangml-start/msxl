@@ -15,6 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             net_image:image_type="0"
+            net_image:image_size="large"
             />
 
 </RelativeLayout>

@@ -19,6 +19,7 @@ public class CommentDetailBean {
     private int myApprove;
     private int myComment;
     private int userId;
+    private String phone;
     private List<ReplyDetailBean> replyList;
 
     public CommentDetailBean(String nickName, String content, String createDate) {
@@ -127,5 +128,13 @@ public class CommentDetailBean {
 
     public void setMyComment(int myComment) {
         this.myComment = myComment;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

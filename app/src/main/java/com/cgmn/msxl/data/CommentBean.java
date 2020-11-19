@@ -55,6 +55,7 @@ public class CommentBean {
         String content = (String) attr.get("content");
         String date = analysisTime(CommonUtil.parseDateString((String) attr.get("created_at"), "yyyyMMdd HH:mm:ss"));
         CommentDetailBean comment = new CommentDetailBean(userName, content, date);
+        comment.setPhone((String) attr.get("phone"));
         comment.setId(((Double) attr.get("id")).intValue());
         comment.setUserId(((Double) attr.get("creator_id")).intValue());
         comment.setApprove(((Double) attr.get("approve")).intValue() +"");

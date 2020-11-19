@@ -230,6 +230,10 @@ public class NetImageView extends ImageView {
         StringBuffer bu = new StringBuffer(imagePath);
         bu.append("&size_type=");
         bu.append(sizeType);
+        if(imageName != null){
+            bu.append("&phone=");
+            bu.append(imageName);
+        }
         return bu.toString();
     }
 
@@ -409,9 +413,9 @@ public class NetImageView extends ImageView {
         int realHeight = realImageViewHeight();
 
         int outWidth = options.outWidth;
-        Log.e("网络图片实际的宽度", String.valueOf(outWidth));
+//        Log.e("网络图片实际的宽度", String.valueOf(outWidth));
         int outHeight = options.outHeight;
-        Log.e("网络图片实际的高度", String.valueOf(outHeight));
+//        Log.e("网络图片实际的高度", String.valueOf(outHeight));
 
         //获取比率最大的那个
         if (outWidth > realWith || outHeight > realHeight) {
@@ -419,7 +423,7 @@ public class NetImageView extends ImageView {
             int heightRadio = Math.round(outHeight / realHeight);
             inSampleSize = withRadio > heightRadio ? withRadio : heightRadio;
         }
-        Log.e("压缩比率", String.valueOf(inSampleSize));
+//        Log.e("压缩比率", String.valueOf(inSampleSize));
         return inSampleSize;
     }
 
@@ -447,7 +451,7 @@ public class NetImageView extends ImageView {
             //获取屏幕的宽度
             width = displayMetrics.widthPixels;
         }
-        Log.e("ImageView实际的宽度", String.valueOf(width));
+//        Log.e("ImageView实际的宽度", String.valueOf(width));
         return width;
     }
 
@@ -474,7 +478,7 @@ public class NetImageView extends ImageView {
             //获取ImageView高度的最大值
             height = displayMetrics.heightPixels;
         }
-        Log.e("ImageView实际的高度", String.valueOf(height));
+//        Log.e("ImageView实际的高度", String.valueOf(height));
         return height;
     }
 

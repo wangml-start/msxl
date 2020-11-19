@@ -41,7 +41,6 @@ public class RankFragment extends Fragment {
     private Handler mHandler;
     private List<Map<String, Object>> mData = null;
     private UserRankAdpter adpter;
-    protected ProgressDialog dialog;
     private TextView txt_rank;
 
     public RankFragment() { }
@@ -82,8 +81,6 @@ public class RankFragment extends Fragment {
             @Override
             public boolean handleMessage(Message msg) {
                 if (msg.what == MessageUtil.REQUEST_SUCCESS) {
-                    dialog.cancel();
-                    dialog.dismiss();
                     mData = (List<Map<String, Object>>) msg.obj;
                     if(!CommonUtil.isEmpty(mData)){
                         adpter = new UserRankAdpter(mContext, mData);
@@ -95,15 +92,11 @@ public class RankFragment extends Fragment {
                         }
                     }
                 } else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
-                    dialog.cancel();
-                    dialog.dismiss();
                     GlobalExceptionHandler.getInstance(mContext).handlerException((Exception) msg.obj);
                 }
                 return false;
             }
         });
-        dialog = new ProgressDialog(mContext);
-        dialog.setMessage("正在加载...");
     }
 
     @Override
@@ -125,7 +118,6 @@ public class RankFragment extends Fragment {
     }
 
     private void initAdpter() {
-        dialog.show();
         //加载用户信息
         GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
             @Override

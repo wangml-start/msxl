@@ -96,10 +96,7 @@ public class RefreshScrollView extends ScrollView {
                     int downRange = (int) ((event.getY()-down_y)*1/3);   //给headView动态设置高度，动态高度是手指向下滑动距离的1/3
 //                    headViewRefresh.setVisibility(View.VISIBLE);  //显示刷新的根视图  显示headView控件
                     b_down = false;    //刚开始滑动，松手还不可以刷新
-                    LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) headViewRefresh.getLayoutParams();  //将滑动距离转化后的值用来给headView动态设置高度
-                    params.width = viewWidth;
-                    params.height = downRange;
-                    headViewRefresh.setLayoutParams(params);
+                    handleHeaderView(viewWidth, downRange);
                     if(downRange >= headViewHeight){   //当动态设置的高度大于初始高度的时候，变换hint，此时松手可刷新；headViewHeight是我设置的初始高度50dp，也用来判断下拉到什么程度才能刷新
                         listsner.hintChange("松开刷新");//超过了设定的高度，可以刷新，如果不设置这个或者设置的值太小，轻轻一拉就刷新，体验不好
                         b_down = true; //可以刷新，如果此时抬起手指就可以刷新了
@@ -119,10 +116,7 @@ public class RefreshScrollView extends ScrollView {
         }
         if(event.getAction() == MotionEvent.ACTION_UP){   //抬起手指
             if(b_down){    //如果可以刷新
-                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) headViewRefresh.getLayoutParams();   //设置headView为原始高度
-                params.width = viewWidth;
-                params.height = headViewHeight;
-                headViewRefresh.setLayoutParams(params);
+                handleHeaderView(viewWidth, headViewHeight);
                 listsner.hintChange("正在刷新");
                 listsner.startRefresh();
                 return false;
@@ -135,5 +129,15 @@ public class RefreshScrollView extends ScrollView {
         }
 
         return super.dispatchTouchEvent(event);
+    }
+
+    public void handleHeaderView(Integer mwidth, Integer mheight){
+        //设置headView为原始高度
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) headViewRefresh.getLayoutParams();
+        if(mwidth != null){
+            params.width = mwidth;
+        }
+        params.height = mheight;
+        headViewRefresh.setLayoutParams(params);
     }
 }

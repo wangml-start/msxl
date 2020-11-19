@@ -153,6 +153,8 @@ public class DisgussActivity extends DisgussBaseActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 tabPosition = tab.getPosition();
+                scrollView.handleHeaderView(null, 100);
+                hintChange("正在刷新");
                 loadCommentList();
             }
             @Override
@@ -257,7 +259,6 @@ public class DisgussActivity extends DisgussBaseActivity {
                                 mHandler.sendMessage(message);
                             }
                         });
-                Log.e(TAG, "NAME=" + Thread.currentThread().getName());
             }
         });
     }
@@ -300,7 +301,6 @@ public class DisgussActivity extends DisgussBaseActivity {
                                 mHandler.sendMessage(message);
                             }
                         });
-                Log.e(TAG, "NAME=" + Thread.currentThread().getName());
             }
         });
     }
@@ -342,7 +342,6 @@ public class DisgussActivity extends DisgussBaseActivity {
                                 mHandler.sendMessage(message);
                             }
                         });
-                Log.e(TAG, "NAME=" + Thread.currentThread().getName());
             }
         });
     }
@@ -394,7 +393,6 @@ public class DisgussActivity extends DisgussBaseActivity {
                                 mHandler.sendMessage(message);
                             }
                         }, params);
-                Log.e(TAG, "NAME=" + Thread.currentThread().getName());
             }
         });
     }
@@ -448,7 +446,6 @@ public class DisgussActivity extends DisgussBaseActivity {
                                 mHandler.sendMessage(message);
                             }
                         }, params);
-                Log.e(TAG, "NAME=" + Thread.currentThread().getName());
             }
         });
     }

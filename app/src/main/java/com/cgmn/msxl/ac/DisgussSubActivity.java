@@ -317,7 +317,6 @@ public class DisgussSubActivity extends DisgussBaseActivity {
                                 mHandler.sendMessage(message);
                             }
                         });
-                Log.e(TAG, "NAME=" + Thread.currentThread().getName());
             }
         });
     }
@@ -359,7 +358,6 @@ public class DisgussSubActivity extends DisgussBaseActivity {
                                 mHandler.sendMessage(message);
                             }
                         });
-                Log.e(TAG, "NAME=" + Thread.currentThread().getName());
             }
         });
     }
@@ -402,7 +400,6 @@ public class DisgussSubActivity extends DisgussBaseActivity {
                                 mHandler.sendMessage(message);
                             }
                         });
-                Log.e(TAG, "NAME=" + Thread.currentThread().getName());
             }
         });
     }
@@ -476,7 +473,6 @@ public class DisgussSubActivity extends DisgussBaseActivity {
                                 mHandler.sendMessage(message);
                             }
                         }, params);
-                Log.e(TAG, "NAME=" + Thread.currentThread().getName());
             }
         });
     }

@@ -136,7 +136,9 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
                     } else if(view.getId() == R.id.comment_setting){
                         commentListener.onSettingClick(view, groupPosition);
                     } else if(view.getId() == R.id.content_view){
-                        commentListener.onShowPicture(bean.getPicture());
+                        commentListener.onShowPicture(bean.getPicture(), null);
+                    } else if(view.getId() == R.id.comment_item_logo){
+                        commentListener.onShowPicture(null, bean.getPhone());
                     }
                 }
             };
@@ -183,6 +185,7 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
             groupHolder.iv_like.setOnClickListener(listener);
             groupHolder.comment_icon.setOnClickListener(listener);
             groupHolder.comment_setting.setOnClickListener(listener);
+            groupHolder.logo.setOnClickListener(listener);
 
         } else {
             convertView = views.get(bean.getNo());
@@ -317,7 +320,7 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
         span.setSpan(new ClickableSpan(){
             @Override
             public void onClick(View widget) {
-                commentListener.onShowPicture(bs);
+                commentListener.onShowPicture(bs, null);
             }
         }, contentText.length()-4, contentText.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
         span.setSpan(new UnderlineSpan() {
