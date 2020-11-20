@@ -8,9 +8,9 @@
             android:id="@+id/show_more"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="35dp"
+            android:layout_marginLeft="20dp"
             android:layout_marginRight="6dp"
-            android:background="@color/replay_bg"
+            android:background="#ECF6F6"
             android:text="查看全部评论>"
             android:textColor="@color/link_color"
             android:textSize="14sp" />

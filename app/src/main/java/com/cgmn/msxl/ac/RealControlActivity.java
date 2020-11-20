@@ -116,7 +116,7 @@ public class RealControlActivity extends AppCompatActivity
     }
 
     private void loadKLineSet(){
-        CustmerToast.makeText(mContxt, R.string.get_stock_datas).show();
+//        CustmerToast.makeText(mContxt, R.string.get_stock_datas).show();
         GlobalTreadPools.getInstance(mContxt).execute(new Runnable() {
             @Override
             public void run() {

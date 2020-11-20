@@ -119,6 +119,45 @@
             android:background="@color/bg_white"
             android:orientation="horizontal">
         <Button
+                android:id="@+id/bt_exit"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawablePadding="2dp"
+                android:gravity="center"
+                android:layout_margin="6dp"
+                android:text="@string/exit_stock"
+                android:textColor="@color/text_topbar"
+                android:textSize="@dimen/size14"
+                style="@style/trading_page_btns"
+                />
+        <Button
+                android:id="@+id/bt_change"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawablePadding="2dp"
+                android:gravity="center"
+                android:layout_margin="6dp"
+                android:text="@string/change_stock"
+                android:textColor="@color/text_topbar"
+                android:textSize="@dimen/size14"
+                style="@style/trading_page_btns"
+                />
+        <Button
+                android:id="@+id/bt_next"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawablePadding="2dp"
+                android:gravity="center"
+                android:layout_margin="6dp"
+                android:text="@string/next"
+                android:textColor="@color/text_topbar"
+                android:textSize="@dimen/size14"
+                style="@style/trading_page_btns"
+                />
+        <Button
                 android:id="@+id/bt_buy"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -144,45 +183,5 @@
                 android:textSize="@dimen/LargeSize"
                 style="@style/trading_page_btns"
                 />
-        <Button
-                android:id="@+id/bt_next"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:drawablePadding="2dp"
-                android:gravity="center"
-                android:layout_margin="6dp"
-                android:text="@string/next"
-                android:textColor="@color/text_topbar"
-                android:textSize="@dimen/size14"
-                style="@style/trading_page_btns"
-                />
-        <Button
-                android:id="@+id/bt_change"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:drawablePadding="2dp"
-                android:gravity="center"
-                android:layout_margin="6dp"
-                android:text="@string/change_stock"
-                android:textColor="@color/text_topbar"
-                android:textSize="@dimen/size14"
-                style="@style/trading_page_btns"
-                />
-        <Button
-                android:id="@+id/bt_exit"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:drawablePadding="2dp"
-                android:gravity="center"
-                android:layout_margin="6dp"
-                android:text="@string/exit_stock"
-                android:textColor="@color/text_topbar"
-                android:textSize="@dimen/size14"
-                style="@style/trading_page_btns"
-                />
-
     </LinearLayout>
 </RelativeLayout>
