@@ -14,7 +14,7 @@
             android:layout_marginLeft="15dp"
             android:text="头像"
             android:gravity="center"
-            android:textSize="@dimen/NormalSize" />
+            android:textSize="@dimen/size14" />
 
     <RelativeLayout
             android:id="@+id/frg_tain_top_bar"
@@ -40,6 +40,6 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="10dp"
                 android:src="@drawable/right"
-                android:textSize="@dimen/NormalSize" />
+                 />
     </RelativeLayout>
 </RelativeLayout>

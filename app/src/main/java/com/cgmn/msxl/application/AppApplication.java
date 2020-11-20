@@ -1,9 +1,9 @@
 package com.cgmn.msxl.application;
 
 import android.app.Application;
-import com.cgmn.msxl.data.User;
+import android.os.Handler;
+import android.os.Looper;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class AppApplication extends Application {
@@ -19,6 +19,27 @@ public class AppApplication extends Application {
     public void onCreate() {
         super.onCreate();
         mInstance = this;
+
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    try {
+                        Looper.loop();
+                    } catch (Throwable e) {
+                        //e为捕获到的主线程产生的异常
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread t, Throwable e) {
+                //e为捕获到的子线程产生的异常
+                e.printStackTrace();
+            }
+        });
     }
 
     public static synchronized AppApplication getInstance() {

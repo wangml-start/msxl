@@ -14,6 +14,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.comp.adpter.AccountAdapter;
 import com.cgmn.msxl.data.EditInfoItem;
+import com.cgmn.msxl.db.AppSqlHelper;
 import com.cgmn.msxl.receiver.ReceiverMessage;
 import com.cgmn.msxl.service.GlobalDataHelper;
 
@@ -126,7 +127,9 @@ public class AccountInfoActivity extends BaseOtherActivity {
         exit_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(mContext, loginActivity.class));
+                AppSqlHelper sqlHeper = new AppSqlHelper(mContext);
+                sqlHeper.excuteSql("UPDATE users SET last_active=0");
+                startActivity(new Intent(mContext, LoginActivity.class));
             }
         });
     }

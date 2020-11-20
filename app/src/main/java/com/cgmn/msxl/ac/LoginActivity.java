@@ -8,30 +8,41 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
+import com.cgmn.msxl.bean.PopuBean;
 import com.cgmn.msxl.comp.CustmerToast;
 import com.cgmn.msxl.comp.LoginBaseActivity;
+import com.cgmn.msxl.comp.view.ClearEditTextView;
+import com.cgmn.msxl.comp.view.PopuWindowView;
 import com.cgmn.msxl.comp.view.showPassworCheckBox;
 import com.cgmn.msxl.data.User;
+import com.cgmn.msxl.db.AppSqlHelper;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
+import com.cgmn.msxl.in.TdataListener;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.service.GlobalDataHelper;
 import com.cgmn.msxl.utils.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class loginActivity extends LoginBaseActivity {
-    private static final String TAG = loginActivity.class.getSimpleName();
-    private EditText tx_pwd;
-    private EditText tx_email;
+public class LoginActivity extends LoginBaseActivity {
+    private static final String TAG = LoginActivity.class.getSimpleName();
+    private ClearEditTextView tx_pwd;
+    private ClearEditTextView tx_email;
 
     private Button bt_login;
     private Button bt_forget_pws;
     private showPassworCheckBox ck_show;
+    private ImageView acc_down_list;
+
+    private List<Map<String, Object>> accList;
 
     private Context mContext;
 
@@ -43,6 +54,7 @@ public class loginActivity extends LoginBaseActivity {
     protected void init(){
         initMessageHandle();
         bindView();
+        loadAccountList();
     }
 
     protected String setTitle(){
@@ -83,7 +95,35 @@ public class loginActivity extends LoginBaseActivity {
             bundle.putString("email", tx_email.getText().toString());
             intent.putExtra("datas", bundle);
             startActivity(intent);
+        }else if(v.getId() == R.id.acc_down_list){
+            showAccountList();
         }
+    }
+
+    private void showAccountList(){
+        PopuWindowView popuWindowView = new PopuWindowView(mContext, LinearLayout.LayoutParams.MATCH_PARENT);
+        popuWindowView.setMaxLines(4);
+        popuWindowView.initPupoData(new TdataListener() {
+            @Override
+            public void initPupoData(List<PopuBean> lists) {
+                if(accList != null){
+                    for (int i = 0; i < accList.size(); i++) {
+                        PopuBean popu = new PopuBean();
+                        popu.setTitle((String) accList.get(i).get("phone"));
+                        popu.setValue((String) accList.get(i).get("password"));
+                        lists.add(popu);
+                    }
+                }
+            }
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position) {
+                tx_email.setText((String) accList.get(position).get("phone"));
+                String ps = AESUtil.decrypt((String) accList.get(position).get("password"), MessageUtil.SERCURETY);
+                tx_pwd.setText(ps);
+            }
+        });
+        popuWindowView.showing(acc_down_list);
     }
 
     @Override
@@ -135,6 +175,9 @@ public class loginActivity extends LoginBaseActivity {
 
         ck_show.setPws(tx_pwd);
         ck_show.setOnCheckedChangeListener(ck_show);
+
+        acc_down_list = findViewById(R.id.acc_down_list);
+        acc_down_list.setOnClickListener(this);
 
 
         //加载用户信息
@@ -188,5 +231,21 @@ public class loginActivity extends LoginBaseActivity {
     public void onBackPressed() {
         // super.onBackPressed();//注释掉这行,back键不退出activity
         Log.i(TAG, "onBackPressed");
+    }
+
+    private void loadAccountList(){
+        GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
+            @Override
+            public void run() {
+                AppSqlHelper dbHelper = new AppSqlHelper(mContext);
+                accList = dbHelper.getAccountList();
+                if(!CommonUtil.isEmpty(accList)){
+                    Message message = Message.obtain();
+                    message.what = MessageUtil.LOAD_USER_INFOR;
+                    message.obj = accList.get(0);
+                    mHandler.sendMessage(message);
+                }
+            }
+        });
     }
 }

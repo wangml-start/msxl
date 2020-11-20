@@ -3,38 +3,53 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".ac.MainActivity">
+        tools:context=".ac.LoginActivity">
 
     <LinearLayout
-            style="@style/register_item">
-        <TextView
-                android:id="@+id/lb_account"
-                style="@style/register_label"
-                android:text="@string/sign_email"></TextView>
-        <EditText
-                android:id="@+id/tx_email"
-                android:hint="@string/email_user_for"
-                android:inputType="textEmailAddress"
-                style="@style/register_input">
-            <requestFocus />
-        </EditText>
-    </LinearLayout>
-
-    <LinearLayout
-            style="@style/register_item">
-        <TextView
-                android:id="@+id/lb_pwd"
-                style="@style/register_label"
-                android:text="@string/sign_user_wd" />
-        <EditText
-                android:id="@+id/tx_pwd"
-                android:hint="@string/wd_reqiure_8"
-                android:inputType="textPassword"
-                style="@style/register_input"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:focusable="true"
+            android:focusableInTouchMode = "true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+        <LinearLayout
+                android:focusable="true"
+                android:focusableInTouchMode = "true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 >
-        </EditText>
+            <com.cgmn.msxl.comp.view.ClearEditTextView
+                    android:id="@+id/tx_email"
+                    android:hint="@string/sign_email"
+                    android:inputType="textEmailAddress"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    style="@style/register_input">
+                <requestFocus />
+            </com.cgmn.msxl.comp.view.ClearEditTextView>
+            <ImageView
+                    android:id="@+id/acc_down_list"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="15dp"
+                    android:layout_height="wrap_content"
+                    android:tint="@color/colorAccent"
+                    android:src="@drawable/down" />
+
+        </LinearLayout>
+        <com.cgmn.msxl.comp.view.ClearEditTextView
+                android:id="@+id/tx_pwd"
+                android:hint="@string/sign_user_wd"
+                android:inputType="textPassword"
+                android:layout_marginRight="15dp"
+                style="@style/register_input"
+                />
     </LinearLayout>
-    <LinearLayout style="@style/register_item">
+
+        <LinearLayout style="@style/register_item">
         <TextView
                 android:id="@+id/lb_dis_pws"
                 style="@style/register_label"
@@ -55,6 +70,7 @@
             style="@style/register_item"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
+            android:layout_height="38dp"
             android:weightSum="100"
             >
         <Button
@@ -67,6 +83,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="50"
+                android:textSize="@dimen/size14"
                 android:text="@string/signin" />
         <Button
                 android:id="@+id/bt_forget"
@@ -78,6 +95,7 @@
                 android:textColor="@color/main_blue_color"
                 android:layout_weight="50"
                 android:enabled="true"
+                android:textSize="@dimen/size14"
                 android:text="@string/forget_pws" />
     </LinearLayout>
 </LinearLayout>

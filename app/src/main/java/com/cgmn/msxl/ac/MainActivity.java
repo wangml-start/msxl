@@ -1,32 +1,22 @@
 package com.cgmn.msxl.ac;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.os.Bundle;
 import com.cgmn.msxl.R;
-import com.cgmn.msxl.application.AppApplication;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.CustmerToast;
 import com.cgmn.msxl.comp.LoginBaseActivity;
 import com.cgmn.msxl.data.User;
-import com.cgmn.msxl.db.AppSqlHelper;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.service.GlobalDataHelper;
 import com.cgmn.msxl.utils.*;
 
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -99,7 +89,7 @@ public class MainActivity extends LoginBaseActivity {
                 }else if(msg.what == MessageUtil.EXCUTE_EXCEPTION){
                     GlobalExceptionHandler.getInstance(mContext).handlerException((Exception) msg.obj);
                 }else if(msg.what == MessageUtil.NEED_TO_LOGIN_PAGE){
-                    startActivity(new Intent(mContext, loginActivity.class));
+                    startActivity(new Intent(mContext, LoginActivity.class));
                     finish();
                 }
                 return false;

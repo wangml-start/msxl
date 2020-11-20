@@ -1,16 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/frg_tain_top_bar"
         android:layout_width="match_parent"
         android:layout_height="35dp"
-        android:background="@color/colorPrimary">
+        android:background="@color/colorPrimary"
+        android:orientation="horizontal">
 
+    <com.cgmn.msxl.comp.view.NetImageView
+            android:id="@+id/user_header"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="8dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            />
     <TextView
             android:id="@+id/txt_frg_tain"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:layout_centerInParent="true"
             android:gravity="center"
             android:textColor="@color/bg_white"
             android:textSize="@dimen/NormalSize" />
-</RelativeLayout>
+    <TextView
+            android:layout_width="35dp"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="8dp"
+            />
+
+</LinearLayout>

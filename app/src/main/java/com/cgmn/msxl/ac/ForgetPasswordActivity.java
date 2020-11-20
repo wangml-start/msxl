@@ -11,6 +11,7 @@ import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.CustmerToast;
 import com.cgmn.msxl.comp.LoginBaseActivity;
+import com.cgmn.msxl.comp.view.ClearEditTextView;
 import com.cgmn.msxl.comp.view.showPassworCheckBox;
 import com.cgmn.msxl.data.User;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
@@ -24,9 +25,9 @@ import java.util.Map;
 
 public class ForgetPasswordActivity extends LoginBaseActivity {
     private static final String TAG = ForgetPasswordActivity.class.getSimpleName();
-    private EditText tx_new_pwd;
-    private EditText tx_email;
-    private EditText tx_valid_code;
+    private ClearEditTextView tx_new_pwd;
+    private ClearEditTextView tx_email;
+    private ClearEditTextView tx_valid_code;
 
     private Button bt_login;
     private Button bt_sent_email;
@@ -116,6 +117,8 @@ public class ForgetPasswordActivity extends LoginBaseActivity {
                 StringBuffer tipes = new StringBuffer();
                 tipes.append(getSourceString(R.string.new_user_wd));
                 tipes.append(getSourceString(R.string.valid_fails));
+                tipes.append(",");
+                tipes.append(getSourceString(R.string.wd_reqiure_8));
                 CustmerToast.makeText(mContext, tipes.toString()).show();
             }
         }

@@ -194,6 +194,14 @@ public class AppSqlHelper extends SQLiteOpenHelper {
         return list.get(0);
     }
 
+    public List<Map<String, Object>> getAccountList(){
+        String sql = "SELECT * FROM users";
+        String[] params = new String[]{};
+        String[] fields = {"phone", "password"};
+        List<Map<String, Object>> list = query(sql, params, fields);
+        return list;
+    }
+
     public Map<String, String> getUserModelSettings(String userId){
         String sql = "SELECT * FROM user_modes where user_id=" + userId;
         String[] params = new String[]{};

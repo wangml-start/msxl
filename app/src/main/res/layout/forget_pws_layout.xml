@@ -3,52 +3,37 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".ac.MainActivity">
+        tools:context=".ac.ForgetPasswordActivity">
 
-    <LinearLayout style="@style/register_item">
-
-        <TextView
-                android:id="@+id/lb_account"
-                style="@style/register_label"
-                android:text="@string/sign_email"></TextView>
-
-        <EditText
+    <LinearLayout
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:focusable="true"
+            android:focusableInTouchMode = "true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+        <com.cgmn.msxl.comp.view.ClearEditTextView
                 android:id="@+id/tx_email"
-                android:hint="@string/email_user_for"
+                android:hint="@string/sign_email"
                 style="@style/register_input"
                 android:inputType="textEmailAddress">
-
             <requestFocus />
-        </EditText>
-    </LinearLayout>
+        </com.cgmn.msxl.comp.view.ClearEditTextView>
 
-    <LinearLayout style="@style/register_item">
-
-        <TextView
-                android:id="@+id/lb_new_user_wd"
-                style="@style/register_label"
-                android:text="@string/new_user_wd" />
-
-        <EditText
+        <com.cgmn.msxl.comp.view.ClearEditTextView
                 android:id="@+id/tx_new_user_wd"
+                android:hint="@string/new_user_wd"
                 style="@style/register_input"
-                android:hint="@string/wd_reqiure_8"
-                android:inputType="textPassword"></EditText>
-    </LinearLayout>
-
-    <LinearLayout style="@style/register_item">
-
-        <TextView
-                android:id="@+id/lb_valid_code"
-                style="@style/register_label"
-                android:text="@string/lb_valid_code" />
-
-        <EditText
+                android:inputType="textPassword"/>
+        <com.cgmn.msxl.comp.view.ClearEditTextView
                 android:id="@+id/tx_valid_code"
                 style="@style/register_input"
-                android:inputType="number"
-                android:hint="@string/wd_valid_code"
-                android:maxLength="6"></EditText>
+                android:hint="@string/lb_valid_code"
+                android:maxLength="6"
+                android:inputType="number"/>
     </LinearLayout>
 
     <LinearLayout style="@style/register_item">
@@ -67,6 +52,7 @@
             style="@style/register_item"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
+            android:layout_height="38dp"
             android:weightSum="100">
 
         <Button
@@ -78,6 +64,7 @@
                 android:layout_weight="50"
                 android:background="@drawable/bt_back_nomal"
                 android:enabled="false"
+                android:textSize="@dimen/size14"
                 android:textColor="@color/main_blue_color"
                 android:text="@string/signin" />
 
@@ -88,6 +75,7 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="10dp"
                 android:layout_weight="50"
+                android:textSize="@dimen/size14"
                 android:background="@drawable/bt_back_nomal"
                 android:textColor="@color/main_blue_color"
                 android:enabled="true"

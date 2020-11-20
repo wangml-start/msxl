@@ -13,9 +13,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.ac.AccountInfoActivity;
+import com.cgmn.msxl.ac.ImageViewActivity;
 import com.cgmn.msxl.ac.VIPActivity;
 import com.cgmn.msxl.comp.adpter.MutiLayoutAdapter;
+import com.cgmn.msxl.comp.view.NetImageView;
 import com.cgmn.msxl.data.PageMainItem;
+import com.cgmn.msxl.service.GlobalDataHelper;
 
 import java.util.ArrayList;
 
@@ -23,6 +26,7 @@ import java.util.ArrayList;
 public class MayFragment extends Fragment {
     private Context mContxt;
     private ListView list_content;
+    private NetImageView user_header;
     private ArrayList<Object> mData = null;
     private MutiLayoutAdapter myAdapter = null;
 
@@ -71,6 +75,17 @@ public class MayFragment extends Fragment {
                             break;
                     }
                 }
+            }
+        });
+
+        user_header = view.findViewById(R.id.user_header);
+        user_header.setImageContent(GlobalDataHelper.getUserCut(mContxt));
+        user_header.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GlobalDataHelper.setDate("email", GlobalDataHelper.getUserAcc(mContxt));
+                Intent intent = new Intent(mContxt, ImageViewActivity.class);
+                startActivity(intent);
             }
         });
     }

@@ -14,7 +14,7 @@
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="15dp"
             android:gravity="center"
-            android:textSize="@dimen/NormalSize" />
+            android:textSize="@dimen/size14" />
     <TextView
             android:id="@+id/txt_content"
             android:layout_width="0dp"
@@ -25,7 +25,7 @@
             android:singleLine="true"
             android:gravity="center_vertical|right"
             android:layout_marginRight="3dp"
-            android:textSize="@dimen/NormalSize" />
+            android:textSize="@dimen/size14" />
 
     <ImageView
             android:tint="@color/colorPrimary"
@@ -34,5 +34,5 @@
             android:layout_gravity="center"
             android:layout_marginRight="10dp"
             android:src="@drawable/right"
-            android:textSize="@dimen/NormalSize" />
+            android:textSize="@dimen/size14" />
 </LinearLayout>

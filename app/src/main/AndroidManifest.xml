@@ -38,7 +38,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ac.loginActivity" />
+        <activity android:name=".ac.LoginActivity" />
         <activity android:name=".ac.ForgetPasswordActivity" />
         <activity android:name=".ac.AppMainActivity" />
         <activity android:name=".ac.RealControlActivity" />
