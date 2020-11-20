@@ -1,7 +1,6 @@
 package com.cgmn.msxl.ac;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,7 +11,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.*;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
@@ -31,6 +29,7 @@ import com.cgmn.msxl.service.*;
 import com.cgmn.msxl.utils.CommonUtil;
 import com.cgmn.msxl.utils.GsonUtil;
 import com.cgmn.msxl.utils.MessageUtil;
+import com.cgmn.msxl.utils.ShowDialog;
 import com.squareup.okhttp.Request;
 import org.apache.commons.lang3.StringUtils;
 
@@ -238,15 +237,11 @@ public class RealControlActivity extends AppCompatActivity
 
     private void showSelectModes(){
         if(modeList.size() > 0){
-            AlertDialog.Builder builder = new AlertDialog.Builder(mContxt);
-            builder.setTitle("您设置的模式");
             List<String> texts = new ArrayList<>();
             for(SettingItem m : modeList){
                 texts.add(m.getModeText());
             }
-            builder.setMessage(StringUtils.join(texts, "\n"));
-            builder.setPositiveButton("Ok", null);
-            builder.show();
+            new ShowDialog().showTips(mContxt, StringUtils.join(texts, "\n") ,"设置的模式");
         }
     }
 
@@ -368,18 +363,14 @@ public class RealControlActivity extends AppCompatActivity
                 settleThisTrading();
                 bt_buy.setEnabled(false);
                 bt_sell.setEnabled(false);
-//                bt_next.setEnabled(false);
                 bt_change.setEnabled(true);
-                AlertDialog.Builder builder = new AlertDialog.Builder(mContxt);
-                builder.setTitle(R.string.tips);
-                builder.setMessage(String.format("该段行情取自: %s(%s)\n日期：%s 至 %s",
+                String tips = String.format("该段行情取自: %s(%s)\n日期：%s 至 %s",
                         realtradeManage.getKlineset().getStockName(),
                         realtradeManage.getCurrentK().getStackCode(),
                         realtradeManage.getKlineset().getStartDate(),
                         realtradeManage.getKlineset().getEndDate()
-                ));
-                builder.setPositiveButton("Ok", null);
-                builder.show();
+                );
+                new ShowDialog().showTips(mContxt, tips);
             }
         }
     }
@@ -486,45 +477,27 @@ public class RealControlActivity extends AppCompatActivity
 
     @Override
     public void onClick(View v) {
-        setSelected();
         if(v.getId() == R.id.bt_next){
             onNextClick();
             stockView.invalidateView();
-            bt_next.setSelected(true);
         }else if(v.getId() == R.id.bt_buy){
             showPopFormBottom(v, "BUY");
-            bt_buy.setSelected(true);
         }else if(v.getId() == R.id.bt_sell){
             showPopFormBottom(v, "SELL");
-            bt_sell.setSelected(true);
         }else if(v.getId() == R.id.bt_change){
             onChageStock();
-            bt_change.setSelected(true);
-//            AlertDialog.Builder builder = new AlertDialog.Builder(mContxt);
-//            builder.setTitle(R.string.tips);
-//            builder.setMessage(R.string.sure_to_do_this);
-//            builder.setPositiveButton(R.string.queding, new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialogInterface, int i) {
-//
-//                }
-//            });
-//            builder.setNegativeButton(R.string.cancel, null);
-//            builder.show();
         }else if(v.getId() == R.id.bt_exit){
-            AlertDialog.Builder builder = new AlertDialog.Builder(mContxt);
-            builder.setTitle(R.string.tips);
-            builder.setMessage(R.string.sure_to_do_this);
-            builder.setPositiveButton(R.string.queding, new DialogInterface.OnClickListener() {
+            new ShowDialog().show(mContxt, getString(R.string.sure_to_do_this), new ShowDialog.OnBottomClickListener() {
                 @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
+                public void positive() {
+                    //确定操作
                     onExit();
                 }
+                @Override
+                public void negative() {
+                    //取消操作
+                }
             });
-            builder.setNegativeButton(R.string.cancel, null);
-            builder.show();
-            bt_exit.setSelected(true);
-
         }
     }
 
@@ -535,12 +508,4 @@ public class RealControlActivity extends AppCompatActivity
         Log.i(TAG, "onBackPressed");
     }
 
-    //重置所有文本的选中状态
-    private void setSelected() {
-        bt_next.setSelected(false);
-        bt_buy.setSelected(false);
-        bt_sell.setSelected(false);
-        bt_change.setSelected(false);
-        bt_exit.setSelected(false);
-    }
 }

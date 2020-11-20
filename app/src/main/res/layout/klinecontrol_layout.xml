@@ -128,8 +128,9 @@
                 android:layout_margin="6dp"
                 android:text="@string/trade_buy"
                 android:textColor="@color/main_red_color"
-                android:background="@color/div_white"
-                android:textSize="@dimen/LargeSize" />
+                android:textSize="@dimen/LargeSize"
+                style="@style/trading_page_btns"
+                />
         <Button
                 android:id="@+id/bt_sell"
                 android:layout_width="0dp"
@@ -138,10 +139,11 @@
                 android:drawablePadding="2dp"
                 android:gravity="center"
                 android:layout_margin="6dp"
-                android:background="@color/div_white"
                 android:text="@string/trade_sell"
                 android:textColor="@color/main_blue_color"
-                android:textSize="@dimen/LargeSize" />
+                android:textSize="@dimen/LargeSize"
+                style="@style/trading_page_btns"
+                />
         <Button
                 android:id="@+id/bt_next"
                 android:layout_width="0dp"
@@ -150,10 +152,11 @@
                 android:drawablePadding="2dp"
                 android:gravity="center"
                 android:layout_margin="6dp"
-                android:background="@color/div_white"
                 android:text="@string/next"
                 android:textColor="@color/text_topbar"
-                android:textSize="@dimen/size14" />
+                android:textSize="@dimen/size14"
+                style="@style/trading_page_btns"
+                />
         <Button
                 android:id="@+id/bt_change"
                 android:layout_width="0dp"
@@ -162,10 +165,11 @@
                 android:drawablePadding="2dp"
                 android:gravity="center"
                 android:layout_margin="6dp"
-                android:background="@color/div_white"
                 android:text="@string/change_stock"
                 android:textColor="@color/text_topbar"
-                android:textSize="@dimen/size14" />
+                android:textSize="@dimen/size14"
+                style="@style/trading_page_btns"
+                />
         <Button
                 android:id="@+id/bt_exit"
                 android:layout_width="0dp"
@@ -174,10 +178,11 @@
                 android:drawablePadding="2dp"
                 android:gravity="center"
                 android:layout_margin="6dp"
-                android:background="@color/div_white"
                 android:text="@string/exit_stock"
                 android:textColor="@color/text_topbar"
-                android:textSize="@dimen/size14" />
+                android:textSize="@dimen/size14"
+                style="@style/trading_page_btns"
+                />
 
     </LinearLayout>
 </RelativeLayout>

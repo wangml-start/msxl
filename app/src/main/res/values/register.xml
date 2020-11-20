@@ -31,4 +31,10 @@
         <item name="android:gravity">center</item>
     </style>
 
+    <style name="trading_page_btns">
+        <item name="android:gravity">center</item>
+        <item name="android:layout_margin">2dp</item>
+        <item name="android:background">@drawable/train_page_bg</item>
+    </style>
+
 </resources>
