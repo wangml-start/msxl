@@ -84,6 +84,7 @@ public class DisgussActivity extends DisgussBaseActivity {
                     if(adapter == null){
                         initExpandableListView();
                     }
+                    expandList();
                     adapter.clearCache();
                     adapter.notifyDataSetChanged();
                     scrollView.stopRefresh();
@@ -98,38 +99,15 @@ public class DisgussActivity extends DisgussBaseActivity {
                     }
                     appendList = false;
                 }else if (msg.what == MessageUtil.PUBLISHED_COMMENT) {
-                    String userName = GlobalDataHelper.getUserName(mContent);
-                    String time = CommentBean.analysisTime(new Date());
-                    CommentDetailBean detailBean = new CommentDetailBean(userName, editCommet, time);
-                    detailBean.setPicture(pictures);
-                    byte[] cut = GlobalDataHelper.getUserCut(mContent);
-                    if(cut != null && cut.length > 0){
-                        detailBean.setUserLogo(cut);
-                    }
-                    detailBean.setUserId(GlobalDataHelper.getUserId(mContent));
-                    detailBean.setId((Integer) msg.obj);
-                    adapter.addTheCommentData(detailBean);
+                    loadCommentList();
                     resetDialog();
                     scrollView.setScrollY(0);
                 } else if(msg.what == MessageUtil.PUBLISHED_REPLAY_COMMENT){
-                    String userName = GlobalDataHelper.getUserName(mContent);
-                    ReplyDetailBean detailBean = new ReplyDetailBean(editCommet);
-                    detailBean.setReplayFrom(userName);
-                    detailBean.setId((Integer) msg.obj);
-                    detailBean.setUserId(GlobalDataHelper.getUserId(mContent));
-                    detailBean.setPicture(pictures);
-                    adapter.addReplyDataTofirst(detailBean, currentSelectedPosition);
-                    expandableListView.expandGroup(currentSelectedPosition);
+                    loadCommentList();
                     resetDialog();
                 } else if (msg.what == MessageUtil.DELETED_COMMENT) {
                     CustmerToast.makeText(mContext, "删除成功").show();
-                    if(deletedBaen != null){
-                        commentsList.remove(deletedBaen);
-                        deletedBaen = null;
-                        adapter.clearCache();
-                        adapter.notifyDataSetChanged();
-                    }
-
+                    loadCommentList();
                 } else if(MessageUtil.LOAD_RELATED_TO_ME == msg.what){
                     response = (SimpleResponse) msg.obj;
                     if(response != null){
@@ -186,7 +164,6 @@ public class DisgussActivity extends DisgussBaseActivity {
         adapter.setCommentListener(this);
         adapter.setExpandAllContent(false);
         expandableListView.setAdapter(adapter);
-        expandList();
         expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView expandableListView, View view, int groupPosition, long l) {

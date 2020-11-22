@@ -195,7 +195,7 @@ public class AppSqlHelper extends SQLiteOpenHelper {
     }
 
     public List<Map<String, Object>> getAccountList(){
-        String sql = "SELECT * FROM users";
+        String sql = "SELECT * FROM users ORDER BY last_active DESC";
         String[] params = new String[]{};
         String[] fields = {"phone", "password"};
         List<Map<String, Object>> list = query(sql, params, fields);

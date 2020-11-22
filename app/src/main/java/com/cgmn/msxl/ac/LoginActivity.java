@@ -101,7 +101,7 @@ public class LoginActivity extends LoginBaseActivity {
     }
 
     private void showAccountList(){
-        PopuWindowView popuWindowView = new PopuWindowView(mContext, LinearLayout.LayoutParams.MATCH_PARENT);
+        PopuWindowView popuWindowView = new PopuWindowView(mContext, 1000);
         popuWindowView.setMaxLines(4);
         popuWindowView.initPupoData(new TdataListener() {
             @Override
@@ -123,7 +123,7 @@ public class LoginActivity extends LoginBaseActivity {
                 tx_pwd.setText(ps);
             }
         });
-        popuWindowView.showing(acc_down_list);
+        popuWindowView.showing(tx_email);
     }
 
     @Override

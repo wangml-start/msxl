@@ -7,7 +7,6 @@ import android.os.Message;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +21,6 @@ import com.cgmn.msxl.comp.adpter.CommentExpandAdapter;
 import com.cgmn.msxl.comp.view.NetImageView;
 import com.cgmn.msxl.data.CommentBean;
 import com.cgmn.msxl.data.CommentDetailBean;
-import com.cgmn.msxl.data.ReplyDetailBean;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.service.GlobalDataHelper;
@@ -136,6 +134,7 @@ public class DisgussSubActivity extends DisgussBaseActivity {
                     if (adapter == null) {
                         initExpandableListView();
                     }
+                    expandList();
                     scrollView.stopRefresh();
                     adapter.clearCache();
                     adapter.notifyDataSetChanged();
@@ -153,44 +152,15 @@ public class DisgussSubActivity extends DisgussBaseActivity {
                     loadReplayList();
                     setHeader();
                 }else if (msg.what == MessageUtil.PUBLISHED_COMMENT) {
-                    String userName = GlobalDataHelper.getUserName(mContext);
-                    String time = CommentBean.analysisTime(new Date());
-                    CommentDetailBean detailBean = new CommentDetailBean(userName, editCommet, time);
-                    detailBean.setPicture(pictures);
-                    detailBean.setId((Integer) msg.obj);
-                    detailBean.setUserId(GlobalDataHelper.getUserId(mContext));
-                    byte[] cut = GlobalDataHelper.getUserCut(mContext);
-                    if (cut != null && cut.length > 0) {
-                        detailBean.setUserLogo(cut);
-                    }
-                    adapter.addTheCommentData(detailBean);
+                    loadReplayList();
                     resetDialog();
                     scrollView.setScrollY(0);
                 } else if (msg.what == MessageUtil.PUBLISHED_REPLAY_COMMENT) {
-                    String userName = GlobalDataHelper.getUserName(mContext);
-                    ReplyDetailBean detailBean = new ReplyDetailBean(editCommet);
-                    detailBean.setReplayFrom(userName);
-                    if(replayUserId > 0){
-                        detailBean.setReplayUserId(replayUserId);
-                        List<ReplyDetailBean> replyList = commentsList.get(currentSelectedPosition).getReplyList();
-                        if(!CommonUtil.isEmpty(replyList)){
-                            detailBean.setReplayTo(replyList.get(subPosition).getReplayUserName(replayUserId));
-                        }
-                    }
-                    detailBean.setId((Integer) msg.obj);
-                    detailBean.setUserId(GlobalDataHelper.getUserId(mContext));
-                    detailBean.setPicture(pictures);
-                    adapter.addTheReplyData(detailBean, currentSelectedPosition);
-                    expandableListView.expandGroup(currentSelectedPosition);
+                    loadReplayList();
                     resetDialog();
                 } else if (msg.what == MessageUtil.DELETED_COMMENT) {
                     CustmerToast.makeText(mContext, "删除成功").show();
-                    if(deletedBaen != null){
-                        commentsList.remove(deletedBaen);
-                        deletedBaen = null;
-                        adapter.clearCache();
-                        adapter.notifyDataSetChanged();
-                    }
+                    loadReplayList();
 
                 } else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
                     GlobalExceptionHandler.getInstance(mContext).handlerException((Exception) msg.obj);

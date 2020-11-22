@@ -15,24 +15,26 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.widget.PopupMenu;
 import androidx.core.content.ContextCompat;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
+import com.cgmn.msxl.bean.PopuBean;
 import com.cgmn.msxl.comp.CustmerToast;
 import com.cgmn.msxl.comp.adpter.CommentExpandAdapter;
 import com.cgmn.msxl.comp.view.CommentExpandableListView;
 import com.cgmn.msxl.comp.view.NetImageView;
+import com.cgmn.msxl.comp.view.PopuWindowView;
 import com.cgmn.msxl.comp.view.RefreshScrollView;
 import com.cgmn.msxl.data.CommentDetailBean;
 import com.cgmn.msxl.in.CommentListener;
 import com.cgmn.msxl.in.RefreshListener;
+import com.cgmn.msxl.in.TdataListener;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.service.GlobalDataHelper;
 import com.cgmn.msxl.service.OkHttpClientManager;
@@ -70,7 +72,6 @@ public abstract class DisgussBaseActivity extends Activity
     protected String editCommet;
     protected boolean appendList = false;
     protected List<CommentDetailBean> commentsList = new ArrayList<>();
-    protected CommentDetailBean deletedBaen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -273,47 +274,41 @@ public abstract class DisgussBaseActivity extends Activity
     }
 
     @SuppressLint("RestrictedApi")
-    protected void showPopupMenu(View view, final CommentDetailBean bean) {
-        // View当前PopupMenu显示的相对View的位置
-        PopupMenu popupMenu = new PopupMenu(this, view);
-        // menu布局
-        popupMenu.getMenuInflater().inflate(R.menu.comment_menu, popupMenu.getMenu());
-        // menu的item点击事件
-        if (bean.getMyComment() != 1) {
-            popupMenu.getMenu().findItem(R.id.remove).setVisible(false);
-        }
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+    protected void showPopupMenu(final View view, final CommentDetailBean bean) {
+        final PopuWindowView popuWindowView = new PopuWindowView(mContext, 230);
+        popuWindowView.setMaxLines(4);
+        popuWindowView.initPupoData(new TdataListener() {
             @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.remove:
-                        if (bean.getMyComment() == 1) {
-                            deleteComment(bean.getId());
-                            deletedBaen = bean;
-                        }
-                        break;
-                    case R.id.copy:
-                        ClipboardManager cmb = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                        cmb.setText(bean.getContent());
-                        CustmerToast.makeText(mContext, "复制成功").show();
-                        break;
+            public void initPupoData(List<PopuBean> lists) {
+                if (bean.getMyComment() == 1) {
+                    PopuBean popu = new PopuBean();
+                    popu.setTitle("删除");
+                    popu.setValue("delete");
+                    popu.setRes(R.drawable.del_icon);
+                    lists.add(popu);
                 }
-                return true;
+                PopuBean popu = new PopuBean();
+                popu.setTitle("复制");
+                popu.setValue("copy");
+                popu.setRes(R.drawable.copy);
+                lists.add(popu);
+            }
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position) {
+                PopuBean pop = popuWindowView.getPopuLists().get(position);
+                if(pop.getValue().equals("delete")){
+                    if (bean.getMyComment() == 1) {
+                        deleteComment(bean.getId());
+                    }
+                }else if(pop.getValue().equals("copy")){
+                    ClipboardManager cmb = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                    cmb.setText(bean.getContent());
+                    CustmerToast.makeText(mContext, "复制成功").show();
+                }
             }
         });
-
-//        try {
-//            Field field = popupMenu.getClass().getDeclaredField("mPopup");
-//            field.setAccessible(true);
-//            MenuPopupHelper helper = (MenuPopupHelper) field.get(popupMenu);
-//            helper.setForceShowIcon(true);
-//        } catch (NoSuchFieldException e) {
-//            e.printStackTrace();
-//        } catch (IllegalAccessException e) {
-//            e.printStackTrace();
-//        }
-
-        popupMenu.show();
+        popuWindowView.showing(view, -200, -30);
     }
 
 

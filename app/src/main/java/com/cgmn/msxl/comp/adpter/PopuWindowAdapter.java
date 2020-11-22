@@ -5,24 +5,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.bean.PopuBean;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PopuWindowAdapter extends BaseAdapter {
 
-    /**
-     * 上下文
-     */
     private Context mContext;
-    /**
-     * 供下拉的集合包括id
-     */
     List<PopuBean> list;
+    private Map<Integer, View> views;
     private LayoutInflater inflater;
 
     public PopuWindowAdapter(Context mContext, List<PopuBean> lists) {
@@ -32,6 +30,7 @@ public class PopuWindowAdapter extends BaseAdapter {
             list = new ArrayList<>();
         }
         inflater = LayoutInflater.from(mContext);
+        views = new HashMap<>();
     }
 
     @Override
@@ -52,27 +51,30 @@ public class PopuWindowAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
-        if (convertView == null) {
-
-            holder = new ViewHolder();
+        if (!views.containsKey(position)) {
             convertView = inflater.inflate(R.layout.dialogui_popu_option_item, null);
+            holder = new ViewHolder(convertView);
+            PopuBean bean = list.get(position);
+            holder.textView.setText(bean.getTitle());
+            if(bean.getRes() != null && bean.getRes() > 0){
+                holder.image.setVisibility(View.VISIBLE);
+                holder.image.setImageResource(bean.getRes());
+            }
 
-            holder.textView = (TextView) convertView
-                    .findViewById(R.id.customui_item_text);
-
-            convertView.setTag(holder);
         } else {
-            holder = (ViewHolder) convertView.getTag();
+            convertView = views.get(position);
         }
-
-        holder.textView.setText(list.get(position).getTitle());
-
-
         return convertView;
     }
 
     class ViewHolder {
         TextView textView;
+        ImageView image;
+
+        public ViewHolder(View view){
+            textView = view.findViewById(R.id.customui_item_text);
+            image = view.findViewById(R.id.image_head);
+        }
     }
 
 }

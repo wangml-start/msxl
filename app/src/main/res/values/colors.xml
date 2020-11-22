@@ -7,11 +7,11 @@
     <color name="grey_dark_bg">#E4B7A8</color>
     <color name="bg_white_title">#FFFFFFFF</color>
     <color name="bg_white">#FFFFFF</color>
-    <color name="div_white">#F6F4F4</color>
+    <color name="div_white">#FAFBFB</color>
     <color name="text_hint">#E1DFDF</color>
     <color name="like">#FF5C5C</color>
     <color name="unlike">#aaaaaa</color>
-    <color name="replay_bg">#EAEAEA</color>
+    <color name="replay_bg">#FAFBFB</color>
     <color name="link_color">#4D6AC3</color>
 
 

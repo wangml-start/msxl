@@ -2,6 +2,7 @@ package com.cgmn.msxl.comp.view;
 
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -37,8 +38,12 @@ public class PopuWindowView implements AdapterView.OnItemClickListener {
         pullDownView = new PopupWindow(viewItem, widthGravity,
                 LayoutParams.WRAP_CONTENT, true);
         pullDownView.setOutsideTouchable(true);
-        pullDownView.setBackgroundDrawable(new BitmapDrawable());
         pupoListView.setOnItemClickListener(this);
+        pullDownView.setFocusable(true);
+        //为了点击非悬浮框处或者按返回键悬浮框消失，需要如下设置。
+        //而且必须设置一个背景才有效。
+        pullDownView.setTouchable(true);
+        pullDownView.setBackgroundDrawable(new ColorDrawable(0x00000000));
     }
 
     /**
@@ -74,6 +79,10 @@ public class PopuWindowView implements AdapterView.OnItemClickListener {
         pullDownView.showAsDropDown(v, 0, 0);
     }
 
+    public void showing(View v, int x, int y) {
+        pullDownView.showAsDropDown(v, x, y);
+    }
+
     /**
      * 关闭popuWindow
      */
@@ -103,4 +112,7 @@ public class PopuWindowView implements AdapterView.OnItemClickListener {
         return popuLists.get(popuPosition).getValue();
     }
 
+    public List<PopuBean> getPopuLists() {
+        return popuLists;
+    }
 }

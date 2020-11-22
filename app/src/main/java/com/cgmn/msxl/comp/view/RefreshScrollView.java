@@ -119,6 +119,7 @@ public class RefreshScrollView extends ScrollView {
                 handleHeaderView(viewWidth, headViewHeight);
                 listsner.hintChange("正在刷新");
                 listsner.startRefresh();
+                b_down = false;
                 return false;
             }else{    //如果不可以刷新，停止刷新
                 stopRefresh();

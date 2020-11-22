@@ -128,7 +128,7 @@ public class AccountInfoActivity extends BaseOtherActivity {
             @Override
             public void onClick(View v) {
                 AppSqlHelper sqlHeper = new AppSqlHelper(mContext);
-                sqlHeper.excuteSql("UPDATE users SET last_active=0");
+                sqlHeper.excuteSql(String.format("UPDATE users SET last_active=2 WHERE phone='%s'", GlobalDataHelper.getUserAcc(mContext)));
                 startActivity(new Intent(mContext, LoginActivity.class));
             }
         });
