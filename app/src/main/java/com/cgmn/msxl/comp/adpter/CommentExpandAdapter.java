@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.cgmn.msxl.R;
+import com.cgmn.msxl.comp.view.CenterImageSpan;
 import com.cgmn.msxl.comp.view.NetImageView;
 import com.cgmn.msxl.data.CommentDetailBean;
 import com.cgmn.msxl.data.ReplyDetailBean;
@@ -199,6 +200,7 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
         if(!expandAll && childPosition >= expandNum){
             convertView = LayoutInflater.from(context).inflate(R.layout.show_more_item, viewGroup, false);
             TextView more = convertView.findViewById(R.id.show_more);
+            more.setText(String.format("查看全部%s条评论>", commentBeanList.get(groupPosition).getReplyList().size()));
             more.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -215,32 +217,8 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
                 final ChildHolder childHolder = new ChildHolder(convertView);
                 subViews.put(key, convertView);
 
-                View.OnClickListener listener = new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (view.getId() == R.id.txt_reply_from){
-                            commentListener.onChildReplayClick(groupPosition, childPosition, subbean.getUserId());
-                        } else if(view.getId() == R.id.txt_reply_to){
-                            commentListener.onChildReplayClick(groupPosition, childPosition, subbean.getReplayUserId());
-                        }
-                    }
-                };
-
-                childHolder.txt_reply_from.setText(subbean.getReplayFrom());
-                childHolder.txt_reply_from.setOnClickListener(listener);
-                if(!CommonUtil.isEmpty(subbean.getReplayTo())){
-                    childHolder.txt_reply.setVisibility(View.VISIBLE);
-                    childHolder.txt_reply_to.setVisibility(View.VISIBLE);
-                    childHolder.txt_reply_to.setText(subbean.getReplayTo());
-                    childHolder.txt_reply_to.setOnClickListener(listener);
-                }
-                String content = commentBeanList.get(groupPosition).getReplyList().get(childPosition).getContent();
-                if(subbean.getPicture() != null && subbean.getPicture().length > 0){
-                    childHolder.tv_content.setText(packUpReplayContent(content, subbean.getPicture()));
-                    childHolder.tv_content.setMovementMethod(LinkMovementMethod.getInstance());
-                }else{
-                    childHolder.tv_content.setText(content);
-                }
+                childHolder.tv_content.setText(packUpReplayContent(groupPosition, childPosition));
+                childHolder.tv_content.setMovementMethod(LinkMovementMethod.getInstance());
             } else {
                 convertView = subViews.get(key);
             }
@@ -274,12 +252,9 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
     }
 
     private class ChildHolder {
-        private TextView txt_reply_from,txt_reply,txt_reply_to, tv_content;
+        private TextView tv_content;
 
         public ChildHolder(View view) {
-            txt_reply_from = (TextView) view.findViewById(R.id.txt_reply_from);
-            txt_reply = (TextView) view.findViewById(R.id.txt_reply);
-            txt_reply_to = (TextView) view.findViewById(R.id.txt_reply_to);
             tv_content = (TextView) view.findViewById(R.id.reply_item_content);
         }
     }
@@ -297,32 +272,12 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
                 commentListener.onShowMoreClick(groupPosition);
             }
         }, contentText.length()-5, contentText.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-        span.setSpan(new UnderlineSpan() {
-            @Override
-            public void updateDrawState(TextPaint ds) {
-                super.updateDrawState(ds);
-                ds.setColor(Color.parseColor(color));
-                ds.setUnderlineText(false);// 去掉下划线
-            }
-        }, contentText.length()-5, contentText.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
 
+        updateDrawState(span, contentText.length()-5, contentText.length());
         return span;
     }
 
-    @SuppressLint("ResourceAsColor")
-    private SpannableString packUpReplayContent(String content, final byte[] bs){
-        if(content == null){
-            content = "";
-        }
-        StringBuffer contentText = new StringBuffer(content);
-        contentText.append("   查看图片");
-        SpannableString span = new SpannableString(contentText.toString());
-        span.setSpan(new ClickableSpan(){
-            @Override
-            public void onClick(View widget) {
-                commentListener.onShowPicture(bs, null);
-            }
-        }, contentText.length()-4, contentText.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+    private void updateDrawState(SpannableString span, Integer start, Integer end){
         span.setSpan(new UnderlineSpan() {
             @Override
             public void updateDrawState(TextPaint ds) {
@@ -330,14 +285,67 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
                 ds.setColor(Color.parseColor(color));
                 ds.setUnderlineText(false);// 去掉下划线
             }
-        }, contentText.length()-4, contentText.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+        }, start, end, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+    }
 
-        Drawable d = context.getResources().getDrawable(R.drawable.photo);
-        d.setColorFilter(Color.parseColor(color), PorterDuff.Mode.MULTIPLY);
-        d.setBounds(0, 0, 60, 60);
-        //8.创建ImageSpan,然后用ImageSpan来替换文本
-        ImageSpan imgspan = new ImageSpan(d, ImageSpan.ALIGN_BOTTOM);
-        span.setSpan(imgspan, contentText.length()-6, contentText.length()-5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+    @SuppressLint("ResourceAsColor")
+    private SpannableString packUpReplayContent(final int groupPosition, final int childPosition){
+        final ReplyDetailBean subbean = commentBeanList.get(groupPosition).getReplyList().get(childPosition);
+        List<Integer[]> pos = new ArrayList<>();
+        Integer start = 0;
+        StringBuffer contentText = new StringBuffer(subbean.getReplayFrom());
+        pos.add(new Integer[]{start, contentText.length()});
+        start = contentText.length();
+        if(!CommonUtil.isEmpty(subbean.getReplayTo())){
+            contentText.append("回复");
+            contentText.append(subbean.getReplayTo());
+            contentText.append(":");
+            pos.add(new Integer[]{start+2, start+2+subbean.getReplayTo().length()});
+        }else{
+            contentText.append(":");
+        }
+        contentText.append(subbean.getContent());
+        if(subbean.getPicture() != null && subbean.getPicture().length > 0) {
+            contentText.append("   查看图片");
+        }
+        SpannableString span = new SpannableString(contentText.toString());
+        if(pos.size() > 0){
+            Integer[] from = pos.get(0);
+            span.setSpan(new ClickableSpan(){
+                @Override
+                public void onClick(View widget) {
+                    commentListener.onChildReplayClick(groupPosition, childPosition, subbean.getUserId());
+                }
+            }, from[0], from[1], Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+            updateDrawState(span, from[0], from[1]);
+        }
+//        if(pos.size() > 1){
+//            Integer[] to = pos.get(1);
+//            span.setSpan(new ClickableSpan(){
+//                @Override
+//                public void onClick(View widget) {
+//                    commentListener.onChildReplayClick(groupPosition, childPosition, subbean.getReplayUserId());
+//                }
+//            }, to[0], to[1], Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+//            updateDrawState(span, to[0], to[1]);
+//        }
+
+        //处理图片
+        if(subbean.getPicture() != null && subbean.getPicture().length > 0){
+            span.setSpan(new ClickableSpan(){
+                @Override
+                public void onClick(View widget) {
+                    commentListener.onShowPicture(subbean.getPicture(), null);
+                }
+            }, contentText.length()-7, contentText.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+            updateDrawState(span, contentText.length()-7, contentText.length());
+            Drawable d = context.getResources().getDrawable(R.drawable.photo);
+            d.setColorFilter(Color.parseColor(color), PorterDuff.Mode.MULTIPLY);
+            d.setBounds(0, 0, 70, 60);
+            //8.创建ImageSpan,然后用ImageSpan来替换文本
+            CenterImageSpan imageSpan = new CenterImageSpan(d);
+            span.setSpan(imageSpan, contentText.length()-6, contentText.length()-5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
 
         return span;
     }
@@ -397,6 +405,7 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
                 replyList.add(replyDetailBean);
                 bean.setReplyList(replyList);
             }
+            views.remove(bean.getNo());
             notifyDataSetChanged();
         } else {
             throw new IllegalArgumentException("回复数据为空!");

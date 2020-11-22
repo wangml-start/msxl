@@ -71,12 +71,6 @@
             android:background="@color/replay_bg"
             >
         <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="我的帖子："
-                android:textColor="@color/text_topbar"
-                android:textSize="@dimen/smallSize" />
-        <TextView
                 android:id="@+id/txt_mycontent"
                 android:letterSpacing="0.1"
                 android:layout_width="fill_parent"

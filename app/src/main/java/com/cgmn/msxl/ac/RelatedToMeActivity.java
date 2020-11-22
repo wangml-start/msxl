@@ -78,8 +78,18 @@ public class RelatedToMeActivity extends BaseOtherActivity {
     }
 
     private void resetText(int position){
-        String txt = tabLayout.getTabAt(position).getText().toString().replaceAll("\\((.)?\\)", "");
-        tabLayout.getTabAt(position).setText(txt);
+        String txt=null;
+        Integer transPos = null;
+        if(position == 0){
+            transPos = 1;
+            txt = tabLayout.getTabAt(1).getText().toString().replaceAll("\\((.)?\\)", "");
+        }else if(position == 1){
+            transPos = 0;
+            txt = tabLayout.getTabAt(0).getText().toString().replaceAll("\\((.)?\\)", "");
+        }
+        if(transPos != null && txt != null){
+            tabLayout.getTabAt(transPos).setText(txt);
+        }
     }
 
     //隐藏所有Fragment

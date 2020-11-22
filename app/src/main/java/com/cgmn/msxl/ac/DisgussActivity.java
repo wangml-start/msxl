@@ -361,7 +361,7 @@ public class DisgussActivity extends DisgussBaseActivity {
                 OkHttpClientManager.Param[] params = new OkHttpClientManager.Param[]{
                         new OkHttpClientManager.Param("token", token),
                         new OkHttpClientManager.Param("picture", org.apache.shiro.codec.Base64.encodeToString(pictures)),
-                        new OkHttpClientManager.Param("comment", editCommet)
+                        new OkHttpClientManager.Param("comment", editCommet.trim())
                 };
                 String url = String.format("%s%s",
                         PropertyService.getInstance().getKey("serverUrl"), "/chat/publish_comment");
@@ -412,8 +412,9 @@ public class DisgussActivity extends DisgussBaseActivity {
                 OkHttpClientManager.Param[] params = new OkHttpClientManager.Param[]{
                         new OkHttpClientManager.Param("token", token),
                         new OkHttpClientManager.Param("picture", org.apache.shiro.codec.Base64.encodeToString(pictures)),
-                        new OkHttpClientManager.Param("comment", editCommet),
+                        new OkHttpClientManager.Param("comment", editCommet.trim()),
                         new OkHttpClientManager.Param("comment_id", commentsList.get(currentSelectedPosition).getId()+""),
+                        new OkHttpClientManager.Param("replay_id", commentsList.get(currentSelectedPosition).getId()+""),
                         new OkHttpClientManager.Param("comment_user_id", commentsList.get(currentSelectedPosition).getUserId()+"")
                 };
                 String url = String.format("%s%s",

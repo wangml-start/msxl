@@ -20,11 +20,12 @@ import com.cgmn.msxl.in.RefreshListener;
 import com.cgmn.msxl.server_interface.RelatedToMe;
 import com.cgmn.msxl.service.GlobalDataHelper;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class RelatedFrgment  extends Fragment implements RefreshListener {
+public abstract class RelatedFrgment extends Fragment implements RefreshListener {
     protected RefreshScrollView scrollView;
     protected CommentExpandableListView listView;
     protected RelativeLayout headView;
@@ -33,8 +34,12 @@ public abstract class RelatedFrgment  extends Fragment implements RefreshListene
     protected Handler mHandler;
     protected List<RelatedToMe> mData = new ArrayList<>();
     protected BottomSheetDialog dialog;
-    protected boolean appendList = false;
+    protected TabLayout tabLayout;
 
+    protected Integer currentPos = 0;
+
+
+    protected boolean appendList = false;
     public static String REFRESH = "REFRESH";
     public static String APPEND = "APPEND";
     protected String action = REFRESH;
@@ -44,11 +49,10 @@ public abstract class RelatedFrgment  extends Fragment implements RefreshListene
         super.onCreate(savedInstanceState);
     }
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View  view = inflater.inflate(R.layout.related_to_me_fragment, container, false);
+        View view = inflater.inflate(R.layout.related_to_me_fragment, container, false);
         mContext = view.getContext();
         listView = view.findViewById(R.id.list_content);
         listView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
@@ -81,12 +85,20 @@ public abstract class RelatedFrgment  extends Fragment implements RefreshListene
     @Override
     public void startRefresh() {
         action = REFRESH;
+        if (tabLayout == null) {
+            tabLayout = getActivity().findViewById(R.id.about_me_tab);
+        }
+        if (tabLayout != null) {
+            TabLayout.Tab tab = tabLayout.getTabAt(currentPos);
+            String txt = tab.getText().toString().replaceAll("\\((.)?\\)", "");
+            tab.setText(txt);
+        }
         loadList(0);
     }
 
     @Override
     public void loadMore() {
-        if(!appendList){
+        if (!appendList) {
             appendList = true;
             action = APPEND;
             loadList(mData.size());
@@ -98,6 +110,8 @@ public abstract class RelatedFrgment  extends Fragment implements RefreshListene
         head_view_tv.setText(hint);
     }
 
-    protected abstract void bindView(View  view);
-    protected abstract void loadList(Integer  start);
+    protected abstract void bindView(View view);
+
+    protected abstract void loadList(Integer start);
+
 }

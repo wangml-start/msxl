@@ -418,19 +418,24 @@ public class DisgussSubActivity extends DisgussBaseActivity {
                 if (pictures == null) {
                     pictures = new byte[]{};
                 }
+
                 Integer beReplayUserId = null;
+                Integer replayId = null;
                 if (currentSelectedPosition < 0) {
                     beReplayUserId = comment.getUserId();
+                    replayId = comment.getId();
                 } else {
                     CommentDetailBean bean = commentsList.get(currentSelectedPosition);
                     if (subPosition < 0) {
                         beReplayUserId = bean.getUserId();
+                        replayId = bean.getId();
                     } else {
                         beReplayUserId = replayUserId;
+                        replayId = bean.getReplyList().get(subPosition).getId();
                     }
                 }
                 Integer commentId = comment.getId();
-                if (currentSelectedPosition > 0) {
+                if (currentSelectedPosition >= 0) {
                     commentId = commentsList.get(currentSelectedPosition).getId();
                 }
                 OkHttpClientManager.Param[] params = new OkHttpClientManager.Param[]{
@@ -438,6 +443,7 @@ public class DisgussSubActivity extends DisgussBaseActivity {
                         new OkHttpClientManager.Param("picture", org.apache.shiro.codec.Base64.encodeToString(pictures)),
                         new OkHttpClientManager.Param("comment", editCommet),
                         new OkHttpClientManager.Param("comment_id", commentId + ""),
+                        new OkHttpClientManager.Param("replay_id", replayId + ""),
                         new OkHttpClientManager.Param("comment_user_id", beReplayUserId + "")
                 };
                 String url = String.format("%s%s",

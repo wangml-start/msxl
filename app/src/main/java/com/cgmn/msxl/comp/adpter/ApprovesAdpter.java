@@ -43,8 +43,8 @@ public class ApprovesAdpter extends RelatedBaseAdapter {
 
             holder.comment_item_userName.setText(item.getUserName());
             holder.comment_item_time.setText(CommentBean.analysisTime(item.getCreatedAt()));
-            holder.txt_app_des.setText(String.format("%s赞了我的帖子", item.getUserName()));
-            holder.txt_mycontent.setText(item.getMyContent());
+            holder.txt_app_des.setText(String.format("%s 赞了我的帖子", item.getUserName()));
+            holder.txt_mycontent.setText(String.format("我的帖子：%s", item.getMyContent()));
         }else{
             convertView = views.get(groupPosition);
         }

@@ -86,15 +86,20 @@ public class CommentBean {
             Integer index = 0;
             for (Map<String, Object> item : replay) {
                 Integer replayUserId = 0;
+                Integer replayId = 0;
                 if(item.get("reply_user_id") != null){
                     replayUserId = ((Double) item.get("reply_user_id")).intValue();
+                }
+                if(item.get("reply_id") != null){
+                    replayId = ((Double) item.get("reply_id")).intValue();
                 }
                 String recontent = (String) item.get("content");
                 ReplyDetailBean replyDetailBean = new ReplyDetailBean(recontent);
                 replyDetailBean.setReplayFrom((String) item.get("user_name"));
-                if(replayUserId != comment.getUserId()){
+                if(replayId != comment.getId()){
                     replyDetailBean.setReplayTo((String) item.get("replay_uname"));
                 }
+                replyDetailBean.setId(((Double) item.get("id")).intValue());
                 replyDetailBean.setNo(index++);
                 replyDetailBean.setUserId(((Double) item.get("creator_id")).intValue());
                 replyDetailBean.setReplayUserId(replayUserId);

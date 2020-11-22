@@ -55,6 +55,8 @@ public class CommentFragment extends RelatedFrgment {
                 return false;
             }
         });
+
+        currentPos = 1;
     }
 
     private String getUrl(Integer start) {

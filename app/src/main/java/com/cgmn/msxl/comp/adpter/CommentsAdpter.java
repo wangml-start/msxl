@@ -40,12 +40,11 @@ public class CommentsAdpter extends RelatedBaseAdapter {
                         .centerCrop()
                         .into(holder.comment_item_logo);
             }
-
+            String content = String.format("%s 回复我的帖子：%s", item.getUserName(), item.getMyContent());
             holder.comment_item_userName.setText(item.getUserName());
             holder.comment_item_time.setText(CommentBean.analysisTime(item.getCreatedAt()));
             holder.txt_app_des.setText(item.getHimContent());
-            holder.txt_mycontent.setText(item.getMyContent());
-            holder.txt_re_user.setText(item.getUserName());
+            holder.txt_mycontent.setText(content);
 
         }else{
             convertView = views.get(groupPosition);
@@ -58,7 +57,7 @@ public class CommentsAdpter extends RelatedBaseAdapter {
     private class CommentViewHolder{
         private NetImageView comment_item_logo;
         private TextView comment_item_userName, comment_item_time,txt_app_des;
-        private TextView txt_mycontent,txt_re_user;
+        private TextView txt_mycontent;
 
         public CommentViewHolder(View view){
             comment_item_logo = view.findViewById(R.id.comment_item_logo);
@@ -66,7 +65,6 @@ public class CommentsAdpter extends RelatedBaseAdapter {
             comment_item_time = view.findViewById(R.id.comment_item_time);
             txt_app_des = view.findViewById(R.id.txt_app_des);
             txt_mycontent = view.findViewById(R.id.txt_mycontent);
-            txt_re_user = view.findViewById(R.id.txt_re_user);
         }
     }
 

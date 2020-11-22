@@ -59,6 +59,8 @@ public class ApproveFragment extends RelatedFrgment {
                 return false;
             }
         });
+
+        currentPos = 0;
     }
 
     private String getUrl(Integer start) {
