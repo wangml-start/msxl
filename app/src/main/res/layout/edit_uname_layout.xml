@@ -5,7 +5,7 @@
         android:background="@color/bg_gray"
         android:orientation="vertical">
 
-    <EditText
+    <com.cgmn.msxl.comp.view.ClearEditTextView
             android:id="@+id/txt_content"
             android:layout_width="match_parent"
             android:layout_height="35dp"
@@ -14,7 +14,7 @@
             android:textColor="@color/text_topbar"
             android:background="@color/bg_topbar"
             android:maxLength="10"
-            android:textSize="@dimen/NormalSize"
+            android:textSize="@dimen/size14"
             />
 
 </LinearLayout>

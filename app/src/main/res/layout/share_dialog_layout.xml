@@ -1,0 +1,52 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:net_image="http://schemas.android.com/apk/res/com.cgmn.msxl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_white"
+        android:orientation="vertical">
+    <LinearLayout
+            android:id="@+id/comment_parent_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/div_white"
+            android:orientation="vertical">
+        <EditText
+                android:id="@+id/txt_comment"
+                android:layout_width="match_parent"
+                android:layout_height="85dp"
+                android:layout_margin="12dp"
+                android:background="@color/div_white"
+                android:gravity="left|top"
+                android:paddingLeft="15dp"
+                android:paddingTop="12dp"
+                android:textColor="#808080"
+                android:textColorHint="#929292"
+                android:textSize="14sp" />
+        <com.cgmn.msxl.comp.view.NetImageView
+                android:id="@+id/im_chart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                net_image:image_type="0"
+                net_image:image_size="large"
+                />
+    </LinearLayout>
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+        <Button
+                android:id="@+id/txt_publish"
+                android:layout_width="72dp"
+                android:layout_height="32dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="6dp"
+                android:layout_marginRight="12dp"
+                android:layout_marginBottom="6dp"
+                android:background="@color/grey_dark_bg"
+                android:text="发布"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/smallSize" />
+    </RelativeLayout>
+
+</LinearLayout>

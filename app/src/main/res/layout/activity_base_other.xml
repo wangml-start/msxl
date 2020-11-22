@@ -46,14 +46,15 @@
                     android:gravity="center|center_vertical"
                     android:singleLine="true"
                     android:textColor="@color/bg_white"
-                    android:textSize="@dimen/NormalSize" />
+                    android:textSize="@dimen/size16" />
 
             <TextView
                     android:id="@+id/txt_complete"
                     android:layout_width="40dp"
                     android:layout_height="match_parent"
-                    android:gravity="center"
+                    android:gravity="left|center"
                     android:textColor="@color/bg_white"
+                    android:textSize="@dimen/size12"
                     android:text="" />
         </LinearLayout>
     </androidx.appcompat.widget.Toolbar>

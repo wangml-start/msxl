@@ -1,7 +1,6 @@
 package com.cgmn.msxl.ac;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -273,7 +272,6 @@ public abstract class DisgussBaseActivity extends Activity
         showPopupMenu(view, bean);
     }
 
-    @SuppressLint("RestrictedApi")
     protected void showPopupMenu(final View view, final CommentDetailBean bean) {
         final PopuWindowView popuWindowView = new PopuWindowView(mContext, 230);
         popuWindowView.setMaxLines(4);

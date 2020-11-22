@@ -14,7 +14,7 @@ import com.cgmn.msxl.R;
 public abstract class BaseOtherActivity extends AppCompatActivity {
     public Context mContext;
     protected RelativeLayout img_back;
-    protected TextView txt_title;
+    protected TextView txt_title, txt_complete;
     protected Toolbar toolbar;
 
     @Override
@@ -31,6 +31,8 @@ public abstract class BaseOtherActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(v.getId() == R.id.img_back){
                     onBackUpClick();
+                }else if(v.getId() == R.id.txt_complete){
+                    onCompletedClick();
                 }
             }
         };
@@ -41,6 +43,8 @@ public abstract class BaseOtherActivity extends AppCompatActivity {
         img_back = findViewById(R.id.img_back);
         txt_title = findViewById(R.id.txt_title);
         img_back.setOnClickListener(listener);
+        txt_complete = findViewById(R.id.txt_complete);
+        txt_complete.setOnClickListener(listener);
 
         setSupportActionBar(toolbar);
         // 将继承了BaseActivity的布局文件解析到 container 中，这样 BaseActivity 就能显示 MainActivity 的布局文件了
@@ -83,12 +87,15 @@ public abstract class BaseOtherActivity extends AppCompatActivity {
         return true;
     };
     protected boolean showComplate(){
-        return true;
-    };
+        return false;
+    }
 
     protected void onBackUpClick(){
         finish();
     };
+    protected void onCompletedClick(){
+
+    }
 
     protected void changeTooBarColor(){};
 }

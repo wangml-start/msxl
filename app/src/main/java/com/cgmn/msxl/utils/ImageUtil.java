@@ -8,6 +8,21 @@ import java.io.ByteArrayOutputStream;
 public class ImageUtil {
     private static int default_width = 1200;
 
+
+    public static byte[] getCompressBytes(Bitmap bitmap){
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 30, baos);
+            if(bitmap != null && !bitmap.isRecycled()){
+                bitmap.isRecycled();
+                bitmap = null;
+            }
+            return baos.toByteArray();
+        } catch (Exception e) {
+        }
+        return null;
+    }
+
     public static byte[] getCompressBytes(String pathName, Integer reqWidth){
         try {
             if(reqWidth == null){

@@ -2,25 +2,37 @@ package com.cgmn.msxl.ac;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import androidx.annotation.RequiresApi;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.CustmerToast;
 import com.cgmn.msxl.comp.view.LineChartMarkView;
+import com.cgmn.msxl.comp.view.NetImageView;
+import com.cgmn.msxl.data.StockHolder;
 import com.cgmn.msxl.data.TradeStatistic;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.service.OkHttpClientManager;
 import com.cgmn.msxl.service.PropertyService;
 import com.cgmn.msxl.service.GlobalDataHelper;
-import com.cgmn.msxl.utils.CommonUtil;
-import com.cgmn.msxl.utils.MessageUtil;
+import com.cgmn.msxl.utils.*;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.*;
 import com.github.mikephil.charting.data.Entry;
@@ -29,6 +41,8 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,6 +54,8 @@ public class StatisticActivity extends BaseOtherActivity {
     private LineChart mLineChart;
 
     private Context mContext;
+    protected BottomSheetDialog dialog;
+    protected View commentView = null;
 
     //消息处理
     private Handler mHandler;
@@ -54,6 +70,8 @@ public class StatisticActivity extends BaseOtherActivity {
     private TextView  tx_st_pl, tx_st_baseAmt,
             tx_st_ex,  tx_st_plrate;
     private String title;
+
+    private TradeStatistic statistic;
 
     @Override
     protected void init(){
@@ -76,10 +94,11 @@ public class StatisticActivity extends BaseOtherActivity {
     protected boolean showRight(){
         return false;
     };
+
     @Override
-    protected boolean showComplate(){
-        return false;
-    };
+    protected void onCompletedClick(){
+        showShareDialog();
+    }
 
     private void bindView() {
         mContext = this;
@@ -89,6 +108,7 @@ public class StatisticActivity extends BaseOtherActivity {
         tx_st_ex = findViewById(R.id.tx_st_ex);
         tx_st_plrate = findViewById(R.id.tx_st_plrate);
         tx_st_baseAmt = findViewById(R.id.tx_st_baseAmt);
+        txt_complete.setText("分享");
 
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra("datas");
@@ -152,38 +172,16 @@ public class StatisticActivity extends BaseOtherActivity {
             @Override
             public boolean handleMessage(Message msg) {
                 if (msg.what == MessageUtil.REQUEST_SUCCESS) {
-                    TradeStatistic statistic = (TradeStatistic) msg.obj;
+                    statistic = (TradeStatistic) msg.obj;
                     showStatisticChart(statistic);
-                } else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
+                } else if(msg.what == MessageUtil.PUBLISHED_COMMENT){
+                    new ShowDialog().showTips(mContext, "分享成功");
+                }else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
                     GlobalExceptionHandler.getInstance(mContext).handlerException((Exception) msg.obj);
                 }
                 return false;
             }
         });
-    }
-
-    private void showStatisticChart(TradeStatistic statistic) {
-        List<Float> list = statistic.getList();
-        if (CommonUtil.isEmpty(list)) {
-            return;
-        }
-        list.add(0, 0f);
-        showLineChart(list, "我的收益", getResources().getColor(R.color.kline_up));
-        Drawable drawable = getResources().getDrawable(R.drawable.fade_blue);
-        setChartFillDrawable(drawable);
-        setMarkerView();
-
-        tx_st_baseAmt.setText(CommonUtil.formatNumer(statistic.getBaseAmt()));
-        tx_st_pl.setText(CommonUtil.formatNumer(statistic.getPl()));
-        tx_st_plrate.setText(CommonUtil.formatPercent(statistic.getPl() / statistic.getBaseAmt()));
-        if (statistic.getPl() > 0) {
-            tx_st_pl.setTextColor(getResources().getColor(R.color.kline_up));
-            tx_st_plrate.setTextColor(getResources().getColor(R.color.kline_up));
-        } else if (statistic.getPl() < 0) {
-            tx_st_pl.setTextColor(getResources().getColor(R.color.kline_down));
-            tx_st_plrate.setTextColor(getResources().getColor(R.color.kline_down));
-        }
-        tx_st_ex.setText(CommonUtil.formatNumer(statistic.getFee()));
     }
 
     /**
@@ -341,5 +339,129 @@ public class StatisticActivity extends BaseOtherActivity {
     @Override
     public void finish() {
         super.finish();
+    }
+
+    protected void invalidCommentView() {
+        /**
+         * 解决bsd显示不全的情况
+         */
+        View parent = (View) commentView.getParent();
+        BottomSheetBehavior behavior = BottomSheetBehavior.from(parent);
+        commentView.measure(0, 0);
+        behavior.setPeekHeight(commentView.getMeasuredHeight());
+    }
+
+    private void showStatisticChart(TradeStatistic statistic) {
+        List<Float> list = statistic.getList();
+        if (CommonUtil.isEmpty(list)) {
+            return;
+        }
+        list.add(0, 0f);
+        showLineChart(list, "我的收益", getResources().getColor(R.color.kline_up));
+        Drawable drawable = getResources().getDrawable(R.drawable.fade_blue);
+        setChartFillDrawable(drawable);
+        setMarkerView();
+
+        tx_st_baseAmt.setText(CommonUtil.formatNumer(statistic.getBaseAmt()));
+        tx_st_pl.setText(CommonUtil.formatNumer(statistic.getPl()));
+        tx_st_plrate.setText(CommonUtil.formatPercent(statistic.getPl() / statistic.getBaseAmt()));
+        if (statistic.getPl() > 0) {
+            tx_st_pl.setTextColor(getResources().getColor(R.color.kline_up));
+            tx_st_plrate.setTextColor(getResources().getColor(R.color.kline_up));
+        } else if (statistic.getPl() < 0) {
+            tx_st_pl.setTextColor(getResources().getColor(R.color.kline_down));
+            tx_st_plrate.setTextColor(getResources().getColor(R.color.kline_down));
+        }
+        tx_st_ex.setText(CommonUtil.formatNumer(statistic.getFee()));
+    }
+
+    private String getComment(){
+        FixStringBuffer text = new FixStringBuffer();
+        String trianTypeStr = "趋势波段训练";
+        if(trainType == StockHolder.LEADING_STRATEGY){
+            trianTypeStr = "龙头战法训练";
+        }
+        text.append("我在%s中通过%s次训练，总收益为%s^_^",
+                trianTypeStr, statistic.getList().size(),
+                CommonUtil.formatPercent(statistic.getPl() / statistic.getBaseAmt()));
+
+        return text.toString();
+    }
+
+    private void showShareDialog() {
+        dialog = new BottomSheetDialog(mContext);
+        if (commentView == null) {
+            commentView = LayoutInflater.from(mContext).inflate(R.layout.share_dialog_layout, null);
+        }
+        if (commentView.getParent() != null) {
+            ((ViewGroup) commentView.getParent()).removeView(commentView);
+        }
+        final EditText commentText = (EditText) commentView.findViewById(R.id.txt_comment);
+        final Button bt_comment = (Button) commentView.findViewById(R.id.txt_publish);
+        final NetImageView im_chart = commentView.findViewById(R.id.im_chart);
+        dialog.setContentView(commentView);
+        commentText.setText(getComment());
+        final byte[] content = ImageUtil.getCompressBytes(mLineChart.getChartBitmap());
+        im_chart.setImageContent(content);
+
+        invalidCommentView();
+        View.OnClickListener listener = new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
+            @Override
+            public void onClick(View view) {
+                if (view.getId() == R.id.txt_publish) {
+                    if (!TextUtils.isEmpty(commentText.getText())) {
+                        Map<String, String> params = new HashMap<>();
+                        params.put("comment", commentText.getText().toString().trim());
+                        if(content != null && content.length > 0){
+                            params.put("picture",  org.apache.shiro.codec.Base64.encodeToString(content));
+                        }
+                        dialog.dismiss();
+                        uploadShare(params);
+                    } else {
+                        CustmerToast.makeText(mContext, "内容不能为空").show();
+                    }
+                }
+            }
+        };
+        bt_comment.setOnClickListener(listener);
+        dialog.show();
+    }
+
+    public void uploadShare(Map<String, String> p){
+        OkHttpClientManager.Param[] params = new OkHttpClientManager.Param[]{
+                new OkHttpClientManager.Param("token", GlobalDataHelper.getToken(mContext)),
+                new OkHttpClientManager.Param("picture", p.get("picture")),
+                new OkHttpClientManager.Param("comment", p.get("comment"))
+        };
+        String url = String.format("%s%s",
+                PropertyService.getInstance().getKey("serverUrl"), "/chat/publish_comment");
+        OkHttpClientManager.postAsyn(url,
+                new OkHttpClientManager.ResultCallback<BaseData>() {
+                    @Override
+                    public void onError(com.squareup.okhttp.Request request, Exception e) {
+                        Message message = Message.obtain();
+                        message.what = MessageUtil.EXCUTE_EXCEPTION;
+                        message.obj = e;
+                        mHandler.sendMessage(message);
+                    }
+
+                    @Override
+                    public void onResponse(BaseData data) {
+                        Message message = Message.obtain();
+                        message.what = MessageUtil.PUBLISHED_COMMENT;
+                        try {
+                            message.obj = data.getRecordId();
+                            Integer status = data.getStatus();
+                            if (status == null || status == -1) {
+                                throw new Exception(data.getError());
+                            }
+                        } catch (Exception e) {
+                            message.what = MessageUtil.EXCUTE_EXCEPTION;
+                            message.obj = e;
+                        }
+                        mHandler.sendMessage(message);
+                    }
+                }, params);
     }
 }
