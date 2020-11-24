@@ -9,4 +9,5 @@
         android:layout_marginRight="24dp"
         android:layout_marginBottom="8dp"
         android:adjustViewBounds="true"
+        android:maxHeight="220dp"
         net_image:image_type="0" />

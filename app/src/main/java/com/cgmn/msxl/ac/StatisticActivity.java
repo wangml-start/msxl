@@ -377,11 +377,11 @@ public class StatisticActivity extends BaseOtherActivity {
 
     private String getComment(){
         FixStringBuffer text = new FixStringBuffer();
-        String trianTypeStr = "趋势波段训练";
+        String trianTypeStr = "趋势波段";
         if(trainType == StockHolder.LEADING_STRATEGY){
-            trianTypeStr = "龙头战法训练";
+            trianTypeStr = "龙头战法";
         }
-        text.append("我在%s中通过%s次训练，总收益为%s^_^",
+        text.append("我在%s中通过%s次训练，获得总收益为%s ^_^",
                 trianTypeStr, statistic.getList().size(),
                 CommonUtil.formatPercent(statistic.getPl() / statistic.getBaseAmt()));
 
