@@ -85,7 +85,6 @@ public class DisgussActivity extends DisgussBaseActivity {
                         initExpandableListView();
                     }
                     expandList();
-                    adapter.clearCache();
                     adapter.notifyDataSetChanged();
                     scrollView.stopRefresh();
                     scrollView.setScrollY(0);
@@ -103,7 +102,15 @@ public class DisgussActivity extends DisgussBaseActivity {
                     resetDialog();
                     scrollView.setScrollY(0);
                 } else if(msg.what == MessageUtil.PUBLISHED_REPLAY_COMMENT){
-                    loadCommentList();
+                    String userName = GlobalDataHelper.getUserName(mContent);
+                    ReplyDetailBean detailBean = new ReplyDetailBean(editCommet);
+                    detailBean.setReplayFrom(userName);
+                    detailBean.setId((Integer) msg.obj);
+                    detailBean.setUserId(GlobalDataHelper.getUserId(mContent));
+                    detailBean.setPicture(pictures);
+                    adapter.addReplyDataTofirst(detailBean, currentSelectedPosition);
+                    expandableListView.expandGroup(currentSelectedPosition);
+                    adapter.notifyDataSetChanged();
                     resetDialog();
                 } else if (msg.what == MessageUtil.DELETED_COMMENT) {
                     CustmerToast.makeText(mContext, "删除成功").show();

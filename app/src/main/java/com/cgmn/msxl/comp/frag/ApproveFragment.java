@@ -44,7 +44,6 @@ public class ApproveFragment extends RelatedFrgment {
                     if (!CommonUtil.isEmpty(msg.obj)) {
                         if(action.equals(REFRESH)){
                             mData.clear();
-                            adpter.resetCache();
                             scrollView.stopRefresh();
                             scrollView.setScrollY(0);
                         }else{

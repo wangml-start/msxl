@@ -51,5 +51,10 @@ public class ImageViewActivity extends AppCompatActivity {
 
 
     }
+    @Override
+    public void finish() {
+        image.relased();
+        super.finish();
+    }
 
 }

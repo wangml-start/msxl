@@ -23,12 +23,10 @@ import java.util.Map;
 public class UserRankAdpter extends BaseAdapter {
     private Context mContext;
     private List<Map<String, Object>> mData = null;
-    private Map<String, View> views;
 
     public UserRankAdpter(Context mContext, List<Map<String, Object>> mData) {
         this.mContext = mContext;
         this.mData = mData;
-        this.views = new HashMap<>();
     }
 
     @Override
@@ -49,34 +47,35 @@ public class UserRankAdpter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         //设置下控件的值
-        if(!views.containsKey(position)){
-            final Map<String, Object> map = mData.get(position);
+        RankViewHolder holder=null;
+        if(convertView == null){
             convertView = LayoutInflater.from(mContext).inflate(R.layout.user_rank_item, parent, false);
-            RankViewHolder holder = new RankViewHolder(convertView);
-            holder.txt_no.setText((position+1)+"");
-            if(!CommonUtil.isEmpty(map.get("small_cut"))){
-                holder.head.setImageContent(Base64.decode((String) map.get("small_cut")));
-            }else{
-                Glide.with(mContext).load(R.drawable.user_logo)
-                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                        .error(R.mipmap.ic_launcher)
-                        .centerCrop()
-                        .into(holder.head);
-            }
-            holder.txt_user_name.setText((String) map.get("user_name"));
-            holder.txt_amt.setText(CommonUtil.formatAmt(map.get("st_amt")));
-            holder.txt_rate.setText(CommonUtil.formatPercent(map.get("rate")));
-
-            holder.head.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    GlobalDataHelper.setDate("email", map.get("phone"));
-                    Intent intent = new Intent(mContext, ImageViewActivity.class);
-                    mContext.startActivity(intent);
-                }
-            });
+            holder = new RankViewHolder(convertView);
+            convertView.setTag(holder);
         }else {
-            convertView = views.get(position);
+            holder = (RankViewHolder) convertView.getTag();
+        }
+        final Map<String, Object> map = mData.get(position);
+        holder.txt_user_name.setText((String) map.get("user_name"));
+        holder.txt_amt.setText(CommonUtil.formatAmt(map.get("st_amt")));
+        holder.txt_rate.setText(CommonUtil.formatPercent(map.get("rate")));
+        holder.head.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GlobalDataHelper.setDate("email", map.get("phone"));
+                Intent intent = new Intent(mContext, ImageViewActivity.class);
+                mContext.startActivity(intent);
+            }
+        });
+        holder.txt_no.setText((position+1)+"");
+        if(!CommonUtil.isEmpty(map.get("small_cut"))){
+            holder.head.setImageContent(Base64.decode((String) map.get("small_cut")));
+        }else{
+            Glide.with(mContext).load(R.drawable.user_logo)
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .error(R.mipmap.ic_launcher)
+                    .centerCrop()
+                    .into(holder.head);
         }
 
         return convertView;

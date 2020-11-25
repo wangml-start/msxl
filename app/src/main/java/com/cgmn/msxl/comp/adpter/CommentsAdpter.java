@@ -20,38 +20,37 @@ public class CommentsAdpter extends RelatedBaseAdapter {
     public CommentsAdpter(Context mContext, List<RelatedToMe> mData) {
         this.mContext = mContext;
         this.mData = mData;
-        views = new HashMap<>();
     }
 
     @Override
     public View getGroupView(final int groupPosition, boolean isExpand, View convertView, ViewGroup viewGroup) {
         final RelatedToMe item = mData.get(groupPosition);
         //设置下控件的值
-        if(!views.containsKey(groupPosition)){
+        CommentViewHolder holder = null;
+        if(convertView == null){
             convertView = LayoutInflater.from(mContext).inflate(R.layout.comments_item, viewGroup, false);
-            views.put(groupPosition, convertView);
-            final CommentViewHolder holder = new CommentViewHolder(convertView);
-            if (item.getSmallCut() != null && item.getSmallCut().length > 0) {
-                holder.comment_item_logo.setImageContent(item.getSmallCut());
-            } else {
-                Glide.with(mContext).load(R.drawable.user_logo)
-                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                        .error(R.mipmap.ic_launcher)
-                        .centerCrop()
-                        .into(holder.comment_item_logo);
-            }
-            String content = String.format("%s 回复我的帖子：%s", item.getUserName(), item.getMyContent());
-            holder.comment_item_userName.setText(item.getUserName());
-            holder.comment_item_time.setText(CommentBean.analysisTime(item.getCreatedAt()));
-            holder.txt_app_des.setText(item.getHimContent());
-            holder.txt_mycontent.setText(content);
-
+            holder = new CommentViewHolder(convertView);
+            convertView.setTag(holder);
         }else{
-            convertView = views.get(groupPosition);
+            holder = (CommentViewHolder) convertView.getTag();
         }
 
-        return convertView;
+        if (item.getSmallCut() != null && item.getSmallCut().length > 0) {
+            holder.comment_item_logo.setImageContent(item.getSmallCut());
+        } else {
+            Glide.with(mContext).load(R.drawable.user_logo)
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .error(R.mipmap.ic_launcher)
+                    .centerCrop()
+                    .into(holder.comment_item_logo);
+        }
+        String content = String.format("%s 回复我的帖子：%s", item.getUserName(), item.getMyContent());
+        holder.comment_item_userName.setText(item.getUserName());
+        holder.comment_item_time.setText(CommentBean.analysisTime(item.getCreatedAt()));
+        holder.txt_app_des.setText(item.getHimContent());
+        holder.txt_mycontent.setText(content);
 
+        return convertView;
     }
 
     private class CommentViewHolder{

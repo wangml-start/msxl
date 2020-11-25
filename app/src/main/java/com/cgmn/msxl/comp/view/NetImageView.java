@@ -3,6 +3,7 @@ package com.cgmn.msxl.comp.view;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.*;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
@@ -169,7 +170,7 @@ public class NetImageView extends ImageView {
         if (drawable == null) {
             return null;
         }
-        Bitmap bitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.RGB_565);
         Canvas canvas = new Canvas(bitmap);
         //根据传递的scaletype获取matrix对象，设置给bitmap
         Matrix matrix = getImageMatrix();
@@ -206,12 +207,14 @@ public class NetImageView extends ImageView {
 
 
     public void setImageContent(byte[] bytes){
+        relased();
         Bitmap bitmap=null;
         if(bytes != null && bytes.length > 0){
             //复制新的输入流
             InputStream is = new ByteArrayInputStream(bytes);
             //调用压缩方法显示图片
             bitmap = getCompressBitmap(is);
+//            Log.d("Picture Size:", (bitmap.getByteCount() / 1024) + "");
             setImageBitmap(bitmap);
         }
     }
@@ -235,6 +238,18 @@ public class NetImageView extends ImageView {
             bu.append(imageName);
         }
         return bu.toString();
+    }
+
+    //手动释放资源
+    public void relased(){
+        Drawable drawable = getDrawable();
+        if (drawable != null && drawable instanceof BitmapDrawable) {
+            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+            Bitmap bitmap = bitmapDrawable.getBitmap();
+            if (bitmap != null && !bitmap.isRecycled()) {
+                bitmap.recycle();
+            }
+        }
     }
 
     //使用网络图片显示

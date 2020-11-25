@@ -21,6 +21,7 @@ import com.cgmn.msxl.comp.adpter.CommentExpandAdapter;
 import com.cgmn.msxl.comp.view.NetImageView;
 import com.cgmn.msxl.data.CommentBean;
 import com.cgmn.msxl.data.CommentDetailBean;
+import com.cgmn.msxl.data.ReplyDetailBean;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.service.GlobalDataHelper;
@@ -136,7 +137,6 @@ public class DisgussSubActivity extends DisgussBaseActivity {
                     }
                     expandList();
                     scrollView.stopRefresh();
-                    adapter.clearCache();
                     adapter.notifyDataSetChanged();
                     comment_total.setText("评论 " + commentsList.size());
                 } else if (msg.what == MessageUtil.APPEND_LOAD_COMMENT_LIST) {
@@ -156,7 +156,18 @@ public class DisgussSubActivity extends DisgussBaseActivity {
                     resetDialog();
                     scrollView.setScrollY(0);
                 } else if (msg.what == MessageUtil.PUBLISHED_REPLAY_COMMENT) {
-                    loadReplayList();
+                    String userName = GlobalDataHelper.getUserName(mContext);
+                    ReplyDetailBean detailBean = new ReplyDetailBean(editCommet);
+                    detailBean.setReplayFrom(userName);
+                    detailBean.setId((Integer) msg.obj);
+                    detailBean.setUserId(GlobalDataHelper.getUserId(mContext));
+                    detailBean.setPicture(pictures);
+                    if(subPosition >= 0){
+                        detailBean.setReplayTo(commentsList.get(currentSelectedPosition).getReplyList().get(subPosition).getReplayFrom());
+                    }
+                    adapter.addReplyDataTofirst(detailBean, currentSelectedPosition);
+                    expandableListView.expandGroup(currentSelectedPosition);
+                    adapter.notifyDataSetChanged();
                     resetDialog();
                 } else if (msg.what == MessageUtil.DELETED_COMMENT) {
                     CustmerToast.makeText(mContext, "删除成功").show();

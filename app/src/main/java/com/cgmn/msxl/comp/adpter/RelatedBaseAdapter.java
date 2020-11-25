@@ -12,13 +12,6 @@ import java.util.Map;
 public abstract class RelatedBaseAdapter extends BaseExpandableListAdapter {
     protected Context mContext;
     protected List<RelatedToMe> mData = null;
-    protected Map<Integer, View> views = null;
-
-    public void resetCache() {
-        if (views != null) {
-            views.clear();
-        }
-    }
 
     @Override
     public int getGroupCount() {
