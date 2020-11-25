@@ -43,7 +43,7 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
     private boolean expandAllContent = true;
     private Integer allContentLength = 150;
 
-    private String color = "#4D6AC3";
+    private String color = "#3558C3";
 
     public void setCommentListener(CommentListener commentListener) {
         this.commentListener = commentListener;
@@ -184,9 +184,13 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
         }
         if (!"0".equals(bean.getApprove())) {
             holder.comment_approve.setText(bean.getApprove());
+        }else{
+            holder.comment_approve.setText("");
         }
         if (bean.getMyApprove() == 1) {
             holder.iv_like.setImageResource(R.drawable.liked);
+        }else{
+            holder.iv_like.setImageResource(R.drawable.icon_comment_like);
         }
 
 
@@ -323,16 +327,17 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
             }, from[0], from[1], Spanned.SPAN_INCLUSIVE_INCLUSIVE);
             updateDrawState(span, from[0], from[1]);
         }
-//        if(pos.size() > 1){
-//            Integer[] to = pos.get(1);
-//            span.setSpan(new ClickableSpan(){
-//                @Override
-//                public void onClick(View widget) {
-//                    commentListener.onChildReplayClick(groupPosition, childPosition, subbean.getReplayUserId());
-//                }
-//            }, to[0], to[1], Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-//            updateDrawState(span, to[0], to[1]);
-//        }
+        if(pos.size() > 1){
+            Integer[] to = pos.get(1);
+            span.setSpan(new UnderlineSpan() {
+                @Override
+                public void updateDrawState(TextPaint ds) {
+                    super.updateDrawState(ds);
+                    ds.setColor(Color.parseColor("#828FB6"));
+                    ds.setUnderlineText(false);// 去掉下划线
+                }
+            }, to[0], to[1], Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+        }
 
         //处理图片
         if(subbean.getPicture() != null && subbean.getPicture().length > 0){
@@ -414,6 +419,26 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
         }
 
     }
+
+    public void addReplyDataToEnd(ReplyDetailBean replyDetailBean, int groupPosition) {
+        if (replyDetailBean != null) {
+            CommentDetailBean bean = commentBeanList.get(groupPosition);
+            if (bean.getReplyList() != null) {
+                replyDetailBean.setNo(bean.getReplyList().size());
+                bean.getReplyList().add(replyDetailBean);
+            } else {
+                replyDetailBean.setNo(0);
+                List<ReplyDetailBean> replyList = new ArrayList<>();
+                replyList.add(replyDetailBean);
+                bean.setReplyList(replyList);
+            }
+            notifyDataSetChanged();
+        } else {
+            throw new IllegalArgumentException("回复数据为空!");
+        }
+
+    }
+
 
 
 

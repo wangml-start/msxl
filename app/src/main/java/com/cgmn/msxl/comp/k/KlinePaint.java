@@ -44,7 +44,7 @@ public class KlinePaint {
      * the space between the entries, default 0.1f (10%)
      */
     protected float mBarSpace = 0.15f;
-    protected float kLineBold = 3f;
+    protected float kLineBold = 3.5f;
 
     /**
      * the max visible entry count.

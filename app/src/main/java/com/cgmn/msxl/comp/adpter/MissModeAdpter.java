@@ -9,19 +9,15 @@ import android.widget.TextView;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.data.SettingItem;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class MissModeAdpter extends BaseAdapter {
     private Context mContext;
     private List<SettingItem> mData = null;
-    private Map<Integer, View> views = null;
 
     public MissModeAdpter(Context mContext, List<SettingItem> mData) {
         this.mContext = mContext;
         this.mData = mData;
-        views = new HashMap<>();
     }
 
     @Override
@@ -45,19 +41,20 @@ public class MissModeAdpter extends BaseAdapter {
         //设置下控件的值
         SettingItem item = (SettingItem) obj;
         SettingViewHolder holder = null;
-        if(!views.containsKey(position)){
+        if(convertView == null){
             holder = new SettingViewHolder();
             convertView = LayoutInflater.from(mContext).inflate(R.layout.mode_miss_item, parent, false);
             holder.txt = convertView.findViewById(R.id.txt_des);
             holder.txt_num = convertView.findViewById(R.id.txt_num);
-            views.put(position, convertView);
+            convertView.setTag(holder);
 
-            if(item != null){
-                holder.txt.setText(item.getModeText());
-                holder.txt_num.setText(item.getMiss());
-            }
         }else{
-            convertView = views.get(position);
+            holder = (SettingViewHolder) convertView.getTag();
+        }
+
+        if(item != null){
+            holder.txt.setText(item.getModeText());
+            holder.txt_num.setText(item.getMiss());
         }
         return convertView;
     }

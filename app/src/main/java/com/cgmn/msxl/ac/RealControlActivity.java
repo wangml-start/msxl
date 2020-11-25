@@ -481,6 +481,9 @@ public class RealControlActivity extends AppCompatActivity
             onNextClick();
             stockView.invalidateView();
         }else if(v.getId() == R.id.bt_buy){
+            if(stockView.getStockHolder().getTotAmt() < 100){
+                new ShowDialog().showTips(mContxt, "当前账户资金不足！");
+            }
             showPopFormBottom(v, "BUY");
         }else if(v.getId() == R.id.bt_sell){
             showPopFormBottom(v, "SELL");

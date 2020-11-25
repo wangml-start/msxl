@@ -165,7 +165,7 @@ public class DisgussSubActivity extends DisgussBaseActivity {
                     if(subPosition >= 0){
                         detailBean.setReplayTo(commentsList.get(currentSelectedPosition).getReplyList().get(subPosition).getReplayFrom());
                     }
-                    adapter.addReplyDataTofirst(detailBean, currentSelectedPosition);
+                    adapter.addReplyDataToEnd(detailBean, currentSelectedPosition);
                     expandableListView.expandGroup(currentSelectedPosition);
                     adapter.notifyDataSetChanged();
                     resetDialog();
