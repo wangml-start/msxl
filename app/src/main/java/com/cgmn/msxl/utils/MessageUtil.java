@@ -41,5 +41,5 @@ public class MessageUtil {
     public static int EXCUTE_EXCEPTION = 0x999;
 
 
-    public final static String SERCURETY = "ASDFGHJK *&^%$#@!";
+    public final static String SERCURETY = "ASDFGHJK*&^%$#@!";
 }

@@ -17,11 +17,11 @@ public class AESUtil {
         }
         StringBuffer sb = new StringBuffer(32);
         sb.append(password);
-        while (sb.length() < 32) {
+        while (sb.length() < 16) {
             sb.append("0");
         }
-        if (sb.length() > 32) {
-            sb.setLength(32);
+        if (sb.length() > 16) {
+            sb.setLength(16);
         }
 
         try {
