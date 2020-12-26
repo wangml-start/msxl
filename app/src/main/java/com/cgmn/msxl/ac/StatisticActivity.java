@@ -226,6 +226,7 @@ public class StatisticActivity extends BaseOtherActivity {
 
         rightYaxis.setDrawGridLines(false);
         leftYAxis.setDrawGridLines(true);
+        leftYAxis.setDrawAxisLine(false); //不显示左侧Y轴
         leftYAxis.enableGridDashedLine(10f, 10f, 0f);
         rightYaxis.setEnabled(false);
         xAxis.setLabelCount(8, false);
