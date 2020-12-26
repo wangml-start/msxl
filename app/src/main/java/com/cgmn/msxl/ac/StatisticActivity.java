@@ -285,6 +285,8 @@ public class StatisticActivity extends BaseOtherActivity {
         //设置曲线值的圆点是实心还是空心
         lineDataSet.setDrawCircleHole(false);
         lineDataSet.setValueTextSize(10f);
+        lineDataSet.setMode(LineDataSet.Mode.HORIZONTAL_BEZIER);
+
         //设置折线图填充
         lineDataSet.setDrawFilled(true);
         lineDataSet.setFormLineWidth(1f);
@@ -358,7 +360,7 @@ public class StatisticActivity extends BaseOtherActivity {
             return;
         }
         list.add(0, 0f);
-        showLineChart(list, "我的收益", getResources().getColor(R.color.kline_up));
+        showLineChart(list, "X轴代表训练次数", getResources().getColor(R.color.kline_up));
         Drawable drawable = getResources().getDrawable(R.drawable.fade_blue);
         setChartFillDrawable(drawable);
         setMarkerView();
