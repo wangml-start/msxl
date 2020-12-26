@@ -192,8 +192,7 @@ public class ModeManager {
                 minLow = node.low;
             }
         }
-        Log.d("############Min:", minLow+"");
-        Log.d("####currentKline.close:", currentKline.close+"");
+
         return currentKline.close < minLow;
     }
 

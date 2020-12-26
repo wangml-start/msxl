@@ -13,7 +13,7 @@ import com.cgmn.msxl.data.StockHolder;
  * one of the sections/tabs/pages.
  */
 public class RankPagerAdapter extends FragmentPagerAdapter {
-    private static final String[] TAB_TITLES = new String[]{"龙头战法排行", "趋势波段排行"};
+    private static final String[] TAB_TITLES = new String[]{"龙头战法", "趋势波段"};
     private static final Integer[] types = new Integer[]{StockHolder.LEADING_STRATEGY, StockHolder.NORMAL_STRATEGY};
     private final Context mContext;
     private String rankType;

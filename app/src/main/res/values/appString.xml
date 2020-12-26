@@ -19,7 +19,7 @@
     <string name="train_sum_line">收益总曲线</string>
     <string name="leading_line">龙头战法曲线</string>
     <string name="normal_line">趋势波段曲线</string>
-    <string name="mode_detail">模式详情</string>
+    <string name="mode_detail">执行情况</string>
     <string name="violate_mode_detai">执行情况</string>
 
     <string name="acct_info">账户信息</string>

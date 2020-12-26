@@ -1,8 +1,6 @@
 package com.cgmn.msxl.server_interface;
 
-import com.cgmn.msxl.data.SettledAccount;
-import com.cgmn.msxl.data.TradeStatistic;
-import com.cgmn.msxl.data.User;
+import com.cgmn.msxl.data.*;
 
 import java.util.List;
 import java.util.Map;
@@ -21,6 +19,11 @@ public class BaseData {
     private SettledAccount settledAccount;
 
     private TradeStatistic statistic;
+
+    private MissModel missModel;
+
+    List<RankEntity> rankList;
+
 
     private byte[] filebyte;
 
@@ -96,5 +99,21 @@ public class BaseData {
 
     public void setRecordId(Integer recordId) {
         this.recordId = recordId;
+    }
+
+    public MissModel getMissModel() {
+        return missModel;
+    }
+
+    public void setMissModel(MissModel missModel) {
+        this.missModel = missModel;
+    }
+
+    public List<RankEntity> getRankList() {
+        return rankList;
+    }
+
+    public void setRankList(List<RankEntity> rankList) {
+        this.rankList = rankList;
     }
 }

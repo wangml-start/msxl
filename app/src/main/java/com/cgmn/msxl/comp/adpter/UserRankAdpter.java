@@ -12,6 +12,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.ac.ImageViewActivity;
 import com.cgmn.msxl.comp.view.NetImageView;
+import com.cgmn.msxl.data.RankEntity;
 import com.cgmn.msxl.service.GlobalDataHelper;
 import com.cgmn.msxl.utils.CommonUtil;
 import org.apache.shiro.codec.Base64;
@@ -22,9 +23,9 @@ import java.util.Map;
 
 public class UserRankAdpter extends BaseAdapter {
     private Context mContext;
-    private List<Map<String, Object>> mData = null;
+    private List<RankEntity> mData = null;
 
-    public UserRankAdpter(Context mContext, List<Map<String, Object>> mData) {
+    public UserRankAdpter(Context mContext, List<RankEntity> mData) {
         this.mContext = mContext;
         this.mData = mData;
     }
@@ -55,21 +56,26 @@ public class UserRankAdpter extends BaseAdapter {
         }else {
             holder = (RankViewHolder) convertView.getTag();
         }
-        final Map<String, Object> map = mData.get(position);
-        holder.txt_user_name.setText((String) map.get("user_name"));
-        holder.txt_amt.setText(CommonUtil.formatAmt(map.get("st_amt")));
-        holder.txt_rate.setText(CommonUtil.formatPercent(map.get("rate")));
+        final RankEntity map = mData.get(position);
+        holder.txt_user_name.setText(map.getUserName());
+        holder.txt_amt.setText(CommonUtil.formatAmt(map.getStAmt()));
+        holder.txt_rate.setText(CommonUtil.formatPercent(map.getRate()));
+        if(map.getRate() > 0){
+            holder.txt_rate.setTextColor(convertView.getResources().getColor(R.color.main_red_color));
+        }else{
+            holder.txt_rate.setTextColor(convertView.getResources().getColor(R.color.kline_down));
+        }
         holder.head.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GlobalDataHelper.setDate("email", map.get("phone"));
+                GlobalDataHelper.setDate("email", map.getRate());
                 Intent intent = new Intent(mContext, ImageViewActivity.class);
                 mContext.startActivity(intent);
             }
         });
         holder.txt_no.setText((position+1)+"");
-        if(!CommonUtil.isEmpty(map.get("small_cut"))){
-            holder.head.setImageContent(Base64.decode((String) map.get("small_cut")));
+        if(!CommonUtil.isEmpty(map.getSmallCut())){
+            holder.head.setImageContent(Base64.decode(map.getSmallCut()));
         }else{
             Glide.with(mContext).load(R.drawable.user_logo)
                     .diskCacheStrategy(DiskCacheStrategy.RESULT)

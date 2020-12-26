@@ -23,6 +23,6 @@
             android:gravity="center"
             android:layout_alignParentRight="true"
             sw:switch_bg_color="@color/text_hint"
-            android:layout_width="50dp"
+            android:layout_width="43dp"
             android:layout_gravity="center"/>
 </RelativeLayout>

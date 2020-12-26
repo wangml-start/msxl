@@ -8,6 +8,8 @@ import android.widget.ListView;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.adpter.MissModeAdpter;
+import com.cgmn.msxl.data.MissModel;
+import com.cgmn.msxl.data.MissModelItem;
 import com.cgmn.msxl.data.SettingItem;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.cgmn.msxl.server_interface.BaseData;
@@ -44,7 +46,7 @@ public class ViolateModeActivity extends BaseOtherActivity {
 
     @Override
     protected String setTitle() {
-        return getString(R.string.miss_mode_st);
+        return getString(R.string.mode_detail);
     }
 
     @Override
@@ -65,17 +67,15 @@ public class ViolateModeActivity extends BaseOtherActivity {
             @Override
             public boolean handleMessage(Message msg) {
                 if (msg.what == MessageUtil.REQUEST_SUCCESS) {
-                    List<Map<String, Object>> misses = (List<Map<String, Object>>) msg.obj;
+                    MissModel misses = (MissModel) msg.obj;
                     if (!CommonUtil.isEmpty(misses)) {
                         mData = new ArrayList<>();
-                        for (Map<String, Object> item : misses) {
-                            Integer type = ((Double) item.get("miss_type")).intValue();
-                            Integer num = ((Double) item.get("num")).intValue();
-                            String text = ModeManager.getInstance().transType(type);
+                        for (MissModelItem item : misses.getList()) {
+                            String text = ModeManager.getInstance().transType(item.getMissType());
                             if (CommonUtil.isEmpty(text)) {
                                 continue;
                             }
-                            SettingItem viewItem = new SettingItem(text, num + " 次");
+                            SettingItem viewItem = new SettingItem(text, item.getCount() + " 次");
                             mData.add(viewItem);
                         }
                         myAdapter = new MissModeAdpter(mContext, mData);
@@ -115,7 +115,7 @@ public class ViolateModeActivity extends BaseOtherActivity {
                                 Message message = Message.obtain();
                                 message.what = MessageUtil.REQUEST_SUCCESS;
                                 try {
-                                    message.obj = data.getRecords();
+                                    message.obj = data.getMissModel();
                                     Integer status = data.getStatus();
                                     if (status == null || status == -1) {
                                         throw new Exception(data.getError());

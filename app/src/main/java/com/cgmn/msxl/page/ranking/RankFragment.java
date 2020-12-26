@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.adpter.UserRankAdpter;
+import com.cgmn.msxl.data.RankEntity;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.service.GlobalDataHelper;
@@ -39,7 +40,7 @@ public class RankFragment extends Fragment {
     private String trainType;
     private String rankType;
     private Handler mHandler;
-    private List<Map<String, Object>> mData = null;
+    private List<RankEntity> mData = null;
     private UserRankAdpter adpter;
     private TextView txt_rank;
 
@@ -81,13 +82,13 @@ public class RankFragment extends Fragment {
             @Override
             public boolean handleMessage(Message msg) {
                 if (msg.what == MessageUtil.REQUEST_SUCCESS) {
-                    mData = (List<Map<String, Object>>) msg.obj;
+                    mData = (List<RankEntity>) msg.obj;
                     if(!CommonUtil.isEmpty(mData)){
                         adpter = new UserRankAdpter(mContext, mData);
                         listView.setAdapter(adpter);
-                        if(!CommonUtil.isEmpty(mData.get(0).get("my_rank"))){
+                        if(!CommonUtil.isEmpty(mData.get(0).getMyRank())){
                             String txt = "我的排名： ";
-                            int rankNo= ((Double) mData.get(0).get("my_rank")).intValue();
+                            int rankNo= mData.get(0).getMyRank();
                             txt_rank.setText(txt + rankNo);
                         }
                     }
@@ -137,7 +138,7 @@ public class RankFragment extends Fragment {
                                 Message message = Message.obtain();
                                 message.what = MessageUtil.REQUEST_SUCCESS;
                                 try {
-                                    message.obj = data.getRecords();
+                                    message.obj = data.getRankList();
                                     Integer status = data.getStatus();
                                     if (status == null || status == -1) {
                                         throw new Exception(data.getError());

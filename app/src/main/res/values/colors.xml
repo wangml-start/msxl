@@ -23,7 +23,7 @@
 
     <color name="bg_gray">#F1EEEE</color>
 
-    <color name="kline_up">#B81206</color>
+    <color name="kline_up">#CA1508</color>
     <color name="kline_down">#05870A</color>
 
     <color name="kline_ave_5">#756D7E</color>
@@ -50,4 +50,6 @@
     <color name="main_blue_color">#1E90FF</color>
     <color name="_e1e4e9">#e1e4e9</color>
     <color name="_abb2bd">#abb2bd</color>
+
+    <color name="_abb2bd1">#FBFBFB</color>
 </resources>
