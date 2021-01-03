@@ -25,7 +25,7 @@ public class BaseData {
     List<RankEntity> rankList;
 
 
-    private byte[] filebyte;
+    private String filebyte;
 
     private List<Map<String, Object>> records;
 
@@ -77,11 +77,11 @@ public class BaseData {
         this.statistic = statistic;
     }
 
-    public byte[] getFilebyte() {
+    public String getFilebyte() {
         return filebyte;
     }
 
-    public void setFilebyte(byte[] filebyte) {
+    public void setFilebyte(String filebyte) {
         this.filebyte = filebyte;
     }
 

@@ -14,6 +14,7 @@ import com.squareup.okhttp.Request;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.net.ConnectException;
+import java.net.SocketTimeoutException;
 
 public class GlobalExceptionHandler {
     private Context mContxt;
@@ -42,7 +43,10 @@ public class GlobalExceptionHandler {
 
     public void handlerException(Exception e){
         try{
-            if((ConnectException)e instanceof ConnectException){
+            if(e instanceof ConnectException){
+                CustmerToast.makeText(mContxt, mContxt.getString(R.string.network_loss)).show();
+            }
+            if(e instanceof SocketTimeoutException){
                 CustmerToast.makeText(mContxt, mContxt.getString(R.string.network_loss)).show();
             }
         }catch (Exception e1){

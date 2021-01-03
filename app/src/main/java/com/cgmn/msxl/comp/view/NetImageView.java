@@ -20,7 +20,9 @@ import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.service.GlobalDataHelper;
 import com.cgmn.msxl.service.OkHttpClientManager;
+import com.cgmn.msxl.utils.CommonUtil;
 import com.cgmn.msxl.utils.MessageUtil;
+import org.apache.shiro.codec.Base64;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -271,9 +273,9 @@ public class NetImageView extends ImageView {
                             public void onResponse(BaseData data) {
                                 Message msg = Message.obtain();
                                 try {
-                                    byte[] bytes = data.getFilebyte();
                                     Bitmap bitmap=null;
-                                    if(bytes != null && bytes.length > 0){
+                                    if(!CommonUtil.isEmpty(data.getFilebyte())){
+                                        byte[] bytes = Base64.decode(data.getFilebyte());
                                         if (isUseCache){
                                             //复制新的输入流
                                             InputStream is = new ByteArrayInputStream(bytes);

@@ -88,6 +88,8 @@ public class MainActivity extends LoginBaseActivity {
                     finish();
                 }else if(msg.what == MessageUtil.EXCUTE_EXCEPTION){
                     GlobalExceptionHandler.getInstance(mContext).handlerException((Exception) msg.obj);
+                    startActivity(new Intent(mContext, LoginActivity.class));
+                    finish();
                 }else if(msg.what == MessageUtil.NEED_TO_LOGIN_PAGE){
                     startActivity(new Intent(mContext, LoginActivity.class));
                     finish();
