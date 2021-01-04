@@ -13,6 +13,7 @@ import com.cgmn.msxl.R;
 import com.cgmn.msxl.ac.ImageViewActivity;
 import com.cgmn.msxl.comp.view.NetImageView;
 import com.cgmn.msxl.data.RankEntity;
+import com.cgmn.msxl.data.StockHolder;
 import com.cgmn.msxl.service.GlobalDataHelper;
 import com.cgmn.msxl.utils.CommonUtil;
 import org.apache.shiro.codec.Base64;
@@ -24,10 +25,12 @@ import java.util.Map;
 public class UserRankAdpter extends BaseAdapter {
     private Context mContext;
     private List<RankEntity> mData = null;
+    private String tranType;
 
-    public UserRankAdpter(Context mContext, List<RankEntity> mData) {
+    public UserRankAdpter(Context mContext, List<RankEntity> mData, String tranType) {
         this.mContext = mContext;
         this.mData = mData;
+        this.tranType = tranType;
     }
 
     @Override
@@ -59,7 +62,12 @@ public class UserRankAdpter extends BaseAdapter {
         final RankEntity map = mData.get(position);
         holder.txt_user_name.setText(map.getUserName());
         holder.txt_amt.setText(CommonUtil.formatAmt(map.getStAmt()));
-        holder.txt_rate.setText(CommonUtil.formatPercent(map.getRate()));
+        if(tranType.equals(StockHolder.RANK_SUMMARY+"")){
+            holder.txt_rate.setText(CommonUtil.formatPercent(map.getRate()));
+        }else{
+            holder.txt_rate.setText(CommonUtil.formatAmt(map.getRate()));
+        }
+
         if(map.getRate() > 0){
             holder.txt_rate.setTextColor(convertView.getResources().getColor(R.color.main_red_color));
         }else{

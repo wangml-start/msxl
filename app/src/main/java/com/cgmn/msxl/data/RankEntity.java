@@ -4,6 +4,7 @@ public class RankEntity {
 
     private Integer userId;
     private Integer myRank;
+    private Integer totalAcc;
     private Double stAmt;
     private Double rate;
     private String phone;
@@ -64,5 +65,13 @@ public class RankEntity {
 
     public void setSmallCut(String smallCut) {
         this.smallCut = smallCut;
+    }
+
+    public Integer getTotalAcc() {
+        return totalAcc;
+    }
+
+    public void setTotalAcc(Integer totalAcc) {
+        this.totalAcc = totalAcc;
     }
 }

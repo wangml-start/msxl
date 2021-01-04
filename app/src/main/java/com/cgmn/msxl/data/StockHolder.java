@@ -20,6 +20,8 @@ public class StockHolder {
 
     public final static int LEADING_STRATEGY = 100;
     public final static int NORMAL_STRATEGY = 101;
+    public final static int RANK_SUMMARY = 99;
+    public final static int EARNING_CURVE_SUMMARY = 98;
 
     private final float brokerRate = 0.00025f;
     private final float yinhuaRate = 0.001f;

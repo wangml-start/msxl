@@ -16,6 +16,7 @@ public class PageMainItem {
     public static int VIP_INFO = 10;
 
 
+
     private int aIcon;
     private String aName;
     private int itemType;

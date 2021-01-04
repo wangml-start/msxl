@@ -46,6 +46,7 @@ public class TrainFragment extends Fragment{
         mData.add(new PageMainItem(R.drawable.main_3, getString(R.string.tradTrain), PageMainItem.NORMAL_STRATEGY));
         mData.add(new SplitItem(getString(R.string.pl_rate_line)));
 //        mData.add(new PageMainItem(R.drawable.head, getString(R.string.train_sum_line), PageMainItem.SUM_PL_LINE));
+        mData.add(new PageMainItem(R.drawable.main_4, getString(R.string.train_sum_line), PageMainItem.SUM_PL_LINE));
         mData.add(new PageMainItem(R.drawable.main_4, getString(R.string.leading_line), PageMainItem.LEADING_LINE));
         mData.add(new PageMainItem(R.drawable.main_5, getString(R.string.normal_line), PageMainItem.NORMARL_LINE));
         mData.add(new SplitItem(getString(R.string.ranking)));
@@ -114,6 +115,7 @@ public class TrainFragment extends Fragment{
                         case 6:
                             intent = new Intent(mContxt, StatisticActivity.class);
                             bundle = new Bundle();
+                            bundle.putInt("train_type", StockHolder.EARNING_CURVE_SUMMARY);
                             bundle.putString("title", getString(R.string.train_sum_line));
                             intent.putExtra("datas", bundle);
                             startActivity(intent);

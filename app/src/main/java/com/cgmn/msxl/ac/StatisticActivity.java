@@ -2,16 +2,13 @@ package com.cgmn.msxl.ac;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,8 +64,8 @@ public class StatisticActivity extends BaseOtherActivity {
     private Integer trainType;
     private Integer userModelId;
 
-    private TextView  tx_st_pl, tx_st_baseAmt,
-            tx_st_ex,  tx_st_plrate;
+    private TextView  tx_st_pl, tx_st_baseAmt,lb_st_plrate,lb_st_baseAmt,
+            tx_st_ex,  tx_st_plrate, tx_st_leftAmt;
     private String title;
 
     private TradeStatistic statistic;
@@ -108,6 +105,9 @@ public class StatisticActivity extends BaseOtherActivity {
         tx_st_ex = findViewById(R.id.tx_st_ex);
         tx_st_plrate = findViewById(R.id.tx_st_plrate);
         tx_st_baseAmt = findViewById(R.id.tx_st_baseAmt);
+        tx_st_leftAmt = findViewById(R.id.tx_st_leftAmt);
+        lb_st_plrate = findViewById(R.id.lb_st_plrate);
+        lb_st_baseAmt = findViewById(R.id.lb_st_baseAmt);
         txt_complete.setText("分享");
 
         Intent intent = getIntent();
@@ -116,6 +116,13 @@ public class StatisticActivity extends BaseOtherActivity {
             trainType = bundle.getInt("train_type");
             userModelId = bundle.getInt("user_model_id");
             title = bundle.getString("title");
+        }
+
+        if(trainType != StockHolder.EARNING_CURVE_SUMMARY){
+            tx_st_baseAmt.setVisibility(View.GONE);
+            tx_st_plrate.setVisibility(View.GONE);
+            lb_st_plrate.setVisibility(View.GONE);
+            lb_st_baseAmt.setVisibility(View.GONE);
         }
     }
 
@@ -234,7 +241,7 @@ public class StatisticActivity extends BaseOtherActivity {
         leftYAxis.setValueFormatter(new IAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
-                return CommonUtil.formatPercent(value);
+                return getYformatValue(value);
             }
         });
         leftYAxis.setLabelCount(6);
@@ -251,6 +258,14 @@ public class StatisticActivity extends BaseOtherActivity {
         //是否绘制在图表里面
         legend.setDrawInside(false);
 
+    }
+
+    public String getYformatValue(float value){
+        if(trainType == StockHolder.EARNING_CURVE_SUMMARY){
+            return CommonUtil.formatPercent(value);
+        }else{
+            return CommonUtil.formatNumer(value);
+        }
     }
 
     /**
@@ -295,7 +310,7 @@ public class StatisticActivity extends BaseOtherActivity {
             @Override
             public String getFormattedValue(float value, Entry entry,
                                             int dataSetIndex, ViewPortHandler viewPortHandler) {
-                return CommonUtil.formatPercent(value);
+                return getYformatValue(value);
             }
         });
         lineDataSet.setDrawValues(false);
@@ -333,7 +348,10 @@ public class StatisticActivity extends BaseOtherActivity {
     }
 
     public void setMarkerView() {
-        LineChartMarkView mv = new LineChartMarkView(this, xAxis.getValueFormatter());
+        LineChartMarkView mv = new LineChartMarkView(
+                this,
+                xAxis.getValueFormatter(),
+                leftYAxis.getValueFormatter());
         mv.setChartView(mLineChart);
         mLineChart.setMarker(mv);
         mLineChart.invalidate();
@@ -366,6 +384,7 @@ public class StatisticActivity extends BaseOtherActivity {
         setMarkerView();
 
         tx_st_baseAmt.setText(CommonUtil.formatNumer(statistic.getBaseAmt()));
+        tx_st_leftAmt.setText(CommonUtil.formatNumer(statistic.getCashAmt()));
         tx_st_pl.setText(CommonUtil.formatNumer(statistic.getPl()));
         tx_st_plrate.setText(CommonUtil.formatPercent(statistic.getPl() / statistic.getBaseAmt()));
         if (statistic.getPl() > 0) {

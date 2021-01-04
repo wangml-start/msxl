@@ -17,6 +17,7 @@ import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.adpter.UserRankAdpter;
 import com.cgmn.msxl.data.RankEntity;
+import com.cgmn.msxl.data.StockHolder;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.service.GlobalDataHelper;
@@ -84,12 +85,14 @@ public class RankFragment extends Fragment {
                 if (msg.what == MessageUtil.REQUEST_SUCCESS) {
                     mData = (List<RankEntity>) msg.obj;
                     if(!CommonUtil.isEmpty(mData)){
-                        adpter = new UserRankAdpter(mContext, mData);
+                        adpter = new UserRankAdpter(mContext, mData, trainType);
                         listView.setAdapter(adpter);
-                        if(!CommonUtil.isEmpty(mData.get(0).getMyRank())){
-                            String txt = "我的排名： ";
-                            int rankNo= mData.get(0).getMyRank();
-                            txt_rank.setText(txt + rankNo);
+                        String txt = "我的排名： ";
+                        Integer rankNo = mData.get(0).getMyRank();
+                        if(rankNo != null && rankNo>0){
+                            txt_rank.setText(String.format("%s %s/%s", txt, rankNo, mData.get(0).getTotalAcc()));
+                        }else{
+                            txt_rank.setText(String.format("%s %s/%s", txt, "--", mData.get(0).getTotalAcc()));
                         }
                     }
                 } else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
@@ -98,6 +101,10 @@ public class RankFragment extends Fragment {
                 return false;
             }
         });
+        TextView txtEarn = view.findViewById(R.id.txtEarn);
+        if(!trainType.equals(StockHolder.RANK_SUMMARY+"")){
+            txtEarn.setText("收益");
+        }
     }
 
     @Override

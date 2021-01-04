@@ -16,10 +16,14 @@ public class LineChartMarkView extends MarkerView {
     private TextView tvDate;
     private TextView tvValue;
     private IAxisValueFormatter xAxisValueFormatter;
+    private IAxisValueFormatter yAxisValueFormatter;
 
-    public LineChartMarkView(Context context, IAxisValueFormatter xAxisValueFormatter) {
+    public LineChartMarkView(Context context,
+                             IAxisValueFormatter xAxisValueFormatter,
+                             IAxisValueFormatter yAxisValueFormatter) {
         super(context, R.layout.layout_markview);
         this.xAxisValueFormatter = xAxisValueFormatter;
+        this.yAxisValueFormatter = yAxisValueFormatter;
 
         tvDate = findViewById(R.id.tv_date);
         tvValue = findViewById(R.id.tv_value);
@@ -30,7 +34,7 @@ public class LineChartMarkView extends MarkerView {
     public void refreshContent(Entry e, Highlight highlight) {
         //展示自定义X轴值 后的X轴内容
         tvDate.setText(xAxisValueFormatter.getFormattedValue(e.getX(), null));
-        tvValue.setText(CommonUtil.formatPercent(e.getY()));
+        tvValue.setText(yAxisValueFormatter.getFormattedValue(e.getY(), null));
         if(e.getY() > 0){
             tvValue.setTextColor(getResources().getColor(R.color.kline_up));
         }else if(e.getY() < 0){

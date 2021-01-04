@@ -24,18 +24,19 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="match_parent"
-                android:gravity="center"
+                android:gravity="left|center_vertical"
                 android:text="操盘手"
                 />
 
         <TextView
-                android:layout_width="100dp"
+                android:layout_width="120dp"
                 android:layout_height="match_parent"
                 android:gravity="right|center_vertical"
                 android:text="资金量"
                 />
         <TextView
-                android:layout_width="100dp"
+                android:id="@+id/txtEarn"
+                android:layout_width="120dp"
                 android:layout_height="match_parent"
                 android:gravity="right|center_vertical"
                 android:layout_marginRight="15dp"
