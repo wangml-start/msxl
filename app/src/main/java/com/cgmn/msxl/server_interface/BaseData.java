@@ -23,7 +23,8 @@ public class BaseData {
     private MissModel missModel;
 
     List<RankEntity> rankList;
-
+    List<ChatAddRecord> chatMain;
+    List<ChatAddRecord> chatSub;
 
     private String filebyte;
 
@@ -115,5 +116,21 @@ public class BaseData {
 
     public void setRankList(List<RankEntity> rankList) {
         this.rankList = rankList;
+    }
+
+    public List<ChatAddRecord> getChatMain() {
+        return chatMain;
+    }
+
+    public void setChatMain(List<ChatAddRecord> chatMain) {
+        this.chatMain = chatMain;
+    }
+
+    public List<ChatAddRecord> getChatSub() {
+        return chatSub;
+    }
+
+    public void setChatSub(List<ChatAddRecord> chatSub) {
+        this.chatSub = chatSub;
     }
 }

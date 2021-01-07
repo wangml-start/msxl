@@ -17,6 +17,7 @@ public class CommonUtil {
     private static DecimalFormat format3 = new DecimalFormat("#,##0.000");
 
     private static DecimalFormat formatAmt = new DecimalFormat("#,##0");
+    private static DecimalFormat formatLargeAmt = new DecimalFormat("#,##0.00");
 
     public static boolean isEmpty(Object o){
         if(o == null){
@@ -103,7 +104,11 @@ public class CommonUtil {
     }
 
     public static String formatAmt(Object num){
-        return formatAmt.format(num);
+        if((float)num > 9999){
+            return formatLargeAmt.format((float)num/10000)+"万";
+        }else{
+            return formatAmt.format(num);
+        }
     }
 
     public static String formatNumer(Object num){

@@ -264,7 +264,7 @@ public class StatisticActivity extends BaseOtherActivity {
         if(trainType == StockHolder.EARNING_CURVE_SUMMARY){
             return CommonUtil.formatPercent(value);
         }else{
-            return CommonUtil.formatNumer(value);
+            return CommonUtil.formatAmt(value);
         }
     }
 
@@ -401,7 +401,7 @@ public class StatisticActivity extends BaseOtherActivity {
         FixStringBuffer text = new FixStringBuffer();
         String trianTypeStr = "趋势波段";
         if(trainType == StockHolder.LEADING_STRATEGY){
-            trianTypeStr = "龙头战法";
+            trianTypeStr = "连板战法";
         }
         text.append("我在%s中通过%s次训练，获得总收益为%s ^_^",
                 trianTypeStr, statistic.getList().size(),

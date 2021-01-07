@@ -7,18 +7,18 @@ import java.util.List;
  */
 
 public class CommentDetailBean {
-    private int id;
-    private int no;
+    private Integer id;
+    private Integer no;
     private String nickName;
     private byte[] userLogo;
     private byte[] picture;
     private String content;
     private String approve;
-    private int replyTotal;
+    private Integer replyTotal;
     private String createDate;
-    private int myApprove;
-    private int myComment;
-    private int userId;
+    private Integer myApprove;
+    private Integer myComment;
+    private Integer userId;
     private String phone;
     private List<ReplyDetailBean> replyList;
 
@@ -28,10 +28,10 @@ public class CommentDetailBean {
         this.createDate = createDate;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -49,10 +49,10 @@ public class CommentDetailBean {
         return content;
     }
 
-    public void setReplyTotal(int replyTotal) {
+    public void setReplyTotal(Integer replyTotal) {
         this.replyTotal = replyTotal;
     }
-    public int getReplyTotal() {
+    public Integer getReplyTotal() {
         return replyTotal;
     }
 
@@ -98,35 +98,35 @@ public class CommentDetailBean {
         this.approve = approve;
     }
 
-    public int getMyApprove() {
+    public Integer getMyApprove() {
         return myApprove;
     }
 
-    public void setMyApprove(int myApprove) {
+    public void setMyApprove(Integer myApprove) {
         this.myApprove = myApprove;
     }
 
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
-    public int getNo() {
+    public Integer getNo() {
         return no;
     }
 
-    public void setNo(int no) {
+    public void setNo(Integer no) {
         this.no = no;
     }
 
-    public int getMyComment() {
+    public Integer getMyComment() {
         return myComment;
     }
 
-    public void setMyComment(int myComment) {
+    public void setMyComment(Integer myComment) {
         this.myComment = myComment;
     }
 

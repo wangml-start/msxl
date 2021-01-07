@@ -8,7 +8,7 @@
 
     <string name="trading">操盘</string>
     <string name="mode_setting">模式设置</string>
-    <string name="dragTrain">龙头战法训练</string>
+    <string name="dragTrain">连板战法训练</string>
     <string name="tradTrain">趋势波段训练</string>
     <string name="up_train_txt">进阶训练</string>
     <string name="statistic">讨论区</string>
@@ -17,7 +17,7 @@
     <string name="total_ranking">排行榜</string>
     <string name="day_ranking">日榜</string>
     <string name="train_sum_line">收益率曲线</string>
-    <string name="leading_line">龙头战法曲线</string>
+    <string name="leading_line">连板战法曲线</string>
     <string name="normal_line">趋势波段曲线</string>
     <string name="mode_detail">执行情况</string>
     <string name="violate_mode_detai">执行情况</string>

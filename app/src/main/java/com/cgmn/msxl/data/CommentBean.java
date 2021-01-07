@@ -1,5 +1,7 @@
 package com.cgmn.msxl.data;
 
+import com.cgmn.msxl.server_interface.BaseData;
+import com.cgmn.msxl.server_interface.ChatAddRecord;
 import com.cgmn.msxl.utils.CommonUtil;
 import org.apache.shiro.codec.Base64;
 
@@ -9,16 +11,23 @@ public class CommentBean {
     private List<CommentDetailBean> commentList;
 
 
-    public CommentBean(Object list, Integer baseIndex) {
+    public CommentBean(BaseData data, Integer baseIndex) {
         commentList = new ArrayList<>();
         try {
-            if(list == null){
+            if(data.getChatMain() == null){
                 return;
             }
-            List<Map<String, Object>> mList = (List<Map<String, Object>>) list;
+            Map<Integer, List<ChatAddRecord>> subMap = new HashMap<>();
+            for(ChatAddRecord sub : data.getChatSub()){
+                Integer pId = sub.getParentId();
+                if(!subMap.containsKey(pId)){
+                    subMap.put(pId, new ArrayList<ChatAddRecord>());
+                }
+                subMap.get(pId).add(sub);
+            }
             Integer index = baseIndex;
-            for (Map<String, Object> item : mList) {
-                CommentDetailBean bean = analysisComment(item);
+            for (ChatAddRecord item : data.getChatMain()) {
+                CommentDetailBean bean = analysisComment(item, subMap);
                 bean.setNo(index++);
                 commentList.add(bean);
             }
@@ -50,61 +59,61 @@ public class CommentBean {
         return CommonUtil.formartTimeString(date, format);
     }
 
-    private CommentDetailBean analysisComment(Map<String, Object> attr) {
-        String userName = (String) attr.get("user_name");
-        String content = (String) attr.get("content");
-        String date = analysisTime(CommonUtil.parseDateString((String) attr.get("created_at"), "yyyyMMdd HH:mm:ss"));
+    private CommentDetailBean analysisComment(ChatAddRecord attr, Map<Integer, List<ChatAddRecord>> subMap) {
+        String userName = attr.getUserName();
+        String content = attr.getContent();
+        String date = analysisTime(CommonUtil.parseDateString(attr.getCreatedAt(), "yyyyMMdd HH:mm:ss"));
         CommentDetailBean comment = new CommentDetailBean(userName, content, date);
-        comment.setPhone((String) attr.get("phone"));
-        comment.setId(((Double) attr.get("id")).intValue());
-        comment.setUserId(((Double) attr.get("creator_id")).intValue());
-        comment.setApprove(((Double) attr.get("approve")).intValue() +"");
-        if(CommonUtil.isEmpty(attr.get("my_approve"))){
+        comment.setPhone(attr.getPhone());
+        comment.setId(attr.getId());
+        comment.setUserId(attr.getCreatorId());
+        comment.setApprove(attr.getApprove()+"");
+        if(CommonUtil.isEmpty(attr.getMyApprove())){
             comment.setMyApprove(0);
         }else {
-            comment.setMyApprove(((Double) attr.get("my_approve")).intValue());
+            comment.setMyApprove(attr.getMyApprove());
         }
-        if(CommonUtil.isEmpty(attr.get("my_comment"))){
+        if(CommonUtil.isEmpty(attr.getMyComment())){
             comment.setMyComment(0);
         }else {
-            comment.setMyComment(((Double) attr.get("my_comment")).intValue());
+            comment.setMyComment(attr.getMyComment());
         }
-        comment.setUserId(((Double) attr.get("creator_id")).intValue());
-        if(!CommonUtil.isEmpty(attr.get("bit_content"))){
-            comment.setPicture(Base64.decode((String) attr.get("bit_content")));
+        comment.setUserId(attr.getCreatorId());
+        if(!CommonUtil.isEmpty(attr.getBitContent())){
+            comment.setPicture(Base64.decode(attr.getBitContent()));
         }
-        if(!CommonUtil.isEmpty(attr.get("small_cut"))){
-            comment.setUserLogo(Base64.decode((String) attr.get("small_cut")));
+        if(!CommonUtil.isEmpty(attr.getSmallCut())){
+            comment.setUserLogo(Base64.decode(attr.getSmallCut()));
         }
 
         //解析回复
-        if(!CommonUtil.isEmpty(attr.get("replay"))){
-            List<Map<String, Object>> replay = (List<Map<String, Object>>) attr.get("replay");
+        if(!CommonUtil.isEmpty(subMap) && subMap.containsKey(attr.getId())){
+            List<ChatAddRecord> replay = subMap.get(attr.getId());
             comment.setReplyTotal(replay.size());
             List<ReplyDetailBean> reList = new ArrayList<>();
             comment.setReplyList(reList);
             Integer index = 0;
-            for (Map<String, Object> item : replay) {
+            for (ChatAddRecord item : replay) {
                 Integer replayUserId = 0;
                 Integer replayId = 0;
-                if(item.get("reply_user_id") != null){
-                    replayUserId = ((Double) item.get("reply_user_id")).intValue();
+                if(item.getReplyUserId() != null){
+                    replayUserId = item.getReplyUserId();
                 }
-                if(item.get("reply_id") != null){
-                    replayId = ((Double) item.get("reply_id")).intValue();
+                if(item.getReplyId() != null){
+                    replayId = item.getReplyId();
                 }
-                String recontent = (String) item.get("content");
+                String recontent = item.getContent();
                 ReplyDetailBean replyDetailBean = new ReplyDetailBean(recontent);
-                replyDetailBean.setReplayFrom((String) item.get("user_name"));
+                replyDetailBean.setReplayFrom(item.getUserName());
                 if(replayId != comment.getId()){
-                    replyDetailBean.setReplayTo((String) item.get("replay_uname"));
+                    replyDetailBean.setReplayTo(item.getReplayUname());
                 }
-                replyDetailBean.setId(((Double) item.get("id")).intValue());
+                replyDetailBean.setId(item.getId());
                 replyDetailBean.setNo(index++);
-                replyDetailBean.setUserId(((Double) item.get("creator_id")).intValue());
+                replyDetailBean.setUserId(item.getCreatorId());
                 replyDetailBean.setReplayUserId(replayUserId);
-                if(!CommonUtil.isEmpty(item.get("bit_content"))){
-                    replyDetailBean.setPicture(Base64.decode((String) item.get("bit_content")));
+                if(!CommonUtil.isEmpty(item.getBitContent())){
+                    replyDetailBean.setPicture(Base64.decode(item.getBitContent()));
                 }
 
                 reList.add(replyDetailBean);

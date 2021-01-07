@@ -8,14 +8,14 @@ public class ReplyDetailBean {
     private String replayFrom;
     private String replayTo;
     private String userLogo;
-    private int id;
-    private int no;
+    private Integer id;
+    private Integer no;
     private String commentId;
     private String content;
     private String status;
     private String createDate;
-    private int userId;
-    private int replayUserId;
+    private Integer userId;
+    private Integer replayUserId;
     private byte[] picture;
 
     public ReplyDetailBean(String content) {
@@ -45,10 +45,10 @@ public class ReplyDetailBean {
         return userLogo;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -80,19 +80,19 @@ public class ReplyDetailBean {
         return createDate;
     }
 
-    public int getNo() {
+    public Integer getNo() {
         return no;
     }
 
-    public void setNo(int no) {
+    public void setNo(Integer no) {
         this.no = no;
     }
 
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
@@ -104,11 +104,11 @@ public class ReplyDetailBean {
         this.picture = picture;
     }
 
-    public int getReplayUserId() {
+    public Integer getReplayUserId() {
         return replayUserId;
     }
 
-    public void setReplayUserId(int replayUserId) {
+    public void setReplayUserId(Integer replayUserId) {
         this.replayUserId = replayUserId;
     }
 

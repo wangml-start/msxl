@@ -45,15 +45,14 @@ public class GlobalExceptionHandler {
         try{
             if(e instanceof ConnectException){
                 CustmerToast.makeText(mContxt, mContxt.getString(R.string.network_loss)).show();
-            }
-            if(e instanceof SocketTimeoutException){
+            }else if(e instanceof SocketTimeoutException){
                 CustmerToast.makeText(mContxt, mContxt.getString(R.string.network_loss)).show();
+            }else {
+                if(!CommonUtil.isEmpty(e.getMessage())){
+                    CustmerToast.makeText(mContxt, e.getMessage()).show();
+                }
             }
-        }catch (Exception e1){
-            if(!CommonUtil.isEmpty(e.getMessage())){
-                CustmerToast.makeText(mContxt, e.getMessage()).show();
-            }
-        }
+        }catch (Exception e1){}
     }
 
     public void handlerExceptionUpException(final Exception e){

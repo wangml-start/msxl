@@ -24,6 +24,7 @@ import com.cgmn.msxl.data.CommentDetailBean;
 import com.cgmn.msxl.data.ReplyDetailBean;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.cgmn.msxl.server_interface.BaseData;
+import com.cgmn.msxl.server_interface.ChatAddRecord;
 import com.cgmn.msxl.service.GlobalDataHelper;
 import com.cgmn.msxl.service.OkHttpClientManager;
 import com.cgmn.msxl.service.PropertyService;
@@ -130,7 +131,7 @@ public class DisgussSubActivity extends DisgussBaseActivity {
             public boolean handleMessage(Message msg) {
                 if (msg.what == MessageUtil.LOAD_REPLAY_LIST) {
                     commentsList.clear();
-                    CommentBean commentBean = new CommentBean(msg.obj, commentsList.size());
+                    CommentBean commentBean = new CommentBean((BaseData) msg.obj, commentsList.size());
                     commentBean.getList(commentsList);
                     if (adapter == null) {
                         initExpandableListView();
@@ -140,14 +141,14 @@ public class DisgussSubActivity extends DisgussBaseActivity {
                     adapter.notifyDataSetChanged();
                     comment_total.setText("评论 " + commentsList.size());
                 } else if (msg.what == MessageUtil.APPEND_LOAD_COMMENT_LIST) {
-                    CommentBean commentBean = new CommentBean(msg.obj, commentsList.size());
+                    CommentBean commentBean = new CommentBean((BaseData) msg.obj, commentsList.size());
                     commentBean.getList(commentsList);
                     adapter.notifyDataSetChanged();
                     expandList();
                     appendList = false;
                     comment_total.setText("评论 " + commentsList.size());
                 } else if(msg.what == MessageUtil.LOAD_COMMENT_INFO){
-                    CommentBean commentBean = new CommentBean(msg.obj, 0);
+                    CommentBean commentBean = new CommentBean((BaseData) msg.obj, 0);
                     comment = commentBean.getFirst();
                     loadReplayList();
                     setHeader();
@@ -286,7 +287,7 @@ public class DisgussSubActivity extends DisgussBaseActivity {
                                 Message message = Message.obtain();
                                 message.what = MessageUtil.LOAD_REPLAY_LIST;
                                 try {
-                                    message.obj = data.getRecords();
+                                    message.obj = data;
                                     Integer status = data.getStatus();
                                     if (status == null || status == -1) {
                                         throw new Exception(data.getError());
@@ -369,7 +370,7 @@ public class DisgussSubActivity extends DisgussBaseActivity {
                                 Message message = Message.obtain();
                                 message.what = MessageUtil.APPEND_LOAD_COMMENT_LIST;
                                 try {
-                                    message.obj = data.getRecords();
+                                    message.obj = data;
                                     Integer status = data.getStatus();
                                     if (status == null || status == -1) {
                                         throw new Exception(data.getError());

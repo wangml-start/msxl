@@ -85,7 +85,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:gravity="center"
-                    android:text="除龙头战法训练外的所有功能"
+                    android:text="除连板战法训练外的所有功能"
                     android:textColor="@color/text_topbar"
                     android:textSize="@dimen/miniSize" />
         </LinearLayout>

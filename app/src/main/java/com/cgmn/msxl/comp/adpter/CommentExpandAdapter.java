@@ -301,7 +301,10 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
         final ReplyDetailBean subbean = commentBeanList.get(groupPosition).getReplyList().get(childPosition);
         List<Integer[]> pos = new ArrayList<>();
         Integer start = 0;
-        StringBuffer contentText = new StringBuffer(subbean.getReplayFrom());
+        StringBuffer contentText = new StringBuffer();
+        if(!CommonUtil.isEmpty(subbean.getReplayFrom())){
+            contentText.append(subbean.getReplayFrom());
+        }
         pos.add(new Integer[]{start, contentText.length()});
         start = contentText.length();
         if(!CommonUtil.isEmpty(subbean.getReplayTo())){
