@@ -54,7 +54,7 @@ public class RelatedToMeActivity extends BaseOtherActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab){
                 onSelected(tab.getPosition());
-                resetText(tab.getPosition());
+//                resetText(tab.getPosition());
             }
             @Override
             public void onTabUnselected(TabLayout.Tab tab){
@@ -64,18 +64,18 @@ public class RelatedToMeActivity extends BaseOtherActivity {
             }
         });
 
-        response = (BaseData) GlobalDataHelper.getDate("relate");
-        if(response != null){
-            if(response.getApproveToMe() > 0){
-                String txt = tabLayout.getTabAt(0).getText().toString();
-                tabLayout.getTabAt(0).setText(String.format("%s(%s)",txt, response.getApproveToMe()));
-            }
-            if(response.getCommentToMe() > 0){
-                String txt = tabLayout.getTabAt(1).getText().toString();
-                tabLayout.getTabAt(1).setText(String.format("%s(%s)",txt, response.getCommentToMe()));
-            }
-            response = null;
-        }
+//        response = (BaseData) GlobalDataHelper.getDate("relate");
+//        if(response != null){
+//            if(response.getApproveToMe() > 0){
+//                String txt = tabLayout.getTabAt(0).getText().toString();
+//                tabLayout.getTabAt(0).setText(String.format("%s(%s)",txt, response.getApproveToMe()));
+//            }
+//            if(response.getCommentToMe() > 0){
+//                String txt = tabLayout.getTabAt(1).getText().toString();
+//                tabLayout.getTabAt(1).setText(String.format("%s(%s)",txt, response.getCommentToMe()));
+//            }
+//            response = null;
+//        }
     }
 
     private void resetText(int position){

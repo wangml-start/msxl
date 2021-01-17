@@ -63,7 +63,7 @@ public class DisgussActivity extends DisgussBaseActivity {
             showCommentDialog();
         } else if(v.getId() == R.id.img_mail){
             Intent intent = new Intent(mContext, RelatedToMeActivity.class);
-            GlobalDataHelper.setDate("relate", response);
+//            GlobalDataHelper.setDate("relate", response);
             startActivity(intent);
             mail.setNum(0);
             response = null;
