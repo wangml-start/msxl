@@ -2,14 +2,17 @@ package com.cgmn.msxl.comp.adpter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.text.*;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ImageSpan;
 import android.text.style.UnderlineSpan;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,9 +42,9 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
     private Context context;
     private CommentListener commentListener;
     private boolean expandAll = false;
-    private Integer expandNum = 3;
+    private Integer expandNum = 5;
     private boolean expandAllContent = true;
-    private Integer allContentLength = 150;
+    private Integer allContentLength = 200;
 
     private String color = "#3558C3";
 
@@ -149,6 +152,7 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
         groupHolder.comment_setting.setOnClickListener(listener);
         groupHolder.logo.setOnClickListener(listener);
         groupHolder.comment_picture.setOnClickListener(listener);
+
         //init content
         //head
         if (bean.getUserLogo() != null && bean.getUserLogo().length > 0) {
@@ -240,8 +244,8 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
 
     private class GroupHolder {
         private NetImageView logo, comment_picture;
-        private TextView tv_name, tv_content, tv_time, comment_approve,comment_setting,comment_num;
-        private ImageView iv_like, comment_icon;
+        private TextView tv_name, tv_content, tv_time, comment_approve,comment_num;
+        private ImageView iv_like, comment_icon, comment_setting;
 
         public GroupHolder(View view) {
             logo = (NetImageView) view.findViewById(R.id.comment_item_logo);
@@ -252,7 +256,7 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
             iv_like = (ImageView) view.findViewById(R.id.comment_item_like);
             comment_icon = (ImageView) view.findViewById(R.id.comment_icon);
             comment_approve = (TextView) view.findViewById(R.id.comment_approve);
-            comment_setting = (TextView) view.findViewById(R.id.comment_setting);
+            comment_setting = view.findViewById(R.id.comment_setting);
             comment_num = (TextView) view.findViewById(R.id.comment_num);
         }
     }

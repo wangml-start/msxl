@@ -24,8 +24,6 @@ import com.cgmn.msxl.data.CommentDetailBean;
 import com.cgmn.msxl.data.ReplyDetailBean;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.cgmn.msxl.server_interface.BaseData;
-import com.cgmn.msxl.server_interface.ChatAddRecord;
-import com.cgmn.msxl.server_interface.SimpleResponse;
 import com.cgmn.msxl.service.GlobalDataHelper;
 import com.cgmn.msxl.service.OkHttpClientManager;
 import com.cgmn.msxl.service.PropertyService;
@@ -43,7 +41,7 @@ public class DisgussActivity extends DisgussBaseActivity {
     private TabLayout tabLayout;
     private NumImageView mail;
     private Integer tabPosition=0;
-    private SimpleResponse response;
+    private BaseData response;
 
     @Override
     protected int getView() {
@@ -117,7 +115,7 @@ public class DisgussActivity extends DisgussBaseActivity {
                     CustmerToast.makeText(mContext, "删除成功").show();
                     loadCommentList();
                 } else if(MessageUtil.LOAD_RELATED_TO_ME == msg.what){
-                    response = (SimpleResponse) msg.obj;
+                    response = (BaseData) msg.obj;
                     if(response != null){
                         mail.setNum(response.getApproveToMe()+response.getCommentToMe());
                     }
@@ -300,7 +298,7 @@ public class DisgussActivity extends DisgussBaseActivity {
                         PropertyService.getInstance().getKey("serverUrl"),
                         "/chat/related_to_me", params);
                 OkHttpClientManager.getAsyn(url,
-                        new OkHttpClientManager.ResultCallback<SimpleResponse>() {
+                        new OkHttpClientManager.ResultCallback<BaseData>() {
                             @Override
                             public void onError(com.squareup.okhttp.Request request, Exception e) {
                                 Message message = Message.obtain();
@@ -310,7 +308,7 @@ public class DisgussActivity extends DisgussBaseActivity {
                             }
 
                             @Override
-                            public void onResponse(SimpleResponse data) {
+                            public void onResponse(BaseData data) {
                                 Message message = Message.obtain();
                                 message.what = MessageUtil.LOAD_RELATED_TO_ME;
                                 try {

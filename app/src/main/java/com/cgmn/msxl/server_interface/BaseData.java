@@ -28,6 +28,11 @@ public class BaseData {
 
     private String filebyte;
 
+    Integer approveToMe=0;
+    Integer commentToMe=0;
+
+    List<RelatedToMe> aboveMe;
+
     private List<Map<String, Object>> records;
 
     public Integer getStatus() {
@@ -132,5 +137,29 @@ public class BaseData {
 
     public void setChatSub(List<ChatAddRecord> chatSub) {
         this.chatSub = chatSub;
+    }
+
+    public Integer getApproveToMe() {
+        return approveToMe;
+    }
+
+    public void setApproveToMe(Integer approveToMe) {
+        this.approveToMe = approveToMe;
+    }
+
+    public Integer getCommentToMe() {
+        return commentToMe;
+    }
+
+    public void setCommentToMe(Integer commentToMe) {
+        this.commentToMe = commentToMe;
+    }
+
+    public List<RelatedToMe> getAboveMe() {
+        return aboveMe;
+    }
+
+    public void setAboveMe(List<RelatedToMe> aboveMe) {
+        this.aboveMe = aboveMe;
     }
 }

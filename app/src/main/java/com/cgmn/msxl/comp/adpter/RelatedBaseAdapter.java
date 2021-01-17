@@ -7,7 +7,6 @@ import android.widget.BaseExpandableListAdapter;
 import com.cgmn.msxl.server_interface.RelatedToMe;
 
 import java.util.List;
-import java.util.Map;
 
 public abstract class RelatedBaseAdapter extends BaseExpandableListAdapter {
     protected Context mContext;

@@ -7,16 +7,17 @@
     <color name="grey_dark_bg">#E4B7A8</color>
     <color name="bg_white_title">#FFFFFFFF</color>
     <color name="bg_white">#FFFFFF</color>
-    <color name="div_white">#FAFBFB</color>
+    <color name="div_white">#F2F2F2</color>
     <color name="text_hint">#E1DFDF</color>
     <color name="like">#FF5C5C</color>
     <color name="unlike">#aaaaaa</color>
     <color name="replay_bg">#FAFBFB</color>
-    <color name="link_color">#3558C3</color>
-
+    <color name="link_color">#577DAF</color>
+    
 
     <color name="bg_topbar">#FCFCFC</color>
     <color name="text_topbar">#000000</color>
+    <color name="text_black">#292626</color>
     <color name="text_yellow">#FFC800</color>
     <color name="transparent">#00FFFFFF</color>
     <color name="text_gray">#8D7A71</color>

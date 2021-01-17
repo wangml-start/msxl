@@ -6,8 +6,8 @@ import android.view.View;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.adpter.CommentsAdpter;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
+import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.server_interface.RelatedToMe;
-import com.cgmn.msxl.server_interface.SimpleResponse;
 import com.cgmn.msxl.service.GlobalDataHelper;
 import com.cgmn.msxl.service.OkHttpClientManager;
 import com.cgmn.msxl.service.PropertyService;
@@ -75,7 +75,7 @@ public class CommentFragment extends RelatedFrgment {
             @Override
             public void run() {
                 OkHttpClientManager.getAsyn(getUrl(start),
-                        new OkHttpClientManager.ResultCallback<SimpleResponse>() {
+                        new OkHttpClientManager.ResultCallback<BaseData>() {
                             @Override
                             public void onError(com.squareup.okhttp.Request request, Exception e) {
                                 Message message = Message.obtain();
@@ -85,7 +85,7 @@ public class CommentFragment extends RelatedFrgment {
                             }
 
                             @Override
-                            public void onResponse(SimpleResponse data) {
+                            public void onResponse(BaseData data) {
                                 Message message = Message.obtain();
                                 message.what = MessageUtil.REQUEST_SUCCESS;
                                 try {

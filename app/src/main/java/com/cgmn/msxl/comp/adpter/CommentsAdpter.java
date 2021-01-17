@@ -11,7 +11,10 @@ import com.cgmn.msxl.R;
 import com.cgmn.msxl.comp.view.NetImageView;
 import com.cgmn.msxl.data.CommentBean;
 import com.cgmn.msxl.server_interface.RelatedToMe;
+import com.cgmn.msxl.utils.CommonUtil;
+import org.apache.shiro.codec.Base64;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -35,8 +38,9 @@ public class CommentsAdpter extends RelatedBaseAdapter {
             holder = (CommentViewHolder) convertView.getTag();
         }
 
-        if (item.getSmallCut() != null && item.getSmallCut().length > 0) {
-            holder.comment_item_logo.setImageContent(item.getSmallCut());
+        if (!CommonUtil.isEmpty(item.getSmallCut())) {
+            byte[] bytes = Base64.decode(item.getSmallCut());
+            holder.comment_item_logo.setImageContent(bytes);
         } else {
             Glide.with(mContext).load(R.drawable.user_logo)
                     .diskCacheStrategy(DiskCacheStrategy.RESULT)
@@ -46,7 +50,8 @@ public class CommentsAdpter extends RelatedBaseAdapter {
         }
         String content = String.format("%s 回复我的帖子：%s", item.getUserName(), item.getMyContent());
         holder.comment_item_userName.setText(item.getUserName());
-        holder.comment_item_time.setText(CommentBean.analysisTime(item.getCreatedAt()));
+        Date reDate = CommonUtil.parseDateString(item.getCreatedAt(), "yyyyMMdd HH:mm:ss");
+        holder.comment_item_time.setText(CommentBean.analysisTime(reDate));
         holder.txt_app_des.setText(item.getHimContent());
         holder.txt_mycontent.setText(content);
 

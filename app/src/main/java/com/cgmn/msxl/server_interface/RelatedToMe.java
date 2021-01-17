@@ -5,8 +5,8 @@ import java.util.Date;
 public class RelatedToMe {
     Integer commentId;
     String userName;
-    Date createdAt;
-    byte[] smallCut;
+    String createdAt;
+    String smallCut;
     String myContent;
     String himContent;
     Integer myContentParent;
@@ -30,19 +30,19 @@ public class RelatedToMe {
         this.userName = userName;
     }
 
-    public Date getCreatedAt() {
+    public String getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
 
-    public byte[] getSmallCut() {
+    public String getSmallCut() {
         return smallCut;
     }
 
-    public void setSmallCut(byte[] smallCut) {
+    public void setSmallCut(String smallCut) {
         this.smallCut = smallCut;
     }
 

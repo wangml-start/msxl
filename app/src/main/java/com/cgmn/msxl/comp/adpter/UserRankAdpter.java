@@ -18,9 +18,7 @@ import com.cgmn.msxl.service.GlobalDataHelper;
 import com.cgmn.msxl.utils.CommonUtil;
 import org.apache.shiro.codec.Base64;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class UserRankAdpter extends BaseAdapter {
     private Context mContext;

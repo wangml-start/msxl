@@ -11,7 +11,10 @@ import com.cgmn.msxl.R;
 import com.cgmn.msxl.comp.view.NetImageView;
 import com.cgmn.msxl.data.CommentBean;
 import com.cgmn.msxl.server_interface.RelatedToMe;
+import com.cgmn.msxl.utils.CommonUtil;
+import org.apache.shiro.codec.Base64;
 
+import java.util.Date;
 import java.util.List;
 
 public class ApprovesAdpter extends RelatedBaseAdapter {
@@ -34,8 +37,9 @@ public class ApprovesAdpter extends RelatedBaseAdapter {
         }
 
         RelatedToMe item = mData.get(groupPosition);
-        if (item.getSmallCut() != null && item.getSmallCut().length > 0) {
-            holder.comment_item_logo.setImageContent(item.getSmallCut());
+        if (!CommonUtil.isEmpty(item.getSmallCut())) {
+            byte[] bytes = Base64.decode(item.getSmallCut());
+            holder.comment_item_logo.setImageContent(bytes);
         } else {
             Glide.with(mContext).load(R.drawable.user_logo)
                     .diskCacheStrategy(DiskCacheStrategy.RESULT)
@@ -45,7 +49,8 @@ public class ApprovesAdpter extends RelatedBaseAdapter {
         }
 
         holder.comment_item_userName.setText(item.getUserName());
-        holder.comment_item_time.setText(CommentBean.analysisTime(item.getCreatedAt()));
+        Date reDate = CommonUtil.parseDateString(item.getCreatedAt(), "yyyyMMdd HH:mm:ss");
+        holder.comment_item_time.setText(CommentBean.analysisTime(reDate));
         holder.txt_app_des.setText(String.format("%s 赞了我的帖子", item.getUserName()));
         holder.txt_mycontent.setText(String.format("我的帖子：%s", item.getMyContent()));
 

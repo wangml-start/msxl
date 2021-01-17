@@ -6,8 +6,8 @@
         android:orientation="vertical">
     <View
             android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:layout_marginTop="3dp"
+            android:layout_marginTop="8dp"
+            android:layout_height="12dp"
             android:background="@drawable/list_item_divider" />
 
     <LinearLayout
@@ -37,8 +37,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="沐风"
-                    android:textColor="#5B595A"
-                    android:textSize="14sp" />
+                    android:textColor="@color/text_topbar"
+                    android:textSize="@dimen/size15" />
 
             <TextView
                     android:id="@+id/comment_item_time"
@@ -46,19 +46,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
                     android:text="1小时前"
-                    android:textColor="#989898"
-                    android:textSize="12sp" />
+                    android:textColor="@color/text_black"
+                    android:textSize="@dimen/size12" />
         </LinearLayout>
-
-        <TextView
-                android:id="@+id/comment_setting"
-                android:layout_width="30dp"
-                android:layout_height="match_parent"
-                android:layout_marginRight="15dp"
-                android:gravity="top|center"
-                android:textSize="@dimen/LargeSize"
-                android:textColor="@color/text_topbar"
-                android:text="..." />
     </LinearLayout>
 
     <LinearLayout
@@ -79,8 +69,8 @@
                 android:layout_marginBottom="2dp"
                 android:letterSpacing="0.1"
                 android:text="从前有座山"
-                android:textColor="#484848"
-                android:textSize="14sp" />
+                android:textColor="@color/text_topbar"
+                android:textSize="@dimen/size15" />
         <com.cgmn.msxl.comp.view.NetImageView
                 android:id="@+id/comment_picture"
                 android:layout_width="wrap_content"
@@ -97,24 +87,34 @@
     <RelativeLayout
             android:layout_marginTop="1dp"
             android:layout_width="match_parent"
-            android:layout_marginLeft="20dp"
             android:layout_height="34dp">
+        <ImageView
+                android:id="@+id/comment_setting"
+                android:layout_width="34dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="130dp"
+                android:padding="8dp"
+                android:src="@drawable/h3"
+
+                 />
         <ImageView
                 android:id="@+id/comment_icon"
                 android:layout_width="34dp"
-                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
                 android:layout_height="match_parent"
                 android:padding="8dp"
+                android:layout_marginRight="85dp"
                 android:src="@drawable/comment_icon" />
         <TextView
                 android:id="@+id/comment_num"
                 android:layout_width="34dp"
                 android:layout_height="match_parent"
                 android:layout_toRightOf="@id/comment_icon"
-                android:gravity="center"
-                android:layout_marginLeft="-18dp"
+                android:layout_marginLeft="-90dp"
                 android:text="1"
-                android:textColor="@color/text_topbar"
+                android:gravity="left|center"
+                android:textColor="@color/text_black"
                 android:textSize="@dimen/size12"
                 />
         <ImageView
@@ -133,7 +133,7 @@
                 android:gravity="center"
                 android:layout_marginLeft="-50dp"
                 android:text="赞"
-                android:textColor="@color/text_topbar"
+                android:textColor="@color/text_black"
                 android:textSize="@dimen/size12"
                 />
     </RelativeLayout>

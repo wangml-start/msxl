@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <inset xmlns:android="http://schemas.android.com/apk/res/android"
         android:drawable="@color/div_white"
-        android:insetLeft="1dp"
+        android:insetLeft="3dp"
         >
 </inset>

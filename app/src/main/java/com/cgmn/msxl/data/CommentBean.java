@@ -53,7 +53,7 @@ public class CommentBean {
                 format = "MM-dd HH:mm";
             }
         } else {
-            format = "yyyy-MM-dd";
+            format = "yyyy-MM-dd HH:mm";
         }
 
         return CommonUtil.formartTimeString(date, format);

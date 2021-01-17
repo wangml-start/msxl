@@ -24,7 +24,6 @@ import com.cgmn.msxl.data.CommentDetailBean;
 import com.cgmn.msxl.data.ReplyDetailBean;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.cgmn.msxl.server_interface.BaseData;
-import com.cgmn.msxl.server_interface.ChatAddRecord;
 import com.cgmn.msxl.service.GlobalDataHelper;
 import com.cgmn.msxl.service.OkHttpClientManager;
 import com.cgmn.msxl.service.PropertyService;
@@ -328,7 +327,7 @@ public class DisgussSubActivity extends DisgussBaseActivity {
                                 Message message = Message.obtain();
                                 message.what = MessageUtil.LOAD_COMMENT_INFO;
                                 try {
-                                    message.obj = data.getRecords();
+                                    message.obj = data;
                                     Integer status = data.getStatus();
                                     if (status == null || status == -1) {
                                         throw new Exception(data.getError());
