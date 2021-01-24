@@ -85,14 +85,6 @@ public abstract class RelatedFrgment extends Fragment implements RefreshListener
     @Override
     public void startRefresh() {
         action = REFRESH;
-        if (tabLayout == null) {
-            tabLayout = getActivity().findViewById(R.id.about_me_tab);
-        }
-        if (tabLayout != null) {
-            TabLayout.Tab tab = tabLayout.getTabAt(currentPos);
-            String txt = tab.getText().toString().replaceAll("\\((.)?\\)", "");
-            tab.setText(txt);
-        }
         loadList(0);
     }
 

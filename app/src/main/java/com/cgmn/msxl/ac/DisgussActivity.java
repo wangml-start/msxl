@@ -91,7 +91,7 @@ public class DisgussActivity extends DisgussBaseActivity {
                     CommentBean commentBean = new CommentBean((BaseData) msg.obj, commentsList.size());
                     int baseSize = commentsList.size();
                     commentBean.getList(commentsList);
-                    if(baseSize < commentsList.size()){
+                    if(baseSize < commentsList.size()){ //有数据再做操作
                         adapter.notifyDataSetChanged();
                         expandList();
                     }
@@ -333,7 +333,7 @@ public class DisgussActivity extends DisgussBaseActivity {
      * 上传评论
      */
     private void publishComment(){
-        CustmerToast.makeText(mContent, "正在评论。。。").show();
+        CustmerToast.makeText(mContent, "正在发布帖子").show();
         GlobalTreadPools.getInstance(mContent).execute(new Runnable() {
             @Override
             public void run() {

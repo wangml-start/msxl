@@ -403,7 +403,7 @@ public class StatisticActivity extends BaseOtherActivity {
         if(trainType == StockHolder.LEADING_STRATEGY){
             trianTypeStr = "连板战法";
         }
-        text.append("我在%s中通过%s次训练，获得总收益为%s ^_^",
+        text.append("我在%s中通过%s次训练，获得总收益为%s",
                 trianTypeStr, statistic.getList().size(),
                 CommonUtil.formatPercent(statistic.getPl() / statistic.getBaseAmt()));
 

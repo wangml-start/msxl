@@ -402,15 +402,15 @@ public class DisgussSubActivity extends DisgussBaseActivity {
 
                 Integer beReplayUserId = null;
                 Integer replayId = null;
-                if (currentSelectedPosition < 0) {
+                if (currentSelectedPosition < 0) { //最外层的回复
                     beReplayUserId = comment.getUserId();
                     replayId = comment.getId();
                 } else {
                     CommentDetailBean bean = commentsList.get(currentSelectedPosition);
-                    if (subPosition < 0) {
+                    if (subPosition < 0) { //评论回复
                         beReplayUserId = bean.getUserId();
                         replayId = bean.getId();
-                    } else {
+                    } else {  //评论下的用户回复
                         beReplayUserId = replayUserId;
                         replayId = bean.getReplyList().get(subPosition).getId();
                     }
