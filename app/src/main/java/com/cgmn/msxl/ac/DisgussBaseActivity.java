@@ -15,10 +15,8 @@ import android.os.Message;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.*;
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import com.cgmn.msxl.R;
@@ -180,6 +178,15 @@ public abstract class DisgussBaseActivity extends Activity
         BottomSheetBehavior behavior = BottomSheetBehavior.from(parent);
         commentView.measure(0, 0);
         behavior.setPeekHeight(commentView.getMeasuredHeight());
+    }
+
+    protected void autoShowkeyboard(EditText commentText){
+        commentText.setFocusable(true);
+        commentText.setFocusableInTouchMode(true);
+        commentText.requestFocus();
+        InputMethodManager inputManager =
+                (InputMethodManager) commentText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.showSoftInput(commentText, 0);
     }
 
     @Override

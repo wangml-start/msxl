@@ -2,7 +2,6 @@ package com.cgmn.msxl.ac;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
@@ -434,7 +433,7 @@ public class DisgussActivity extends DisgussBaseActivity {
     }
 
     private void showCommentDialog() {
-        dialog = new BottomSheetDialog(mContent);
+        dialog =  new BottomSheetDialog(mContent, R.style.BottomSheetStyle);
         if (commentView == null) {
             commentView = LayoutInflater.from(mContent).inflate(R.layout.comment_dialog_layout, null);
         }
@@ -444,8 +443,8 @@ public class DisgussActivity extends DisgussBaseActivity {
         final EditText commentText = (EditText) commentView.findViewById(R.id.dialog_comment_et);
         final Button bt_comment = (Button) commentView.findViewById(R.id.dialog_comment_bt);
         final Button dialog_comment_pic = commentView.findViewById(R.id.dialog_comment_pic);
+        autoShowkeyboard(commentText);
         dialog.setContentView(commentView);
-
         invalidCommentView();
         View.OnClickListener listener = new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.M)
@@ -488,12 +487,14 @@ public class DisgussActivity extends DisgussBaseActivity {
 
             }
         });
+
+
         dialog.show();
     }
 
     private void showReplyDialog(final int position) {
         currentSelectedPosition = position;
-        dialog = new BottomSheetDialog(mContent);
+        dialog = new BottomSheetDialog(mContent, R.style.BottomSheetStyle);
         if (commentView == null) {
             commentView = LayoutInflater.from(mContent).inflate(R.layout.comment_dialog_layout, null);
         }
@@ -503,6 +504,7 @@ public class DisgussActivity extends DisgussBaseActivity {
         final EditText commentText = (EditText) commentView.findViewById(R.id.dialog_comment_et);
         final Button bt_comment = (Button) commentView.findViewById(R.id.dialog_comment_bt);
         final Button dialog_comment_pic = commentView.findViewById(R.id.dialog_comment_pic);
+        autoShowkeyboard(commentText);
         commentText.setHint("回复 " + commentsList.get(position).getNickName() + " 的评论:");
         dialog.setContentView(commentView);
         invalidCommentView();
@@ -533,11 +535,6 @@ public class DisgussActivity extends DisgussBaseActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (!TextUtils.isEmpty(charSequence) && charSequence.length() > 2) {
-                    bt_comment.setBackgroundColor(Color.parseColor("#FFB568"));
-                } else {
-                    bt_comment.setBackgroundColor(Color.parseColor("#D8D8D8"));
-                }
                 editCommet = commentText.getText().toString().trim();
             }
 

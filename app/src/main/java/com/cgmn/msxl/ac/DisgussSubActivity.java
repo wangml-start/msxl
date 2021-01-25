@@ -208,7 +208,7 @@ public class DisgussSubActivity extends DisgussBaseActivity {
     }
 
     private void showReplyDialog() {
-        dialog = new BottomSheetDialog(mContext);
+        dialog = new BottomSheetDialog(mContext, R.style.BottomSheetStyle);
         if (commentView == null) {
             commentView = LayoutInflater.from(mContext).inflate(R.layout.comment_dialog_layout, null);
         }
@@ -218,6 +218,7 @@ public class DisgussSubActivity extends DisgussBaseActivity {
         final EditText commentText = (EditText) commentView.findViewById(R.id.dialog_comment_et);
         final Button bt_comment = (Button) commentView.findViewById(R.id.dialog_comment_bt);
         final Button dialog_comment_pic = commentView.findViewById(R.id.dialog_comment_pic);
+        autoShowkeyboard(commentText);
         String text = null;
         if (currentSelectedPosition < 0) {
             text = String.format("回复%s的评论:", comment.getNickName());
@@ -245,11 +246,6 @@ public class DisgussSubActivity extends DisgussBaseActivity {
             @SuppressLint("ResourceAsColor")
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (!TextUtils.isEmpty(charSequence) && charSequence.length() > 1) {
-                    bt_comment.setBackgroundColor(getColor(R.color.grey_dark_bg));
-                } else {
-                    bt_comment.setBackgroundColor(getColor(R.color.replay_bg));
-                }
                 editCommet = commentText.getText().toString().trim();
             }
 

@@ -411,7 +411,7 @@ public class StatisticActivity extends BaseOtherActivity {
     }
 
     private void showShareDialog() {
-        dialog = new BottomSheetDialog(mContext);
+        dialog = new BottomSheetDialog(mContext,R.style.BottomSheetStyle);
         if (commentView == null) {
             commentView = LayoutInflater.from(mContext).inflate(R.layout.share_dialog_layout, null);
         }
