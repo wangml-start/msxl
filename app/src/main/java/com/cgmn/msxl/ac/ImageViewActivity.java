@@ -3,7 +3,9 @@ package com.cgmn.msxl.ac;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
@@ -48,7 +50,11 @@ public class ImageViewActivity extends AppCompatActivity {
             image.setImageName((String) obj);
             image.setImageURL(GlobalDataHelper.getUserPortraitUrl(mContext));
         }
-
+        ViewGroup.LayoutParams layout = image.getLayoutParams();
+        DisplayMetrics dm = getResources().getDisplayMetrics();
+        int width = dm.widthPixels;// 表示屏幕的像素宽度，单位是px（像素）
+        layout.height = width;
+        layout.width = width;
 
     }
     @Override

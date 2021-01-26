@@ -14,8 +14,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            net_image:image_type="0"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:scaleType="centerCrop"
             net_image:image_size="large"
-            />
+            net_image:image_type="0" />
 
 </RelativeLayout>
