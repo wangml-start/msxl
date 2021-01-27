@@ -20,7 +20,7 @@
                 android:drawablePadding="2dp"
                 android:gravity="center"
                 android:padding="2dp"
-                guide:icon="@drawable/with_chat"
+                guide:icon="@drawable/chat_region"
                 guide:text="@string/statistic"
                 guide:color="@color/colorAccent"
                 guide:text_size="@dimen/size12" />

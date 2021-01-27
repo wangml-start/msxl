@@ -19,7 +19,7 @@
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="40dp"
+            android:layout_marginLeft="32dp"
             android:gravity="left|center_vertical"
             android:textColor="@color/text_topbar"
             android:textSize="@dimen/size16" />

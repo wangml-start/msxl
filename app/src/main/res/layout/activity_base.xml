@@ -57,7 +57,7 @@
                     android:orientation="vertical">
                 <ImageView
                         android:layout_width="20dp"
-                        android:layout_height="4dp"
+                        android:layout_height="20dp"
                         android:layout_centerVertical="true"
                         android:src="@drawable/h3"
                         android:tint="@color/bg_white" />

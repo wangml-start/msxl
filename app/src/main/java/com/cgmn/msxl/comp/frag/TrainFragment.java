@@ -42,19 +42,19 @@ public class TrainFragment extends Fragment{
     private void initAdpter(){
         mData = new ArrayList<Object>();
         mData.add(new SplitItem(getString(R.string.trading)));
-        mData.add(new PageMainItem(R.drawable.main_2, getString(R.string.dragTrain), PageMainItem.LEADING_STRATEGY));
-        mData.add(new PageMainItem(R.drawable.main_3, getString(R.string.tradTrain), PageMainItem.NORMAL_STRATEGY));
+        mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.dragTrain), PageMainItem.LEADING_STRATEGY));
+        mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.tradTrain), PageMainItem.NORMAL_STRATEGY));
         mData.add(new SplitItem(getString(R.string.pl_rate_line)));
 //        mData.add(new PageMainItem(R.drawable.head, getString(R.string.train_sum_line), PageMainItem.SUM_PL_LINE));
-        mData.add(new PageMainItem(R.drawable.main_4, getString(R.string.train_sum_line), PageMainItem.SUM_PL_LINE));
-        mData.add(new PageMainItem(R.drawable.main_4, getString(R.string.leading_line), PageMainItem.LEADING_LINE));
-        mData.add(new PageMainItem(R.drawable.main_5, getString(R.string.normal_line), PageMainItem.NORMARL_LINE));
+        mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.train_sum_line), PageMainItem.SUM_PL_LINE));
+        mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.leading_line), PageMainItem.LEADING_LINE));
+        mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.normal_line), PageMainItem.NORMARL_LINE));
         mData.add(new SplitItem(getString(R.string.ranking)));
-        mData.add(new PageMainItem(R.drawable.main_6, getString(R.string.total_ranking), PageMainItem.TOTAL_RANK));
+        mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.total_ranking), PageMainItem.TOTAL_RANK));
 //        mData.add(new PageMainItem(R.drawable.head, getString(R.string.day_ranking), PageMainItem.DAY_RANK));
         mData.add(new SplitItem(getString(R.string.mode_detail)));
-        mData.add(new PageMainItem(R.drawable.main_1, getString(R.string.mode_setting), PageMainItem.MODEL_SETTING));
-        mData.add(new PageMainItem(R.drawable.main_7, getString(R.string.violate_mode_detai), PageMainItem.VIOLATE_MODE_DETAI));
+        mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.mode_setting), PageMainItem.MODEL_SETTING));
+        mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.violate_mode_detai), PageMainItem.VIOLATE_MODE_DETAI));
 
         myAdapter = new MutiLayoutAdapter(mContxt, mData);
         list_content.setAdapter(myAdapter);
@@ -151,15 +151,15 @@ public class TrainFragment extends Fragment{
             }
         });
 
-        user_header = view.findViewById(R.id.user_header);
-        user_header.setImageContent(GlobalDataHelper.getUserCut(mContxt));
-        user_header.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                GlobalDataHelper.setDate("email", GlobalDataHelper.getUserAcc(mContxt));
-                Intent intent = new Intent(mContxt, ImageViewActivity.class);
-                startActivity(intent);
-            }
-        });
+//        user_header = view.findViewById(R.id.user_header);
+//        user_header.setImageContent(GlobalDataHelper.getUserCut(mContxt));
+//        user_header.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                GlobalDataHelper.setDate("email", GlobalDataHelper.getUserAcc(mContxt));
+//                Intent intent = new Intent(mContxt, ImageViewActivity.class);
+//                startActivity(intent);
+//            }
+//        });
     }
 }

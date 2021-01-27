@@ -41,8 +41,8 @@ public class MayFragment extends Fragment {
     private void initAdpter(){
 
         mData = new ArrayList<Object>();
-        mData.add(new PageMainItem(R.drawable.main_2, getString(R.string.acct_info), PageMainItem.MY_GENERAL_INFO));
-        mData.add(new PageMainItem(R.drawable.main_3, getString(R.string.vip_way), PageMainItem.VIP_INFO));
+        mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.acct_info), PageMainItem.MY_GENERAL_INFO));
+        mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.vip_way), PageMainItem.VIP_INFO));
 
         myAdapter = new MutiLayoutAdapter(mContxt, mData);
         list_content.setAdapter(myAdapter);
@@ -78,15 +78,15 @@ public class MayFragment extends Fragment {
             }
         });
 
-        user_header = view.findViewById(R.id.user_header);
-        user_header.setImageContent(GlobalDataHelper.getUserCut(mContxt));
-        user_header.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                GlobalDataHelper.setDate("email", GlobalDataHelper.getUserAcc(mContxt));
-                Intent intent = new Intent(mContxt, ImageViewActivity.class);
-                startActivity(intent);
-            }
-        });
+//        user_header = view.findViewById(R.id.user_header);
+//        user_header.setImageContent(GlobalDataHelper.getUserCut(mContxt));
+//        user_header.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                GlobalDataHelper.setDate("email", GlobalDataHelper.getUserAcc(mContxt));
+//                Intent intent = new Intent(mContxt, ImageViewActivity.class);
+//                startActivity(intent);
+//            }
+//        });
     }
 }

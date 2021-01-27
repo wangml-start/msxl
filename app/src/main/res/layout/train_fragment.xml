@@ -33,13 +33,14 @@
                 android:layout_height="match_parent"
                 android:layout_centerInParent="true"
                 android:gravity="center"
-                android:text="@string/vip_way"
+                android:text="会员"
                 android:textColor="@color/bg_white"
                 android:textSize="@dimen/smallSize" />
     </LinearLayout>
 
     <ListView
             android:id="@+id/list_content"
+            android:layout_marginTop="10dp"
             android:divider="@drawable/list_item_divider"
             android:dividerHeight="2dp"
             android:layout_width="match_parent"
