@@ -19,6 +19,7 @@
                 android:id="@+id/tx_email"
                 android:hint="@string/sign_email"
                 style="@style/register_input"
+                android:background="@drawable/edittext_border"
                 android:inputType="textEmailAddress">
             <requestFocus />
         </com.cgmn.msxl.comp.view.ClearEditTextView>
@@ -26,6 +27,7 @@
         <com.cgmn.msxl.comp.view.ClearEditTextView
                 android:id="@+id/tx_new_user_wd"
                 android:hint="@string/new_user_wd"
+                android:background="@drawable/edittext_border"
                 style="@style/register_input"
                 android:inputType="textPassword"/>
         <com.cgmn.msxl.comp.view.ClearEditTextView
@@ -33,6 +35,7 @@
                 style="@style/register_input"
                 android:hint="@string/lb_valid_code"
                 android:maxLength="6"
+                android:background="@drawable/edittext_border"
                 android:inputType="number"/>
     </LinearLayout>
 
@@ -64,8 +67,8 @@
                 android:layout_weight="50"
                 android:background="@drawable/bt_back_nomal"
                 android:enabled="false"
-                android:textSize="@dimen/size14"
-                android:textColor="@color/main_blue_color"
+                android:textColor="@color/bg_white"
+                android:textSize="@dimen/size16"
                 android:text="@string/signin" />
 
         <Button
@@ -75,10 +78,10 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="10dp"
                 android:layout_weight="50"
-                android:textSize="@dimen/size14"
                 android:background="@drawable/bt_back_nomal"
-                android:textColor="@color/main_blue_color"
                 android:enabled="true"
+                android:textColor="@color/bg_white"
+                android:textSize="@dimen/size16"
                 android:text="@string/send_email" />
     </LinearLayout>
 
