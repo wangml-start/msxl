@@ -17,6 +17,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.CustmerToast;
+import com.cgmn.msxl.comp.KeyBoardBottomSheetDialog;
 import com.cgmn.msxl.comp.adpter.CommentExpandAdapter;
 import com.cgmn.msxl.comp.view.NetImageView;
 import com.cgmn.msxl.data.CommentBean;
@@ -208,7 +209,7 @@ public class DisgussSubActivity extends DisgussBaseActivity {
     }
 
     private void showReplyDialog() {
-        dialog = new BottomSheetDialog(mContext, R.style.BottomSheetStyle);
+        dialog = new KeyBoardBottomSheetDialog(mContext, R.style.BottomSheetStyle);
         if (commentView == null) {
             commentView = LayoutInflater.from(mContext).inflate(R.layout.comment_dialog_layout, null);
         }

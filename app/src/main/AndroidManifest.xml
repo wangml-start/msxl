@@ -50,10 +50,13 @@
         <activity android:name=".ac.EditSignatureActivity"/>
         <activity android:name=".ac.EditPasswordActivity"/>
         <activity android:name=".ac.EditGenderActivity"/>
-        <activity android:name=".ac.EditHeaderActivity" android:hardwareAccelerated="false" />
+        <activity android:name=".ac.EditHeaderActivity"
+                android:hardwareAccelerated="false" />
         <activity android:name=".ac.UserRankingActivity"/>
         <activity android:name=".ac.ViolateModeActivity"/>
-        <activity android:name=".ac.DisgussActivity" />
+        <activity android:name=".ac.DisgussActivity"
+                android:windowSoftInputMode="adjustPan|stateHidden"
+                />
         <activity android:name=".ac.DisgussSubActivity"/>
         <activity android:name=".ac.ImageViewActivity"/>
         <activity android:name=".ac.RelatedToMeActivity"/>

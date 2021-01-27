@@ -16,6 +16,7 @@ import androidx.annotation.RequiresApi;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.CustmerToast;
+import com.cgmn.msxl.comp.KeyBoardBottomSheetDialog;
 import com.cgmn.msxl.comp.adpter.CommentExpandAdapter;
 import com.cgmn.msxl.comp.view.NumImageView;
 import com.cgmn.msxl.data.CommentBean;
@@ -433,7 +434,7 @@ public class DisgussActivity extends DisgussBaseActivity {
     }
 
     private void showCommentDialog() {
-        dialog =  new BottomSheetDialog(mContent, R.style.BottomSheetStyle);
+        dialog =  new KeyBoardBottomSheetDialog(mContent, R.style.BottomSheetStyle);
         if (commentView == null) {
             commentView = LayoutInflater.from(mContent).inflate(R.layout.comment_dialog_layout, null);
         }
@@ -443,7 +444,6 @@ public class DisgussActivity extends DisgussBaseActivity {
         final EditText commentText = (EditText) commentView.findViewById(R.id.dialog_comment_et);
         final Button bt_comment = (Button) commentView.findViewById(R.id.dialog_comment_bt);
         final Button dialog_comment_pic = commentView.findViewById(R.id.dialog_comment_pic);
-        autoShowkeyboard(commentText);
         dialog.setContentView(commentView);
         invalidCommentView();
         View.OnClickListener listener = new View.OnClickListener() {
@@ -474,11 +474,6 @@ public class DisgussActivity extends DisgussBaseActivity {
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (!TextUtils.isEmpty(charSequence) && charSequence.length() > 1) {
-                    bt_comment.setBackgroundColor(getColor(R.color.grey_dark_bg));
-                } else {
-                    bt_comment.setBackgroundColor(getColor(R.color.replay_bg));
-                }
                 editCommet = commentText.getText().toString().trim();
             }
 
@@ -487,14 +482,13 @@ public class DisgussActivity extends DisgussBaseActivity {
 
             }
         });
-
-
         dialog.show();
+        autoShowkeyboard(commentText);
     }
 
     private void showReplyDialog(final int position) {
         currentSelectedPosition = position;
-        dialog = new BottomSheetDialog(mContent, R.style.BottomSheetStyle);
+        dialog = new KeyBoardBottomSheetDialog(mContent, R.style.BottomSheetStyle);
         if (commentView == null) {
             commentView = LayoutInflater.from(mContent).inflate(R.layout.comment_dialog_layout, null);
         }

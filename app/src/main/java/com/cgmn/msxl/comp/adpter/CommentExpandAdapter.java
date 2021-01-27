@@ -180,7 +180,7 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
             holder.comment_picture.setVisibility(View.VISIBLE);
             ViewGroup.LayoutParams layout = holder.comment_picture.getLayoutParams();
             DisplayMetrics dm = context.getResources().getDisplayMetrics();
-            int width = ((Double)(dm.widthPixels*0.6)).intValue();// 表示屏幕的像素宽度，单位是px（像素）
+            int width = ((Double)(dm.widthPixels*0.75)).intValue();// 表示屏幕的像素宽度，单位是px（像素）
             layout.height = width;
             layout.width = width;
         }else{

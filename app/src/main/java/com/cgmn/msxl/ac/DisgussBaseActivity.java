@@ -42,10 +42,7 @@ import com.cgmn.msxl.utils.MessageUtil;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public abstract class DisgussBaseActivity extends Activity
         implements RefreshListener, CommentListener {

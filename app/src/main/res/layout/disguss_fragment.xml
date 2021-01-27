@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -114,7 +115,7 @@
                     android:background="@drawable/comment_bt_selector"
                     android:gravity="center_vertical"
                     android:paddingLeft="18dp"
-                    android:text="发帖..."
+                    android:text="@string/sbslj"
                     android:textColor="#B6B6B6"
                     android:textSize="@dimen/size16" />
         </LinearLayout>
