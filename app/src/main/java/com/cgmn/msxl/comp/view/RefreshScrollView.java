@@ -49,7 +49,7 @@ public class RefreshScrollView extends ScrollView {
         this.headViewHeight = UIUtil.dip2px(getContext(),50); //dp转px,px转dp工具，下文给出
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) headViewRefresh.getLayoutParams();
         params.width = viewWidth;
-        params.height = 0;
+//        params.height = 0;
         headViewRefresh.setLayoutParams(params); //将headView的高度重新设置为0,也就是不可见，为什么这么设置？下文会介绍
     }
 
@@ -65,7 +65,7 @@ public class RefreshScrollView extends ScrollView {
      * 刷新停止,给scrollView外部调用
      */
     public void stopRefresh() {
-        listsner.hintChange("下拉刷新");  //停止刷新之后，将提示文字设置成初始值，时刻准备着下次刷新
+        listsner.hintChange("下拉加载");  //停止刷新之后，将提示文字设置成初始值，时刻准备着下次刷新
 //        headViewRefresh.setVisibility(View.GONE);  //隐藏headView
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) headViewRefresh.getLayoutParams();  //将headView的高度重新设置为1
         params.width = viewWidth;
@@ -98,10 +98,10 @@ public class RefreshScrollView extends ScrollView {
                     b_down = false;    //刚开始滑动，松手还不可以刷新
                     handleHeaderView(viewWidth, downRange);
                     if(downRange >= headViewHeight){   //当动态设置的高度大于初始高度的时候，变换hint，此时松手可刷新；headViewHeight是我设置的初始高度50dp，也用来判断下拉到什么程度才能刷新
-                        listsner.hintChange("松开刷新");//超过了设定的高度，可以刷新，如果不设置这个或者设置的值太小，轻轻一拉就刷新，体验不好
+                        listsner.hintChange("松开加载");//超过了设定的高度，可以刷新，如果不设置这个或者设置的值太小，轻轻一拉就刷新，体验不好
                         b_down = true; //可以刷新，如果此时抬起手指就可以刷新了
                     }else{     //当动态设置的高度不大于初始高度的时候，变换hint，此时松手不可刷新
-                        listsner.hintChange("下拉刷新");
+                        listsner.hintChange("下拉加载");
                         b_down = false; //不可以刷新
                     }
                     return true;   //拦截触摸事件，scrollView不可响应触摸事件，否则会造成松手滑动跳动错位
@@ -116,9 +116,7 @@ public class RefreshScrollView extends ScrollView {
         }
         if(event.getAction() == MotionEvent.ACTION_UP){   //抬起手指
             if(b_down){    //如果可以刷新
-                handleHeaderView(viewWidth, headViewHeight);
-                listsner.hintChange("正在刷新");
-                listsner.startRefresh();
+                startRefresh(viewWidth, headViewHeight);
                 b_down = false;
                 return false;
             }else{    //如果不可以刷新，停止刷新
@@ -130,6 +128,12 @@ public class RefreshScrollView extends ScrollView {
         }
 
         return super.dispatchTouchEvent(event);
+    }
+
+    public void startRefresh(Integer vWidth, Integer headHeight){
+        handleHeaderView(vWidth, headHeight);
+        listsner.hintChange("正在加载");
+        listsner.startRefresh();
     }
 
     public void handleHeaderView(Integer mwidth, Integer mheight){

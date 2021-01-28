@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -103,6 +104,12 @@ public abstract class DisgussBaseActivity extends Activity
         init();
     }
 
+    protected void starLoadChatList(){
+        DisplayMetrics dm = getResources().getDisplayMetrics();
+        int width = dm.widthPixels;// 表示屏幕的像素宽度，单位是px（像素）
+        scrollView.startRefresh(width, 100);
+    }
+
     /**
      * 处理权限回调结果
      */
@@ -141,7 +148,7 @@ public abstract class DisgussBaseActivity extends Activity
                     c.moveToFirst();
                     int columnIndex = c.getColumnIndex(filePathColumns[0]);
                     String imagePath = c.getString(columnIndex);
-                    byte[] bs = ImageUtil.getCompressBytes(imagePath, 800);
+                    byte[] bs = ImageUtil.getCompressBytes(imagePath);
                     if (bs != null && bs.length > 0) {
                         pictures = bs;
                         imageView = LayoutInflater.from(mContext).inflate(R.layout.comment_image_item, null);

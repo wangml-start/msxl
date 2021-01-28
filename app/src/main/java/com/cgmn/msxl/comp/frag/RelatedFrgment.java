@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,7 +74,9 @@ public abstract class RelatedFrgment extends Fragment implements RefreshListener
         scrollView.setListsner(this);
         scrollView.setHeadView(headView);
         bindView(view);
-        loadList(0);
+        DisplayMetrics dm = getResources().getDisplayMetrics();
+        int width = dm.widthPixels;// 表示屏幕的像素宽度，单位是px（像素）
+        scrollView.startRefresh(width, 100);
         return view;
     }
 

@@ -10,6 +10,7 @@
             android:layout_width="100dp"
             android:layout_height="120dp"
             android:layout_margin="15dp"
+            android:scaleType="centerCrop"
             android:background="@color/bg_white"
             net_image:image_type="0"
             />

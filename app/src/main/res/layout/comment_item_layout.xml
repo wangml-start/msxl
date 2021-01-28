@@ -80,6 +80,7 @@
                 android:layout_marginRight="24dp"
                 android:layout_marginBottom="8dp"
                 android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
                 android:visibility="gone"
                 net_image:image_type="0" />
     </LinearLayout>

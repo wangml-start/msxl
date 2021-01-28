@@ -8,6 +8,7 @@ import android.os.Message;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,8 +54,8 @@ public class DisgussActivity extends DisgussBaseActivity {
         mContent = this;
         initView();
         initMessageHandle();
-        loadCommentList();
         loadRaleatedTome();
+        starLoadChatList();
     }
 
     @Override
@@ -136,9 +137,7 @@ public class DisgussActivity extends DisgussBaseActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 tabPosition = tab.getPosition();
-                scrollView.handleHeaderView(null, 100);
-                hintChange("正在刷新");
-                loadCommentList();
+                scrollView.startRefresh(null, 100);
             }
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {

@@ -30,7 +30,6 @@ import com.cgmn.msxl.service.OkHttpClientManager;
 import com.cgmn.msxl.service.PropertyService;
 import com.cgmn.msxl.utils.CommonUtil;
 import com.cgmn.msxl.utils.MessageUtil;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.*;
 
@@ -58,7 +57,7 @@ public class DisgussSubActivity extends DisgussBaseActivity {
         if(recordId > 0){
             loadCommentInfo();
         }else{
-            loadReplayList();
+            starLoadChatList();
         }
     }
 

@@ -6,7 +6,8 @@ import android.graphics.BitmapFactory;
 import java.io.ByteArrayOutputStream;
 
 public class ImageUtil {
-    private static int default_width = 1200;
+    private static int default_width = 500;
+    private static int default_height = 800;
 
 
     public static byte[] getCompressBytes(Bitmap bitmap){
@@ -23,14 +24,11 @@ public class ImageUtil {
         return null;
     }
 
-    public static byte[] getCompressBytes(String pathName, Integer reqWidth){
+    public static byte[] getCompressBytes(String pathName){
         try {
-            if(reqWidth == null){
-                reqWidth = default_width;
-            }
-            Bitmap bmp = decodeSampledBitmapFromFile(pathName, reqWidth, reqWidth);
+            Bitmap bmp = decodeSampledBitmapFromFile(pathName, default_width, default_height);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bmp.compress(Bitmap.CompressFormat.JPEG, 30, baos);
+            bmp.compress(Bitmap.CompressFormat.JPEG, 40, baos);
             if(bmp != null && !bmp.isRecycled()){
                 bmp.isRecycled();
                 bmp = null;
@@ -45,7 +43,7 @@ public class ImageUtil {
         try {
             Bitmap bmp = decodeSampledBitmapFromFile(pathName, 100, 100);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bmp.compress(Bitmap.CompressFormat.JPEG, 30, baos);
+            bmp.compress(Bitmap.CompressFormat.JPEG, 40, baos);
             if(bmp != null && !bmp.isRecycled()){
                 bmp.isRecycled();
                 bmp = null;
