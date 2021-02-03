@@ -13,12 +13,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.ac.AccountInfoActivity;
-import com.cgmn.msxl.ac.ImageViewActivity;
+import com.cgmn.msxl.ac.ChargeActivity;
 import com.cgmn.msxl.ac.VIPActivity;
 import com.cgmn.msxl.comp.adpter.MutiLayoutAdapter;
 import com.cgmn.msxl.comp.view.NetImageView;
 import com.cgmn.msxl.data.PageMainItem;
-import com.cgmn.msxl.service.GlobalDataHelper;
 
 import java.util.ArrayList;
 
@@ -43,6 +42,8 @@ public class MayFragment extends Fragment {
         mData = new ArrayList<Object>();
         mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.acct_info), PageMainItem.MY_GENERAL_INFO));
         mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.vip_way), PageMainItem.VIP_INFO));
+        mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.chargev_way), PageMainItem.CHARGE_INFO));
+
 
         myAdapter = new MutiLayoutAdapter(mContxt, mData);
         list_content.setAdapter(myAdapter);
@@ -71,6 +72,10 @@ public class MayFragment extends Fragment {
                             break;
                         case 10:
                             intent = new Intent(mContxt, VIPActivity.class);
+                            startActivity(intent);
+                            break;
+                        case 11:
+                            intent = new Intent(mContxt, ChargeActivity.class);
                             startActivity(intent);
                             break;
                     }

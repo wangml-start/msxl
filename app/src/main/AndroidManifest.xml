@@ -45,6 +45,7 @@
         <activity android:name=".ac.StatisticActivity"/>
         <activity android:name=".ac.ModeSettingActivity"/>
         <activity android:name=".ac.VIPActivity"/>
+        <activity android:name=".ac.ChargeActivity"/>
         <activity android:name=".ac.AccountInfoActivity"/>
         <activity android:name=".ac.EditNameActivity" />
         <activity android:name=".ac.EditSignatureActivity"/>

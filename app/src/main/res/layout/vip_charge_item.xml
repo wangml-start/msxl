@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:background="@drawable/bt_vip_back"
+        android:background="@drawable/bt_back_blank"
         android:descendantFocusability="blocksDescendants"
         android:orientation="vertical">
 
@@ -11,7 +11,7 @@
             android:layout_width="match_parent"
             android:layout_height="25dp"
             android:gravity="center"
-            android:textColor="@color/text_topbar"
+            android:textColor="@color/main_bg_orange_light"
             android:textSize="@dimen/smallSize" />
 
     <LinearLayout
@@ -21,20 +21,11 @@
             android:clickable="false"
             android:focusable="true"
             android:orientation="horizontal">
-
-        <TextView
-                android:layout_width="40dp"
-                android:layout_height="match_parent"
-                android:gravity="right|center_vertical"
-                android:text="￥"
-                android:textColor="@color/main_bg_orange_light"
-                android:textSize="@dimen/size12" />
         <TextView
                 android:id="@+id/txt_amt"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="3dp"
-                android:gravity="left|center_vertical"
+                android:gravity="center"
                 android:textColor="@color/main_bg_orange_light"
                 android:textSize="@dimen/LargeSize" />
     </LinearLayout>

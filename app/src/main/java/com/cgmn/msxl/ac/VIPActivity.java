@@ -63,10 +63,10 @@ public class VIPActivity extends BaseOtherActivity {
     private void setSelLevel(){
         if(permissionKey.equals(LEVEL_2)){
             line_level2.setBackgroundResource(R.drawable.bt_back_pressed);
-            line_level1.setBackgroundResource(R.drawable.bt_back_nomal);
+            line_level1.setBackgroundResource(R.drawable.bt_back_blank);
         }else if(permissionKey.equals(LEVEL_1)){
             line_level1.setBackgroundResource(R.drawable.bt_back_pressed);
-            line_level2.setBackgroundResource(R.drawable.bt_back_nomal);
+            line_level2.setBackgroundResource(R.drawable.bt_back_blank);
         }
 
         if(getParms() == null){
@@ -180,7 +180,7 @@ public class VIPActivity extends BaseOtherActivity {
                     if (position == i) {//当前选中的Item改变背景颜色
                         view.setBackgroundResource(R.drawable.bt_back_pressed);
                     } else {
-                        v.setBackgroundResource(R.drawable.bt_back_nomal);
+                        v.setBackgroundResource(R.drawable.bt_back_blank);
                     }
                 }
                 setSelLevel();

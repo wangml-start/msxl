@@ -14,7 +14,7 @@ public class PageMainItem {
 
     public static int MY_GENERAL_INFO = 9;
     public static int VIP_INFO = 10;
-
+    public static int CHARGE_INFO = 11;
 
 
     private int aIcon;

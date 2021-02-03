@@ -49,7 +49,7 @@ public class KlinePaint {
     /**
      * the max visible entry count.
      */
-    protected int visibleCount = 40;
+    protected int visibleCount = 35;
 
     private boolean highlightEnable = false;
     private float[] highlightPoint = new float[2];

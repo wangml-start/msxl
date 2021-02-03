@@ -167,7 +167,7 @@
                 android:layout_margin="6dp"
                 android:text="@string/trade_buy"
                 android:textColor="@color/main_red_color"
-                android:textSize="@dimen/LargeSize"
+                android:textSize="@dimen/size14"
                 style="@style/trading_page_btns"
                 />
         <Button
@@ -180,7 +180,7 @@
                 android:layout_margin="6dp"
                 android:text="@string/trade_sell"
                 android:textColor="@color/main_blue_color"
-                android:textSize="@dimen/LargeSize"
+                android:textSize="@dimen/size14"
                 style="@style/trading_page_btns"
                 />
     </LinearLayout>

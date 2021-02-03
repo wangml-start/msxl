@@ -35,7 +35,7 @@
                     android:layout_weight="1"
                     android:gravity="bottom"
                     android:text="用户名"
-                    android:textColor="@color/main_bg"
+                    android:textColor="@color/main_bg_orange_light"
                     android:textSize="@dimen/smallSize" />
 
             <View
@@ -50,7 +50,7 @@
                     android:layout_weight="1"
                     android:gravity="top"
                     android:text="您还没开通Level权限"
-                    android:textColor="@color/main_bg"
+                    android:textColor="@color/main_bg_orange_light"
                     android:textSize="@dimen/smallSize" />
         </LinearLayout>
     </RelativeLayout>
@@ -63,7 +63,7 @@
 
         <LinearLayout
                 android:id="@+id/line_level1"
-                android:layout_width="160dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="10dp"
@@ -86,8 +86,8 @@
                     android:layout_height="30dp"
                     android:gravity="center"
                     android:text="除连板战法训练外的所有功能"
-                    android:textColor="@color/text_topbar"
-                    android:textSize="@dimen/miniSize" />
+                    android:textColor="@color/main_bg_orange_light"
+                    android:textSize="@dimen/size12" />
         </LinearLayout>
 
         <View
@@ -99,7 +99,7 @@
 
         <LinearLayout
                 android:id="@+id/line_level2"
-                android:layout_width="160dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
@@ -122,8 +122,8 @@
                     android:layout_height="30dp"
                     android:gravity="center"
                     android:text="可使用所有功能"
-                    android:textColor="@color/text_topbar"
-                    android:textSize="@dimen/miniSize" />
+                    android:textColor="@color/main_bg_orange_light"
+                    android:textSize="@dimen/size12" />
         </LinearLayout>
 
     </RelativeLayout>
@@ -151,10 +151,11 @@
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_marginLeft="8dp"
+            android:layout_marginTop="20dp"
             android:gravity="center|left"
-            android:text="首次开通送20万"
-            android:textColor="@color/text_topbar"
-            android:textSize="@dimen/smallSize" />
+            android:text="首次开通赠送20万操盘资金"
+            android:textColor="@color/main_bg_orange_light"
+            android:textSize="@dimen/size16" />
     <View
             android:layout_width="match_parent"
             android:layout_height="30dp"
@@ -173,7 +174,7 @@
                 android:gravity="center"
                 android:text="@string/vip_pay"
                 android:layout_alignParentBottom="true"
-                android:background="@drawable/pay_bg"
+                android:background="@drawable/bt_back_nomal"
                 android:textColor="@color/main_text_color"/>
     </RelativeLayout>
 
