@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#FF7F00</color>
-    <color name="colorPrimaryDark">#FF7F00</color>
-    <color name="colorAccent">#FF7F00</color>
+    <color name="colorPrimary">#ED4713</color>
+    <color name="colorPrimaryDark">#ED4713</color>
+    <color name="colorAccent">#ED4713</color>
     <color name="vipSelect">#F3D7CD</color>
     <color name="grey_dark_bg">#E6896B</color>
     <color name="bg_white_title">#FFFFFFFF</color>
@@ -33,6 +33,8 @@
 
     <color name="start_color">#F4A4A4</color>
     <color name="end_color">#00ff0000</color>
+
+    <color name="kline_ave_52">#ED4713</color>
 
 
 

@@ -8,6 +8,7 @@ public class RankEntity {
     private Double stAmt;
     private Double rate;
     private String phone;
+    private Integer gender;
     private String userName;
     private String smallCut;
 
@@ -73,5 +74,13 @@ public class RankEntity {
 
     public void setTotalAcc(Integer totalAcc) {
         this.totalAcc = totalAcc;
+    }
+
+    public Integer getGender() {
+        return gender;
+    }
+
+    public void setGender(Integer gender) {
+        this.gender = gender;
     }
 }

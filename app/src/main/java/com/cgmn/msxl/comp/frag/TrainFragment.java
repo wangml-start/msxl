@@ -51,6 +51,7 @@ public class TrainFragment extends Fragment{
         mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.normal_line), PageMainItem.NORMARL_LINE));
         mData.add(new SplitItem(getString(R.string.ranking)));
         mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.total_ranking), PageMainItem.TOTAL_RANK));
+        mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.dan_ranking), PageMainItem.DAN_RANK));
 //        mData.add(new PageMainItem(R.drawable.head, getString(R.string.day_ranking), PageMainItem.DAY_RANK));
         mData.add(new SplitItem(getString(R.string.mode_detail)));
         mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.mode_setting), PageMainItem.MODEL_SETTING));
@@ -110,6 +111,10 @@ public class TrainFragment extends Fragment{
                             bundle = new Bundle();
                             bundle.putString("rank_type", "SUM");
                             intent.putExtra("datas", bundle);
+                            startActivity(intent);
+                            break;
+                        case 12:
+                            intent = new Intent(mContxt, DanRankingActivity.class);
                             startActivity(intent);
                             break;
                         case 6:

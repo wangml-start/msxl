@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">量化操盘</string>
+    <string name="app_name">投资悟道</string>
 <!--    登录-->
     <string name="signin">登录</string>
     <string name="register">注册</string>

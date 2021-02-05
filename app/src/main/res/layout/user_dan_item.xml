@@ -8,10 +8,10 @@
         android:orientation="horizontal" >
 
     <TextView
-            android:layout_width="50dp"
+            android:layout_width="60dp"
             android:textSize="@dimen/smallSize"
             android:layout_height="match_parent"
-            android:gravity="center"
+            android:gravity="center|center_vertical"
             android:textColor="@color/text_topbar"
             android:id="@+id/txt_no"
             />
@@ -20,6 +20,7 @@
             android:id="@+id/img_head"
             android:layout_width="24dp"
             android:layout_height="24dp"
+            android:layout_marginLeft="40dp"
             android:layout_marginTop="3dp"
             net_image:image_type="2"
             net_image:image_radius="3dp"
@@ -29,26 +30,17 @@
             android:layout_weight="1"
             android:textSize="@dimen/smallSize"
             android:layout_height="match_parent"
+            android:layout_marginLeft="3dp"
             android:gravity="left|center_vertical"
             android:textColor="@color/text_topbar"
-            android:layout_marginLeft="8dp"
             android:id="@+id/txt_user_name"
             />
     <TextView
-            android:layout_width="80dp"
+            android:layout_width="120dp"
             android:layout_height="match_parent"
             android:textSize="@dimen/smallSize"
             android:textColor="@color/text_topbar"
-            android:gravity="right|center_vertical"
+            android:gravity="center|center_vertical"
             android:id="@+id/txt_amt"
-            />
-    <TextView
-            android:layout_width="80dp"
-            android:layout_height="match_parent"
-            android:textSize="@dimen/smallSize"
-            android:gravity="right|center_vertical"
-            android:textColor="@color/text_topbar"
-            android:layout_marginRight="15dp"
-            android:id="@+id/txt_rate"
             />
 </LinearLayout>

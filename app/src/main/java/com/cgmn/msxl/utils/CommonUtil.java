@@ -104,8 +104,9 @@ public class CommonUtil {
     }
 
     public static String formatAmt(Object num){
-        if(Math.abs((Float) num) > 9999){
-            return formatLargeAmt.format((Float)num/10000)+"万";
+        Double number = Math.abs(Double.valueOf(num.toString()));
+        if( number > 9999.0){
+            return formatLargeAmt.format(number/10000)+"万";
         }else{
             return formatAmt.format(num);
         }

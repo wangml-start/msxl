@@ -26,6 +26,7 @@ import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.cgmn.msxl.in.TdataListener;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.service.GlobalDataHelper;
+import com.cgmn.msxl.service.OkHttpClientManager;
 import com.cgmn.msxl.utils.*;
 
 import java.util.HashMap;
@@ -74,21 +75,21 @@ public class LoginActivity extends LoginBaseActivity {
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.bt_login) {
-            String em = tx_email.getText().toString();
-            String pws = tx_pwd.getText().toString();
-            final Map<String, String> p = new HashMap<>();
-            p.put("email", em);
-            String sercurety = AESUtil.encrypt(pws, MessageUtil.SERCURETY);
-            p.put("pws", sercurety);
-            p.put("GENERAL_LOGIN", "1");
-            CustmerToast.makeText(mContext, R.string.logining).show();
-            GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
-                @Override
-                public void run() {
-                    onLoginRequest(p, mContext, mHandler);
-                    Log.e(TAG,"NAME="+Thread.currentThread().getName());
+            boolean isRegist = true;
+            if(!CommonUtil.isEmpty(accList)){
+                String em = tx_email.getText().toString().trim();
+                for(Map<String, Object> item : accList){
+                    if(item.get("phone").toString().equals(em)){
+                        isRegist = false;
+                        break;
+                    }
                 }
-            });
+            }
+            if(isRegist){ //首次注册
+                validEmail();
+            }else{
+                onLoginClick();
+            }
         } else if (v.getId() == R.id.bt_forget) {
             Intent intent = new Intent(this, ForgetPasswordActivity.class);
             Bundle bundle = new Bundle();
@@ -98,6 +99,49 @@ public class LoginActivity extends LoginBaseActivity {
         }else if(v.getId() == R.id.acc_down_list){
             showAccountList();
         }
+    }
+
+    public void validEmail(){
+        String em = tx_email.getText().toString();
+        String url = "https://api.nbhao.org/v1/email/verify";
+        OkHttpClientManager.Param[] params = new OkHttpClientManager.Param[]{
+                new OkHttpClientManager.Param("email", em.trim())
+        };
+        OkHttpClientManager.postAsyn(url,
+                new OkHttpClientManager.ResultCallback<Map<String, Object>>() {
+                    @Override
+                    public void onError(com.squareup.okhttp.Request request, Exception e) {
+                        Message message = Message.obtain();
+                        message.what = MessageUtil.MAIL_VALID_REQUEST_404;
+                        message.obj = e;
+                        mHandler.sendMessage(message);
+                    }
+                    @Override
+                    public void onResponse(Map<String, Object> data) {
+                        Message message = Message.obtain();
+                        message.what = MessageUtil.MAIL_VALID_REQUEST_200;
+                        message.obj = data;
+                        mHandler.sendMessage(message);
+                    }
+                }, params);
+    }
+
+    private void onLoginClick(){
+        String em = tx_email.getText().toString();
+        String pws = tx_pwd.getText().toString();
+        final Map<String, String> p = new HashMap<>();
+        p.put("email", em);
+        String sercurety = AESUtil.encrypt(pws, MessageUtil.SERCURETY);
+        p.put("pws", sercurety);
+        p.put("GENERAL_LOGIN", "1");
+        CustmerToast.makeText(mContext, R.string.logining).show();
+        GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
+            @Override
+            public void run() {
+                onLoginRequest(p, mContext, mHandler);
+                Log.e(TAG,"NAME="+Thread.currentThread().getName());
+            }
+        });
     }
 
     private void showAccountList(){
@@ -215,6 +259,15 @@ public class LoginActivity extends LoginBaseActivity {
                         tx_email.setText((String) map.get("phone"));
                         String ps = AESUtil.decrypt((String) map.get("password"), MessageUtil.SERCURETY);
                         tx_pwd.setText(ps);
+                    }
+                }else if(msg.what == MessageUtil.MAIL_VALID_REQUEST_404){
+                    onLoginClick();
+                }else if(msg.what == MessageUtil.MAIL_VALID_REQUEST_200){
+                    Map<String, Object> map = (Map<String, Object>) msg.obj;
+                    if(!CommonUtil.isEmpty(map) && "true".equals(map.get("result"))){
+                        onLoginClick();
+                    }else{
+                        CustmerToast.makeText(mContext, "该邮箱不存在").show();
                     }
                 }
                 return false;

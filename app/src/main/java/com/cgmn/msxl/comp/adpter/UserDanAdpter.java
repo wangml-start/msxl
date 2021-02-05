@@ -2,8 +2,6 @@ package com.cgmn.msxl.comp.adpter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -19,22 +17,19 @@ import com.cgmn.msxl.ac.ImageViewActivity;
 import com.cgmn.msxl.comp.view.CenterImageSpan;
 import com.cgmn.msxl.comp.view.NetImageView;
 import com.cgmn.msxl.data.RankEntity;
-import com.cgmn.msxl.data.StockHolder;
 import com.cgmn.msxl.service.GlobalDataHelper;
 import com.cgmn.msxl.utils.CommonUtil;
 import org.apache.shiro.codec.Base64;
 
 import java.util.List;
 
-public class UserRankAdpter extends BaseAdapter {
+public class UserDanAdpter extends BaseAdapter {
     private Context mContext;
     private List<RankEntity> mData = null;
-    private String tranType;
 
-    public UserRankAdpter(Context mContext, List<RankEntity> mData, String tranType) {
+    public UserDanAdpter(Context mContext, List<RankEntity> mData) {
         this.mContext = mContext;
         this.mData = mData;
-        this.tranType = tranType;
     }
 
     @Override
@@ -57,7 +52,7 @@ public class UserRankAdpter extends BaseAdapter {
         //设置下控件的值
         RankViewHolder holder=null;
         if(convertView == null){
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.user_rank_item, parent, false);
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.user_dan_item, parent, false);
             holder = new RankViewHolder(convertView);
             convertView.setTag(holder);
         }else {
@@ -82,17 +77,7 @@ public class UserRankAdpter extends BaseAdapter {
 
         holder.txt_user_name.setText(span);
         holder.txt_amt.setText(CommonUtil.formatAmt(map.getStAmt()));
-        if(tranType.equals(StockHolder.RANK_SUMMARY+"")){
-            holder.txt_rate.setText(CommonUtil.formatPercent(map.getRate()));
-        }else{
-            holder.txt_rate.setText(CommonUtil.formatAmt(map.getRate()));
-        }
 
-        if(map.getRate() > 0){
-            holder.txt_rate.setTextColor(convertView.getResources().getColor(R.color.main_red_color));
-        }else{
-            holder.txt_rate.setTextColor(convertView.getResources().getColor(R.color.kline_down));
-        }
         holder.head.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,14 +104,12 @@ public class UserRankAdpter extends BaseAdapter {
         TextView txt_no;
         TextView txt_user_name;
         TextView txt_amt;
-        TextView txt_rate;
         NetImageView head;
 
         public RankViewHolder(View convertView){
             txt_no = convertView.findViewById(R.id.txt_no);
             txt_user_name = convertView.findViewById(R.id.txt_user_name);
             txt_amt = convertView.findViewById(R.id.txt_amt);
-            txt_rate = convertView.findViewById(R.id.txt_rate);
             head = convertView.findViewById(R.id.img_head);
         }
     }

@@ -16,6 +16,8 @@ public class PageMainItem {
     public static int VIP_INFO = 10;
     public static int CHARGE_INFO = 11;
 
+    public static int DAN_RANK = 12;
+
 
     private int aIcon;
     private String aName;

@@ -36,9 +36,11 @@ public class MessageUtil {
     public static int LOAD_COMMENT_INFO = 0x017;
 
 
-
+    public static int MAIL_VALID_REQUEST_404 = 0x018;
+    public static int MAIL_VALID_REQUEST_200 = 0x09;
 
     public static int EXCUTE_EXCEPTION = 0x999;
+
 
 
     public final static String SERCURETY = "ASDFGHJK*&^%$#@!";
