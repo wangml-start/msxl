@@ -88,11 +88,11 @@ public class GlobalDataHelper {
                 "/user/portrait_view", p);
     }
 
-    public static void setDate(String key, Object obj){
+    public static void setData(String key, Object obj){
         pageTranfer.put(key, obj);
     }
 
-    public static Object getDate(String key){
+    public static Object getData(String key){
         Object obj = pageTranfer.get(key);
         pageTranfer.remove(key);
         return obj;

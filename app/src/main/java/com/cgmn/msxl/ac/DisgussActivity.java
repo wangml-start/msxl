@@ -556,7 +556,7 @@ public class DisgussActivity extends DisgussBaseActivity {
 
     private void jump2Sub(CommentDetailBean bean){
         Intent intent = new Intent(mContent, DisgussSubActivity.class);
-        GlobalDataHelper.setDate("comment", bean);
+        GlobalDataHelper.setData("comment", bean);
         startActivity(intent);
     }
 

@@ -28,14 +28,21 @@ public class MarqueeManager {
     public void startMarquee(){
         final Map<String, String> params = new HashMap<>();
         params.put("token", GlobalDataHelper.getToken(mContext));
-        params.put("LAST_NUMBER","0");
+        Object obj = GlobalDataHelper.getData("MARQUEE_LAST_NUM");
+        if(obj != null){
+            params.put("LAST_NUMBER", obj.toString());
+        }
         marqueeview.setCompleteListener(new MyMarqueeView.RotationListener() {
             @Override
             public void completeDisplay() {
                 if(nodes != null && nodes.size() > 0){
                     CatchItem item = nodes.get(nodes.size()-1);
                     params.put("LAST_NUMBER",item.getRecordId()+"");
+                    GlobalDataHelper.setData("MARQUEE_LAST_NUM", item.getRecordId());
                     reloadData(params);
+                }else{
+                    marqueeview.clearAnimation();
+                    marqueeview.stopFilp();
                 }
             }
         });
@@ -50,8 +57,8 @@ public class MarqueeManager {
                 }
             }
         };
-        //2s后开始执行，间隔为10s
-        mTimer.schedule(mTimerTask, 2000,10000);
+        //2s后开始执行，间隔为6s
+        mTimer.schedule(mTimerTask, 2000,6000);
 
     }
 

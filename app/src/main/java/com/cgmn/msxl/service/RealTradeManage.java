@@ -66,6 +66,16 @@ public class RealTradeManage {
         }
     }
 
+    public void setStockName(){
+        if(currentK != null){
+            currentK.setStackName(klineset.getStockName());
+        }
+        if(lastK != null){
+            lastK.setStackName(klineset.getStockName());
+        }
+
+    }
+
     public boolean showNextOpen() {
         if (klineset.getFutureList().size() > 0) {
             fixInitDate();
@@ -83,6 +93,7 @@ public class RealTradeManage {
 
             kStatus = OPEN;
             setDatas();
+            setStockName();
             return true;
         }
 

@@ -23,7 +23,7 @@ public class MyMarqueeView extends FrameLayout {
     private static final String TAG = MyMarqueeView.class.getSimpleName();
 
     // 轮播间隔
-    private int mInterval = 2000;
+    private int mInterval = 2500;
 
     // 动画时长
     private boolean hasSetAnimDuration = false;
@@ -262,8 +262,6 @@ public class MyMarqueeView extends FrameLayout {
                 int count = mMultiItemTypeAdapter.getCount();
                 if (mPosition >= count) {
                     if(mRotationListener != null){
-                        clearAnimation();
-                        stopFilp();
                         mRotationListener.completeDisplay();
                     }else{
                         mPosition = 0;

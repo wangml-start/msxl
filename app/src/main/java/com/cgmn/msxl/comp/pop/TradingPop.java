@@ -2,6 +2,8 @@ package com.cgmn.msxl.comp.pop;
 
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -11,12 +13,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.cgmn.msxl.R;
+import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.CustmerToast;
 import com.cgmn.msxl.data.SettingItem;
 import com.cgmn.msxl.data.StockHolder;
-import com.cgmn.msxl.service.ModeManager;
-import com.cgmn.msxl.service.RealTradeManage;
+import com.cgmn.msxl.server_interface.BaseData;
+import com.cgmn.msxl.service.*;
 import com.cgmn.msxl.utils.CommonUtil;
+import com.cgmn.msxl.utils.MessageUtil;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -153,7 +157,9 @@ public class TradingPop extends PopupWindow
             return;
         }
         if (this.action.equals("BUY")) {
-            stoHolder.buyStock(count, price, manage.getCurrentK().getStackCode());
+            stoHolder.buyStock(count, price,
+                    manage.getCurrentK().getStackCode(),
+                    manage.getCurrentK().getStackName());
             if(count == stoHolder.getHoldShare()){
                 stoHolder.whenNextDay();
             }
@@ -179,7 +185,12 @@ public class TradingPop extends PopupWindow
                         "违背模式\n " + StringUtils.join(messges, "\n"), Toast.LENGTH_LONG).show();
             }
         }else{
+            float rate = stoHolder.getPlRateNum();
             stoHolder.sellStock(count, price);
+            if(stoHolder.getHoldShare() == 0 && rate >= 0.2){
+                //上传出色交易
+                uploadTrade(rate);
+            }
         }
         // 销毁弹出框
         dismiss();
@@ -228,5 +239,35 @@ public class TradingPop extends PopupWindow
         }else if(v.getId() == R.id.count_plus){
             onCountChange(1);
         }
+    }
+
+    /**
+     * 将获利20个点以上的交易上传 用于跑马灯展示
+     * @param rate
+     */
+    private void uploadTrade(final float rate){
+        GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
+            @Override
+            public void run() {
+                Map<String, String> params = new HashMap<>();
+                params.put("name", GlobalDataHelper.getUserName(mContext));
+                params.put("stockName", stoHolder.getStackName());
+                params.put("plRate", rate+"");
+                params.put("token", GlobalDataHelper.getToken(mContext));
+                String action = "/common/outstanding_trade";
+                String url = CommonUtil.buildGetUrl(
+                        PropertyService.getInstance().getKey("serverUrl"),
+                        action, params);
+                OkHttpClientManager.getAsyn(url,
+                        new OkHttpClientManager.ResultCallback<BaseData>() {
+                            @Override
+                            public void onError(com.squareup.okhttp.Request request, Exception e) {
+                            }
+                            @Override
+                            public void onResponse(BaseData data) {
+                            }
+                        });
+            }
+        });
     }
 }

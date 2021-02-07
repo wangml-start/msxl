@@ -271,8 +271,8 @@ public abstract class DisgussBaseActivity extends Activity
 
     @Override
     public void onShowPicture(byte[] bytes, String phone) {
-        GlobalDataHelper.setDate("content", bytes);
-        GlobalDataHelper.setDate("email", phone);
+        GlobalDataHelper.setData("content", bytes);
+        GlobalDataHelper.setData("email", phone);
         Intent intent = new Intent(mContext, ImageViewActivity.class);
         startActivity(intent);
     }

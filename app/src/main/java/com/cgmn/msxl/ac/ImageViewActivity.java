@@ -42,11 +42,11 @@ public class ImageViewActivity extends AppCompatActivity {
             }
         });
         image = findViewById(R.id.image);
-        Object obj = GlobalDataHelper.getDate("content");
+        Object obj = GlobalDataHelper.getData("content");
         if(obj != null){
             image.setImageContent((byte[]) obj);
         }else {
-            obj = GlobalDataHelper.getDate("email");
+            obj = GlobalDataHelper.getData("email");
             image.setImageName((String) obj);
             image.setImageURL(GlobalDataHelper.getUserPortraitUrl(mContext));
         }

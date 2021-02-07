@@ -31,6 +31,7 @@ public class StockHolder {
 
     //交易相关参数
     private String code = "";
+    private String stackName = "";
 
     private Float initTotAmt = 0.0f;
 
@@ -181,6 +182,10 @@ public class StockHolder {
         return String.format("%sXX", code.substring(0, 4));
     }
 
+    public String getStackName() {
+        return stackName;
+    }
+
     public void setCode(String code) {
         this.code = code;
     }
@@ -237,6 +242,10 @@ public class StockHolder {
         return CommonUtil.formatPercent((price - costPrice) / costPrice);
     }
 
+    public float getPlRateNum() {
+        return (price - costPrice) / costPrice;
+    }
+
     public String getExchangeLb() {
         return exchangeLb;
     }
@@ -256,8 +265,9 @@ public class StockHolder {
         return CommonUtil.formatPercent(pl / initTotAmt);
     }
 
-    public void buyStock(int count, Float pri, String scode) {
+    public void buyStock(int count, Float pri, String scode, String sName) {
         code = scode;
+        stackName = sName;
         holdShare += count;
         price = pri;
         float buyAmt = pri * count;

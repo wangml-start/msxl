@@ -96,7 +96,7 @@ public class UserRankAdpter extends BaseAdapter {
         holder.head.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GlobalDataHelper.setDate("email", map.getPhone());
+                GlobalDataHelper.setData("email", map.getPhone());
                 Intent intent = new Intent(mContext, ImageViewActivity.class);
                 mContext.startActivity(intent);
             }

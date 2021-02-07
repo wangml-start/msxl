@@ -9,6 +9,8 @@ public class StockDetail {
 
     private String stackCode;
 
+    private String stackName;
+
     private Date quoteDate;
 
     private Float start;
@@ -137,5 +139,13 @@ public class StockDetail {
 
     public void setOpenrate(String openrate) {
         this.openrate = openrate;
+    }
+
+    public String getStackName() {
+        return stackName;
+    }
+
+    public void setStackName(String stackName) {
+        this.stackName = stackName;
     }
 }

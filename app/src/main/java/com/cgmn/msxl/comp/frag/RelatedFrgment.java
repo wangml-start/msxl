@@ -61,7 +61,7 @@ public abstract class RelatedFrgment extends Fragment implements RefreshListener
             public boolean onGroupClick(ExpandableListView expandableListView, View view, int groupPosition, long l) {
                 RelatedToMe entity = mData.get(groupPosition);
                 Intent intent = new Intent(mContext, DisgussSubActivity.class);
-                GlobalDataHelper.setDate("viewId", entity.getCommentId());
+                GlobalDataHelper.setData("viewId", entity.getCommentId());
                 startActivity(intent);
                 return true;
             }
