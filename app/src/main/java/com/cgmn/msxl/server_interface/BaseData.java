@@ -26,6 +26,8 @@ public class BaseData {
     List<ChatAddRecord> chatMain;
     List<ChatAddRecord> chatSub;
 
+    List<CatchItem> marqueeList;
+
     private String filebyte;
 
     Integer approveToMe=0;
@@ -161,5 +163,13 @@ public class BaseData {
 
     public void setAboveMe(List<RelatedToMe> aboveMe) {
         this.aboveMe = aboveMe;
+    }
+
+    public List<CatchItem> getMarqueeList() {
+        return marqueeList;
+    }
+
+    public void setMarqueeList(List<CatchItem> marqueeList) {
+        this.marqueeList = marqueeList;
     }
 }

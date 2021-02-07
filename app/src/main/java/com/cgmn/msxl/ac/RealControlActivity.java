@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.CustmerToast;
+import com.cgmn.msxl.comp.view.MyMarqueeView;
 import com.cgmn.msxl.comp.view.StockHolderView;
 import com.cgmn.msxl.comp.pop.TradingPop;
 import com.cgmn.msxl.comp.k.KlineChart;
@@ -60,7 +61,7 @@ public class RealControlActivity extends AppCompatActivity
     TextView lb_left_day;
     TextView lb_left_s,lb_last_rate;
     Button bt_next, bt_buy,bt_sell, bt_change, bt_exit;
-
+    MyMarqueeView marqueeview;
 
 
     @Override
@@ -283,6 +284,8 @@ public class RealControlActivity extends AppCompatActivity
         bt_change.setOnClickListener(this);
         bt_exit.setOnClickListener(this);
 
+
+
         chartParent = findViewById(R.id.chart_parent);
         holderParent = findViewById(R.id.holder_parent);
         DisplayMetrics dm = new DisplayMetrics();
@@ -296,6 +299,10 @@ public class RealControlActivity extends AppCompatActivity
         stockView = new StockHolderView(this);
         chartParent.addView(chart);
         holderParent.addView(stockView);
+
+        marqueeview = findViewById(R.id.marqueeview);
+        MarqueeManager marqueeManager = new MarqueeManager(mContxt, marqueeview);
+        marqueeManager.startMarquee();
 
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra("datas");
