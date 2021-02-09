@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.ac.AccountInfoActivity;
 import com.cgmn.msxl.ac.ChargeActivity;
+import com.cgmn.msxl.ac.ContactUsActivity;
 import com.cgmn.msxl.ac.VIPActivity;
 import com.cgmn.msxl.comp.adpter.MutiLayoutAdapter;
 import com.cgmn.msxl.comp.view.NetImageView;
@@ -43,6 +44,7 @@ public class MayFragment extends Fragment {
         mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.acct_info), PageMainItem.MY_GENERAL_INFO));
         mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.vip_way), PageMainItem.VIP_INFO));
         mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.chargev_way), PageMainItem.CHARGE_INFO));
+        mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.contact_us), PageMainItem.CONTACT_US));
 
 
         myAdapter = new MutiLayoutAdapter(mContxt, mData);
@@ -66,7 +68,7 @@ public class MayFragment extends Fragment {
                         case 9:
                             intent = new Intent(mContxt, AccountInfoActivity.class);
                             bundle = new Bundle();
-                            bundle.putString("title", getString(R.string.train_sum_line));
+//                            bundle.putString("title", getString(R.string.train_sum_line));
                             intent.putExtra("datas", bundle);
                             startActivity(intent);
                             break;
@@ -78,6 +80,11 @@ public class MayFragment extends Fragment {
                             intent = new Intent(mContxt, ChargeActivity.class);
                             startActivity(intent);
                             break;
+                        case 13:
+                            intent = new Intent(mContxt, ContactUsActivity.class);
+                            startActivity(intent);
+                            break;
+
                     }
                 }
             }

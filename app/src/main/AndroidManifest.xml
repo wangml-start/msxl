@@ -62,6 +62,7 @@
         <activity android:name=".ac.DisgussSubActivity"/>
         <activity android:name=".ac.ImageViewActivity"/>
         <activity android:name=".ac.RelatedToMeActivity"/>
+        <activity android:name=".ac.ContactUsActivity"/>
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
 

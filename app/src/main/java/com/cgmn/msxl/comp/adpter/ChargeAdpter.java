@@ -10,8 +10,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import com.cgmn.msxl.R;
-import com.cgmn.msxl.data.VipItem;
-import com.cgmn.msxl.server_interface.VipDataSetting;
 
 import java.util.List;
 

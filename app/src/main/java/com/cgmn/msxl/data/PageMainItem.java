@@ -17,6 +17,7 @@ public class PageMainItem {
     public static int CHARGE_INFO = 11;
 
     public static int DAN_RANK = 12;
+    public static int CONTACT_US = 13;
 
 
     private int aIcon;

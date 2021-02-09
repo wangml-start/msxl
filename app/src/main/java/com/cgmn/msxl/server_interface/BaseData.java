@@ -34,6 +34,7 @@ public class BaseData {
     Integer commentToMe=0;
 
     List<RelatedToMe> aboveMe;
+    List<String> infoList;
 
     private List<Map<String, Object>> records;
 
@@ -171,5 +172,13 @@ public class BaseData {
 
     public void setMarqueeList(List<CatchItem> marqueeList) {
         this.marqueeList = marqueeList;
+    }
+
+    public List<String> getInfoList() {
+        return infoList;
+    }
+
+    public void setInfoList(List<String> infoList) {
+        this.infoList = infoList;
     }
 }
