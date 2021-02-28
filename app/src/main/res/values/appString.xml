@@ -20,17 +20,18 @@
     <string name="train_sum_line">收益率曲线</string>
     <string name="leading_line">连板战法曲线</string>
     <string name="normal_line">趋势波段曲线</string>
-    <string name="mode_detail">违背模式情况</string>
+    <string name="mode_detail">执行情况</string>
     <string name="violate_mode_detai">执行情况</string>
 
     <string name="acct_info">账户信息</string>
     <string name="vip_way">会员中心</string>
     <string name="chargev_way">充值中心</string>
     <string name="contact_us">帮助中心</string>
+    <string name="check_new_version">检查更新</string>
     <string name="head_img">个人头像</string>
     <string name="user_name">昵称</string>
     <string name="gender">性别</string>
-    <string name="signature">个性签名</string>
+    <string name="signature">个人说明</string>
     <string name="ue_psw">修改密码</string>
 
 </resources>

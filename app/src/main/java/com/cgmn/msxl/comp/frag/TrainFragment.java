@@ -18,7 +18,6 @@ import com.cgmn.msxl.comp.view.NetImageView;
 import com.cgmn.msxl.data.PageMainItem;
 import com.cgmn.msxl.data.SplitItem;
 import com.cgmn.msxl.data.StockHolder;
-import com.cgmn.msxl.service.GlobalDataHelper;
 
 import java.util.ArrayList;
 
@@ -167,4 +166,5 @@ public class TrainFragment extends Fragment{
 //            }
 //        });
     }
+
 }

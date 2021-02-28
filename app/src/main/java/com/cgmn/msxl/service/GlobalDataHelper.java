@@ -55,6 +55,11 @@ public class GlobalDataHelper {
         return storage + "/portrait";
     }
 
+    public static String getSaveApkPath(){
+        String storage = Environment.getExternalStorageDirectory().getPath();
+        return storage + "/apk";
+    }
+
     public static String getUserAcc(Context context){
         Map<String, Object> u = getUser(context);
         return (String) u.get("phone");
@@ -80,6 +85,17 @@ public class GlobalDataHelper {
         return (String) u.get("user_name");
     }
 
+    public static String getUserSignature(Context context){
+        Map<String, Object> u = getUser(context);
+        return (String) u.get("signature");
+    }
+
+    public static String getUserGender(Context context){
+        Map<String, Object> u = getUser(context);
+        return (String) u.get("gender");
+    }
+
+
     public static String getUserPortraitUrl(Context context){
         Map<String, String> p = new HashMap<>();
         p.put("token", getToken(context));
@@ -96,6 +112,11 @@ public class GlobalDataHelper {
         Object obj = pageTranfer.get(key);
         pageTranfer.remove(key);
         return obj;
+    }
+
+    public static String getDownloadVersionUrl(Context context){
+        return String.format("%s/%s?token=%s",PropertyService.getInstance().getKey("serverUrl"),
+                "common/download_version",GlobalDataHelper.getToken(context));
     }
 
 }

@@ -36,6 +36,8 @@ public class BaseData {
     List<RelatedToMe> aboveMe;
     List<String> infoList;
 
+    private UserDetailInfo userDetailInfo;
+
     private List<Map<String, Object>> records;
 
     public Integer getStatus() {
@@ -180,5 +182,13 @@ public class BaseData {
 
     public void setInfoList(List<String> infoList) {
         this.infoList = infoList;
+    }
+
+    public UserDetailInfo getUserDetailInfo() {
+        return userDetailInfo;
+    }
+
+    public void setUserDetailInfo(UserDetailInfo userDetailInfo) {
+        this.userDetailInfo = userDetailInfo;
     }
 }

@@ -70,6 +70,7 @@ public class RealControlActivity extends AppCompatActivity
         setContentView(R.layout.klinecontrol_layout);
         bindView();
         initMessageHandle();
+        loadAccCash();
         loadKLineSet();
         loadUserMode();
     }
@@ -185,8 +186,9 @@ public class RealControlActivity extends AppCompatActivity
         chart.setData(realtradeManage.getGroup());
         chart.invalidateView();
         updateTopBar();
-        initStockHolder();
+    }
 
+    private void loadAccCash(){
         //获取资金账户信息
         GlobalTreadPools.getInstance(mContxt).execute(new Runnable() {
             @Override

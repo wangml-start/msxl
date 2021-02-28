@@ -12,10 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.cgmn.msxl.R;
-import com.cgmn.msxl.ac.AccountInfoActivity;
-import com.cgmn.msxl.ac.ChargeActivity;
-import com.cgmn.msxl.ac.ContactUsActivity;
-import com.cgmn.msxl.ac.VIPActivity;
+import com.cgmn.msxl.ac.*;
 import com.cgmn.msxl.comp.adpter.MutiLayoutAdapter;
 import com.cgmn.msxl.comp.view.NetImageView;
 import com.cgmn.msxl.data.PageMainItem;
@@ -45,6 +42,7 @@ public class MayFragment extends Fragment {
         mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.vip_way), PageMainItem.VIP_INFO));
         mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.chargev_way), PageMainItem.CHARGE_INFO));
         mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.contact_us), PageMainItem.CONTACT_US));
+        mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.check_new_version), PageMainItem.CHECK_NEW_VERSION));
 
 
         myAdapter = new MutiLayoutAdapter(mContxt, mData);
@@ -66,10 +64,7 @@ public class MayFragment extends Fragment {
                     Bundle bundle = null;
                     switch (type){
                         case 9:
-                            intent = new Intent(mContxt, AccountInfoActivity.class);
-                            bundle = new Bundle();
-//                            bundle.putString("title", getString(R.string.train_sum_line));
-                            intent.putExtra("datas", bundle);
+                            intent = new Intent(mContxt, UserInfoActivity.class);
                             startActivity(intent);
                             break;
                         case 10:
@@ -84,7 +79,10 @@ public class MayFragment extends Fragment {
                             intent = new Intent(mContxt, ContactUsActivity.class);
                             startActivity(intent);
                             break;
-
+                        case 14:
+                            intent = new Intent(mContxt, NewVersionActivity.class);
+                            startActivity(intent);
+                            break;
                     }
                 }
             }

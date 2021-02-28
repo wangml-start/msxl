@@ -104,9 +104,13 @@ public class CommonUtil {
     }
 
     public static String formatAmt(Object num){
+        Integer symbol = 1;
+        if(Double.valueOf(num.toString()) < 0){
+            symbol = -1;
+        }
         Double number = Math.abs(Double.valueOf(num.toString()));
         if( number > 9999.0){
-            return formatLargeAmt.format(number/10000)+"万";
+            return formatLargeAmt.format(number/10000 * symbol)+"万";
         }else{
             return formatAmt.format(num);
         }

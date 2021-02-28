@@ -14,15 +14,4 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-    <Button
-            android:id="@+id/exit_btn"
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_alignParentBottom="true"
-            android:background="@drawable/bt_back_nomal"
-            android:textColor="@color/bg_white"
-            android:textSize="@dimen/size16"
-            android:layout_margin="15dp"
-            android:text="@string/signin_out"
-            />
 </RelativeLayout>

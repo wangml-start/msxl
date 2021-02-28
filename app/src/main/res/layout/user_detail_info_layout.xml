@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_white"
+        tools:context=".ac.UserInfoActivity">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="vertical">
+
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@color/bg_white">
+
+            <com.cgmn.msxl.comp.view.NetImageView
+                    android:id="@+id/icon_head"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="8dp"
+                    android:layout_marginLeft="10dp" />
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/icon_head"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:orientation="vertical">
+
+                <TextView
+                        android:id="@+id/txt_user_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:text="用户名"
+                        android:textColor="@color/text_black" />
+
+                <TextView
+                        android:id="@+id/txt_account"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:text="账号"
+                        android:textColor="@color/text_black" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <View
+                android:background="@color/text_hint"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                />
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/bg_white"
+                android:orientation="horizontal">
+
+            <TextView
+                    android:layout_width="65dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:text="会员类型"
+                    android:textColor="@color/text_black" />
+
+            <TextView
+                    android:id="@+id/txt_user_type"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:text="--"
+                    android:textColor="@color/text_black" />
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginTop="8dp"
+                    android:text="会员到期日"
+                    android:textColor="@color/text_black" />
+
+            <TextView
+                    android:id="@+id/txt_valid_at"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:text="--"
+                    android:textColor="@color/text_black" />
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-10dp"
+                android:background="@color/bg_white"
+                android:orientation="horizontal">
+
+            <TextView
+                    android:layout_width="65dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:text="账户资金"
+                    android:textColor="@color/text_black" />
+
+            <TextView
+                    android:id="@+id/txt_total_cash"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:text="--"
+                    android:textColor="@color/text_black" />
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginTop="8dp"
+                    android:text="盈亏总和"
+                    android:textColor="@color/text_black" />
+
+            <TextView
+                    android:id="@+id/txt_pl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:text="--"
+                    android:textColor="@color/text_black" />
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-10dp"
+                android:background="@color/bg_white"
+                android:orientation="horizontal">
+
+            <TextView
+                    android:layout_width="65dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:text="训练次数"
+                    android:textColor="@color/text_black" />
+
+            <TextView
+                    android:id="@+id/txt_train_times"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:text="--"
+                    android:textColor="@color/text_black" />
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginTop="8dp"
+                    android:text="胜率"
+                    android:textColor="@color/text_black" />
+
+            <TextView
+                    android:id="@+id/txt_win_rate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:text="--"
+                    android:textColor="@color/text_black" />
+        </LinearLayout>
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-10dp"
+                android:background="@color/bg_white"
+                android:orientation="horizontal">
+
+            <TextView
+                    android:layout_width="65dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:text="段位"
+                    android:textColor="@color/text_black" />
+
+            <TextView
+                    android:id="@+id/txt_dan"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:text="--"
+                    android:textColor="@color/text_black" />
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginTop="8dp"
+                    android:text="生日:"
+                    android:textColor="@color/text_black" />
+
+            <TextView
+                    android:id="@+id/txt_b_day"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:text="--"
+                    android:textColor="@color/text_black" />
+        </LinearLayout>
+        <View
+                android:background="@color/text_hint"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                />
+        <TextView
+                android:textColor="@color/text_black"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="8dp"
+                android:text="@string/signature"
+                 />
+        <TextView
+                android:id="@+id/txt_signature"
+                android:layout_margin="8dp"
+                android:textColor="@color/text_black"
+                android:layout_width="match_parent"
+                android:text="--"
+                android:layout_height="80dp" />
+    </LinearLayout>
+
+    <TextView
+            android:id="@+id/btn_update"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="8dp"
+            android:background="@drawable/bt_back_nomal"
+            android:gravity="center"
+            android:text="@string/signin_out"
+            android:textColor="@color/main_text_color"
+            android:textSize="@dimen/size16" />
+</RelativeLayout>

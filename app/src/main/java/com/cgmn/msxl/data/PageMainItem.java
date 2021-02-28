@@ -18,7 +18,7 @@ public class PageMainItem {
 
     public static int DAN_RANK = 12;
     public static int CONTACT_US = 13;
-
+    public static int CHECK_NEW_VERSION = 14;
 
     private int aIcon;
     private String aName;

@@ -25,7 +25,6 @@ public class AccountInfoActivity extends BaseOtherActivity {
     private static final String TAG = AccountInfoActivity.class.getSimpleName();
     private Context mContext;
     private ListView list_content;
-    private Button exit_btn;
     private ArrayList<Object> mData = null;
     private AccountAdapter myAdapter = null;
     private BroadcastReceiver receiver;
@@ -46,7 +45,7 @@ public class AccountInfoActivity extends BaseOtherActivity {
 
     @Override
     protected String setTitle(){
-        return getString(R.string.acct_info);
+        return getString(R.string.personal_info);
     };
 
     @Override
@@ -121,15 +120,6 @@ public class AccountInfoActivity extends BaseOtherActivity {
                     intent.putExtra("datas", bundle);
                     startActivity(intent);
                 }
-            }
-        });
-        exit_btn = findViewById(R.id.exit_btn);
-        exit_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AppSqlHelper sqlHeper = new AppSqlHelper(mContext);
-                sqlHeper.excuteSql(String.format("UPDATE users SET last_active=2 WHERE phone='%s'", GlobalDataHelper.getUserAcc(mContext)));
-                startActivity(new Intent(mContext, LoginActivity.class));
             }
         });
     }
