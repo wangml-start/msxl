@@ -105,6 +105,9 @@ public class CommonUtil {
 
     public static String formatAmt(Object num){
         Integer symbol = 1;
+        if(isEmpty(num)){
+            return "";
+        }
         if(Double.valueOf(num.toString()) < 0){
             symbol = -1;
         }
@@ -112,7 +115,7 @@ public class CommonUtil {
         if( number > 9999.0){
             return formatLargeAmt.format(number/10000 * symbol)+"万";
         }else{
-            return formatAmt.format(num);
+            return formatAmt.format(number);
         }
     }
 
