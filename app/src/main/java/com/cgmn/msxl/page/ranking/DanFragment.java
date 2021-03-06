@@ -22,6 +22,7 @@ import com.cgmn.msxl.service.GlobalDataHelper;
 import com.cgmn.msxl.service.OkHttpClientManager;
 import com.cgmn.msxl.service.PropertyService;
 import com.cgmn.msxl.utils.CommonUtil;
+import com.cgmn.msxl.utils.FixStringBuffer;
 import com.cgmn.msxl.utils.MessageUtil;
 
 import java.util.HashMap;
@@ -39,7 +40,7 @@ public class DanFragment extends Fragment {
     private Handler mHandler;
     private List<RankEntity> mData = null;
     private UserDanAdpter adpter;
-    private TextView txt_rank;
+    private TextView txt_rank, txt_des;
 
     public DanFragment() { }
     public static DanFragment newInstance(Integer trainType) {
@@ -81,13 +82,15 @@ public class DanFragment extends Fragment {
                     if(!CommonUtil.isEmpty(mData)){
                         adpter = new UserDanAdpter(mContext, mData);
                         listView.setAdapter(adpter);
-                        String txt = "我的排名： ";
+                        FixStringBuffer text = new FixStringBuffer();
+                        text.append("我的排名： ");
                         Integer rankNo = mData.get(0).getMyRank();
                         if(rankNo != null && rankNo>0){
-                            txt_rank.setText(String.format("%s %s/%s", txt, rankNo, mData.get(0).getTotalAcc()));
+                            text.append("%s/%s", rankNo, mData.get(0).getTotalAcc());
                         }else{
-                            txt_rank.setText(String.format("%s %s/%s", txt, "--", mData.get(0).getTotalAcc()));
+                            text.append("%s/%s", "--", mData.get(0).getTotalAcc());
                         }
+                        txt_rank.setText(text.toString());
                     }
                 } else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
                     GlobalExceptionHandler.getInstance(mContext).handlerException((Exception) msg.obj);
@@ -95,6 +98,14 @@ public class DanFragment extends Fragment {
                 return false;
             }
         });
+        txt_des =  view.findViewById(R.id.txt_des);
+        if(danRank == 1){
+            txt_des.setText(" 资金达到200万");
+        }else if(danRank == 2){
+            txt_des.setText(" 资金达到1000万");
+        }else if(danRank == 3){
+            txt_des.setText(" 资金达到10000万");
+        }
     }
 
     @Override

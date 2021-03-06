@@ -186,6 +186,7 @@ public class RealControlActivity extends AppCompatActivity
         chart.setData(realtradeManage.getGroup());
         chart.invalidateView();
         updateTopBar();
+        initStockHolder();
     }
 
     private void loadAccCash(){
@@ -231,9 +232,11 @@ public class RealControlActivity extends AppCompatActivity
     }
 
     private void initStockHolder(){
+        Float totalAmount = stockView.getStockHolder().getTotAmt();
         stockView.setStockHolder(new StockHolder());
         stockView.getStockHolder().setModelRecordId(userModelId);
         stockView.getStockHolder().setTrainType(trainType);
+        stockView.initAccount(totalAmount);
         stockView.invalidateView();
         stockView.getStockHolder().setModeList(modeList);
     }
@@ -421,8 +424,10 @@ public class RealControlActivity extends AppCompatActivity
                                     nodes.clear();
                                     Log.d(TAG, "UPLOAD TRADING SUCCESS!");
                                 }else{
-                                    Log.d(TAG, "UPLOAD TRADING FAILED!");
-                                    Log.d(TAG, data.getError());
+                                    Message message = Message.obtain();
+                                    message.what = MessageUtil.EXCUTE_EXCEPTION;
+                                    message.obj = new RuntimeException(data.getError());
+                                    mHandler.sendMessage(message);
                                 }
                             }
                         },

@@ -202,7 +202,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="40dp"
                     android:layout_marginTop="8dp"
-                    android:text="生日:"
+                    android:text="生日"
                     android:textColor="@color/text_black" />
 
             <TextView

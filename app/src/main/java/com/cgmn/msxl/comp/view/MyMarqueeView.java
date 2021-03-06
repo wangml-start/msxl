@@ -23,7 +23,7 @@ public class MyMarqueeView extends FrameLayout {
     private static final String TAG = MyMarqueeView.class.getSimpleName();
 
     // 轮播间隔
-    private int mInterval = 2500;
+    private int mInterval = 3000;
 
     // 动画时长
     private boolean hasSetAnimDuration = false;

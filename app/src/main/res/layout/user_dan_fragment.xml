@@ -42,12 +42,31 @@
             android:layout_weight="1"
             android:layout_width="match_parent"
             />
-    <TextView
-            android:id="@+id/txt_rank"
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:gravity="left|center_vertical"
-            android:layout_marginLeft="15dp"
-            android:text="我的排名"
-            />
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:background="@color/div_white"
+            android:textColor="@color/text_topbar"
+            android:layout_height="30dp">
+        <TextView
+                android:id="@+id/txt_rank"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:gravity="left|center_vertical"
+                android:layout_marginLeft="15dp"
+                android:text="我的排名"
+                android:textSize="@dimen/size12"
+                android:textColor="@color/colorPrimary"
+                />
+        <TextView
+                android:id="@+id/txt_des"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="left|center_vertical"
+                android:layout_marginRight="15dp"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/size12"
+                />
+    </LinearLayout>
 </LinearLayout>

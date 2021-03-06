@@ -58,7 +58,7 @@ public class MarqueeManager {
             }
         };
         //2s后开始执行，间隔为6s
-        mTimer.schedule(mTimerTask, 2000,6000);
+        mTimer.schedule(mTimerTask, 2000,8000);
 
     }
 
