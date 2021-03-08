@@ -15,6 +15,7 @@ public class MarqueeManager {
     private Context mContext;
     MyMarqueeView marqueeview;
     List<CatchItem> nodes = null;
+    Timer mTimer = new Timer();
 
     public MarqueeManager(Context context, MyMarqueeView view) {
         mContext = context;
@@ -48,7 +49,6 @@ public class MarqueeManager {
         });
 
 
-        Timer mTimer = new Timer();
         TimerTask mTimerTask = new TimerTask() {
             @Override
             public void run() {
@@ -88,5 +88,8 @@ public class MarqueeManager {
         });
     }
 
+    public void tiemrCancel(){
+        mTimer.cancel();
+    }
 
 }

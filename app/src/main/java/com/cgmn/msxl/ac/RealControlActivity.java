@@ -62,6 +62,7 @@ public class RealControlActivity extends AppCompatActivity
     TextView lb_left_s,lb_last_rate;
     Button bt_next, bt_buy,bt_sell, bt_change, bt_exit;
     MyMarqueeView marqueeview;
+    MarqueeManager marqueeManager;
 
 
     @Override
@@ -306,7 +307,7 @@ public class RealControlActivity extends AppCompatActivity
         holderParent.addView(stockView);
 
         marqueeview = findViewById(R.id.marqueeview);
-        MarqueeManager marqueeManager = new MarqueeManager(mContxt, marqueeview);
+        marqueeManager = new MarqueeManager(mContxt, marqueeview);
         marqueeManager.startMarquee();
 
         Intent intent = getIntent();
@@ -507,6 +508,7 @@ public class RealControlActivity extends AppCompatActivity
             new ShowDialog().show(mContxt, getString(R.string.sure_to_do_this), new ShowDialog.OnBottomClickListener() {
                 @Override
                 public void positive() {
+                    marqueeManager.tiemrCancel();
                     //确定操作
                     onExit();
                 }
