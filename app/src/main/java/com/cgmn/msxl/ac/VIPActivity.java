@@ -151,7 +151,7 @@ public class VIPActivity extends BaseOtherActivity {
     private void setPermission(){
         if(setting != null && !CommonUtil.isEmpty(setting.getExpireDate())){
             String des = String.format("当前权限: %s   到期日: %s",
-                    setting.getLevel(), CommonUtil.formartTimeString(setting.getExpireDate(), "yyyy-MM-dd HH:mm:ss"));
+                    setting.getLevel(), setting.getExpireDate());
             txt_des.setText(des);
         }
     }
@@ -159,14 +159,7 @@ public class VIPActivity extends BaseOtherActivity {
     private void afterLoad(){
         setPermission();
         if (!CommonUtil.isEmpty(setting.getList())) {
-            mData = new ArrayList<>();
-            for (Map<String, Object> item : setting.getList()) {
-                VipItem viewItem = new VipItem();
-                viewItem.setTimeType((String) item.get("time_type"));
-                viewItem.setAmt(((Double) item.get("amt")).intValue());
-                viewItem.setNum(((Double) item.get("num")).intValue());
-                mData.add(viewItem);
-            }
+            mData = setting.getList();
         }
         myAdapter = new VipAdpter(mContext, mData);
         myAdapter.setRate(setting.getRate());

@@ -1,16 +1,15 @@
 package com.cgmn.msxl.server_interface;
 
-import java.util.ArrayList;
+import com.cgmn.msxl.data.VipItem;
+
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 public class VipDataSetting {
     public static String DAY_TYPE = "DAY";
     public static String MONTH_TYPE = "MONTH";
 
-    private List<Map<String, Object>> daySetting;
-    private List<Map<String, Object>> monthSetting;
+    private List<VipItem> list;
     private Float rate;
     private Integer status;
     private String error;
@@ -18,20 +17,12 @@ public class VipDataSetting {
     private Date expireDate;
 
 
-    public List<Map<String, Object>> getDaySetting() {
-        return daySetting;
+    public List<VipItem> getList() {
+        return list;
     }
 
-    public void setDaySetting(List<Map<String, Object>> daySetting) {
-        this.daySetting = daySetting;
-    }
-
-    public List<Map<String, Object>> getMonthSetting() {
-        return monthSetting;
-    }
-
-    public void setMonthSetting(List<Map<String, Object>> monthSetting) {
-        this.monthSetting = monthSetting;
+    public void setList(List<VipItem> list) {
+        this.list = list;
     }
 
     public Float getRate() {
@@ -74,11 +65,4 @@ public class VipDataSetting {
         this.expireDate = expireDate;
     }
 
-    public List<Map<String, Object>> getList(){
-        List<Map<String, Object>> temp = new ArrayList<>();
-        temp.addAll(daySetting);
-        temp.addAll(monthSetting);
-
-        return temp;
-    }
 }

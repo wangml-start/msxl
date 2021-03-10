@@ -85,7 +85,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:gravity="center"
-                    android:text="除连板战法训练外的所有功能"
+                    android:text="趋势波段训练"
                     android:textColor="@color/main_bg_orange_light"
                     android:textSize="@dimen/size12" />
         </LinearLayout>
@@ -121,7 +121,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:gravity="center"
-                    android:text="可使用所有功能"
+                    android:text="趋势波段训练+连板战法训练"
                     android:textColor="@color/main_bg_orange_light"
                     android:textSize="@dimen/size12" />
         </LinearLayout>
