@@ -26,7 +26,7 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical|center"
             android:textColor="@color/text_black"
-            android:background="@color/bg_white"
+            android:background="@color/div_white"
             android:text="复制"
             android:textSize="@dimen/size14" />
 </LinearLayout>
