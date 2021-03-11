@@ -105,7 +105,7 @@ public class UserInfoActivity extends BaseOtherActivity {
         txt_b_day = findViewById(R.id.txt_b_day);
         txt_signature = findViewById(R.id.txt_signature);
         btn_update = findViewById(R.id.btn_update);
-        txt_complete.setText("编辑");
+        txt_complete.setText("个人信息");
         mHandler = new Handler(new Handler.Callback() {
             @Override
             public boolean handleMessage(Message msg) {
@@ -161,7 +161,7 @@ public class UserInfoActivity extends BaseOtherActivity {
         txt_account.setText("账号: " + GlobalDataHelper.getUserAcc(mContext));
         txt_signature.setText(GlobalDataHelper.getUserSignature(mContext));
 
-        String tempName = "操盘手名: " + uName + " ";
+        String tempName = "操盘手: " + uName + " ";
         if(gender != null){
             Drawable d = null;
             if(gender.equals("0")){
@@ -184,7 +184,7 @@ public class UserInfoActivity extends BaseOtherActivity {
         if(!CommonUtil.isEmpty(info.getVipType())){
             txt_user_type.setText(info.getVipType());
         }else{
-            txt_user_type.setText("普通会员");
+            txt_user_type.setText("普通用户");
         }
         if(!CommonUtil.isEmpty(info.getVipEnd())){
             txt_valid_at.setText(info.getVipEnd());
