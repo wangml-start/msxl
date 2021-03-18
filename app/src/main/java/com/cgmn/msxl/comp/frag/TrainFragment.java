@@ -52,6 +52,8 @@ public class TrainFragment extends Fragment{
         mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.total_ranking), PageMainItem.TOTAL_RANK));
         mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.dan_ranking), PageMainItem.DAN_RANK));
 //        mData.add(new PageMainItem(R.drawable.head, getString(R.string.day_ranking), PageMainItem.DAY_RANK));
+        mData.add(new SplitItem(getString(R.string.market)));
+        mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.trend_break_up), PageMainItem.TREND_BREAK_UP));
         mData.add(new SplitItem(getString(R.string.mode_title)));
         mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.mode_setting), PageMainItem.MODEL_SETTING));
         mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.violate_mode_detai), PageMainItem.VIOLATE_MODE_DETAI));
@@ -139,6 +141,10 @@ public class TrainFragment extends Fragment{
                             bundle.putString("title", getString(R.string.normal_line));
                             bundle.putInt("user_model_id", 1);
                             intent.putExtra("datas", bundle);
+                            startActivity(intent);
+                            break;
+                        case 15:
+                            intent = new Intent(mContxt, MarketTrendActivity.class);
                             startActivity(intent);
                             break;
                     }

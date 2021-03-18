@@ -40,6 +40,8 @@ public class BaseData {
 
     private List<Map<String, Object>> records;
 
+    MarketData marketData;
+
     public Integer getStatus() {
         return status;
     }
@@ -190,5 +192,13 @@ public class BaseData {
 
     public void setUserDetailInfo(UserDetailInfo userDetailInfo) {
         this.userDetailInfo = userDetailInfo;
+    }
+
+    public MarketData getMarketData() {
+        return marketData;
+    }
+
+    public void setMarketData(MarketData marketData) {
+        this.marketData = marketData;
     }
 }

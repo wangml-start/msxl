@@ -20,7 +20,7 @@
     <string name="train_sum_line">收益率曲线</string>
     <string name="leading_line">连板战法曲线</string>
     <string name="normal_line">趋势波段曲线</string>
-    <string name="mode_detail">执行情况</string>
+    <string name="mode_detail">违背次数</string>
     <string name="violate_mode_detai">执行情况</string>
 
     <string name="acct_info">账户信息</string>
@@ -33,5 +33,9 @@
     <string name="gender">性别</string>
     <string name="signature">个人说明</string>
     <string name="ue_psw">修改密码</string>
+    <string name="personal">个人</string>
+    <string name="system">系统</string>
+    <string name="market">行情</string>
+    <string name="trend_break_up">趋势突破</string>
 
 </resources>

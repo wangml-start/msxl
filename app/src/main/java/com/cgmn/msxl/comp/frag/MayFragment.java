@@ -16,6 +16,7 @@ import com.cgmn.msxl.ac.*;
 import com.cgmn.msxl.comp.adpter.MutiLayoutAdapter;
 import com.cgmn.msxl.comp.view.NetImageView;
 import com.cgmn.msxl.data.PageMainItem;
+import com.cgmn.msxl.data.SplitItem;
 
 import java.util.ArrayList;
 
@@ -38,9 +39,11 @@ public class MayFragment extends Fragment {
     private void initAdpter(){
 
         mData = new ArrayList<Object>();
+        mData.add(new SplitItem(getString(R.string.personal)));
         mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.acct_info), PageMainItem.MY_GENERAL_INFO));
         mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.vip_way), PageMainItem.VIP_INFO));
         mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.chargev_way), PageMainItem.CHARGE_INFO));
+        mData.add(new SplitItem(getString(R.string.system)));
         mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.contact_us), PageMainItem.CONTACT_US));
         mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.check_new_version), PageMainItem.CHECK_NEW_VERSION));
 

@@ -37,7 +37,10 @@ public class MessageUtil {
 
 
     public static int MAIL_VALID_REQUEST_404 = 0x018;
-    public static int MAIL_VALID_REQUEST_200 = 0x09;
+    public static int MAIL_VALID_REQUEST_200 = 0x019;
+
+    public static int REQUEST_BREAK_UP_SUCCESS = 0x020;
+    public static int REQUEST_STOCK_DETAIL_SUCCESS = 0x021;
 
     public static int EXCUTE_EXCEPTION = 0x999;
 

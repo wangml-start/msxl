@@ -65,6 +65,7 @@
         <activity android:name=".ac.ContactUsActivity"/>
         <activity android:name=".ac.NewVersionActivity"/>
         <activity android:name=".ac.UserInfoActivity"/>
+        <activity android:name=".ac.MarketTrendActivity"/>
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
 

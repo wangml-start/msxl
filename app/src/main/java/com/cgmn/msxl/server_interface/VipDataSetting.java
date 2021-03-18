@@ -14,7 +14,7 @@ public class VipDataSetting {
     private Integer status;
     private String error;
     private String level;
-    private Date expireDate;
+    private String expireDate;
 
 
     public List<VipItem> getList() {
@@ -57,11 +57,11 @@ public class VipDataSetting {
         this.level = level;
     }
 
-    public Date getExpireDate() {
+    public String getExpireDate() {
         return expireDate;
     }
 
-    public void setExpireDate(Date expireDate) {
+    public void setExpireDate(String expireDate) {
         this.expireDate = expireDate;
     }
 

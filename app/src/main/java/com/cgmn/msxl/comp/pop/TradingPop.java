@@ -130,6 +130,11 @@ public class TradingPop extends PopupWindow
 
     private void setAmountText(String amont){
         tx_candle_amt.setText("金额： "+ amont);
+        if(this.action.equals("BUY")){
+            tx_candle_amt.setTextColor(mContext.getResources().getColor(R.color.main_red_color));
+        }else{
+            tx_candle_amt.setTextColor(mContext.getResources().getColor(R.color.main_blue_color));
+        }
     }
 
     private void positionManage(float persent){
