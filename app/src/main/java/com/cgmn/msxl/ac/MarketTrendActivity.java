@@ -256,7 +256,7 @@ public class MarketTrendActivity extends BaseOtherActivity {
 
         chart = new KlineChart(this);
         chart.getKlinePaint().setVisibleCount(60);
-        chart.getKlinePaint().setkLineBold(1.5f);
+        chart.getKlinePaint().setkLineBold(1f);
         chartParent.addView(chart);
 
         list_content.setOnItemClickListener(new AdapterView.OnItemClickListener(){
