@@ -3,7 +3,6 @@
         android:layout_width="match_parent"
         android:layout_height="35dp"
         android:orientation="horizontal"
-        android:background="@color/bg_topbar"
         >
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="0dp"
@@ -32,7 +31,7 @@
 
     <TextView
             android:id="@+id/txt_s_end"
-            android:layout_width="100dp"
+            android:layout_width="80dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:gravity="center"
@@ -40,7 +39,7 @@
             android:textSize="@dimen/size16" />
     <TextView
             android:id="@+id/txt_s_up_rate"
-            android:layout_width="100dp"
+            android:layout_width="80dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:gravity="center"

@@ -54,6 +54,30 @@ public class KlinePaint {
     private boolean highlightEnable = false;
     private float[] highlightPoint = new float[2];
 
+    public float getmBarSpace() {
+        return mBarSpace;
+    }
+
+    public void setmBarSpace(float mBarSpace) {
+        this.mBarSpace = mBarSpace;
+    }
+
+    public float getkLineBold() {
+        return kLineBold;
+    }
+
+    public void setkLineBold(float kLineBold) {
+        this.kLineBold = kLineBold;
+    }
+
+    public int getVisibleCount() {
+        return visibleCount;
+    }
+
+    public void setVisibleCount(int visibleCount) {
+        this.visibleCount = visibleCount;
+    }
+
     /**
      * a y value formatter.
      */

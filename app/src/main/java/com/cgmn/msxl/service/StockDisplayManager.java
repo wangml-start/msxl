@@ -9,11 +9,13 @@ import java.util.List;
 
 public class StockDisplayManager {
     KlineGroup group;
+    private StockDetail lastK;
     private List<StockDetail> stocks;
 
     public void resetManager(){
         group = null;
         stocks = null;
+        lastK = null;
     }
 
     public void repacklineNode() {
@@ -22,6 +24,9 @@ public class StockDisplayManager {
             for (int i = 0; i < stocks.size(); i++) {
                 StockDetail detail = stocks.get(i);
                 float last = 0;
+                if(lastK != null){
+                    last = lastK.getEnd();
+                }
                 group.addKline(new KLine(
                         detail.getHigh(),
                         detail.getLow(),
@@ -29,6 +34,7 @@ public class StockDisplayManager {
                         detail.getEnd(),
                         last,
                         detail.getVol()));
+                lastK = detail;
             }
         }
         setDatas();

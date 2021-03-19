@@ -3,6 +3,7 @@ package com.cgmn.msxl.server_interface;
 public class TrendStock {
     private String stackCode;
     private String stackName;
+    private String breakUpDays;
     private String end;
     private String upRate;
     private String exchageRate;
@@ -18,6 +19,14 @@ public class TrendStock {
 
     public String getStackName() {
         return stackName;
+    }
+
+    public String getBreakUpDays() {
+        return breakUpDays;
+    }
+
+    public void setBreakUpDays(String breakUpDays) {
+        this.breakUpDays = breakUpDays;
     }
 
     public void setStackName(String stackName) {

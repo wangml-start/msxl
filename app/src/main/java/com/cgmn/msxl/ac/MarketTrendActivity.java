@@ -10,10 +10,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.*;
 import androidx.core.graphics.drawable.DrawableCompat;
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
@@ -43,7 +40,7 @@ public class MarketTrendActivity extends BaseOtherActivity {
     private static final String TAG = MarketTrendActivity.class.getSimpleName();
 
     private Handler mHandler;
-    private TextView txt_day_list, txt_date, txt_vol;
+    private TextView txt_day_list, txt_date, txt_vol,txt_des;
     private LinearLayout chartParent;
     private ListView list_content;
     private MarketAdapter adapter;
@@ -54,7 +51,7 @@ public class MarketTrendActivity extends BaseOtherActivity {
     private TimePickerView pvTime;
     private MarketData marketData;
     private String selectedDay, selectedVol = "0", selectedDate;
-
+    private String selectedCode;
     private StockDisplayManager stockManager;
 
     @Override
@@ -89,17 +86,23 @@ public class MarketTrendActivity extends BaseOtherActivity {
                     adapter.notifyDataSetChanged();
                     if(!CommonUtil.isEmpty(marketData.getStocks())){
                         stockManager.resetManager();
+                        stockManager.setStocks(marketData.getStocks());
                         startChartInit();
                     }
                 } else if (msg.what == MessageUtil.REQUEST_BREAK_UP_SUCCESS) {
                     adpterDatas.clear();
-                    marketData = (MarketData) msg.obj;
-                    if(!CommonUtil.isEmpty(marketData.getTrendList())){
-                        adpterDatas.addAll(marketData.getTrendList());
+                    MarketData mkData = (MarketData) msg.obj;
+                    if(!CommonUtil.isEmpty(mkData.getTrendList())){
+                        adpterDatas.addAll(mkData.getTrendList());
                     }
                     adapter.notifyDataSetChanged();
                 } else if (msg.what == MessageUtil.REQUEST_STOCK_DETAIL_SUCCESS) {
-
+                    MarketData mkData = (MarketData) msg.obj;
+                    if(!CommonUtil.isEmpty(mkData.getStocks())){
+                        stockManager.resetManager();
+                        stockManager.setStocks(mkData.getStocks());
+                        startChartInit();
+                    }
                 } else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
                     GlobalExceptionHandler.getInstance(mContext).handlerException((Exception) msg.obj);
                 }
@@ -214,6 +217,7 @@ public class MarketTrendActivity extends BaseOtherActivity {
         stockManager = new StockDisplayManager();
 
         list_content = findViewById(R.id.list_content);
+        txt_des = findViewById(R.id.txt_des);
         txt_vol = findViewById(R.id.txt_vol);
         txt_day_list = findViewById(R.id.txt_day_list);
         txt_date = findViewById(R.id.txt_date);
@@ -251,17 +255,29 @@ public class MarketTrendActivity extends BaseOtherActivity {
         txt_date.setCompoundDrawables(null, null, wrappedDrawable, null);
 
         chart = new KlineChart(this);
+        chart.getKlinePaint().setVisibleCount(60);
+        chart.getKlinePaint().setkLineBold(1.5f);
         chartParent.addView(chart);
+
+        list_content.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TrendStock object = adpterDatas.get(position);
+                if(!object.getStackCode().equals(selectedCode)){
+                    selectedCode = object.getStackCode();
+                    loadStockDetails(object.getStackCode());
+                    txt_des.setText(object.getBreakUpDays());
+                }
+            }
+        });
     }
     private void startChartInit(){
-        stockManager.setStocks(marketData.getStocks());
         stockManager.repacklineNode();
         if(stockManager.getGroup() == null) {
             return;
         }
         chart.setData(stockManager.getGroup());
         chart.invalidateView();
-//        updateTopBar();
     }
 
 
@@ -333,6 +349,48 @@ public class MarketTrendActivity extends BaseOtherActivity {
                             public void onResponse(BaseData data) {
                                 Message message = Message.obtain();
                                 message.what = MessageUtil.REQUEST_BREAK_UP_SUCCESS;
+                                try {
+                                    message.obj = data.getMarketData();
+                                    Integer status = data.getStatus();
+                                    if (status == null || status == -1) {
+                                        throw new Exception(data.getError());
+                                    }
+                                } catch (Exception e) {
+                                    message.what = MessageUtil.EXCUTE_EXCEPTION;
+                                    message.obj = e;
+                                }
+                                mHandler.sendMessage(message);
+                            }
+                        });
+            }
+        });
+    }
+
+    private void loadStockDetails(final String code) {
+        GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
+            @Override
+            public void run() {
+                String action = "/stock/stock_details";
+                Map<String, String> params = new HashMap<>();
+                params.put("code", code);
+                params.put("token", GlobalDataHelper.getToken(mContext));
+                String url = CommonUtil.buildGetUrl(
+                        PropertyService.getInstance().getKey("serverUrl"),
+                        action, params);
+                OkHttpClientManager.getAsyn(url,
+                        new OkHttpClientManager.ResultCallback<BaseData>() {
+                            @Override
+                            public void onError(com.squareup.okhttp.Request request, Exception e) {
+                                Message message = Message.obtain();
+                                message.what = MessageUtil.EXCUTE_EXCEPTION;
+                                message.obj = e;
+                                mHandler.sendMessage(message);
+                            }
+
+                            @Override
+                            public void onResponse(BaseData data) {
+                                Message message = Message.obtain();
+                                message.what = MessageUtil.REQUEST_STOCK_DETAIL_SUCCESS;
                                 try {
                                     message.obj = data.getMarketData();
                                     Integer status = data.getStatus();

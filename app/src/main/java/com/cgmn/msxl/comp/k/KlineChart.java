@@ -16,6 +16,10 @@ public class KlineChart extends View {
     private KlinePaint klinePaint;
     private KlineGroup mData;
 
+    public KlinePaint getKlinePaint() {
+        return klinePaint;
+    }
+
     public KlineChart(Context context) {
         this(context, null);
     }

@@ -302,6 +302,8 @@ public class RealControlActivity extends AppCompatActivity
         chartParent.setLayoutParams(kparams);
 
         chart = new KlineChart(this);
+        chart.getKlinePaint().setVisibleCount(60);
+        chart.getKlinePaint().setkLineBold(1.5f);
         stockView = new StockHolderView(this);
         chartParent.addView(chart);
         holderParent.addView(stockView);
