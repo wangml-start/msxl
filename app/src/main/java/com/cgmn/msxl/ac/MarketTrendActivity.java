@@ -244,6 +244,7 @@ public class MarketTrendActivity extends BaseOtherActivity {
         txt_vol.setOnClickListener(lis);
         txt_day_list.setOnClickListener(lis);
         txt_date.setOnClickListener(lis);
+        txt_complete.setText("解锁");
         Drawable right = getResources().getDrawable(R.drawable.down);
         right.setBounds(0, 0, 25, 25);//必须设置图片的大小否则没有作用
         Drawable wrappedDrawable = DrawableCompat.wrap(right);
@@ -415,7 +416,7 @@ public class MarketTrendActivity extends BaseOtherActivity {
 
     @Override
     protected boolean showComplate() {
-        return false;
+        return true;
     }
 
 }
