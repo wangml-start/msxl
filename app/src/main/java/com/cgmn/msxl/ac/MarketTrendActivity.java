@@ -46,9 +46,10 @@ public class MarketTrendActivity extends BaseOtherActivity {
     private MarketAdapter adapter;
     private KlineChart chart;
     List<TrendStock> adpterDatas = new ArrayList<>();
-    private OptionsPickerView dayOptions, volOptions;
+    private OptionsPickerView dayOptions, volOptions, pvTime;
     private ArrayList<SelectionItem> dayList = new ArrayList<>(), volList = new ArrayList<>();
-    private TimePickerView pvTime;
+    private ArrayList<SelectionItem> dateList = new ArrayList<>();
+//    private TimePickerView pvTime;
     private MarketData marketData;
     private String selectedDay, selectedVol = "0", selectedDate;
     private String selectedCode;
@@ -119,16 +120,23 @@ public class MarketTrendActivity extends BaseOtherActivity {
                 }
                 dayList.add(new SelectionItem(str, str + "天", "day"));
             }
+            if(marketData.getTradeDate() != null){
+                for (String str : marketData.getTradeDate()) {
+                    if (selectedDate == null) {
+                        selectedDate = str;
+                    }
+                    dateList.add(new SelectionItem(str, str, "date"));
+                }
+            }
         }
         volList.add(new SelectionItem("0", "价格突破", "vol"));
         volList.add(new SelectionItem("1", "放量突破", "vol"));
         dayOptions = creatOptionPicker(dayList);
         volOptions = creatOptionPicker(volList);
-        initTimePicker();
-        selectedDate = marketData.getTradeDate();
-        txt_date.setText(marketData.getTradeDate());
+        pvTime = creatOptionPicker(dateList);
+//        initTimePicker();
+        txt_date.setText(selectedDate);
         txt_day_list.setText(dayList.get(0).getText());
-        selectedDay = dayList.get(0).getValue();
         txt_vol.setText(volList.get(0).getText());
         selectedVol = volList.get(0).getValue();
     }
@@ -141,9 +149,12 @@ public class MarketTrendActivity extends BaseOtherActivity {
                 if (item.getType().equals("day")) {
                     txt_day_list.setText(item.getPickerViewText());
                     selectedDay = item.getValue();
-                } else {
+                } else if(item.getType().equals("vol")){
                     selectedVol = item.getValue();
                     txt_vol.setText(item.getPickerViewText());
+                } else if(item.getType().equals("date")){
+                    selectedDate = item.getValue();
+                    txt_date.setText(item.getPickerViewText());
                 }
                 loadBreakUpList();
             }
@@ -168,49 +179,49 @@ public class MarketTrendActivity extends BaseOtherActivity {
     }
 
     private void initTimePicker() {//Dialog 模式下，在底部弹出
-        pvTime = new TimePickerBuilder(this, new OnTimeSelectListener() {
-            @Override
-            public void onTimeSelect(Date date, View v) {
-                String time = CommonUtil.formartTimeString(date, "yyyyMMdd");
-                selectedDate = time;
-                txt_date.setText(time);
-                loadBreakUpList();
-            }
-        })
-                .setType(new boolean[]{true, true, true, false, false, false})
-                .isDialog(true) //默认设置false ，内部实现将DecorView 作为它的父控件。
-                .setCancelText("取消")//取消按钮文字
-                .setSubmitText("确认")//确认按钮文字
-                .setContentTextSize(20)//设置滚轮文字大小
-                .setDividerColor(getColor(R.color.colorPrimary))//设置分割线的颜色
-                .setOutSideColor(getColor(R.color.div_white_bg)) //设置外部遮罩颜色
-                .setTextColorCenter(getColor(R.color.colorPrimary))
-                .setItemVisibleCount(6) //若设置偶数，实际值会加1（比如设置6，则最大可见条目为7）
-                .setLineSpacingMultiplier(2.0f)
-                .isAlphaGradient(true)
-                .setLabel("年", "月", "日", "时", "分", "秒")//默认设置为年月日时分秒
-                .isCenterLabel(false)
-                .build();
-
-        Dialog mDialog = pvTime.getDialog();
-        if (mDialog != null) {
-
-            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    Gravity.BOTTOM);
-
-            params.leftMargin = 0;
-            params.rightMargin = 0;
-            pvTime.getDialogContainerLayout().setLayoutParams(params);
-
-            Window dialogWindow = mDialog.getWindow();
-            if (dialogWindow != null) {
-                dialogWindow.setWindowAnimations(com.bigkoo.pickerview.R.style.picker_view_slide_anim);//修改动画样式
-                dialogWindow.setGravity(Gravity.BOTTOM);//改成Bottom,底部显示
-                dialogWindow.setDimAmount(0.3f);
-            }
-        }
+//        pvTime = new TimePickerBuilder(this, new OnTimeSelectListener() {
+//            @Override
+//            public void onTimeSelect(Date date, View v) {
+//                String time = CommonUtil.formartTimeString(date, "yyyyMMdd");
+//                selectedDate = time;
+//                txt_date.setText(time);
+//                loadBreakUpList();
+//            }
+//        })
+//                .setType(new boolean[]{true, true, true, false, false, false})
+//                .isDialog(true) //默认设置false ，内部实现将DecorView 作为它的父控件。
+//                .setCancelText("取消")//取消按钮文字
+//                .setSubmitText("确认")//确认按钮文字
+//                .setContentTextSize(20)//设置滚轮文字大小
+//                .setDividerColor(getColor(R.color.colorPrimary))//设置分割线的颜色
+//                .setOutSideColor(getColor(R.color.div_white_bg)) //设置外部遮罩颜色
+//                .setTextColorCenter(getColor(R.color.colorPrimary))
+//                .setItemVisibleCount(6) //若设置偶数，实际值会加1（比如设置6，则最大可见条目为7）
+//                .setLineSpacingMultiplier(2.0f)
+//                .isAlphaGradient(true)
+//                .setLabel("年", "月", "日", "时", "分", "秒")//默认设置为年月日时分秒
+//                .isCenterLabel(false)
+//                .build();
+//
+//        Dialog mDialog = pvTime.getDialog();
+//        if (mDialog != null) {
+//
+//            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+//                    ViewGroup.LayoutParams.MATCH_PARENT,
+//                    ViewGroup.LayoutParams.WRAP_CONTENT,
+//                    Gravity.BOTTOM);
+//
+//            params.leftMargin = 0;
+//            params.rightMargin = 0;
+//            pvTime.getDialogContainerLayout().setLayoutParams(params);
+//
+//            Window dialogWindow = mDialog.getWindow();
+//            if (dialogWindow != null) {
+//                dialogWindow.setWindowAnimations(com.bigkoo.pickerview.R.style.picker_view_slide_anim);//修改动画样式
+//                dialogWindow.setGravity(Gravity.BOTTOM);//改成Bottom,底部显示
+//                dialogWindow.setDimAmount(0.3f);
+//            }
+//        }
     }
 
     private void bindView() {

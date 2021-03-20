@@ -3,18 +3,18 @@ package com.cgmn.msxl.server_interface;
 import java.util.List;
 
 public class MarketData {
-    String tradeDate;
+    List<String> tradeDate;
     List<String> points;
     Integer unlocked;
     private List<TrendStock> trendList;
 
     private List<StockDetail> stocks;
 
-    public String getTradeDate() {
+    public List<String> getTradeDate() {
         return tradeDate;
     }
 
-    public void setTradeDate(String tradeDate) {
+    public void setTradeDate(List<String> tradeDate) {
         this.tradeDate = tradeDate;
     }
 
