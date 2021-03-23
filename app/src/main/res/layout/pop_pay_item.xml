@@ -22,22 +22,22 @@
                 android:id="@+id/btn_zfb"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/white_btn_top"
+                android:background="@drawable/white_btn"
                 android:text="支付宝"
                 android:textColor="@color/main_bg_grey" />
 
-        <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/bg_gray"
-                 />
-        <Button
-                android:id="@+id/btn_wx"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/white_btn_bottom"
-                android:text="微信支付"
-                android:textColor="@color/main_bg_grey" />
+<!--        <View-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="1dp"-->
+<!--                android:background="@color/bg_gray"-->
+<!--                 />-->
+<!--        <Button-->
+<!--                android:id="@+id/btn_wx"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:background="@drawable/white_btn_bottom"-->
+<!--                android:text="微信支付"-->
+<!--                android:textColor="@color/main_bg_grey" />-->
         <Button
                 android:id="@+id/btn_cancel"
                 android:layout_width="match_parent"

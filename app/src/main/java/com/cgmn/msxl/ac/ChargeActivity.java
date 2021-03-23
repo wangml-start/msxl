@@ -1,6 +1,5 @@
 package com.cgmn.msxl.ac;
 
-import android.app.ProgressDialog;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -15,6 +14,7 @@ import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.adpter.ChargeAdpter;
 import com.cgmn.msxl.comp.pop.PayPop;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
+import com.cgmn.msxl.in.PaymentListener;
 import com.cgmn.msxl.server_interface.VipDataSetting;
 import com.cgmn.msxl.service.GlobalDataHelper;
 import com.cgmn.msxl.service.OkHttpClientManager;
@@ -34,7 +34,6 @@ public class ChargeActivity extends BaseOtherActivity {
     private GridView grid_view;
 
     private Handler mHandler;
-    protected ProgressDialog dialog;
     private ChargeAdpter myAdapter = null;
     private PayPop mPayPopWindow;
     private Integer selectedCharge;
@@ -76,9 +75,7 @@ public class ChargeActivity extends BaseOtherActivity {
             @Override
             public boolean handleMessage(Message msg) {
                 if(MessageUtil.VIP_CHARGE_RESPONSE == msg.what){
-                    dialog.cancel();
                 } else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
-                    dialog.cancel();
                     GlobalExceptionHandler.getInstance(mContext).handlerException((Exception) msg.obj);
                 }
                 return false;
@@ -86,8 +83,6 @@ public class ChargeActivity extends BaseOtherActivity {
         });
 
         txt_des = findViewById(R.id.txt_des);
-        dialog = new ProgressDialog(mContext);
-        dialog.setMessage("正在提交...");
     }
 
     private void setPermission(){
@@ -129,20 +124,20 @@ public class ChargeActivity extends BaseOtherActivity {
 
 
     private void showPayPop(){
-        mPayPopWindow = new PayPop(ChargeActivity.this, new View.OnClickListener() {
+        mPayPopWindow = new PayPop(ChargeActivity.this, new PaymentListener() {
             @Override
-            public void onClick(View v) {
-                mPayPopWindow.dismiss();
-                onZFBCilck();
-            }
-        }, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mPayPopWindow.dismiss();
-                onWXCilck();
+            public void afterPayment(Boolean success) {
             }
         });
         mPayPopWindow.setAmt(selectedCharge+"");
+        Map<String, String> params = new HashMap<>();
+        params.put("amt", selectedCharge+"");
+        params.put("channel","android");
+        params.put("charge_type",PayPop.CHARGE_TYPE_CASH+"");
+        params.put("body","投资悟道充值");
+        params.put("subject","投资悟道充值");
+        params.put("token", GlobalDataHelper.getToken(mContext));
+        mPayPopWindow.setParams(params);
 
         View rootView = LayoutInflater.from(mContext)
                 .inflate(R.layout.vip_page_layout, null);
@@ -151,61 +146,9 @@ public class ChargeActivity extends BaseOtherActivity {
 
     }
 
-    private void onZFBCilck(){
-        sendToServer();
-    }
-
-    private void onWXCilck(){
-        sendToServer();
-    }
-
-    private void sendToServer(){
-        dialog.show();
-        GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
-            @Override
-            public void run() {
-                String action = "/vip_purchase/user_charge";
-                Map<String, String> params = new HashMap<>();
-                params.put("amt", selectedCharge+"");
-                params.put("token", GlobalDataHelper.getToken(mContext));
-                String url = CommonUtil.buildGetUrl(
-                        PropertyService.getInstance().getKey("serverUrl"),
-                        action, params);
-                OkHttpClientManager.getAsyn(url,
-                        new OkHttpClientManager.ResultCallback<VipDataSetting>() {
-                            @Override
-                            public void onError(com.squareup.okhttp.Request request, Exception e) {
-                                Message message = Message.obtain();
-                                message.what = MessageUtil.EXCUTE_EXCEPTION;
-                                message.obj = e;
-                                mHandler.sendMessage(message);
-                            }
-
-                            @Override
-                            public void onResponse(VipDataSetting data) {
-                                Message message = Message.obtain();
-                                message.what = MessageUtil.VIP_CHARGE_RESPONSE;
-                                try {
-                                    message.obj = data;
-                                    Integer status = data.getStatus();
-                                    if (status == null || status == -1) {
-                                        throw new Exception(data.getError());
-                                    }
-                                } catch (Exception e) {
-                                    message.what = MessageUtil.EXCUTE_EXCEPTION;
-                                    message.obj = e;
-                                }
-                                mHandler.sendMessage(message);
-                            }
-                        });
-                Log.e(TAG, "NAME=" + Thread.currentThread().getName());
-            }
-        });
-    }
 
     @Override
     public void finish() {
-        dialog.dismiss();
         super.finish();
     }
 }

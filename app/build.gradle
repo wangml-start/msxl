@@ -42,6 +42,7 @@ dependencies {
     implementation 'com.azhon:appupdateX:3.0.3'
     implementation 'com.contrarywind:Android-PickerView:4.1.9'
     testImplementation 'junit:junit:4.12'
+    implementation (name: 'alipaysdk-15.8.02.210308182128', ext: 'aar')
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 

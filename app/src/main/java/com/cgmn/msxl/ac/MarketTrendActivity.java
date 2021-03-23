@@ -3,6 +3,7 @@ package com.cgmn.msxl.ac;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.util.DisplayMetrics;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.*;
+import androidx.annotation.RequiresApi;
 import androidx.core.graphics.drawable.DrawableCompat;
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
@@ -66,6 +68,7 @@ public class MarketTrendActivity extends BaseOtherActivity {
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void init() {
         bindView();
@@ -76,6 +79,7 @@ public class MarketTrendActivity extends BaseOtherActivity {
 
     private void initMessageHandler() {
         mHandler = new Handler(new Handler.Callback() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public boolean handleMessage(Message msg) {
                 if (MessageUtil.REQUEST_SUCCESS == msg.what) {
@@ -112,6 +116,7 @@ public class MarketTrendActivity extends BaseOtherActivity {
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     private void initOptions() {
         if (marketData != null) {
             for (String str : marketData.getPoints()) {
@@ -141,6 +146,7 @@ public class MarketTrendActivity extends BaseOtherActivity {
         selectedVol = volList.get(0).getValue();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     private OptionsPickerView creatOptionPicker(final ArrayList<SelectionItem> list) {
         OptionsPickerView ops = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
             @Override
@@ -224,6 +230,7 @@ public class MarketTrendActivity extends BaseOtherActivity {
 //        }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     private void bindView() {
         stockManager = new StockDisplayManager();
 
@@ -279,6 +286,7 @@ public class MarketTrendActivity extends BaseOtherActivity {
                     selectedCode = object.getStackCode();
                     loadStockDetails(object.getStackCode());
                     txt_des.setText(object.getBreakUpDays());
+                    txt_title.setText(object.getStackName());
                 }
             }
         });

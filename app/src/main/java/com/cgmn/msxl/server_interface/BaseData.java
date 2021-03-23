@@ -42,6 +42,8 @@ public class BaseData {
 
     MarketData marketData;
 
+    String alipaySignature;
+
     public Integer getStatus() {
         return status;
     }
@@ -200,5 +202,13 @@ public class BaseData {
 
     public void setMarketData(MarketData marketData) {
         this.marketData = marketData;
+    }
+
+    public String getAlipaySignature() {
+        return alipaySignature;
+    }
+
+    public void setAlipaySignature(String alipaySignature) {
+        this.alipaySignature = alipaySignature;
     }
 }

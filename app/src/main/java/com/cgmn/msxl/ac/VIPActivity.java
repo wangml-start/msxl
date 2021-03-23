@@ -18,6 +18,8 @@ import com.cgmn.msxl.comp.adpter.VipAdpter;
 import com.cgmn.msxl.comp.pop.PayPop;
 import com.cgmn.msxl.data.VipItem;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
+import com.cgmn.msxl.in.PaymentListener;
+import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.server_interface.VipDataSetting;
 import com.cgmn.msxl.service.GlobalDataHelper;
 import com.cgmn.msxl.service.OkHttpClientManager;
@@ -78,10 +80,28 @@ public class VIPActivity extends BaseOtherActivity {
 
     @Override
     protected void init(){
+        initMessageHandler();
         bindView();
         initAdpter();
 
         setSelLevel();
+    }
+
+    private void initMessageHandler(){
+        mHandler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message msg) {
+                if (msg.what == MessageUtil.REQUEST_SUCCESS) {
+                    setting = (VipDataSetting) msg.obj;
+                    afterLoad();
+                } else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
+                    dialog.cancel();
+                    GlobalExceptionHandler.getInstance(mContext).handlerException((Exception) msg.obj);
+                }
+                return false;
+            }
+        });
+
     }
 
     private void bindView(){
@@ -109,27 +129,6 @@ public class VIPActivity extends BaseOtherActivity {
         line_level1.setOnClickListener(listener);
         line_level2.setOnClickListener(listener);
         btn_pay.setOnClickListener(listener);
-
-
-        mHandler = new Handler(new Handler.Callback() {
-            @Override
-            public boolean handleMessage(Message msg) {
-                if (msg.what == MessageUtil.REQUEST_SUCCESS) {
-                    setting = (VipDataSetting) msg.obj;
-                    afterLoad();
-                } else if(MessageUtil.VIP_CHARGE_RESPONSE == msg.what){
-                    dialog.cancel();
-                    VipDataSetting res = (VipDataSetting) msg.obj;
-                    setting.setExpireDate(res.getExpireDate());
-                    setting.setLevel(res.getLevel());
-                    setPermission();
-                } else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
-                    dialog.cancel();
-                    GlobalExceptionHandler.getInstance(mContext).handlerException((Exception) msg.obj);
-                }
-                return false;
-            }
-        });
 
         grid_view = findViewById(R.id.grid_view);
         txt_u_name = findViewById(R.id.txt_u_name);
@@ -161,23 +160,26 @@ public class VIPActivity extends BaseOtherActivity {
         if (!CommonUtil.isEmpty(setting.getList())) {
             mData = setting.getList();
         }
-        myAdapter = new VipAdpter(mContext, mData);
-        myAdapter.setRate(setting.getRate());
-        grid_view.setAdapter(myAdapter);
-        grid_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectedVip = mData.get(position);
-                for(int i=0;i<parent.getCount();i++){
-                    View v = parent.getChildAt(i);
-                    if (position == i) {//当前选中的Item改变背景颜色
-                        view.setBackgroundResource(R.drawable.bt_back_pressed);
-                    } else {
-                        v.setBackgroundResource(R.drawable.bt_back_blank);
+        if (myAdapter == null) {
+            myAdapter = new VipAdpter(mContext, mData);
+            myAdapter.setRate(setting.getRate());
+            grid_view.setAdapter(myAdapter);
+            grid_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    selectedVip = mData.get(position);
+                    for(int i=0;i<parent.getCount();i++){
+                        View v = parent.getChildAt(i);
+                        if (position == i) {//当前选中的Item改变背景颜色
+                            view.setBackgroundResource(R.drawable.bt_back_pressed);
+                        } else {
+                            v.setBackgroundResource(R.drawable.bt_back_blank);
+                        }
                     }
-                }
-                setSelLevel();
-            }});
+                    setSelLevel();
+                }});
+        }
+        myAdapter.notifyDataSetChanged();
     }
 
     private void initAdpter(){
@@ -256,26 +258,23 @@ public class VIPActivity extends BaseOtherActivity {
         p.put("num", selectedVip.getNum()+"");
         Float menoy = selectedVip.getAmt() * rate;
         p.put("amt", menoy.intValue()+"");
-
+        p.put("channel","android");
+        p.put("body","投资悟道开通会员");
+        p.put("subject","投资悟道开通会员");
+        p.put("charge_type",PayPop.CHARGE_TYPE_VIP+"");
         return p;
     }
 
 
     private void showPayPop(){
-        mPayPopWindow = new PayPop(VIPActivity.this, new View.OnClickListener() {
+        mPayPopWindow = new PayPop(VIPActivity.this, new PaymentListener() {
             @Override
-            public void onClick(View v) {
-                mPayPopWindow.dismiss();
-                onZFBCilck();
-            }
-        }, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mPayPopWindow.dismiss();
-                onWXCilck();
+            public void afterPayment(Boolean success) {
+                initAdpter();
             }
         });
         mPayPopWindow.setAmt(getParms().get("amt"));
+        mPayPopWindow.setParams(getParms());
 
         View rootView = LayoutInflater.from(mContext)
                 .inflate(R.layout.vip_page_layout, null);
@@ -284,56 +283,6 @@ public class VIPActivity extends BaseOtherActivity {
 
     }
 
-    private void onZFBCilck(){
-        sendToServer();
-    }
-
-    private void onWXCilck(){
-        sendToServer();
-    }
-
-    private void sendToServer(){
-        dialog.show();
-        GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
-            @Override
-            public void run() {
-                String action = "/vip_purchase/vip_charge";
-                Map<String, String> params = getParms();
-                params.put("token", GlobalDataHelper.getToken(mContext));
-                String url = CommonUtil.buildGetUrl(
-                        PropertyService.getInstance().getKey("serverUrl"),
-                        action, params);
-                OkHttpClientManager.getAsyn(url,
-                        new OkHttpClientManager.ResultCallback<VipDataSetting>() {
-                            @Override
-                            public void onError(com.squareup.okhttp.Request request, Exception e) {
-                                Message message = Message.obtain();
-                                message.what = MessageUtil.EXCUTE_EXCEPTION;
-                                message.obj = e;
-                                mHandler.sendMessage(message);
-                            }
-
-                            @Override
-                            public void onResponse(VipDataSetting data) {
-                                Message message = Message.obtain();
-                                message.what = MessageUtil.VIP_CHARGE_RESPONSE;
-                                try {
-                                    message.obj = data;
-                                    Integer status = data.getStatus();
-                                    if (status == null || status == -1) {
-                                        throw new Exception(data.getError());
-                                    }
-                                } catch (Exception e) {
-                                    message.what = MessageUtil.EXCUTE_EXCEPTION;
-                                    message.obj = e;
-                                }
-                                mHandler.sendMessage(message);
-                            }
-                        });
-                Log.e(TAG, "NAME=" + Thread.currentThread().getName());
-            }
-        });
-    }
 
     @Override
     public void finish() {

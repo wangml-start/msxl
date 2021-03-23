@@ -42,6 +42,9 @@ public class MessageUtil {
     public static int REQUEST_BREAK_UP_SUCCESS = 0x020;
     public static int REQUEST_STOCK_DETAIL_SUCCESS = 0x021;
 
+    public static int VIP_CHARGE_ZFB_RESPONSE = 0x022;
+    public static int ZFB_LOCAL_RESPONSE = 0x023;
+
     public static int EXCUTE_EXCEPTION = 0x999;
 
 
