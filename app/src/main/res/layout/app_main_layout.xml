@@ -48,7 +48,7 @@
                 guide:icon="@drawable/user_man"
                 guide:text="@string/tab_menu_may"
                 guide:color="@color/colorAccent"
-                guide:text_size="@dimen/size12" />
+                guide:text_size="@dimen/miniSize" />
 
     </LinearLayout>
 

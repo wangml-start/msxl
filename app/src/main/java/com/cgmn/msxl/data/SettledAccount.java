@@ -13,6 +13,8 @@ public class SettledAccount {
 
     private Float fee;
 
+    private Integer vipPermission;
+
     public Integer getId() {
         return id;
     }
@@ -59,5 +61,13 @@ public class SettledAccount {
 
     public void setFee(Float fee) {
         this.fee = fee;
+    }
+
+    public Integer getVipPermission() {
+        return vipPermission;
+    }
+
+    public void setVipPermission(Integer vipPermission) {
+        this.vipPermission = vipPermission;
     }
 }

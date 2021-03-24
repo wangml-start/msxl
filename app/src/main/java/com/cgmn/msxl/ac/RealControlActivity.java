@@ -167,6 +167,11 @@ public class RealControlActivity extends AppCompatActivity
                     SettledAccount acc = (SettledAccount) msg.obj;
                     stockView.initAccount(acc.getCashAmt());
                     stockView.invalidateView();
+                    if(acc.getVipPermission() == 0){
+                        jumpToChargetPage("vip");
+                    }else if(acc.getCashAmt().intValue() == 0){
+                        jumpToChargetPage("charge");
+                    }
                 }else if(msg.what == MessageUtil.LPAD_USER_MODES_SUCCESS){
                     //show current mode
                     showSelectModes();
@@ -513,6 +518,36 @@ public class RealControlActivity extends AppCompatActivity
                     marqueeManager.tiemrCancel();
                     //确定操作
                     onExit();
+                }
+                @Override
+                public void negative() {
+                    //取消操作
+                }
+            });
+        }
+    }
+
+    public void jumpToChargetPage(String type){
+        if(type.equals("vip")){
+            new ShowDialog().show(mContxt, "当前会员已到期，前往开通?", new ShowDialog.OnBottomClickListener() {
+                @Override
+                public void positive() {
+                    Intent intent = new Intent(mContxt, VIPActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+                @Override
+                public void negative() {
+                    //取消操作
+                }
+            });
+        }else if(type.equals("charge")){
+            new ShowDialog().show(mContxt, "账户可用资金不足，前往充值?", new ShowDialog.OnBottomClickListener() {
+                @Override
+                public void positive() {
+                    Intent intent = new Intent(mContxt, ChargeActivity.class);
+                    startActivity(intent);
+                    finish();
                 }
                 @Override
                 public void negative() {

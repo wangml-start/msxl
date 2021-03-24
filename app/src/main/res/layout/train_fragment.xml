@@ -15,6 +15,7 @@
                 android:id="@+id/user_header"
                 android:layout_marginTop="5dp"
                 android:layout_marginLeft="8dp"
+                android:visibility="gone"
                 android:layout_width="62dp"
                 android:layout_height="25dp"
                 />
@@ -32,7 +33,7 @@
                 android:layout_width="70dp"
                 android:layout_height="match_parent"
                 android:layout_centerInParent="true"
-                android:gravity="center"
+                android:visibility="gone"
                 android:text="会员"
                 android:textColor="@color/bg_white"
                 android:textSize="@dimen/smallSize" />
