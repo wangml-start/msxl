@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
+import com.cgmn.msxl.comp.CustmerToast;
 import com.cgmn.msxl.comp.adpter.UserRankAdpter;
 import com.cgmn.msxl.data.RankEntity;
 import com.cgmn.msxl.data.StockHolder;
@@ -94,6 +95,8 @@ public class RankFragment extends Fragment {
                         }else{
                             txt_rank.setText(String.format("%s %s/%s", txt, "--", mData.get(0).getTotalAcc()));
                         }
+                    }else{
+                        CustmerToast.makeText(mContext, getString(R.string.zan_no_rank)).show();
                     }
                 } else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
                     GlobalExceptionHandler.getInstance(mContext).handlerException((Exception) msg.obj);

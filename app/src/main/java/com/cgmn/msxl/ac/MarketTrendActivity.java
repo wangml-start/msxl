@@ -1,6 +1,5 @@
 package com.cgmn.msxl.ac;
 
-import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -8,24 +7,23 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.*;
 import androidx.annotation.RequiresApi;
 import androidx.core.graphics.drawable.DrawableCompat;
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
-import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
-import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
-import com.bigkoo.pickerview.view.TimePickerView;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.adpter.MarketAdapter;
 import com.cgmn.msxl.comp.k.KlineChart;
+import com.cgmn.msxl.comp.pop.PayPop;
+import com.cgmn.msxl.comp.pop.UnlockPop;
 import com.cgmn.msxl.data.SelectionItem;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
+import com.cgmn.msxl.in.PaymentListener;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.server_interface.MarketData;
 import com.cgmn.msxl.server_interface.TrendStock;
@@ -35,6 +33,7 @@ import com.cgmn.msxl.service.PropertyService;
 import com.cgmn.msxl.service.StockDisplayManager;
 import com.cgmn.msxl.utils.CommonUtil;
 import com.cgmn.msxl.utils.MessageUtil;
+import com.cgmn.msxl.utils.ShowDialog;
 
 import java.util.*;
 
@@ -42,7 +41,7 @@ public class MarketTrendActivity extends BaseOtherActivity {
     private static final String TAG = MarketTrendActivity.class.getSimpleName();
 
     private Handler mHandler;
-    private TextView txt_day_list, txt_date, txt_vol,txt_des;
+    private TextView txt_day_list, txt_date, txt_vol,txt_des,txt_unlock_des;
     private LinearLayout chartParent;
     private ListView list_content;
     private MarketAdapter adapter;
@@ -56,6 +55,9 @@ public class MarketTrendActivity extends BaseOtherActivity {
     private String selectedDay, selectedVol = "0", selectedDate;
     private String selectedCode;
     private StockDisplayManager stockManager;
+
+    private UnlockPop mPhotoPopupWindow;
+    private PayPop mPayPopWindow;
 
     @Override
     protected int getContentView() {
@@ -108,6 +110,13 @@ public class MarketTrendActivity extends BaseOtherActivity {
                         stockManager.setStocks(mkData.getStocks());
                         startChartInit();
                     }
+                } else if(msg.what == MessageUtil.UNLOCK_BY_ADD_FEE){
+                    BaseData data = (BaseData) msg.obj;
+                    if(data.getStatus() == 5000){ //成功
+                        loadBreakUpList();
+                    }else if(data.getStatus() == 2000){
+                        new ShowDialog().showTips(mContext, data.getError());
+                    }
                 } else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
                     GlobalExceptionHandler.getInstance(mContext).handlerException((Exception) msg.obj);
                 }
@@ -132,6 +141,11 @@ public class MarketTrendActivity extends BaseOtherActivity {
                     }
                     dateList.add(new SelectionItem(str, str, "date"));
                 }
+            }
+
+            if(marketData.getUnlocked() == 1){
+                txt_unlock_des.setVisibility(View.GONE);
+                txt_complete.setVisibility(View.GONE);
             }
         }
         volList.add(new SelectionItem("0", "价格突破", "vol"));
@@ -239,6 +253,7 @@ public class MarketTrendActivity extends BaseOtherActivity {
         txt_vol = findViewById(R.id.txt_vol);
         txt_day_list = findViewById(R.id.txt_day_list);
         txt_date = findViewById(R.id.txt_date);
+        txt_unlock_des = findViewById(R.id.txt_unlock_des);
         chartParent = findViewById(R.id.chart_parent);
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -436,6 +451,85 @@ public class MarketTrendActivity extends BaseOtherActivity {
     @Override
     protected boolean showComplate() {
         return true;
+    }
+
+    @Override
+    protected void onCompletedClick() {
+        mPhotoPopupWindow = new UnlockPop(MarketTrendActivity.this,
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mPhotoPopupWindow.dismiss();
+                        //调出支付界面
+                        mPayPopWindow = new PayPop(MarketTrendActivity.this, new PaymentListener() {
+                            @Override
+                            public void afterPayment(Boolean success) {
+                                loadBreakUpList();
+                            }
+                        });
+                        mPayPopWindow.setAmt("99");
+                        Map<String, String> p = new HashMap<>();
+                        p.put("amt", "99");
+                        p.put("channel","android");
+                        p.put("body","投资悟道解锁查看完整突破行情");
+                        p.put("subject","投资悟道解锁查看完整突破行情");
+                        p.put("charge_type",PayPop.CHARGE_TYPE_MARKET+"");
+                        mPayPopWindow.setParams(p);
+
+                        View rootView = LayoutInflater.from(mContext)
+                                .inflate(R.layout.activity_main, null);
+                        mPayPopWindow.showAtLocation(rootView,
+                                Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+
+                    }
+                }, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPhotoPopupWindow.dismiss();
+                //查询累计消费
+                GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        String action = "//stock/market_unlock";
+                        Map<String, String> params = new HashMap<>();
+                        params.put("token", GlobalDataHelper.getToken(mContext));
+                        String url = CommonUtil.buildGetUrl(
+                                PropertyService.getInstance().getKey("serverUrl"),
+                                action, params);
+                        OkHttpClientManager.getAsyn(url,
+                                new OkHttpClientManager.ResultCallback<BaseData>() {
+                                    @Override
+                                    public void onError(com.squareup.okhttp.Request request, Exception e) {
+                                        Message message = Message.obtain();
+                                        message.what = MessageUtil.EXCUTE_EXCEPTION;
+                                        message.obj = e;
+                                        mHandler.sendMessage(message);
+                                    }
+                                    @Override
+                                    public void onResponse(BaseData data) {
+                                        Message message = Message.obtain();
+                                        message.what = MessageUtil.UNLOCK_BY_ADD_FEE;
+                                        try {
+                                            message.obj = data;
+                                            Integer status = data.getStatus();
+                                            if (status == null || status == -1) {
+                                                throw new Exception(data.getError());
+                                            }
+                                        } catch (Exception e) {
+                                            message.what = MessageUtil.EXCUTE_EXCEPTION;
+                                            message.obj = e;
+                                        }
+                                        mHandler.sendMessage(message);
+                                    }
+                                });
+                    }
+                });
+            }
+        });
+        View rootView = LayoutInflater.from(mContext)
+                .inflate(R.layout.activity_main, null);
+        mPhotoPopupWindow.showAtLocation(rootView,
+                Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
     }
 
 }

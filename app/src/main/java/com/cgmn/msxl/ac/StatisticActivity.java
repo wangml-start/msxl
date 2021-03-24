@@ -109,7 +109,7 @@ public class StatisticActivity extends BaseOtherActivity {
         lb_st_plrate = findViewById(R.id.lb_st_plrate);
         lb_st_baseAmt = findViewById(R.id.lb_st_baseAmt);
         txt_complete.setText("分享");
-
+        txt_complete.setVisibility(View.GONE);
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra("datas");
         if (bundle != null) {
@@ -134,7 +134,7 @@ public class StatisticActivity extends BaseOtherActivity {
                 Map<String, String> params = new HashMap<>();
                 params.put("token", GlobalDataHelper.getToken(mContext));
                 if (trainType != null) {
-                    params.put("trainType", trainType + "");
+                    params.put("train_type", trainType + "");
                 }
                 if (userModelId != null) {
                     params.put("userModelId", userModelId + "");
@@ -181,6 +181,9 @@ public class StatisticActivity extends BaseOtherActivity {
                 if (msg.what == MessageUtil.REQUEST_SUCCESS) {
                     statistic = (TradeStatistic) msg.obj;
                     showStatisticChart(statistic);
+                    if(statistic.getList() != null && statistic.getList().size() > 0){
+                        txt_complete.setVisibility(View.VISIBLE);
+                    }
                 } else if(msg.what == MessageUtil.PUBLISHED_COMMENT){
                     new ShowDialog().showTips(mContext, "分享成功");
                 }else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {

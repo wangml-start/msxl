@@ -151,5 +151,17 @@
                 android:layout_height="wrap_content"/>
     </LinearLayout>
 
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/txt_unlock_des"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColor="@color/colorPrimary"
+            android:text = "解锁后查看全部行数据"
+            android:textSize="@dimen/size12"
+            />
 
 </RelativeLayout>

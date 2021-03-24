@@ -50,11 +50,11 @@
 
             <TextView
                     android:id="@+id/txt_complete"
-                    android:layout_width="wrap_content"
+                    android:layout_width="40dp"
                     android:layout_height="match_parent"
                     android:gravity="left|center"
                     android:textColor="@color/bg_white"
-                    android:textSize="@dimen/size12"
+                    android:textSize="@dimen/size14"
                     android:text="" />
         </LinearLayout>
     </androidx.appcompat.widget.Toolbar>

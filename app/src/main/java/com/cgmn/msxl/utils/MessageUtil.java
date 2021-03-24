@@ -45,6 +45,9 @@ public class MessageUtil {
     public static int VIP_CHARGE_ZFB_RESPONSE = 0x022;
     public static int ZFB_LOCAL_RESPONSE = 0x023;
 
+
+    public static int UNLOCK_BY_ADD_FEE = 0x024;
+
     public static int EXCUTE_EXCEPTION = 0x999;
 
 

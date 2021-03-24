@@ -19,6 +19,7 @@ import com.cgmn.msxl.R;
 import com.cgmn.msxl.ac.MainActivity;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.bean.AliPayResult;
+import com.cgmn.msxl.comp.CustmerToast;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.cgmn.msxl.in.PaymentListener;
 import com.cgmn.msxl.server_interface.BaseData;
@@ -74,7 +75,11 @@ public class PayPop extends PopupWindow {
             @Override
             public boolean handleMessage(Message msg) {
                 if(MessageUtil.VIP_CHARGE_ZFB_RESPONSE == msg.what){
-                    alipay((String) msg.obj);
+                    if(CommonUtil.isEmpty(msg.obj)){
+                        CustmerToast.makeText(mContext, "服务端请求失败").show();
+                    }else{
+                        alipay((String) msg.obj);
+                    }
                 } else if(MessageUtil.ZFB_LOCAL_RESPONSE == msg.what){
                     AliPayResult payResult = new AliPayResult((Map<String, String>) msg.obj);
                     /**

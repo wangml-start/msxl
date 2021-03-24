@@ -84,7 +84,7 @@ public class RealTradeManage {
             }
             currentK = klineset.getFutureList().get(0);
             float num = (currentK.getStart() - lastK.getEnd()) / lastK.getEnd();
-            if(num > -0.2){
+            if(num > -0.21){
                 currentK.setOpenrate(CommonUtil.formatPercent(num));
             }else{
                 currentK.setOpenrate("--");
