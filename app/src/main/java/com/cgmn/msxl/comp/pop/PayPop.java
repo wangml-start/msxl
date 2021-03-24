@@ -104,7 +104,7 @@ public class PayPop extends PopupWindow {
         this.amt = amt;
         if(amt != null){
             btn_zfb.setText(String.format("支付宝(￥%s)", amt));
-            btn_wx.setText(String.format("微信支付(￥%s)", amt));
+//            btn_wx.setText(String.format("微信支付(￥%s)", amt));
         }
     }
 
