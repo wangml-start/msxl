@@ -23,18 +23,18 @@
                 guide:icon="@drawable/chat_region"
                 guide:text="@string/statistic"
                 guide:color="@color/colorAccent"
-                guide:text_size="@dimen/size12" />
+                guide:text_size="@dimen/miniSize" />
         <com.cgmn.msxl.comp.view.GuideIconView
                 android:id="@+id/txt_xunlian"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:drawablePadding="2dp"
+                android:drawablePadding="4dp"
                 android:gravity="center"
-                android:padding="2dp"
+                android:padding="4dp"
                 guide:icon="@drawable/train_item"
                 guide:text="@string/tab_menu_xunlian"
-                guide:text_size="@dimen/size12"
+                guide:text_size="@dimen/miniSize"
                 guide:color="@color/colorAccent"
                 />
         <com.cgmn.msxl.comp.view.GuideIconView
