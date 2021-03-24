@@ -29,4 +29,12 @@
                 android:textColor="@color/main_bg_orange_light"
                 android:textSize="@dimen/LargeSize" />
     </LinearLayout>
+    <TextView
+            android:clickable="false"
+            android:id="@+id/txt_day_des_next"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:gravity="center"
+            android:textColor="@color/main_bg_orange_light"
+            android:textSize="@dimen/size12" />
 </LinearLayout>

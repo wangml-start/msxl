@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.data.VipItem;
 import com.cgmn.msxl.server_interface.VipDataSetting;
+import com.cgmn.msxl.utils.CommonUtil;
 
 import java.util.List;
 
@@ -49,6 +50,7 @@ public class VipAdpter extends BaseAdapter {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.vip_charge_item, parent, false);
             holder.txt_day_des = convertView.findViewById(R.id.txt_day_des);
             holder.txt_amt = convertView.findViewById(R.id.txt_amt);
+            holder.txt_day_des_next = convertView.findViewById(R.id.txt_day_des_next);
 
             convertView.setTag(R.id.tag_main_item,holder);
         }else{
@@ -58,14 +60,21 @@ public class VipAdpter extends BaseAdapter {
         if(item != null){
             if(item.getTimeType().equals(VipDataSetting.DAY_TYPE)){
                 holder.txt_day_des.setText(String.format("%s天", item.getNum()));
+                holder.txt_day_des_next.setText(String.format("%s/天",CommonUtil.formatNumer(rate * item.getAmt()/item.getNum())));
             }else{
                 String discount = "";
                 if(item.getNum() == 3){
-                    discount = "(8折)";
+                    discount = "8折";
                 }else if(item.getNum() == 12){
-                    discount = "(6折)";
+                    discount = "7折";
+                }else if(item.getNum() == 24){
+                    discount = "6折";
+                }else if(item.getNum() == 36){
+                    discount = "5折";
                 }
-                holder.txt_day_des.setText(String.format("%s个月%s", item.getNum(), discount));
+                Float daily = (rate * item.getAmt()) / (item.getNum()*30);
+                holder.txt_day_des.setText(String.format("%s个月",item.getNum()));
+                holder.txt_day_des_next.setText(String.format("%s %s/天",discount, CommonUtil.formatNumer(daily)));
             }
             Float money = rate * item.getAmt();
 
@@ -82,7 +91,7 @@ public class VipAdpter extends BaseAdapter {
     }
 
     private static class VipViewHolder{
-        TextView txt_day_des;
+        TextView txt_day_des,txt_day_des_next;
         TextView txt_amt;
     }
 
