@@ -106,6 +106,7 @@ public class UserInfoActivity extends BaseOtherActivity {
         txt_signature = findViewById(R.id.txt_signature);
         btn_update = findViewById(R.id.btn_update);
         txt_complete.setText("个人信息");
+        txt_complete.setTextSize(10);
         mHandler = new Handler(new Handler.Callback() {
             @Override
             public boolean handleMessage(Message msg) {

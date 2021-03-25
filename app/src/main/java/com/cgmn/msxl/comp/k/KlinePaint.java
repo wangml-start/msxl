@@ -227,67 +227,6 @@ public class KlinePaint {
             mapPoints(shadowBuffer);
             canvas.drawLines(shadowBuffer, tempKpint);
 
-            //draw char B\S\T
-            if(entry.ch != null){
-                float dotHeight = 80;
-                float textR = 16;
-                Paint chPint = otPaint;
-                if("B".equals(entry.ch)){
-                    chPint = buyPaint;
-                    if(shadowBuffer[7] + dotHeight + textR*2 > candleRect.bottom){
-                        float startY = shadowBuffer[1];
-                        canvas.drawCircle(shadowBuffer[0],startY-20,5f, chPint);
-                        canvas.drawLine(shadowBuffer[0], startY-20, shadowBuffer[2], startY-dotHeight, chPint);
-                        float textLength = whitePaint.measureText(entry.ch);
-                        canvas.drawCircle(shadowBuffer[0], startY-dotHeight-textR, textR,chPint);
-                        canvas.drawText(
-                                entry.ch,
-                                shadowBuffer[0] - (textLength/2.0f),
-                                startY-dotHeight-textR/2,
-                                whitePaint);
-                    }else{
-                        float startY = shadowBuffer[7];
-                        canvas.drawCircle(shadowBuffer[0],startY+textR,5f, chPint);
-                        canvas.drawLine(shadowBuffer[0], startY+textR, shadowBuffer[2], startY+dotHeight, chPint);
-                        float textLength = whitePaint.measureText(entry.ch);
-                        canvas.drawCircle(shadowBuffer[0], startY+dotHeight+textR, textR,chPint);
-                        canvas.drawText(
-                                entry.ch,
-                                shadowBuffer[0] - (textLength/2.0f),
-                                startY+dotHeight+textR+textR/2,
-                                whitePaint);
-                    }
-                } else {
-                    if("S".equals(entry.ch)){
-                        chPint = sellPaint;
-                    }
-                    if(shadowBuffer[1] - dotHeight - textR*2 > candleRect.top){
-                        float startY = shadowBuffer[1];
-                        canvas.drawCircle(shadowBuffer[0],startY-20,5f, chPint);
-                        canvas.drawLine(shadowBuffer[0], startY-20, shadowBuffer[2], startY-dotHeight, chPint);
-                        float textLength = whitePaint.measureText(entry.ch);
-                        canvas.drawCircle(shadowBuffer[0], startY-dotHeight-textR, textR,chPint);
-                        canvas.drawText(
-                                entry.ch,
-                                shadowBuffer[0] - (textLength/2.0f),
-                                startY-dotHeight-textR/2,
-                                whitePaint);
-                    }else{
-                        float startY = shadowBuffer[7];
-                        canvas.drawCircle(shadowBuffer[0],startY+textR,5f, chPint);
-                        canvas.drawLine(shadowBuffer[0], startY+textR, shadowBuffer[2], startY+dotHeight, chPint);
-                        float textLength = whitePaint.measureText(entry.ch);
-                        canvas.drawCircle(shadowBuffer[0], startY+dotHeight+textR, textR,chPint);
-                        canvas.drawText(
-                                entry.ch,
-                                shadowBuffer[0] - (textLength/2.0f),
-                                startY+dotHeight+textR+textR/2,
-                                whitePaint);
-                    }
-                }
-
-            }
-
 
             // draw step 2: draw body
             bodyBuffer[0] = i + mBarSpace;
@@ -378,6 +317,66 @@ public class KlinePaint {
                 canvas.drawLine(deaBuffer[0], macdRect.bottom - deaBuffer[1], deaBuffer[2], macdRect.bottom - deaBuffer[3], mk10Paint);
             }
 
+            //draw char B\S\T
+            if(entry.ch != null){
+                float dotHeight = 80;
+                float textR = 16;
+                Paint chPint = otPaint;
+                if("B".equals(entry.ch)){
+                    chPint = buyPaint;
+                    if(shadowBuffer[7] + dotHeight + textR*2 > candleRect.bottom){
+                        float startY = shadowBuffer[1];
+                        canvas.drawCircle(shadowBuffer[0],startY-20,5f, chPint);
+                        canvas.drawLine(shadowBuffer[0], startY-20, shadowBuffer[2], startY-dotHeight, chPint);
+                        float textLength = whitePaint.measureText(entry.ch);
+                        canvas.drawCircle(shadowBuffer[0], startY-dotHeight-textR, textR,chPint);
+                        canvas.drawText(
+                                entry.ch,
+                                shadowBuffer[0] - (textLength/2.0f),
+                                startY-dotHeight-textR/2,
+                                whitePaint);
+                    }else{
+                        float startY = shadowBuffer[7];
+                        canvas.drawCircle(shadowBuffer[0],startY+textR,5f, chPint);
+                        canvas.drawLine(shadowBuffer[0], startY+textR, shadowBuffer[2], startY+dotHeight, chPint);
+                        float textLength = whitePaint.measureText(entry.ch);
+                        canvas.drawCircle(shadowBuffer[0], startY+dotHeight+textR, textR,chPint);
+                        canvas.drawText(
+                                entry.ch,
+                                shadowBuffer[0] - (textLength/2.0f),
+                                startY+dotHeight+textR+textR/2,
+                                whitePaint);
+                    }
+                } else {
+                    if("S".equals(entry.ch)){
+                        chPint = sellPaint;
+                    }
+                    if(shadowBuffer[1] - dotHeight - textR*2 > candleRect.top){
+                        float startY = shadowBuffer[1];
+                        canvas.drawCircle(shadowBuffer[0],startY-20,5f, chPint);
+                        canvas.drawLine(shadowBuffer[0], startY-20, shadowBuffer[2], startY-dotHeight, chPint);
+                        float textLength = whitePaint.measureText(entry.ch);
+                        canvas.drawCircle(shadowBuffer[0], startY-dotHeight-textR, textR,chPint);
+                        canvas.drawText(
+                                entry.ch,
+                                shadowBuffer[0] - (textLength/2.0f),
+                                startY-dotHeight-textR/2,
+                                whitePaint);
+                    }else{
+                        float startY = shadowBuffer[7];
+                        canvas.drawCircle(shadowBuffer[0],startY+textR,5f, chPint);
+                        canvas.drawLine(shadowBuffer[0], startY+textR, shadowBuffer[2], startY+dotHeight, chPint);
+                        float textLength = whitePaint.measureText(entry.ch);
+                        canvas.drawCircle(shadowBuffer[0], startY+dotHeight+textR, textR,chPint);
+                        canvas.drawText(
+                                entry.ch,
+                                shadowBuffer[0] - (textLength/2.0f),
+                                startY+dotHeight+textR+textR/2,
+                                whitePaint);
+                    }
+                }
+
+            }
 
             // extra calc: set highlight position
             if (highlightPoint[0] <= bodyBuffer[2] && highlightPoint[0] >= bodyBuffer[0]) {
