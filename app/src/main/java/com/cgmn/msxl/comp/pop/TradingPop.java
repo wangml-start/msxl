@@ -189,9 +189,18 @@ public class TradingPop extends PopupWindow
                 CustmerToast.makeText(mContext,
                         "违背模式\n " + StringUtils.join(messges, "\n"), Toast.LENGTH_LONG).show();
             }
+            //标记
+            manage.getCurrentK().setOpChar("B");
         }else{
             float rate = stoHolder.getPlRateNum();
             stoHolder.sellStock(count, price);
+            if(stoHolder.getHoldShare() == 0){
+                //标记
+                manage.getCurrentK().setOpChar("S");
+            }else{
+                //标记
+                manage.getCurrentK().setOpChar("T");
+            }
             if(stoHolder.getHoldShare() == 0 && rate >= 0.2){
                 //上传出色交易
                 uploadTrade(rate);

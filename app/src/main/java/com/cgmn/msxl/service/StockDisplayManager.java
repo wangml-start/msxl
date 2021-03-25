@@ -5,6 +5,7 @@ import com.cgmn.msxl.comp.k.KlineGroup;
 import com.cgmn.msxl.server_interface.StockDetail;
 import com.cgmn.msxl.utils.CommonUtil;
 
+import java.util.Date;
 import java.util.List;
 
 public class StockDisplayManager {
@@ -12,28 +13,35 @@ public class StockDisplayManager {
     private StockDetail lastK;
     private List<StockDetail> stocks;
 
-    public void resetManager(){
+    public void resetManager() {
         group = null;
         stocks = null;
         lastK = null;
     }
 
-    public void repacklineNode() {
-        if(!CommonUtil.isEmpty(stocks)){
+    public void repacklineNode(String date) {
+        if (!CommonUtil.isEmpty(stocks)) {
+            Date nowDate = new Date();
             this.group = new KlineGroup();
             for (int i = 0; i < stocks.size(); i++) {
                 StockDetail detail = stocks.get(i);
                 float last = 0;
-                if(lastK != null){
+                if (lastK != null) {
                     last = lastK.getEnd();
                 }
-                group.addKline(new KLine(
+                KLine kk = new KLine(
                         detail.getHigh(),
                         detail.getLow(),
                         detail.getStart(),
                         detail.getEnd(),
                         last,
-                        detail.getVol()));
+                        detail.getVol());
+                group.addKline(kk);
+                if (date.equals(CommonUtil.formartTimeString(detail.getQuoteDate(), "yyyyMMdd"))) {
+                    if(CommonUtil.compareDate(detail.getQuoteDate(), nowDate) < 0){
+                        kk.setCh(date.substring(6));
+                    }
+                }
                 lastK = detail;
             }
         }

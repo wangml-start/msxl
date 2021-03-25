@@ -193,4 +193,39 @@ public class CommonUtil {
 
         return data;
     }
+
+    /**
+     * 不考虑null
+     * @param obj1
+     * @param obj2
+     * @return
+     */
+    public static int compareDate(Object obj1, Object obj2){
+        Date date1=null, date2=null;
+        if(obj1 instanceof Date){
+            date1 = (Date)obj1;
+        }else{
+            date1 = parseDateString((String)obj1);
+        }
+        if(obj2 instanceof Date){
+            date2 = (Date)obj2;
+        }else{
+            date2 = parseDateString((String)obj2);
+        }
+
+        if(isEmpty(date1) && !isEmpty(date2)){
+            return -1;
+        }
+        if(!isEmpty(date1) && isEmpty(date2)){
+            return 1;
+        }
+        if(isEmpty(date1) && isEmpty(date2)){
+            return 0;
+        }
+
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd");
+
+        return fmt.format(date1).compareTo(fmt.format(date2));
+    }
+
 }

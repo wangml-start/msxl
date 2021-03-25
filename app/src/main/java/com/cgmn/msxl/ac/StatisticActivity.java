@@ -109,7 +109,7 @@ public class StatisticActivity extends BaseOtherActivity {
         lb_st_plrate = findViewById(R.id.lb_st_plrate);
         lb_st_baseAmt = findViewById(R.id.lb_st_baseAmt);
         txt_complete.setText("分享");
-        txt_complete.setVisibility(View.GONE);
+        txt_complete.setEnabled(false);
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra("datas");
         if (bundle != null) {
@@ -182,7 +182,7 @@ public class StatisticActivity extends BaseOtherActivity {
                     statistic = (TradeStatistic) msg.obj;
                     showStatisticChart(statistic);
                     if(statistic.getList() != null && statistic.getList().size() > 0){
-                        txt_complete.setVisibility(View.VISIBLE);
+                        txt_complete.setEnabled(true);
                     }
                 } else if(msg.what == MessageUtil.PUBLISHED_COMMENT){
                     new ShowDialog().showTips(mContext, "分享成功");

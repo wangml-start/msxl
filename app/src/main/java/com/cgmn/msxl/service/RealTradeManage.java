@@ -52,16 +52,19 @@ public class RealTradeManage {
         for (int i = 0; i < klineset.getInitList().size(); i++) {
             StockDetail detail = klineset.getInitList().get(i);
             float last = 0;
-            if(lastK != null){
+            if (lastK != null) {
                 last = lastK.getEnd();
             }
-            group.addKline(new KLine(
+            KLine kk = new KLine(
                     detail.getHigh(),
                     detail.getLow(),
                     detail.getStart(),
                     detail.getEnd(),
                     last,
-                    detail.getVol()));
+                    detail.getVol());
+            kk.setCh(detail.getOpChar());
+            group.addKline(kk);
+
             lastK = detail;
         }
     }

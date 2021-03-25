@@ -33,6 +33,8 @@ public class StockDetail {
 
     private String openrate;
 
+    private String opChar;
+
     public Integer getId() {
         return id;
     }
@@ -147,5 +149,13 @@ public class StockDetail {
 
     public void setStackName(String stackName) {
         this.stackName = stackName;
+    }
+
+    public String getOpChar() {
+        return opChar;
+    }
+
+    public void setOpChar(String opChar) {
+        this.opChar = opChar;
     }
 }

@@ -10,7 +10,9 @@ import java.util.List;
 
 public class KlinePaint {
     protected final Paint mDownPaint, mUpPaint,mimdlePaint;
+    protected final Paint buyPaint, sellPaint,otPaint;
     protected final Paint mGridPaint, mLabelPaint;
+    protected final Paint whitePaint;
     protected final Paint mk5Paint, mk10Paint, mk20Paint;
     private Paint.FontMetrics fontMetrics = new Paint.FontMetrics();
 
@@ -123,6 +125,33 @@ public class KlinePaint {
         mk5Paint.setStrokeWidth(kLineBold);
         mk10Paint.setStrokeWidth(kLineBold);
         mk20Paint.setStrokeWidth(kLineBold);
+
+        buyPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        sellPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        otPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+        buyPaint.setStyle(Paint.Style.FILL);
+        buyPaint.setStrokeWidth(kLineBold);
+        sellPaint.setStyle(Paint.Style.FILL);
+        sellPaint.setStrokeWidth(kLineBold);
+        otPaint.setStyle(Paint.Style.FILL);
+        otPaint.setStrokeWidth(kLineBold);
+        buyPaint.setStrokeWidth(kLineBold);
+        sellPaint.setStrokeWidth(kLineBold);
+        otPaint.setStrokeWidth(kLineBold);
+        buyPaint.setColor(Color.parseColor("#BFDA0505"));
+        sellPaint.setColor(Color.parseColor("#D91E90FF"));
+        otPaint.setColor(Color.parseColor("#D9ED4713"));
+        buyPaint.setPathEffect(new DashPathEffect(new float[]{4, 4}, 0));
+        sellPaint.setPathEffect(new DashPathEffect(new float[]{4, 4}, 0));
+        otPaint.setPathEffect(new DashPathEffect(new float[]{4, 4}, 0));
+
+        whitePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        whitePaint.setStyle(Paint.Style.FILL);
+        whitePaint.setColor(Color.WHITE);
+        whitePaint.setTextSize(25);
+        whitePaint.setStrokeWidth(2f);
+
     }
 
     public void setContentRect(RectF contentRect) {
@@ -194,8 +223,71 @@ public class KlinePaint {
                 shadowBuffer[5] = entry.open;
                 shadowBuffer[7] = entry.low;
             }
+
             mapPoints(shadowBuffer);
             canvas.drawLines(shadowBuffer, tempKpint);
+
+            //draw char B\S\T
+            if(entry.ch != null){
+                float dotHeight = 80;
+                float textR = 16;
+                Paint chPint = otPaint;
+                if("B".equals(entry.ch)){
+                    chPint = buyPaint;
+                    if(shadowBuffer[7] + dotHeight + textR*2 > candleRect.bottom){
+                        float startY = shadowBuffer[1];
+                        canvas.drawCircle(shadowBuffer[0],startY-20,5f, chPint);
+                        canvas.drawLine(shadowBuffer[0], startY-20, shadowBuffer[2], startY-dotHeight, chPint);
+                        float textLength = whitePaint.measureText(entry.ch);
+                        canvas.drawCircle(shadowBuffer[0], startY-dotHeight-textR, textR,chPint);
+                        canvas.drawText(
+                                entry.ch,
+                                shadowBuffer[0] - (textLength/2.0f),
+                                startY-dotHeight-textR/2,
+                                whitePaint);
+                    }else{
+                        float startY = shadowBuffer[7];
+                        canvas.drawCircle(shadowBuffer[0],startY+textR,5f, chPint);
+                        canvas.drawLine(shadowBuffer[0], startY+textR, shadowBuffer[2], startY+dotHeight, chPint);
+                        float textLength = whitePaint.measureText(entry.ch);
+                        canvas.drawCircle(shadowBuffer[0], startY+dotHeight+textR, textR,chPint);
+                        canvas.drawText(
+                                entry.ch,
+                                shadowBuffer[0] - (textLength/2.0f),
+                                startY+dotHeight+textR+textR/2,
+                                whitePaint);
+                    }
+                } else {
+                    if("S".equals(entry.ch)){
+                        chPint = sellPaint;
+                    }
+                    if(shadowBuffer[1] - dotHeight - textR*2 > candleRect.top){
+                        float startY = shadowBuffer[1];
+                        canvas.drawCircle(shadowBuffer[0],startY-20,5f, chPint);
+                        canvas.drawLine(shadowBuffer[0], startY-20, shadowBuffer[2], startY-dotHeight, chPint);
+                        float textLength = whitePaint.measureText(entry.ch);
+                        canvas.drawCircle(shadowBuffer[0], startY-dotHeight-textR, textR,chPint);
+                        canvas.drawText(
+                                entry.ch,
+                                shadowBuffer[0] - (textLength/2.0f),
+                                startY-dotHeight-textR/2,
+                                whitePaint);
+                    }else{
+                        float startY = shadowBuffer[7];
+                        canvas.drawCircle(shadowBuffer[0],startY+textR,5f, chPint);
+                        canvas.drawLine(shadowBuffer[0], startY+textR, shadowBuffer[2], startY+dotHeight, chPint);
+                        float textLength = whitePaint.measureText(entry.ch);
+                        canvas.drawCircle(shadowBuffer[0], startY+dotHeight+textR, textR,chPint);
+                        canvas.drawText(
+                                entry.ch,
+                                shadowBuffer[0] - (textLength/2.0f),
+                                startY+dotHeight+textR+textR/2,
+                                whitePaint);
+                    }
+                }
+
+            }
+
 
             // draw step 2: draw body
             bodyBuffer[0] = i + mBarSpace;

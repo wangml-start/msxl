@@ -17,6 +17,8 @@ public class KLine {
   public float dea;
   public float macd;
 
+  public String ch;
+
   public boolean isOpen=false;
 
   public KLine(float high, float low, float open, float close, float lsclose, int volume) {
@@ -36,5 +38,13 @@ public class KLine {
     this.volume = 1;
     this.isOpen = true;
     this.lastClose = lastClose;
+  }
+
+  public String getCh() {
+    return ch;
+  }
+
+  public void setCh(String ch) {
+    this.ch = ch;
   }
 }

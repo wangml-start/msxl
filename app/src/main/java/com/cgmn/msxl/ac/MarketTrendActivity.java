@@ -88,6 +88,9 @@ public class MarketTrendActivity extends BaseOtherActivity {
                     marketData = (MarketData) msg.obj;
                     adpterDatas.addAll(marketData.getTrendList());
                     initOptions();
+                    if(!CommonUtil.isEmpty(marketData.getTrendList())){
+                        txt_title.setText(marketData.getTrendList().get(0).getStackName());
+                    }
                     adapter = new MarketAdapter(mContext, adpterDatas);
                     list_content.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
@@ -143,9 +146,10 @@ public class MarketTrendActivity extends BaseOtherActivity {
                 }
             }
 
-            if(marketData.getUnlocked() == 1){
-                txt_unlock_des.setVisibility(View.GONE);
-                txt_complete.setVisibility(View.GONE);
+            if(marketData.getUnlocked() == 0){
+                txt_unlock_des.setVisibility(View.VISIBLE);
+                txt_complete.setText("解锁");
+                txt_complete.setEnabled(true);
             }
         }
         volList.add(new SelectionItem("0", "价格突破", "vol"));
@@ -261,7 +265,7 @@ public class MarketTrendActivity extends BaseOtherActivity {
         LinearLayout.LayoutParams kparams = (LinearLayout.LayoutParams) chartParent.getLayoutParams();
         kparams.height = ((Double) (screenHeight * 0.5)).intValue();
         chartParent.setLayoutParams(kparams);
-
+        txt_complete.setEnabled(false);
         View.OnClickListener lis = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -277,7 +281,7 @@ public class MarketTrendActivity extends BaseOtherActivity {
         txt_vol.setOnClickListener(lis);
         txt_day_list.setOnClickListener(lis);
         txt_date.setOnClickListener(lis);
-        txt_complete.setText("解锁");
+
         Drawable right = getResources().getDrawable(R.drawable.down);
         right.setBounds(0, 0, 25, 25);//必须设置图片的大小否则没有作用
         Drawable wrappedDrawable = DrawableCompat.wrap(right);
@@ -307,7 +311,7 @@ public class MarketTrendActivity extends BaseOtherActivity {
         });
     }
     private void startChartInit(){
-        stockManager.repacklineNode();
+        stockManager.repacklineNode(selectedDate);
         if(stockManager.getGroup() == null) {
             return;
         }
@@ -446,11 +450,6 @@ public class MarketTrendActivity extends BaseOtherActivity {
     @Override
     protected boolean showRight() {
         return false;
-    }
-
-    @Override
-    protected boolean showComplate() {
-        return true;
     }
 
     @Override
