@@ -169,7 +169,7 @@ public class RealControlActivity extends AppCompatActivity
                     stockView.invalidateView();
                     if(acc.getVipPermission() == 0){
                         jumpToChargetPage("vip");
-                    }else if(acc.getCashAmt().intValue() == 0){
+                    }else if(acc.getCashAmt().intValue() < 100){
                         jumpToChargetPage("charge");
                     }
                 }else if(msg.what == MessageUtil.LPAD_USER_MODES_SUCCESS){

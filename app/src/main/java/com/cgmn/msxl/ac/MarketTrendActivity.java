@@ -117,6 +117,7 @@ public class MarketTrendActivity extends BaseOtherActivity {
                     BaseData data = (BaseData) msg.obj;
                     if(data.getStatus() == 5000){ //成功
                         loadBreakUpList();
+                        setPermissionText(true);
                     }else if(data.getStatus() == 2000){
                         new ShowDialog().showTips(mContext, data.getError());
                     }
@@ -147,9 +148,7 @@ public class MarketTrendActivity extends BaseOtherActivity {
             }
 
             if(marketData.getUnlocked() == 0){
-                txt_unlock_des.setVisibility(View.VISIBLE);
-                txt_complete.setText("解锁");
-                txt_complete.setEnabled(true);
+                setPermissionText(false);
             }
         }
         volList.add(new SelectionItem("0", "价格突破", "vol"));
@@ -162,6 +161,18 @@ public class MarketTrendActivity extends BaseOtherActivity {
         txt_day_list.setText(dayList.get(0).getText());
         txt_vol.setText(volList.get(0).getText());
         selectedVol = volList.get(0).getValue();
+    }
+
+    private void setPermissionText(Boolean flag){
+        if(!flag){
+            txt_unlock_des.setVisibility(View.VISIBLE);
+            txt_complete.setText("解锁");
+            txt_complete.setEnabled(true);
+        }else{
+            txt_unlock_des.setVisibility(View.GONE);
+            txt_complete.setText("");
+            txt_complete.setEnabled(false);
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -467,9 +478,9 @@ public class MarketTrendActivity extends BaseOtherActivity {
                                 loadBreakUpList();
                             }
                         });
-                        mPayPopWindow.setAmt("99");
+                        mPayPopWindow.setAmt(marketData.getMarketPrice());
                         Map<String, String> p = new HashMap<>();
-                        p.put("amt", "99");
+                        p.put("amt", marketData.getMarketPrice());
                         p.put("channel","android");
                         p.put("body","投资悟道解锁查看完整突破行情");
                         p.put("subject","投资悟道解锁查看完整突破行情");
@@ -490,7 +501,7 @@ public class MarketTrendActivity extends BaseOtherActivity {
                 GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
                     @Override
                     public void run() {
-                        String action = "//stock/market_unlock";
+                        String action = "/stock/market_unlock";
                         Map<String, String> params = new HashMap<>();
                         params.put("token", GlobalDataHelper.getToken(mContext));
                         String url = CommonUtil.buildGetUrl(
@@ -525,7 +536,7 @@ public class MarketTrendActivity extends BaseOtherActivity {
                     }
                 });
             }
-        });
+        },marketData.getMarketPrice());
         View rootView = LayoutInflater.from(mContext)
                 .inflate(R.layout.activity_main, null);
         mPhotoPopupWindow.showAtLocation(rootView,

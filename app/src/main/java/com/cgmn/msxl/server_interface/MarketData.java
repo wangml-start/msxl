@@ -6,6 +6,7 @@ public class MarketData {
     List<String> tradeDate;
     List<String> points;
     Integer unlocked;
+    String marketPrice;
     private List<TrendStock> trendList;
 
     private List<StockDetail> stocks;
@@ -48,5 +49,13 @@ public class MarketData {
 
     public void setStocks(List<StockDetail> stocks) {
         this.stocks = stocks;
+    }
+
+    public String getMarketPrice() {
+        return marketPrice;
+    }
+
+    public void setMarketPrice(String marketPrice) {
+        this.marketPrice = marketPrice;
     }
 }

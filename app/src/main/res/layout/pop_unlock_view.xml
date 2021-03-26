@@ -16,9 +16,10 @@
         <TextView
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:text="选项"
+                android:text="解锁选项"
                 android:gravity="center"
                 android:textColor="@color/text_hint"
+                android:textSize="@dimen/miniSize"
                 android:background="@drawable/white_btn_top"
                 />
         <View
@@ -32,6 +33,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/white_btn_center"
                 android:text="消费满500解锁"
+                android:textSize="@dimen/size12"
                 android:textColor="@color/main_bg_grey" />
 
         <View
@@ -45,7 +47,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/white_btn_bottom"
-                android:text="支付99解锁"
+                android:text=""
+                android:textSize="@dimen/size12"
                 android:textColor="@color/main_bg_grey" />
 
         <Button
@@ -55,6 +58,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="15dp"
                 android:background="@drawable/white_btn"
+                android:textSize="@dimen/size12"
                 android:text="取消"
                 android:textColor="@color/main_bg_grey" />
     </LinearLayout>
