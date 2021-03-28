@@ -80,6 +80,7 @@ public class MarqueeManager {
                                     totalList.addAll(0, data.getMarqueeList());
                                     CatchItem item = data.getMarqueeList().get(0);
                                     GlobalDataHelper.setData("MARQUEE_LAST_NUM", item.getRecordId());
+                                    nodes.clear();
                                     nodes.addAll(totalList);
                                     marqueeview.clearAnimation();
                                     marqueeview.stopFilp();
