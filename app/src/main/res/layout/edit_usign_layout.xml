@@ -16,6 +16,7 @@
             android:inputType="textMultiLine"
             android:textColor="@color/text_topbar"
             android:background="@color/bg_white"
+            android:textSize="@dimen/smallSize"
             android:maxLength="150"
             />
 </LinearLayout>

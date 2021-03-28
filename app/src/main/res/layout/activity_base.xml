@@ -51,7 +51,7 @@
 
             <RelativeLayout
                     android:id="@+id/img_right"
-                    android:layout_width="40dp"
+                    android:layout_width="30dp"
                     android:visibility="gone"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
@@ -65,12 +65,12 @@
 
             <TextView
                     android:id="@+id/txt_complete"
-                    android:layout_width="45dp"
+                    android:layout_width="30dp"
                     android:visibility="gone"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:textColor="@color/bg_white"
-                    android:textSize="@dimen/NormalSize"
+                    android:textSize="@dimen/smallSize"
                     android:text="@string/complete" />
         </LinearLayout>
     </androidx.appcompat.widget.Toolbar>

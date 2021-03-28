@@ -42,6 +42,8 @@ public class EditGenderActivity extends EditBaseActivity
         last_relative = findViewById(R.id.last_relative);
         first_relative.setOnClickListener(this);
         last_relative.setOnClickListener(this);
+        txt_complete.setVisibility(View.VISIBLE);
+        txt_complete.setText("");
 
         if("0".equals(fieldContent)){
             img_man.setImageResource(R.drawable.check);
