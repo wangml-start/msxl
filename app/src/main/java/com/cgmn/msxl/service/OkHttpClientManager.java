@@ -6,16 +6,7 @@ import android.widget.ImageView;
 
 import com.google.gson.Gson;
 import com.google.gson.internal.$Gson$Types;
-import com.squareup.okhttp.Call;
-import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.FormEncodingBuilder;
-import com.squareup.okhttp.Headers;
-import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.MultipartBuilder;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
-import com.squareup.okhttp.Response;
+import com.squareup.okhttp.*;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -49,6 +40,12 @@ public class OkHttpClientManager{
         mOkHttpClient.setReadTimeout(20, TimeUnit.SECONDS);
         mDelivery = new Handler(Looper.getMainLooper());
         mGson = new Gson();
+    }
+
+    public static void addIntercept(Interceptor interceptor){
+        if(mInstance != null){
+            mInstance.mOkHttpClient.interceptors().add(interceptor);
+        }
     }
 
     public static OkHttpClientManager getInstance()

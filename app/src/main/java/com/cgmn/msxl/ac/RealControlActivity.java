@@ -516,7 +516,6 @@ public class RealControlActivity extends AppCompatActivity
             new ShowDialog().show(mContxt, getString(R.string.sure_to_do_this), new ShowDialog.OnBottomClickListener() {
                 @Override
                 public void positive() {
-                    marqueeManager.tiemrCancel();
                     //确定操作
                     onExit();
                 }
@@ -536,6 +535,7 @@ public class RealControlActivity extends AppCompatActivity
                     Intent intent = new Intent(mContxt, VIPActivity.class);
                     startActivity(intent);
                     finish();
+
                 }
                 @Override
                 public void negative() {
@@ -565,4 +565,10 @@ public class RealControlActivity extends AppCompatActivity
         Log.i(TAG, "onBackPressed");
     }
 
+
+    @Override
+    public void finish() {
+        marqueeManager.tiemrCancel();
+        super.finish();
+    }
 }

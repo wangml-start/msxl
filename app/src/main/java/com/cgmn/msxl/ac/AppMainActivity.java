@@ -2,27 +2,34 @@ package com.cgmn.msxl.ac;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.azhon.appupdate.config.UpdateConfiguration;
 import com.azhon.appupdate.manager.DownloadManager;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
+import com.cgmn.msxl.comp.CustmerToast;
 import com.cgmn.msxl.comp.view.GuideIconView;
 import com.cgmn.msxl.comp.frag.MayFragment;
 import com.cgmn.msxl.comp.frag.TrainFragment;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
+import com.cgmn.msxl.receiver.ReceiverMessage;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.service.GlobalDataHelper;
 import com.cgmn.msxl.service.OkHttpClientManager;
 import com.cgmn.msxl.service.PropertyService;
+import com.cgmn.msxl.service.TokenInterceptor;
 import com.cgmn.msxl.utils.CommonUtil;
 import com.cgmn.msxl.utils.MessageUtil;
 
@@ -46,6 +53,9 @@ public class AppMainActivity extends AppCompatActivity
 
     private DownloadManager manager;
 
+    private BroadcastReceiver receiver;
+    private LocalBroadcastManager broadcastManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +65,8 @@ public class AppMainActivity extends AppCompatActivity
         fManager = getFragmentManager();
         txt_xunlian.performClick();
         checkVersion();
+
+        registerTokenListener();
     }
 
 
@@ -212,6 +224,24 @@ public class AppMainActivity extends AppCompatActivity
                         });
             }
         });
+    }
+
+    private void registerTokenListener(){
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Bundle bundle = intent.getExtras();
+                CustmerToast.makeText(mContxt, bundle.getString("message")).show();
+                startActivity(new Intent(mContxt, LoginActivity.class));
+                finish();
+            }
+        };
+        broadcastManager = LocalBroadcastManager.getInstance(mContxt);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ReceiverMessage.TOKEN_INVALID); //监听的事件key
+        broadcastManager.registerReceiver(receiver, intentFilter);
+
+        OkHttpClientManager.getInstance().addIntercept(new TokenInterceptor(mContxt));
     }
 
 }

@@ -1,6 +1,5 @@
 package com.cgmn.msxl.ac;
 
-import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
