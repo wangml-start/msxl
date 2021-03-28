@@ -103,7 +103,7 @@
                 android:layout_height="20dp"
                 android:background="@color/bg_white"
                 app:mvAnimDuration="500"
-                app:mvInterval="4000"
+                app:mvInterval="1500"
                 app:mvDirection="top_to_bottom"
                 >
 

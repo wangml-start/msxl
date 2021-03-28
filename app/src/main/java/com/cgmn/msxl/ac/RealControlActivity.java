@@ -1,7 +1,9 @@
 package com.cgmn.msxl.ac;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.CustmerToast;
@@ -23,6 +26,7 @@ import com.cgmn.msxl.comp.swb.State;
 import com.cgmn.msxl.data.*;
 import com.cgmn.msxl.db.AppSqlHelper;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
+import com.cgmn.msxl.receiver.ReceiverMessage;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.server_interface.KlineSet;
 import com.cgmn.msxl.server_interface.StockDetail;
@@ -52,6 +56,8 @@ public class RealControlActivity extends AppCompatActivity
 
     private LinearLayout chartParent, holderParent;
 
+    private BroadcastReceiver receiver;
+    private LocalBroadcastManager broadcastManager;
 
     private RealTradeManage realtradeManage;
     TextView lb_open_price;
@@ -74,6 +80,7 @@ public class RealControlActivity extends AppCompatActivity
         loadAccCash();
         loadKLineSet();
         loadUserMode();
+        registerTokenListener();
     }
 
     private String getUrl(){
@@ -563,6 +570,22 @@ public class RealControlActivity extends AppCompatActivity
     public void onBackPressed() {
         // super.onBackPressed();//注释掉这行,back键不退出activity
         Log.i(TAG, "onBackPressed");
+    }
+
+    private void registerTokenListener(){
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                marqueeManager.tiemrCancel();
+                finish();
+            }
+        };
+        broadcastManager = LocalBroadcastManager.getInstance(mContxt);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ReceiverMessage.STOP_TIMER_STATK); //监听的事件key
+        broadcastManager.registerReceiver(receiver, intentFilter);
+
+        OkHttpClientManager.getInstance().addIntercept(new TokenInterceptor(mContxt));
     }
 
 

@@ -14,8 +14,10 @@ public class MarqueeManager {
     private String action = "/common/query_marquee_datas";
     private Context mContext;
     MyMarqueeView marqueeview;
-    List<CatchItem> nodes = null;
-    Timer mTimer = new Timer();
+    LinkedList<CatchItem> totalList = new LinkedList<>();
+    LinkedList<CatchItem> nodes = new LinkedList<>();
+    Timer mTimer;
+    TimerTask mTimerTask;
 
     public MarqueeManager(Context context, MyMarqueeView view) {
         mContext = context;
@@ -26,47 +28,43 @@ public class MarqueeManager {
         this.action = action;
     }
 
-    public void startMarquee(){
+    public void startMarquee() {
         final Map<String, String> params = new HashMap<>();
         params.put("token", GlobalDataHelper.getToken(mContext));
-        Object obj = GlobalDataHelper.getData("MARQUEE_LAST_NUM");
-        if(obj != null){
-            params.put("LAST_NUMBER", obj.toString());
-        }
         marqueeview.setCompleteListener(new MyMarqueeView.RotationListener() {
             @Override
             public void completeDisplay() {
-                if(nodes != null && nodes.size() > 0){
-                    CatchItem item = nodes.get(nodes.size()-1);
-                    params.put("LAST_NUMBER",item.getRecordId()+"");
-                    GlobalDataHelper.setData("MARQUEE_LAST_NUM", item.getRecordId());
-                    reloadData(params);
-                }else{
-                    marqueeview.clearAnimation();
-                    marqueeview.stopFilp();
-                }
+                marqueeview.clearAnimation();
+                marqueeview.stopFilp();
+            }
+            @Override
+            public void oneDisplayed(Integer pos) {
+                totalList.remove(nodes.get(pos));
             }
         });
 
 
-        TimerTask mTimerTask = new TimerTask() {
+        mTimerTask = new TimerTask() {
             @Override
             public void run() {
-                if(CommonUtil.isEmpty(nodes)){
-                    reloadData(params);
-                }
+                reloadData(params);
             }
         };
-        //2s后开始执行，间隔为6s
-        mTimer.schedule(mTimerTask, 2000,8000);
+        //2s后开始执行，间隔为3s
+        mTimer = new Timer();
+        mTimer.schedule(mTimerTask, 2000, 4000);
 
     }
 
 
-    private void reloadData(final Map<String, String> params){
+    private void reloadData(final Map<String, String> params) {
         GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
             @Override
             public void run() {
+                Object obj = GlobalDataHelper.getData("MARQUEE_LAST_NUM");
+                if (obj != null) {
+                    params.put("LAST_NUMBER", obj.toString());
+                }
                 String url = CommonUtil.buildGetUrl(
                         PropertyService.getInstance().getKey("serverUrl"),
                         action, params);
@@ -75,12 +73,19 @@ public class MarqueeManager {
                             @Override
                             public void onError(com.squareup.okhttp.Request request, Exception e) {
                             }
+
                             @Override
                             public void onResponse(BaseData data) {
-                                nodes = data.getMarqueeList();
-                                if(nodes != null && nodes.size() > 0){
+                                if (!CommonUtil.isEmpty(data.getMarqueeList())) {
+                                    totalList.addAll(0, data.getMarqueeList());
+                                    CatchItem item = data.getMarqueeList().get(0);
+                                    GlobalDataHelper.setData("MARQUEE_LAST_NUM", item.getRecordId());
+                                    nodes.addAll(totalList);
+                                    marqueeview.clearAnimation();
+                                    marqueeview.stopFilp();
                                     MarqueeAdapter marqueeAdapter = new MarqueeAdapter(mContext, nodes);
                                     marqueeview.setAdapter(marqueeAdapter);
+                                    marqueeview.startFlip();
                                 }
                             }
                         });
@@ -88,8 +93,12 @@ public class MarqueeManager {
         });
     }
 
-    public void tiemrCancel(){
-        mTimer.cancel();
+    public void tiemrCancel() {
+        if (mTimerTask != null) {
+            mTimerTask.cancel();
+        }
+        if (mTimer != null) {
+            mTimer.cancel();
+        }
     }
-
 }

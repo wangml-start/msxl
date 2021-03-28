@@ -230,9 +230,10 @@ public class AppMainActivity extends AppCompatActivity
         receiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
+                Intent jump = new Intent(mContxt, LoginActivity.class);
                 Bundle bundle = intent.getExtras();
-                CustmerToast.makeText(mContxt, bundle.getString("message")).show();
-                startActivity(new Intent(mContxt, LoginActivity.class));
+                jump.putExtra("message", bundle.getString("message"));
+                startActivity(jump);
                 finish();
             }
         };

@@ -221,8 +221,11 @@ public class LoginActivity extends LoginBaseActivity {
 
         acc_down_list = findViewById(R.id.acc_down_list);
         acc_down_list.setOnClickListener(this);
-
-
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        if(bundle != null){
+            CustmerToast.makeText(mContext, bundle.getString("message")).show();
+        }
         //加载用户信息
         GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
             @Override

@@ -106,11 +106,12 @@ public class GlobalDataHelper {
 
     public static void setData(String key, Object obj){
         pageTranfer.put(key, obj);
+        Integer a = 1;
     }
 
     public static Object getData(String key){
         Object obj = pageTranfer.get(key);
-        pageTranfer.remove(key);
+//        pageTranfer.remove(key);
         return obj;
     }
 

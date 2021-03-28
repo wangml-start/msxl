@@ -253,6 +253,9 @@ public class MyMarqueeView extends FrameLayout {
             public void onAnimationStart(Animation animation) {
                 //                Log.i(TAG, "onAnimationStart: mPosition = " +mPosition);
                 mLastView.setVisibility(View.VISIBLE);
+                if(mRotationListener != null){
+                    mRotationListener.oneDisplayed(mPosition);
+                }
             }
 
             @Override
@@ -452,10 +455,16 @@ public class MyMarqueeView extends FrameLayout {
         void onFilpSelect(int position, View view);
     }
 
-    /**
-     * 当显示完一周期
-     */
     public interface RotationListener{
+
+        /**
+         * 当显示完一周期
+         */
         void completeDisplay();
+
+        /**
+         * 当显示完一条
+         */
+        void oneDisplayed(Integer pos);
     }
 }
