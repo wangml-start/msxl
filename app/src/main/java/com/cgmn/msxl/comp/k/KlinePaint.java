@@ -5,6 +5,7 @@ import android.view.MotionEvent;
 import com.cgmn.msxl.utils.CommonUtil;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,73 +18,33 @@ public class KlinePaint {
     private Paint.FontMetrics fontMetrics = new Paint.FontMetrics();
 
     protected KlineGroup data;
+    protected List<KLinePoint> points = new ArrayList<>();
+    protected List<PriceLinePoint> pricePts = new ArrayList<>();
 
     protected RectF contentRect = new RectF();
     protected RectF candleRect = new RectF();
     protected RectF barRect = new RectF();
     protected RectF macdRect = new RectF();
 
-    private final float candleBarRatio = 0.56f;
-    private final float reactUseRate = 0.95f;
+    protected int startx = 0;
+    protected int endx = 0;
 
-    // contain 4 points to draw 2 lines.
-    protected float[] shadowBuffer = new float[8];
-    // contain 2 points to draw a rect.
-    protected float[] bodyBuffer = new float[4];
-    // contain 1 points to get y value.
-    protected float[] barBuffer = new float[2];
-    // contain 1 points to get y value.
-    protected float[] macdBuffer = new float[4];
-    protected float[] difBuffer = new float[4];
-    protected float[] deaBuffer = new float[4];
-
-    private float[] calcTemp = new float[]{0, 0};
-
-    // contain 4 points to draw average lines.
-    protected float[] averageBuffer = new float[4];
-
-    /**
-     * the space between the entries, default 0.1f (10%)
-     */
-    protected float mBarSpace = 0.15f;
-    protected float kLineBold = 3.5f;
-
-    /**
-     * the max visible entry count.
-     */
-    protected int visibleCount = 35;
-
-    private boolean highlightEnable = false;
-    private float[] highlightPoint = new float[2];
-
-    public float getmBarSpace() {
-        return mBarSpace;
+    public int getStartx() {
+        return startx;
     }
 
-    public void setmBarSpace(float mBarSpace) {
-        this.mBarSpace = mBarSpace;
+    public void setStartx(int startx) {
+        this.startx = startx;
     }
 
-    public float getkLineBold() {
-        return kLineBold;
+    public int getEndx() {
+        return endx;
     }
 
-    public void setkLineBold(float kLineBold) {
-        this.kLineBold = kLineBold;
+    public void setEndx(int endx) {
+        this.endx = endx;
     }
 
-    public int getVisibleCount() {
-        return visibleCount;
-    }
-
-    public void setVisibleCount(int visibleCount) {
-        this.visibleCount = visibleCount;
-    }
-
-    /**
-     * a y value formatter.
-     */
-    protected DecimalFormat decimalFormatter = new DecimalFormat("0.00");
 
     public void setColors(int klineUpcolor, int klineDowncolor,
                           int ave5, int ave10, int ave20) {
@@ -97,15 +58,15 @@ public class KlinePaint {
     public KlinePaint() {
         mDownPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mDownPaint.setStyle(Paint.Style.FILL);
-        mDownPaint.setStrokeWidth(kLineBold);
+        mDownPaint.setStrokeWidth(KlineStyle.kLineBold);
 
         mUpPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mUpPaint.setStyle(Paint.Style.STROKE);
-        mUpPaint.setStrokeWidth(kLineBold);
+        mUpPaint.setStrokeWidth(KlineStyle.kLineBold);
 
         mimdlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mimdlePaint.setStyle(Paint.Style.STROKE);
-        mimdlePaint.setStrokeWidth(kLineBold);
+        mimdlePaint.setStrokeWidth(KlineStyle.kLineBold);
         mimdlePaint.setColor(Color.GRAY);
 
         mGridPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -122,26 +83,26 @@ public class KlinePaint {
         mk5Paint.setStyle(Paint.Style.FILL);
         mk10Paint.setStyle(Paint.Style.FILL);
         mk20Paint.setStyle(Paint.Style.FILL);
-        mk5Paint.setStrokeWidth(kLineBold);
-        mk10Paint.setStrokeWidth(kLineBold);
-        mk20Paint.setStrokeWidth(kLineBold);
+        mk5Paint.setStrokeWidth(KlineStyle.kLineBold);
+        mk10Paint.setStrokeWidth(KlineStyle.kLineBold);
+        mk20Paint.setStrokeWidth(KlineStyle.kLineBold);
 
         buyPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         sellPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         otPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
         buyPaint.setStyle(Paint.Style.FILL);
-        buyPaint.setStrokeWidth(kLineBold);
+        buyPaint.setStrokeWidth(KlineStyle.kLineBold);
         sellPaint.setStyle(Paint.Style.FILL);
-        sellPaint.setStrokeWidth(kLineBold);
+        sellPaint.setStrokeWidth(KlineStyle.kLineBold);
         otPaint.setStyle(Paint.Style.FILL);
-        otPaint.setStrokeWidth(kLineBold);
-        buyPaint.setStrokeWidth(kLineBold);
-        sellPaint.setStrokeWidth(kLineBold);
-        otPaint.setStrokeWidth(kLineBold);
-        buyPaint.setColor(Color.parseColor("#BFDA0505"));
-        sellPaint.setColor(Color.parseColor("#D91E90FF"));
-        otPaint.setColor(Color.parseColor("#D9ED4713"));
+        otPaint.setStrokeWidth(KlineStyle.kLineBold);
+        buyPaint.setStrokeWidth(KlineStyle.kLineBold);
+        sellPaint.setStrokeWidth(KlineStyle.kLineBold);
+        otPaint.setStrokeWidth(KlineStyle.kLineBold);
+        buyPaint.setColor(Color.parseColor("#DA0505"));
+        sellPaint.setColor(Color.parseColor("#1E90FF"));
+        otPaint.setColor(Color.parseColor("#ED4713"));
         buyPaint.setPathEffect(new DashPathEffect(new float[]{4, 4}, 0));
         sellPaint.setPathEffect(new DashPathEffect(new float[]{4, 4}, 0));
         otPaint.setPathEffect(new DashPathEffect(new float[]{4, 4}, 0));
@@ -156,8 +117,8 @@ public class KlinePaint {
 
     public void setContentRect(RectF contentRect) {
         float barTop = contentRect.bottom -
-                (1 - candleBarRatio) * (contentRect.height());
-        float macdTop = barTop + (1 - candleBarRatio) * (contentRect.height()) / 2.0f;
+                (1 - KlineStyle.candleBarRatio) * (contentRect.height());
+        float macdTop = barTop + (1 - KlineStyle.candleBarRatio) * (contentRect.height()) / 2.0f;
 
         this.candleRect.set(contentRect.left, contentRect.top, contentRect.right, barTop);
         this.barRect.set(contentRect.left, barTop, contentRect.right, macdTop);
@@ -166,9 +127,9 @@ public class KlinePaint {
     }
 
     public void setData(KlineGroup data) {
+        startx = 0;
+        endx = 0;
         this.data = data;
-        prepareMatrixValue(data.mYMax - data.mYMin, data.mYMin);
-        prepareMatrixOffset(candleRect.left, candleRect.top);
     }
 
     /**
@@ -176,303 +137,169 @@ public class KlinePaint {
      */
     public void render(Canvas canvas) {
         // CALC
-        calc();
+        calcChartPoint();
+        calcPriceLinePoint();
         // DRAW LABELS
         renderLabels(canvas);
-        canvas.drawLine(0, macdRect.top, macdRect.right, macdRect.top, mGridPaint);
-        canvas.drawLine(0, macdRect.bottom, macdRect.right, macdRect.bottom, mGridPaint);
+//        canvas.drawLine(0, macdRect.top, macdRect.right, macdRect.top, mGridPaint);
+//        canvas.drawLine(0, macdRect.bottom, macdRect.right, macdRect.bottom, mGridPaint);
 
         // set the entry draw area.
         canvas.save();
         canvas.clipRect(candleRect.left, candleRect.top, candleRect.right, macdRect.bottom);
-        List<KLine> temList = data.getNodes().subList(visibleXMin, visibleXMax);
-        for (int i = 0; i < temList.size(); i++) {
-            KLine entry = temList.get(i);
+        for (int i = 0; i < points.size(); i++) {
+            KLinePoint entry = points.get(i);
             // draw step 0: set color
+
+            // draw Kline
             Paint tempKpint = mimdlePaint;
-            if(entry.open < entry.close){
+            if(entry.state == 1){
                 tempKpint= mUpPaint;
-            }else if(entry.open > entry.close){
+                canvas.drawRect(entry.openPt[0], entry.closePt[1], entry.openPt[0]+KlineStyle.kWidth, entry.openPt[1], tempKpint);
+                canvas.drawLine(entry.highPt[0], entry.highPt[1], entry.highPt[0], entry.closePt[1], tempKpint);
+                canvas.drawLine(entry.lowPt[0], entry.lowPt[1], entry.lowPt[0], entry.openPt[1], tempKpint);
+            }else if(entry.state == -1){
                 tempKpint = mDownPaint;
-            }
-            if (entry.isOpen) {
-                float openKline[] = new float[4];
-                openKline[0] = i + mBarSpace;
-                openKline[2] = i + 1 - mBarSpace;
-                openKline[1] = entry.open;
-                openKline[3] = entry.open;
-                mapPoints(openKline);
-                canvas.drawLine(openKline[0], openKline[1], openKline[2], openKline[3], tempKpint);
-
-                continue;
-            }
-
-            // draw step 1: draw shadow 上下引线
-            shadowBuffer[0] = i + 0.5f;
-            shadowBuffer[2] = i + 0.5f;
-            shadowBuffer[4] = i + 0.5f;
-            shadowBuffer[6] = i + 0.5f;
-            if (entry.open > entry.close) {
-                shadowBuffer[1] = entry.high;
-                shadowBuffer[3] = entry.open;
-                shadowBuffer[5] = entry.close;
-                shadowBuffer[7] = entry.low;
-            } else {
-                shadowBuffer[1] = entry.high;
-                shadowBuffer[3] = entry.close;
-                shadowBuffer[5] = entry.open;
-                shadowBuffer[7] = entry.low;
-            }
-
-            mapPoints(shadowBuffer);
-            canvas.drawLines(shadowBuffer, tempKpint);
-
-
-            // draw step 2: draw body
-            bodyBuffer[0] = i + mBarSpace;
-            bodyBuffer[2] = i + 1 - mBarSpace;
-            if (entry.open > entry.close) {
-                bodyBuffer[1] = entry.open;
-                bodyBuffer[3] = entry.close;
-            } else {
-                bodyBuffer[1] = entry.close;
-                bodyBuffer[3] = entry.open;
-            }
-
-            mapPoints(bodyBuffer);
-            if(CommonUtil.floatNumEqual(entry.close, entry.open)){
-                canvas.drawLine(bodyBuffer[0], bodyBuffer[1], bodyBuffer[2], bodyBuffer[3], tempKpint);
+                canvas.drawRect(entry.openPt[0], entry.closePt[1], entry.openPt[0]+KlineStyle.kWidth, entry.openPt[1], tempKpint);
+                canvas.drawLine(entry.highPt[0], entry.highPt[1], entry.lowPt[0], entry.lowPt[1], tempKpint);
             }else{
-                canvas.drawRect(bodyBuffer[0], bodyBuffer[1], bodyBuffer[2], bodyBuffer[3], tempKpint);
+                canvas.drawRect(entry.openPt[0], entry.closePt[1], entry.openPt[0]+KlineStyle.kWidth, entry.openPt[1], tempKpint);
+                canvas.drawLine(entry.highPt[0], entry.highPt[1], entry.lowPt[0], entry.lowPt[1], tempKpint);
             }
 
-            // draw step 3: draw bar
-            barBuffer[0] = 0;
-            barBuffer[1] = entry.volume;
-            mMatrixBar.mapPoints(barBuffer);
-            if(entry.close >= entry.lastClose){
-                canvas.drawRect(bodyBuffer[0], barRect.bottom - barBuffer[1], bodyBuffer[2], barRect.bottom - 1,mUpPaint);
+            // draw step 3: draw volume
+            if(entry.state >= 0){
+                canvas.drawRect(entry.volBPt[0], entry.volumePt[1],
+                        entry.volBPt[0]+KlineStyle.kWidth, entry.volBPt[1],mUpPaint);
             }else{
-                canvas.drawRect(bodyBuffer[0], barRect.bottom - barBuffer[1], bodyBuffer[2], barRect.bottom - 1, mDownPaint);
+                canvas.drawRect(entry.volBPt[0], entry.volumePt[1],
+                        entry.volBPt[0]+KlineStyle.kWidth, entry.volBPt[1],mDownPaint);
             }
 
             //draw step 4: MA5 10 20
             if (i > 0) {
-                KLine preEntry = temList.get(i - 1);
-                if (preEntry.avg5 > 0) {
-                    averageBuffer[0] = i - 1;
-                    averageBuffer[2] = i;
-                    averageBuffer[1] = preEntry.avg5;
-                    averageBuffer[3] = entry.avg5;
-                    mapPoints(averageBuffer);
-                    canvas.drawLine(averageBuffer[0], averageBuffer[1], averageBuffer[2], averageBuffer[3], mk5Paint);
+                KLinePoint preEntry = points.get(i - 1);
+                if (preEntry.line5Pt != null) {
+                    canvas.drawLine(preEntry.line5Pt[0], preEntry.line5Pt[1], entry.line5Pt[0], entry.line5Pt[1], mk5Paint);
                 }
-                if (preEntry.avg10 > 0) {
-                    averageBuffer[0] = i - 1;
-                    averageBuffer[2] = i;
-                    averageBuffer[1] = preEntry.avg10;
-                    averageBuffer[3] = entry.avg10;
-                    mapPoints(averageBuffer);
-                    canvas.drawLine(averageBuffer[0], averageBuffer[1], averageBuffer[2], averageBuffer[3], mk10Paint);
+                if (preEntry.line10Pt != null) {
+                    canvas.drawLine(preEntry.line10Pt[0], preEntry.line10Pt[1], entry.line10Pt[0], entry.line10Pt[1], mk10Paint);
                 }
-                if (preEntry.avg20 > 0) {
-                    averageBuffer[0] = i - 1;
-                    averageBuffer[2] = i;
-                    averageBuffer[1] = preEntry.avg20;
-                    averageBuffer[3] = entry.avg20;
-                    mapPoints(averageBuffer);
-                    canvas.drawLine(averageBuffer[0], averageBuffer[1], averageBuffer[2], averageBuffer[3], mk20Paint);
+                if (preEntry.line20Pt != null) {
+                    canvas.drawLine(preEntry.line20Pt[0], preEntry.line20Pt[1], entry.line20Pt[0], entry.line20Pt[1], mk20Paint);
                 }
             }
 
             //draw step 4: MACD
-            macdBuffer[0] = 0;
-            macdBuffer[1] = entry.macd;
-            macdBuffer[2] = 0;
-            macdBuffer[3] = 0;
-            mMatrixMacd.mapPoints(macdBuffer);
-            mMatrixOffset.mapPoints(macdBuffer);
-            if (entry.macd > 0) {
-                canvas.drawLine(shadowBuffer[0], macdRect.bottom - macdBuffer[1], shadowBuffer[0], macdRect.bottom - macdBuffer[3], mUpPaint);
+            if (entry.macdState > 0) {
+                canvas.drawLine(entry.macdPt[0],entry.macdPt[1], entry.macdBPt[0], entry.macdBPt[1], mUpPaint);
             } else {
-                canvas.drawLine(shadowBuffer[0], macdRect.bottom - macdBuffer[1], shadowBuffer[0], macdRect.bottom - macdBuffer[3], mDownPaint);
+                canvas.drawLine(entry.macdPt[0],entry.macdPt[1], entry.macdBPt[0], entry.macdBPt[1], mDownPaint);
             }
 
             if (i > 0) {
-                KLine preEntry = temList.get(i - 1);
-                difBuffer[0] = i - 1;
-                difBuffer[2] = i;
-                difBuffer[1] = preEntry.dif;
-                difBuffer[3] = entry.dif;
-                mMatrixMacd.mapPoints(difBuffer);
-                mMatrixOffset.mapPoints(difBuffer);
-                canvas.drawLine(difBuffer[0], macdRect.bottom - difBuffer[1], difBuffer[2], macdRect.bottom - difBuffer[3], mk5Paint);
-
-                deaBuffer[0] = i - 1;
-                deaBuffer[2] = i;
-                deaBuffer[1] = preEntry.dea;
-                deaBuffer[3] = entry.dea;
-                mMatrixMacd.mapPoints(deaBuffer);
-                mMatrixOffset.mapPoints(deaBuffer);
-                canvas.drawLine(deaBuffer[0], macdRect.bottom - deaBuffer[1], deaBuffer[2], macdRect.bottom - deaBuffer[3], mk10Paint);
+                KLinePoint preEntry = points.get(i - 1);
+                canvas.drawLine(preEntry.difPt[0], preEntry.difPt[1], entry.difPt[0], entry.difPt[1], mk5Paint);
+                canvas.drawLine(preEntry.deaPt[0], preEntry.deaPt[1], entry.deaPt[0], entry.deaPt[1], mk10Paint);
             }
 
             //draw char B\S\T
-            if(entry.ch != null){
-                float dotHeight = 80;
+            if(entry.opChar != null){
+                float dotHeight = 45;
                 float textR = 16;
+                float distance = 16;
+
                 Paint chPint = otPaint;
-                if("B".equals(entry.ch)){
+                if("B".equals(entry.opChar)){
                     chPint = buyPaint;
-                    if(shadowBuffer[7] + dotHeight + textR*2 > candleRect.bottom){
-                        float startY = shadowBuffer[1];
-                        canvas.drawCircle(shadowBuffer[0],startY-20,5f, chPint);
-                        canvas.drawLine(shadowBuffer[0], startY-20, shadowBuffer[2], startY-dotHeight, chPint);
-                        float textLength = whitePaint.measureText(entry.ch);
-                        canvas.drawCircle(shadowBuffer[0], startY-dotHeight-textR, textR,chPint);
+                }else if("S" == entry.opChar){
+                    chPint = sellPaint;
+                }
+                float textLength = whitePaint.measureText(entry.opChar);
+                if("B".equals(entry.opChar)){
+                    if(entry.lowPt[1]+dotHeight+textR*2 > entry.maxPt[1]){ //下方放不下
+                        float starty = entry.highPt[1];
+                        float[] startPt =new float[]{entry.highPt[0], starty-distance};
+                        float[] endPt =new float[]{entry.highPt[0], starty-distance-dotHeight};
+                        canvas.drawCircle(startPt[0],startPt[1],5f, chPint);
+                        canvas.drawLine(startPt[0],startPt[1], endPt[0],endPt[1], chPint);
+                        canvas.drawCircle(endPt[0], endPt[1]-textR, textR,chPint);
                         canvas.drawText(
-                                entry.ch,
-                                shadowBuffer[0] - (textLength/2.0f),
-                                startY-dotHeight-textR/2,
+                                entry.opChar,
+                                endPt[0] - (textLength/2.0f),
+                                endPt[1]-textR/2,
                                 whitePaint);
                     }else{
-                        float startY = shadowBuffer[7];
-                        canvas.drawCircle(shadowBuffer[0],startY+textR,5f, chPint);
-                        canvas.drawLine(shadowBuffer[0], startY+textR, shadowBuffer[2], startY+dotHeight, chPint);
-                        float textLength = whitePaint.measureText(entry.ch);
-                        canvas.drawCircle(shadowBuffer[0], startY+dotHeight+textR, textR,chPint);
+                        float starty = entry.lowPt[1];
+                        float[] startPt =new float[]{entry.lowPt[0], starty+distance};
+                        float[] endPt =new float[]{entry.highPt[0], starty+distance+dotHeight};
+                        canvas.drawCircle(startPt[0],startPt[1],5f, chPint);
+                        canvas.drawLine(startPt[0],startPt[1], endPt[0], endPt[1], chPint);
+                        canvas.drawCircle(endPt[0], endPt[1]+textR, textR,chPint);
                         canvas.drawText(
-                                entry.ch,
-                                shadowBuffer[0] - (textLength/2.0f),
-                                startY+dotHeight+textR+textR/2,
+                                entry.opChar,
+                                endPt[0] - (textLength/2.0f),
+                                endPt[1]+textR+textR/2,
                                 whitePaint);
                     }
-                } else {
-                    if("S".equals(entry.ch)){
-                        chPint = sellPaint;
-                    }
-                    if(shadowBuffer[1] - dotHeight - textR*2 > candleRect.top){
-                        float startY = shadowBuffer[1];
-                        canvas.drawCircle(shadowBuffer[0],startY-20,5f, chPint);
-                        canvas.drawLine(shadowBuffer[0], startY-20, shadowBuffer[2], startY-dotHeight, chPint);
-                        float textLength = whitePaint.measureText(entry.ch);
-                        canvas.drawCircle(shadowBuffer[0], startY-dotHeight-textR, textR,chPint);
+                }else{
+                    if(entry.highPt[1]-dotHeight-textR*2 > entry.minPt[1]){ //上边能放下时
+                        float starty = entry.highPt[1];
+                        float[] startPt =new float[]{entry.highPt[0], starty-distance};
+                        float[] endPt =new float[]{entry.highPt[0], starty-distance-dotHeight};
+                        canvas.drawCircle(startPt[0],startPt[1],5f, chPint);
+                        canvas.drawLine(startPt[0],startPt[1], endPt[0], endPt[1], chPint);
+                        canvas.drawCircle(endPt[0], endPt[1]-textR, textR,chPint);
                         canvas.drawText(
-                                entry.ch,
-                                shadowBuffer[0] - (textLength/2.0f),
-                                startY-dotHeight-textR/2,
+                                entry.opChar,
+                                endPt[0] - (textLength/2.0f),
+                                endPt[1]-textR/2,
                                 whitePaint);
                     }else{
-                        float startY = shadowBuffer[7];
-                        canvas.drawCircle(shadowBuffer[0],startY+textR,5f, chPint);
-                        canvas.drawLine(shadowBuffer[0], startY+textR, shadowBuffer[2], startY+dotHeight, chPint);
-                        float textLength = whitePaint.measureText(entry.ch);
-                        canvas.drawCircle(shadowBuffer[0], startY+dotHeight+textR, textR,chPint);
+                        float starty = entry.lowPt[1];
+                        float[] startPt =new float[]{entry.lowPt[0], starty+distance};
+                        float[] endPt =new float[]{entry.lowPt[0], starty+distance+dotHeight};
+                        canvas.drawCircle(startPt[0],startPt[1],5f, chPint);
+                        canvas.drawLine(startPt[0],startPt[1], endPt[0], endPt[1], chPint);
+                        canvas.drawCircle(endPt[0], endPt[1]+textR, textR,chPint);
                         canvas.drawText(
-                                entry.ch,
-                                shadowBuffer[0] - (textLength/2.0f),
-                                startY+dotHeight+textR+textR/2,
+                                entry.opChar,
+                                endPt[0] - (textLength/2.0f),
+                                endPt[1]+textR+textR/2,
                                 whitePaint);
                     }
                 }
 
-            }
-
-            // extra calc: set highlight position
-            if (highlightPoint[0] <= bodyBuffer[2] && highlightPoint[0] >= bodyBuffer[0]) {
-                highlightPoint[0] = shadowBuffer[0];
-                highlightPoint[1] = (bodyBuffer[1] + bodyBuffer[3]) / 2;
-
-                // DRAW HIGHLIGHT
-                if (highlightEnable) {
-                    renderHighlight(canvas);
-                }
             }
         }
         canvas.restore();
     }
 
     /**
-     * Calculate the current range of x and y.
-     */
-    protected void calc() {
-        visibleXMin = data.getNodes().size() - visibleCount;
-        if (visibleXMin < 0) {
-            visibleXMin = 0;
-        }
-        visibleXMax = data.getNodes().size();
-
-        // calc step 1: calc min&max y value
-        data.calcMinMax(visibleXMin, visibleXMax);
-        prepareMatrixValue(data.mYMax - data.mYMin, data.mYMin);
-        prepareMatrixBar(data.mMaxYVolume);
-        prepareMatrixMacd();
-    }
-
-    /**
      * Draw x and y labels.
      */
     protected void renderLabels(Canvas canvas) {
-        int marginRight = 16;
-        float textX = canvas.getWidth()-marginRight;
+        float textX = canvas.getWidth()-10;
         // DRAW Y LABELS
         mLabelPaint.setTextAlign(Paint.Align.RIGHT);
-
-        //draw max y value
-        calcTemp[1] = candleRect.top;
-        revertMapPoints(calcTemp);
-        String value = decimalFormatter.format(calcTemp[1]);
         mLabelPaint.setTextSize(30);
         mLabelPaint.getFontMetrics(fontMetrics);
-        canvas.drawLine(5, candleRect.top - fontMetrics.top - fontMetrics.bottom, candleRect.right, candleRect.top - fontMetrics.top - fontMetrics.bottom, mGridPaint);
+        float moveY = 28;
+        for(PriceLinePoint pt : pricePts){
+            canvas.drawLine(pt.pstartPt[0],pt.pstartPt[1],pt.pendPt[0],pt.pendPt[1], mGridPaint);
+            if(pricePts.indexOf(pt) == 4){
+                moveY = -10;
+            }
+            canvas.drawText(pt.price,textX, pt.pendPt[1]+moveY, mLabelPaint);
+        }
         canvas.drawText(
-                value,
-                textX,
-                candleRect.top - fontMetrics.top - fontMetrics.bottom,
-                mLabelPaint);
-        // draw min y value
-        calcTemp[1] = candleRect.bottom;
-        revertMapPoints(calcTemp);
-        value = decimalFormatter.format(calcTemp[1]);
-        mLabelPaint.getFontMetrics(fontMetrics);
-        canvas.drawLine(5, candleRect.bottom - fontMetrics.bottom, candleRect.right, candleRect.bottom - fontMetrics.bottom, mGridPaint);
-        canvas.drawText(
-                value,
-                textX,
-                candleRect.bottom - fontMetrics.bottom,
-                mLabelPaint);
-
-        calcTemp[1] = candleRect.height() / 3 + candleRect.top;
-        revertMapPoints(calcTemp);
-        value = decimalFormatter.format(calcTemp[1]);
-        mLabelPaint.getFontMetrics(fontMetrics);
-        canvas.drawLine(5, candleRect.height() / 3 + candleRect.top + fontMetrics.bottom, candleRect.right, candleRect.height() / 3 + candleRect.top + fontMetrics.bottom, mGridPaint);
-        canvas.drawText(
-                value,
-                textX,
-                candleRect.height() / 3 + candleRect.top + fontMetrics.bottom,
-                mLabelPaint);
-
-        calcTemp[1] = candleRect.height() * 2 / 3 + candleRect.top;
-        revertMapPoints(calcTemp);
-        value = decimalFormatter.format(calcTemp[1]);
-        mLabelPaint.getFontMetrics(fontMetrics);
-        canvas.drawLine(5, candleRect.height() * 2 / 3 + candleRect.top + fontMetrics.bottom, candleRect.right, candleRect.height() * 2 / 3 + candleRect.top + fontMetrics.bottom, mGridPaint);
-        canvas.drawText(
-                value,
-                textX,
-                candleRect.height() * 2 / 3 + candleRect.top + fontMetrics.bottom,
-                mLabelPaint);
-
-        mLabelPaint.setTextSize(30);
-        canvas.drawText(
-                "VOL",
+                "MACD",
                 textX,
                 barRect.height() * 3 / 5 + candleRect.bottom,
                 mLabelPaint);
 
         canvas.drawText(
-                "MACD",
+                "VOL",
                 textX,
                 macdRect.height() * 3 / 5 + barRect.bottom,
                 mLabelPaint);
@@ -482,100 +309,97 @@ public class KlinePaint {
     }
 
     /**
-     * Draw highlight.
+     * 计算坐标
      */
-    protected void renderHighlight(Canvas canvas) {
-        canvas.drawLine(candleRect.left, highlightPoint[1], candleRect.right, highlightPoint[1], mGridPaint);
-        canvas.drawLine(highlightPoint[0], candleRect.top, highlightPoint[0], barRect.bottom, mGridPaint);
-    }
-
-    /**
-     * Transform an array of points with all matrices.
-     * VERY IMPORTANT: Keep matrix order "value-touch-offset" when transforming.
-     */
-    protected void mapPoints(float[] pts) {
-        mMatrixValue.mapPoints(pts);
-        mMatrixOffset.mapPoints(pts);
-    }
-
-    protected void revertMapPoints(float[] pixels) {
-        Matrix tmp = new Matrix();
-
-        // invert all matrices to convert back to the original value
-        mMatrixOffset.invert(tmp);
-        tmp.mapPoints(pixels);
-
-        tmp.mapPoints(pixels);
-
-        mMatrixValue.invert(tmp);
-        tmp.mapPoints(pixels);
-    }
-
-    public void prepareMatrixValue(float deltaY, float yMin) {
-        float scaleX = candleRect.width() / visibleCount;
-        float scaleY = candleRect.height() * reactUseRate / deltaY;
-
-        mMatrixValue.reset();
-        mMatrixValue.postTranslate(0, -yMin);
-        // the negative scale factor is used to draw y from down to up
-        mMatrixValue.postScale(scaleX, -scaleY);
-        mMatrixValue.postTranslate(0, candleRect.height());
-    }
-
-    public void prepareMatrixOffset(float offsetX, float offsetY) {
-        mMatrixOffset.reset();
-        mMatrixOffset.postTranslate(offsetX, offsetY);
-    }
-
-    public void prepareMatrixBar(float maxY) {
-        // increase the y range for good looking.
-        mMatrixBar.reset();
-        mMatrixBar.postScale(1, barRect.height() * reactUseRate / maxY);
-    }
-
-    public void prepareMatrixMacd() {
-        float deltaY = Math.abs(data.mYMaxMacd) + Math.abs(data.mYMinMacd);
-        float absMax = Math.abs(data.mYMaxMacd);
-        float absMin = Math.abs(data.mYMaxMacd);
-        int direction = 1;
-        if (Math.abs(data.mYMinMacd) > absMax) {
-            absMax = Math.abs(data.mYMinMacd);
-            direction = -1;
+    protected void calcChartPoint(){
+        if(endx <= 0){
+            int visibleCount = (int) ((contentRect.width()-KlineStyle.rightWidth) / (KlineStyle.kWidth+KlineStyle.mBarSpace));
+            startx = data.getNodes().size() - visibleCount;
+            if (startx < 0) {
+                startx = 0;
+            }
+            endx = data.getNodes().size();
         }
-        if (Math.abs(data.mYMinMacd) < absMin) {
-            absMin = Math.abs(data.mYMinMacd);
+        data.calcMinMax(startx, endx);
+        List<KLine> temList = data.getNodes().subList(startx, endx);
+
+        float viewHeight = contentRect.height();
+        float chartHeight = viewHeight * KlineStyle.chartRate;
+        float volmeHeight = viewHeight * KlineStyle.volRate;
+        float macdHeight = viewHeight * KlineStyle.macdRate;
+
+        float half = KlineStyle.kWidth / 2;
+        float ySpace = KlineStyle.chartSpace;
+        float macdY = chartHeight+KlineStyle.macdSpace;
+        float volumeY = chartHeight+macdHeight+KlineStyle.volSpace;
+
+        float startx = 0;
+
+        float priceDelta = data.mYMax - data.mYMin;
+        float punit = (chartHeight-KlineStyle.chartSpace*2) / priceDelta;
+        float vunit = (volmeHeight-KlineStyle.volSpace*2) / data.mMaxYVolume;
+        float macdDelta = data.mYMaxMacd - data.mYMinMacd;
+        float munit = (macdHeight-KlineStyle.macdSpace*2) / macdDelta;
+
+        points.clear();
+        for (int i = 0; i < temList.size(); i++) {
+            KLine node = temList.get(i);
+            startx = KlineStyle.mBarSpace * (i + 1) + KlineStyle.kWidth * i;
+
+            KLinePoint pt = new KLinePoint();
+            points.add(pt);
+            pt.openPt = new float[]{ startx,(data.mYMax - node.open) * punit+ySpace};
+            pt.closePt = new float[]{startx, (data.mYMax - node.close)*punit + ySpace};
+            pt.highPt = new float[]{startx+half, (data.mYMax - node.high)*punit + ySpace};
+            pt.lowPt = new float[]{startx+half, (data.mYMax - node.low)*punit + ySpace};
+            pt.state = node.getState();
+            pt.isOpen = node.isOpen;
+            pt.volumePt = new float[]{startx, (data.mMaxYVolume - node.volume)*vunit + volumeY};
+            pt.volBPt = new float[]{startx, chartHeight+macdHeight+volmeHeight};
+            pt.difPt = new float[]{startx+half, (data.mYMaxMacd - node.dif)*munit + macdY};
+            pt.deaPt = new float[]{startx+half, (data.mYMaxMacd - node.dea)*munit + macdY};
+            pt.macdPt = new float[]{startx+half, (data.mYMaxMacd - node.macd)*munit + macdY};
+            pt.macdBPt = new float[]{startx+half, data.mYMaxMacd*munit + macdY};
+            pt.macdState = node.macd >= 0 ? 1 : -1;
+            pt.maxPt = new float[]{startx+half, priceDelta*punit + ySpace};
+            pt.minPt = new float[]{startx+half, ySpace};
+            pt.opChar = node.ch;
+
+            //均线
+            if(node.avg5 != -1){
+                pt.line5Pt = new float[]{startx+half, (data.mYMax - node.avg5)* punit+ySpace};
+            }
+            if(node.avg10 != -1){
+                pt.line10Pt = new float[]{startx+half, (data.mYMax - node.avg10)* punit+ySpace};
+            }
+            if(node.avg20 != -1){
+                pt.line20Pt = new float[]{startx+half, (data.mYMax - node.avg20)* punit+ySpace};
+            }
+
+            //价格线
+
+
         }
-        float scaleY = macdRect.height() * 0.75f / deltaY;
-        float scaleX = macdRect.width() / visibleCount;
-        mMatrixMacd.reset();
-        if(direction > 0){
-            mMatrixMacd.postTranslate(0, absMin);
-        }else{
-            mMatrixMacd.postTranslate(0, absMax);
-        }
-        mMatrixMacd.postScale(scaleX, scaleY);
     }
-
     /**
-     * matrix to map the values to the screen pixels
+     * 计算价格线
      */
-    protected Matrix mMatrixValue = new Matrix();
+    protected void calcPriceLinePoint(){
+        pricePts.clear();;
+        float viewHeight = contentRect.height();
+        float chartHeight = viewHeight * KlineStyle.chartRate;
+        float priceDelta = data.mYMax - data.mYMin;
+        float punit = chartHeight / priceDelta;
 
-    /**
-     * matrix to map the chart offset
-     */
-    protected Matrix mMatrixOffset = new Matrix();
-
-    /**
-     * matrix to map the volume value
-     */
-    protected Matrix mMatrixBar = new Matrix();
-
-    /**
-     * matrix to map the macd value
-     */
-    protected Matrix mMatrixMacd = new Matrix();
-
-    protected int visibleXMin, visibleXMax;
-
+        float pstartx = 5;
+        float pendx = contentRect.width()-5;
+        Integer count = 0;
+        while(count < 5){
+            float y = chartHeight * count / 4;
+            String price = CommonUtil.formatNumer(data.mYMax - (y/punit));
+            pricePts.add(new PriceLinePoint(new float[]{pstartx, y}, new float[]{pendx, y}, price));
+            count++;
+        }
+    }
 }
+

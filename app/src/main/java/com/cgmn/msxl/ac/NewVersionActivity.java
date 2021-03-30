@@ -1,7 +1,5 @@
 package com.cgmn.msxl.ac;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;

@@ -92,7 +92,6 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="10dp"
                 android:background="@color/bg_white"
                 android:orientation="vertical" />
         <!--k line -->

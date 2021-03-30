@@ -47,4 +47,15 @@ public class KLine {
   public void setCh(String ch) {
     this.ch = ch;
   }
+
+  public Integer getState() {
+    float delta = open - close;
+    if (delta == 0) {
+      return 0;
+    } else if (delta > 0) {
+      return -1;
+    } else {
+      return 1;
+    }
+  }
 }

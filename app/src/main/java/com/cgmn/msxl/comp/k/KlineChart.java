@@ -11,8 +11,6 @@ import com.cgmn.msxl.R;
 public class KlineChart extends View {
 
     private RectF contentRect;
-    private float contentMinOffset;
-
     private KlinePaint klinePaint;
     private KlineGroup mData;
 
@@ -32,8 +30,6 @@ public class KlineChart extends View {
         super(context, attrs, defStyleAttr);
 
         contentRect = new RectF();
-        contentMinOffset = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, context.getResources().getDisplayMetrics());
-
         klinePaint = new KlinePaint();
 
         klinePaint.setColors(
@@ -47,7 +43,7 @@ public class KlineChart extends View {
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        contentRect.set(contentMinOffset, contentMinOffset, w - contentMinOffset* 7, h - contentMinOffset);
+        contentRect.set(0, 0, w , h);
         klinePaint.setContentRect(contentRect);
         if(mData != null){
             invalidateView();

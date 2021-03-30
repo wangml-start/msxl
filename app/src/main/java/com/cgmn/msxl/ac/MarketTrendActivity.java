@@ -18,7 +18,7 @@ import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.adpter.MarketAdapter;
-import com.cgmn.msxl.comp.k.KlineChart;
+import com.cgmn.msxl.comp.k.KLineContent;
 import com.cgmn.msxl.comp.pop.PayPop;
 import com.cgmn.msxl.comp.pop.UnlockPop;
 import com.cgmn.msxl.data.SelectionItem;
@@ -45,7 +45,7 @@ public class MarketTrendActivity extends BaseOtherActivity {
     private LinearLayout chartParent;
     private ListView list_content;
     private MarketAdapter adapter;
-    private KlineChart chart;
+    private KLineContent chart;
     List<TrendStock> adpterDatas = new ArrayList<>();
     private OptionsPickerView dayOptions, volOptions, pvTime;
     private ArrayList<SelectionItem> dayList = new ArrayList<>(), volList = new ArrayList<>();
@@ -303,9 +303,7 @@ public class MarketTrendActivity extends BaseOtherActivity {
         txt_vol.setCompoundDrawables(null, null, wrappedDrawable, null);
         txt_date.setCompoundDrawables(null, null, wrappedDrawable, null);
 
-        chart = new KlineChart(this);
-        chart.getKlinePaint().setVisibleCount(60);
-        chart.getKlinePaint().setkLineBold(1f);
+        chart = new KLineContent(this);
         chart.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         chartParent.addView(chart);
 

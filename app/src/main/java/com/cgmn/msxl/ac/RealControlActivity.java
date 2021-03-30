@@ -18,6 +18,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.CustmerToast;
+import com.cgmn.msxl.comp.k.KLineContent;
 import com.cgmn.msxl.comp.view.MyMarqueeView;
 import com.cgmn.msxl.comp.view.StockHolderView;
 import com.cgmn.msxl.comp.pop.TradingPop;
@@ -44,7 +45,7 @@ public class RealControlActivity extends AppCompatActivity
         implements View.OnClickListener{
     private static final String TAG = RealControlActivity.class.getSimpleName();
     private Context mContxt;
-    private KlineChart chart;
+    private KLineContent chart;
     private StockHolderView stockView;
     //设置的模式
     List<SettingItem> modeList;
@@ -313,10 +314,8 @@ public class RealControlActivity extends AppCompatActivity
         kparams.height = ((Double)(screenHeight * 0.5)).intValue();
         chartParent.setLayoutParams(kparams);
 
-        chart = new KlineChart(this);
+        chart = new KLineContent(this);
         chart.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-        chart.getKlinePaint().setVisibleCount(50);
-        chart.getKlinePaint().setkLineBold(1f);
         stockView = new StockHolderView(this);
         chartParent.addView(chart);
         holderParent.addView(stockView);
