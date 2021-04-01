@@ -49,7 +49,7 @@
                 android:layout_height="41dp"
                 android:textSize="@dimen/NormalSize"
                 android:gravity="center"
-                android:text="@string/vip_pay"
+                android:text="@string/charge_cash"
                 android:layout_alignParentBottom="true"
                 android:background="@drawable/bt_back_nomal"
                 android:textColor="@color/main_text_color"/>

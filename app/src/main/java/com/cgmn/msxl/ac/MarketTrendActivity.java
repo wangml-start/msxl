@@ -473,16 +473,18 @@ public class MarketTrendActivity extends BaseOtherActivity {
                         mPayPopWindow = new PayPop(MarketTrendActivity.this, new PaymentListener() {
                             @Override
                             public void afterPayment(Boolean success) {
-                                loadBreakUpList();
-                                setPermissionText(true);
+                                if(success){
+                                    loadBreakUpList();
+                                    setPermissionText(true);
+                                }
                             }
                         });
                         mPayPopWindow.setAmt(marketData.getMarketPrice());
                         Map<String, String> p = new HashMap<>();
                         p.put("amt", marketData.getMarketPrice());
                         p.put("channel","android");
-                        p.put("body","投资悟道解锁查看完整突破行情");
-                        p.put("subject","投资悟道解锁查看完整突破行情");
+                        p.put("body","投资悟道解锁完整突破行情");
+                        p.put("subject","解锁");
                         p.put("charge_type",PayPop.CHARGE_TYPE_MARKET+"");
                         mPayPopWindow.setParams(p);
 
@@ -496,7 +498,7 @@ public class MarketTrendActivity extends BaseOtherActivity {
             @Override
             public void onClick(View v) {
                 mPhotoPopupWindow.dismiss();
-                //查询累计消费
+                //查询累积消费
                 GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
                     @Override
                     public void run() {
@@ -535,7 +537,7 @@ public class MarketTrendActivity extends BaseOtherActivity {
                     }
                 });
             }
-        },marketData.getMarketPrice());
+        },marketData.getMarketPrice(), marketData.getAddAmtLimit());
         View rootView = LayoutInflater.from(mContext)
                 .inflate(R.layout.activity_main, null);
         mPhotoPopupWindow.showAtLocation(rootView,

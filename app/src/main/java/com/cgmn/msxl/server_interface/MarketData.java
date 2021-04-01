@@ -7,6 +7,8 @@ public class MarketData {
     List<String> points;
     Integer unlocked;
     String marketPrice;
+    String addAmtLimit;
+
     private List<TrendStock> trendList;
 
     private List<StockDetail> stocks;
@@ -57,5 +59,13 @@ public class MarketData {
 
     public void setMarketPrice(String marketPrice) {
         this.marketPrice = marketPrice;
+    }
+
+    public String getAddAmtLimit() {
+        return addAmtLimit;
+    }
+
+    public void setAddAmtLimit(String addAmtLimit) {
+        this.addAmtLimit = addAmtLimit;
     }
 }

@@ -133,7 +133,7 @@ public class VIPActivity extends BaseOtherActivity {
                     myAdapter.notifyDataSetChanged();
                     setSelLevel();
                 }else if(v.getId() == R.id.btn_pay){
-                    if(setting != null && setting.getLevel().equals("Level1")
+                    if(setting != null && "Level1".equals(setting.getLevel())
                             && permissionKey.equals(LEVEL_2)){//升级
                         calcuVipUpGrade();
                         CustmerToast.makeText(mContext, "正请求数据。。。").show();
@@ -344,9 +344,11 @@ public class VIPActivity extends BaseOtherActivity {
         if(subAmt == null){
             subAmt = 0;
         }
-        Integer orderAmt = Double.valueOf(getParms().get("amt")).intValue();
+        Map<String, String> p = getParms();
+        Integer orderAmt = Double.valueOf(p.get("amt")).intValue();
         mPayPopWindow.setAmt((orderAmt-subAmt)+"");
-        mPayPopWindow.setParams(getParms());
+        p.put("amt", (orderAmt-subAmt)+"");
+        mPayPopWindow.setParams(p);
 
         View rootView = LayoutInflater.from(mContext)
                 .inflate(R.layout.vip_page_layout, null);

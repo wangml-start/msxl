@@ -23,15 +23,17 @@ public class UnlockPop extends PopupWindow {
     private View.OnClickListener calcAddAmtListener; //累计消费解锁
 
     private String amt;
+    private String addAmtLimit;
 
 
     public UnlockPop(Activity context, View.OnClickListener chargeListener,
-                     View.OnClickListener calcAddAmtListener,  String amt) {
+                     View.OnClickListener calcAddAmtListener,  String amt, String addAmt) {
         super(context);
         this.mContext = context;
         this.chargeListener = chargeListener;
         this.calcAddAmtListener = calcAddAmtListener;
         this.amt = amt;
+        addAmtLimit = addAmt;
         Init();
     }
 
@@ -48,6 +50,7 @@ public class UnlockPop extends PopupWindow {
         Button btn_cancel = mView.findViewById(R.id.icon_btn_cancel);
 
         btn_pay.setText(String.format("支付%s解锁", amt));
+        btn_calc_add.setText(String.format("消费满%s解锁", addAmtLimit));
 
         btn_pay.setOnClickListener(chargeListener);
         btn_calc_add.setOnClickListener(calcAddAmtListener);

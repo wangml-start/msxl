@@ -32,7 +32,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/white_btn_center"
-                android:text="消费满500解锁"
                 android:textSize="@dimen/size12"
                 android:textColor="@color/main_bg_grey" />
 

@@ -386,9 +386,9 @@ public class StatisticActivity extends BaseOtherActivity {
         setChartFillDrawable(drawable);
         setMarkerView();
 
-        tx_st_baseAmt.setText(CommonUtil.formatNumer(statistic.getBaseAmt()));
-        tx_st_leftAmt.setText(CommonUtil.formatNumer(statistic.getCashAmt()));
-        tx_st_pl.setText(CommonUtil.formatNumer(statistic.getPl()));
+        tx_st_baseAmt.setText(CommonUtil.formatAmt(statistic.getBaseAmt()));
+        tx_st_leftAmt.setText(CommonUtil.formatAmt(statistic.getCashAmt()));
+        tx_st_pl.setText(CommonUtil.formatAmt(statistic.getPl()));
         tx_st_plrate.setText(CommonUtil.formatPercent(statistic.getPl() / statistic.getBaseAmt()));
         if (statistic.getPl() > 0) {
             tx_st_pl.setTextColor(getResources().getColor(R.color.kline_up));
@@ -397,7 +397,7 @@ public class StatisticActivity extends BaseOtherActivity {
             tx_st_pl.setTextColor(getResources().getColor(R.color.kline_down));
             tx_st_plrate.setTextColor(getResources().getColor(R.color.kline_down));
         }
-        tx_st_ex.setText(CommonUtil.formatNumer(statistic.getFee()));
+        tx_st_ex.setText(CommonUtil.formatAmt(statistic.getFee()));
     }
 
     private String getComment(){
