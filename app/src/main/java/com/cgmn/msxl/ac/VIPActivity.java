@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
+import com.cgmn.msxl.comp.CustmerToast;
 import com.cgmn.msxl.comp.view.NetImageView;
 import com.cgmn.msxl.comp.adpter.VipAdpter;
 import com.cgmn.msxl.comp.pop.PayPop;
@@ -66,9 +67,13 @@ public class VIPActivity extends BaseOtherActivity {
         if(permissionKey.equals(LEVEL_2)){
             line_level2.setBackgroundResource(R.drawable.bt_back_pressed);
             line_level1.setBackgroundResource(R.drawable.bt_back_blank);
+            if(setting != null && "Level1".equals(setting.getLevel())){
+                btn_pay.setText(R.string.vip_up_grade);
+            }
         }else if(permissionKey.equals(LEVEL_1)){
             line_level1.setBackgroundResource(R.drawable.bt_back_pressed);
             line_level2.setBackgroundResource(R.drawable.bt_back_blank);
+            btn_pay.setText(R.string.vip_pay);
         }
 
         if(getParms() == null){
@@ -100,6 +105,9 @@ public class VIPActivity extends BaseOtherActivity {
                 } else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
                     dialog.cancel();
                     GlobalExceptionHandler.getInstance(mContext).handlerException((Exception) msg.obj);
+                } else if(msg.what == MessageUtil.VIP_UP_GRADE_CHARGE_RESPONSE){
+                    VipDataSetting vipItem = (VipDataSetting) msg.obj;
+                    showPayPop(vipItem.getUpGradeAmt());
                 }
                 return false;
             }
@@ -125,7 +133,13 @@ public class VIPActivity extends BaseOtherActivity {
                     myAdapter.notifyDataSetChanged();
                     setSelLevel();
                 }else if(v.getId() == R.id.btn_pay){
-                    showPayPop();
+                    if(setting != null && setting.getLevel().equals("Level1")
+                            && permissionKey.equals(LEVEL_2)){//升级
+                        calcuVipUpGrade();
+                        CustmerToast.makeText(mContext, "正请求数据。。。").show();
+                    }else{
+                        showPayPop(0);
+                    }
                 }
             }
         };
@@ -163,6 +177,7 @@ public class VIPActivity extends BaseOtherActivity {
 
     private void afterLoad(){
         setPermission();
+        setSelLevel();
         if (!CommonUtil.isEmpty(setting.getList())) {
             mData = setting.getList();
         }
@@ -231,6 +246,49 @@ public class VIPActivity extends BaseOtherActivity {
         });
     }
 
+    private void calcuVipUpGrade(){
+        //加载配置数据
+        GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
+            @Override
+            public void run() {
+                String action = "/vip_query/vip_up_grade";
+                Map<String, String> params = getParms();
+                params.put("token", GlobalDataHelper.getToken(mContext));
+                String url = CommonUtil.buildGetUrl(
+                        PropertyService.getInstance().getKey("serverUrl"),
+                        action, params);
+                OkHttpClientManager.getAsyn(url,
+                        new OkHttpClientManager.ResultCallback<VipDataSetting>() {
+                            @Override
+                            public void onError(com.squareup.okhttp.Request request, Exception e) {
+                                Message message = Message.obtain();
+                                message.what = MessageUtil.EXCUTE_EXCEPTION;
+                                message.obj = e;
+                                mHandler.sendMessage(message);
+                            }
+
+                            @Override
+                            public void onResponse(VipDataSetting data) {
+                                Message message = Message.obtain();
+                                message.what = MessageUtil.VIP_UP_GRADE_CHARGE_RESPONSE;
+                                try {
+                                    message.obj = data;
+                                    Integer status = data.getStatus();
+                                    if (status == null || status == -1) {
+                                        throw new Exception(data.getError());
+                                    }
+                                } catch (Exception e) {
+                                    message.what = MessageUtil.EXCUTE_EXCEPTION;
+                                    message.obj = e;
+                                }
+                                mHandler.sendMessage(message);
+                            }
+                        });
+                Log.e(TAG, "NAME=" + Thread.currentThread().getName());
+            }
+        });
+    }
+
     @Override
     protected boolean showRight(){
         return false;
@@ -265,21 +323,29 @@ public class VIPActivity extends BaseOtherActivity {
         Float menoy = selectedVip.getAmt() * rate;
         p.put("amt", menoy.intValue()+"");
         p.put("channel","android");
-        p.put("body","投资悟道开通会员");
-        p.put("subject","投资悟道开通会员");
+        p.put("subject","会员");
+        p.put("body","投资悟道开通开通会员");
         p.put("charge_type",PayPop.CHARGE_TYPE_VIP+"");
+        if(setting != null && "Level1".equals(setting.getLevel()) && permissionKey.equals(LEVEL_2)){
+            p.put("body","投资悟道会员升级");
+            p.put("charge_type",PayPop.CHARGE_TYPE_VIP_UP_GRADE+"");
+        }
         return p;
     }
 
 
-    private void showPayPop(){
+    private void showPayPop(Integer subAmt){
         mPayPopWindow = new PayPop(VIPActivity.this, new PaymentListener() {
             @Override
             public void afterPayment(Boolean success) {
 //                initAdpter();
             }
         });
-        mPayPopWindow.setAmt(getParms().get("amt"));
+        if(subAmt == null){
+            subAmt = 0;
+        }
+        Integer orderAmt = Double.valueOf(getParms().get("amt")).intValue();
+        mPayPopWindow.setAmt((orderAmt-subAmt)+"");
         mPayPopWindow.setParams(getParms());
 
         View rootView = LayoutInflater.from(mContext)

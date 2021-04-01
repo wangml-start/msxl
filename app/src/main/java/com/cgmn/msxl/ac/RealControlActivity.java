@@ -535,7 +535,7 @@ public class RealControlActivity extends AppCompatActivity
 
     public void jumpToChargetPage(String type){
         if(type.equals("vip")){
-            new ShowDialog().show(mContxt, "当前会员已到期，前往开通?", new ShowDialog.OnBottomClickListener() {
+            new ShowDialog().show(mContxt, "当前权限不足，前往开通?", new ShowDialog.OnBottomClickListener() {
                 @Override
                 public void positive() {
                     Intent intent = new Intent(mContxt, VIPActivity.class);

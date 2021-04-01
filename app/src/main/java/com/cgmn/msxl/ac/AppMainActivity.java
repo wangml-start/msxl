@@ -19,7 +19,6 @@ import com.azhon.appupdate.config.UpdateConfiguration;
 import com.azhon.appupdate.manager.DownloadManager;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
-import com.cgmn.msxl.comp.CustmerToast;
 import com.cgmn.msxl.comp.view.GuideIconView;
 import com.cgmn.msxl.comp.frag.MayFragment;
 import com.cgmn.msxl.comp.frag.TrainFragment;

@@ -88,7 +88,7 @@ public class UserRankAdpter extends BaseAdapter {
             holder.txt_rate.setText(CommonUtil.formatAmt(map.getRate()));
         }
 
-        if(map.getRate() > 0){
+        if(map.getRate() >= 0){
             holder.txt_rate.setTextColor(convertView.getResources().getColor(R.color.main_red_color));
         }else{
             holder.txt_rate.setTextColor(convertView.getResources().getColor(R.color.kline_down));

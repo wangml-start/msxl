@@ -48,6 +48,8 @@ public class MessageUtil {
 
     public static int UNLOCK_BY_ADD_FEE = 0x024;
 
+    public static int VIP_UP_GRADE_CHARGE_RESPONSE = 0x025;
+
     public static int EXCUTE_EXCEPTION = 0x999;
 
 

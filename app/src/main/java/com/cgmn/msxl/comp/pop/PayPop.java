@@ -39,6 +39,7 @@ public class PayPop extends PopupWindow {
     public final static int CHARGE_TYPE_VIP = 0;
     public final static int CHARGE_TYPE_MARKET = 1;
     public final static int CHARGE_TYPE_CASH = 2;
+    public final static int CHARGE_TYPE_VIP_UP_GRADE = 3;
 
     private View mView; // PopupWindow 菜单布局
     private Context mContext; // 上下文参数

@@ -16,6 +16,8 @@ public class VipDataSetting {
     private String level;
     private String expireDate;
 
+    private Integer upGradeAmt;
+
 
     public List<VipItem> getList() {
         return list;
@@ -65,4 +67,11 @@ public class VipDataSetting {
         this.expireDate = expireDate;
     }
 
+    public Integer getUpGradeAmt() {
+        return upGradeAmt;
+    }
+
+    public void setUpGradeAmt(Integer upGradeAmt) {
+        this.upGradeAmt = upGradeAmt;
+    }
 }

@@ -156,6 +156,17 @@
             android:text="首次开通赠送20万操盘资金"
             android:textColor="@color/main_bg_orange_light"
             android:textSize="@dimen/size16" />
+    <TextView
+            android:clickable="false"
+            android:id="@+id/txt_up_grade_des"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center|left"
+            android:text="升级计算：订单金额-Level剩余金额"
+            android:textColor="@color/main_bg_orange_light"
+            android:textSize="@dimen/size16" />
     <View
             android:layout_width="match_parent"
             android:layout_height="30dp"

@@ -49,7 +49,8 @@
     <string name="weman">女</string>
     <string name="mode_title">模式</string>
     <string name="miss_mode_st">违背模式次数统计</string>
-    <string name="vip_pay">支付</string>
+    <string name="vip_pay">续费</string>
+    <string name="vip_up_grade">升级</string>
     <string name="sbslj">随便说两句...</string>
     <string name="personal_info">个人信息</string>
     <string name="zan_no_rank">暂无排行数据</string>
