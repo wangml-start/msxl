@@ -91,7 +91,7 @@ public class PayPop extends PopupWindow {
                     // 判断resultStatus 为9000则代表支付成功
                     if ("9000".equals(resultStatus)) {
                         paymentListener.afterPayment(true);
-                        new ShowDialog().showTips(mContext, "支付成功" + resultInfo ,"");
+                        new ShowDialog().showTips(mContext, "支付成功","");
                     } else {
                         paymentListener.afterPayment(false);
                         // 该笔订单真实的支付结果，需要依赖服务端的异步通知。

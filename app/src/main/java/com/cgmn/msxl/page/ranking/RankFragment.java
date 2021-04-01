@@ -96,7 +96,7 @@ public class RankFragment extends Fragment {
                             txt_rank.setText(String.format("%s %s/%s", txt, "--", mData.get(0).getTotalAcc()));
                         }
                     }else{
-                        CustmerToast.makeText(mContext, getString(R.string.zan_no_rank)).show();
+//                        CustmerToast.makeText(mContext, getString(R.string.zan_no_rank)).show();
                     }
                 } else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
                     GlobalExceptionHandler.getInstance(mContext).handlerException((Exception) msg.obj);

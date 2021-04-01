@@ -74,21 +74,23 @@ public class LoginActivity extends LoginBaseActivity {
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.bt_login) {
-            boolean isRegist = true;
-            if(!CommonUtil.isEmpty(accList)){
-                String em = tx_email.getText().toString().trim();
-                for(Map<String, Object> item : accList){
-                    if(item.get("phone").toString().equals(em)){
-                        isRegist = false;
-                        break;
-                    }
-                }
-            }
-            if(isRegist){ //首次注册
-                validEmail();
-            }else{
-                onLoginClick();
-            }
+//            boolean isRegist = true;
+//            if(!CommonUtil.isEmpty(accList)){
+//                String em = tx_email.getText().toString().trim();
+//                for(Map<String, Object> item : accList){
+//                    if(item.get("phone").toString().equals(em)){
+//                        isRegist = false;
+//                        break;
+//                    }
+//                }
+//            }
+//            if(isRegist){ //首次注册
+//                validEmail();
+//            }else{
+//                onLoginClick();
+//            }
+
+            onLoginClick();
         } else if (v.getId() == R.id.bt_forget) {
             Intent intent = new Intent(this, ForgetPasswordActivity.class);
             Bundle bundle = new Bundle();

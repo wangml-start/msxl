@@ -474,6 +474,7 @@ public class MarketTrendActivity extends BaseOtherActivity {
                             @Override
                             public void afterPayment(Boolean success) {
                                 loadBreakUpList();
+                                setPermissionText(true);
                             }
                         });
                         mPayPopWindow.setAmt(marketData.getMarketPrice());

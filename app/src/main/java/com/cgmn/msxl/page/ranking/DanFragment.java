@@ -93,7 +93,7 @@ public class DanFragment extends Fragment {
                         }
                         txt_rank.setText(text.toString());
                     }else{
-                        CustmerToast.makeText(mContext, getString(R.string.zan_no_rank)).show();
+//                        CustmerToast.makeText(mContext, getString(R.string.zan_no_rank)).show();
                     }
                 } else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
                     GlobalExceptionHandler.getInstance(mContext).handlerException((Exception) msg.obj);

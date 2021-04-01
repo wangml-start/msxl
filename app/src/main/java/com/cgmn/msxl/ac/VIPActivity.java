@@ -11,6 +11,8 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.view.NetImageView;
@@ -139,8 +141,11 @@ public class VIPActivity extends BaseOtherActivity {
         if(cut != null && cut.length > 0){
             icon_head.setImageContent(cut);
         }else{
-            icon_head.setImageName(GlobalDataHelper.getUserAcc(mContext));
-            icon_head.setImageURL(GlobalDataHelper.getUserPortraitUrl(mContext));
+            Glide.with(mContext).load(R.drawable.user_logo)
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .error(R.mipmap.ic_launcher)
+                    .centerCrop()
+                    .into(icon_head);
         }
         txt_u_name.setText(GlobalDataHelper.getUserName(mContext));
 
@@ -271,7 +276,7 @@ public class VIPActivity extends BaseOtherActivity {
         mPayPopWindow = new PayPop(VIPActivity.this, new PaymentListener() {
             @Override
             public void afterPayment(Boolean success) {
-                initAdpter();
+//                initAdpter();
             }
         });
         mPayPopWindow.setAmt(getParms().get("amt"));

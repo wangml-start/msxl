@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.comp.view.NetImageView;
 import com.cgmn.msxl.data.EditInfoItem;
@@ -107,8 +109,11 @@ public class AccountAdapter extends BaseAdapter {
                     if(cut != null && cut.length > 0){
                         headHolder.img_icon.setImageContent(cut);
                     }else{
-                        headHolder.img_icon.setImageName(GlobalDataHelper.getUserAcc(mContext));
-                        headHolder.img_icon.setImageURL(GlobalDataHelper.getUserPortraitUrl(mContext));
+                        Glide.with(mContext).load(R.drawable.user_logo)
+                                .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                                .error(R.mipmap.ic_launcher)
+                                .centerCrop()
+                                .into(headHolder.img_icon);
                     }
                     headHolder.txt_title.setText(item.getTitle());
                 }

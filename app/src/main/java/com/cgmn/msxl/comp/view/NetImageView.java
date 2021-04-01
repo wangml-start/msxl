@@ -121,6 +121,9 @@ public class NetImageView extends ImageView {
     @Override
     protected void onDraw(Canvas canvas) {
         Drawable mDrawable = getDrawable();
+        if(CommonUtil.isEmpty(mDrawable)){
+            return;
+        }
         Matrix mDrawMatrix = getImageMatrix();
         if (mDrawable == null) {
             return; // couldn't resolve the URI
