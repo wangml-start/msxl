@@ -50,6 +50,8 @@ public class MessageUtil {
 
     public static int VIP_UP_GRADE_CHARGE_RESPONSE = 0x025;
 
+    public static int OPTINAL_STOCK_ADD = 0x026;
+
     public static int EXCUTE_EXCEPTION = 0x999;
 
 

@@ -17,6 +17,7 @@ import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
+import com.cgmn.msxl.comp.CustmerToast;
 import com.cgmn.msxl.comp.adpter.MarketAdapter;
 import com.cgmn.msxl.comp.k.KLineContent;
 import com.cgmn.msxl.comp.pop.PayPop;
@@ -43,6 +44,7 @@ public class MarketTrendActivity extends BaseOtherActivity {
     private Handler mHandler;
     private TextView txt_day_list, txt_date, txt_vol,txt_des,txt_unlock_des;
     private LinearLayout chartParent;
+    private RelativeLayout add_optional_st;
     private ListView list_content;
     private MarketAdapter adapter;
     private KLineContent chart;
@@ -53,6 +55,7 @@ public class MarketTrendActivity extends BaseOtherActivity {
 //    private TimePickerView pvTime;
     private MarketData marketData;
     private String selectedDay, selectedVol = "0", selectedDate;
+    private Integer selectedListIndex;
     private String selectedCode;
     private StockDisplayManager stockManager;
 
@@ -90,6 +93,8 @@ public class MarketTrendActivity extends BaseOtherActivity {
                     initOptions();
                     if(!CommonUtil.isEmpty(marketData.getTrendList())){
                         txt_title.setText(marketData.getTrendList().get(0).getStackName());
+                        selectedListIndex=0;
+                        selectedCode = marketData.getTrendList().get(0).getStackCode();
                     }
                     adapter = new MarketAdapter(mContext, adpterDatas);
                     list_content.setAdapter(adapter);
@@ -123,6 +128,8 @@ public class MarketTrendActivity extends BaseOtherActivity {
                     }
                 } else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
                     GlobalExceptionHandler.getInstance(mContext).handlerException((Exception) msg.obj);
+                } else if(msg.what == MessageUtil.OPTINAL_STOCK_ADD){
+                    CustmerToast.makeText(mContext, "已成功加入自选").show();
                 }
                 return false;
             }
@@ -269,6 +276,7 @@ public class MarketTrendActivity extends BaseOtherActivity {
         txt_day_list = findViewById(R.id.txt_day_list);
         txt_date = findViewById(R.id.txt_date);
         txt_unlock_des = findViewById(R.id.txt_unlock_des);
+        add_optional_st = findViewById(R.id.add_optional_st);
         chartParent = findViewById(R.id.chart_parent);
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -286,12 +294,15 @@ public class MarketTrendActivity extends BaseOtherActivity {
                     dayOptions.show();
                 } else if (v.getId() == R.id.txt_date && pvTime != null) {
                     pvTime.show();
+                } else if(v.getId() == R.id.add_optional_st){
+                    addOptionalStock();
                 }
             }
         };
         txt_vol.setOnClickListener(lis);
         txt_day_list.setOnClickListener(lis);
         txt_date.setOnClickListener(lis);
+        add_optional_st.setOnClickListener(lis);
 
         Drawable right = getResources().getDrawable(R.drawable.down);
         right.setBounds(0, 0, 25, 25);//必须设置图片的大小否则没有作用
@@ -316,6 +327,7 @@ public class MarketTrendActivity extends BaseOtherActivity {
                     loadStockDetails(object.getStackCode());
                     txt_des.setText(object.getBreakUpDays());
                     txt_title.setText(object.getStackName());
+                    selectedListIndex=position;
                 }
             }
         });
@@ -440,6 +452,50 @@ public class MarketTrendActivity extends BaseOtherActivity {
                             public void onResponse(BaseData data) {
                                 Message message = Message.obtain();
                                 message.what = MessageUtil.REQUEST_STOCK_DETAIL_SUCCESS;
+                                try {
+                                    message.obj = data.getMarketData();
+                                    Integer status = data.getStatus();
+                                    if (status == null || status == -1) {
+                                        throw new Exception(data.getError());
+                                    }
+                                } catch (Exception e) {
+                                    message.what = MessageUtil.EXCUTE_EXCEPTION;
+                                    message.obj = e;
+                                }
+                                mHandler.sendMessage(message);
+                            }
+                        });
+            }
+        });
+    }
+
+    private void addOptionalStock(){
+        GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
+            @Override
+            public void run() {
+                String action = "/stock/stock_optional";
+                Map<String, String> params = new HashMap<>();
+                params.put("stock_code", selectedCode);
+                params.put("stock_name", adpterDatas.get(selectedListIndex).getStackName());
+                params.put("operation", "add");
+                params.put("token", GlobalDataHelper.getToken(mContext));
+                String url = CommonUtil.buildGetUrl(
+                        PropertyService.getInstance().getKey("serverUrl"),
+                        action, params);
+                OkHttpClientManager.getAsyn(url,
+                        new OkHttpClientManager.ResultCallback<BaseData>() {
+                            @Override
+                            public void onError(com.squareup.okhttp.Request request, Exception e) {
+                                Message message = Message.obtain();
+                                message.what = MessageUtil.EXCUTE_EXCEPTION;
+                                message.obj = e;
+                                mHandler.sendMessage(message);
+                            }
+
+                            @Override
+                            public void onResponse(BaseData data) {
+                                Message message = Message.obtain();
+                                message.what = MessageUtil.OPTINAL_STOCK_ADD;
                                 try {
                                     message.obj = data.getMarketData();
                                     Integer status = data.getStatus();

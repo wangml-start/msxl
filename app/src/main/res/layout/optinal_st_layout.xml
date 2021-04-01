@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:background="@color/bg_white"
+        android:clipToPadding="true"
+        android:fitsSystemWindows="true"
+        tools:context=".ac.OptionalStockActivity">
+    <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/colorPrimary"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+        <LinearLayout
+                android:id="@+id/frg_tain_top_bar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+            <RelativeLayout
+                    android:id="@+id/img_back"
+                    android:layout_marginLeft="7dp"
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_centerVertical="true"
+                        android:gravity="center|center_vertical"
+                        android:src="@drawable/left"
+                        android:tint="@color/bg_white" />
+            </RelativeLayout>
+
+            <TextView
+                    android:id="@+id/txt_title"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center|center_vertical"
+                    android:singleLine="true"
+                    android:textColor="@color/bg_white"
+                    android:textSize="@dimen/NormalSize" />
+            <RelativeLayout
+                    android:id="@+id/img_add"
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="10dp"
+                    android:orientation="horizontal">
+                <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/add_st"
+                        android:tint="@color/bg_white" />
+            </RelativeLayout>
+            <RelativeLayout
+                    android:id="@+id/img_delete"
+                    android:layout_width="30dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+                <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/del_st"
+                        android:tint="@color/bg_white" />
+            </RelativeLayout>
+        </LinearLayout>
+    </androidx.appcompat.widget.Toolbar>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_below="@id/toolbar"
+            android:layout_marginTop="10dp"
+            android:clipToPadding="true"
+            android:fitsSystemWindows="true"
+            android:orientation="vertical">
+        <!--k line -->
+        <LinearLayout
+                android:id="@+id/chart_parent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:background="@color/bg_white"
+                android:orientation="vertical" />
+        <!--k line -->
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/text_hint" />
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/text_hint" />
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:background="@color/bg_topbar"
+                android:orientation="horizontal" >
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="品种"
+                    android:textColor="@color/text_black"
+                    android:textSize="@dimen/size12" />
+            <TextView
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="收盘"
+                    android:textColor="@color/text_black"
+                    android:textSize="@dimen/size12" />
+            <TextView
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="涨幅"
+                    android:textColor="@color/text_black"
+                    android:textSize="@dimen/size12" />
+            <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="换手率"
+                    android:textColor="@color/text_black"
+                    android:textSize="@dimen/size12" />
+        </LinearLayout>
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/text_hint" />
+        <!-- list-->
+        <ListView
+                android:id="@+id/list_content"
+                android:divider="@drawable/list_item_divider"
+                android:listSelector="@drawable/stock_list_selector"
+                android:dividerHeight="1dp"
+                android:layout_alignParentTop="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+</RelativeLayout>

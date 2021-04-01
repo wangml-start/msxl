@@ -20,7 +20,7 @@ public class PageMainItem {
     public static int CONTACT_US = 13;
     public static int CHECK_NEW_VERSION = 14;
     public static int TREND_BREAK_UP = 15;
-
+    public static int OPTIONAL_STOCKS = 16;
 
     private int aIcon;
     private String aName;

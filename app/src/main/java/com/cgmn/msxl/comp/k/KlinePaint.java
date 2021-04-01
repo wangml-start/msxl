@@ -1,12 +1,9 @@
 package com.cgmn.msxl.comp.k;
 
 import android.graphics.*;
-import android.view.MotionEvent;
 import com.cgmn.msxl.utils.CommonUtil;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class KlinePaint {
@@ -116,13 +113,13 @@ public class KlinePaint {
     }
 
     public void setContentRect(RectF contentRect) {
-        float barTop = contentRect.bottom -
-                (1 - KlineStyle.candleBarRatio) * (contentRect.height());
-        float macdTop = barTop + (1 - KlineStyle.candleBarRatio) * (contentRect.height()) / 2.0f;
+        float macdTop  = contentRect.bottom - (1-KlineStyle.chartRate) * contentRect.height();
+        float barTop = macdTop + KlineStyle.macdRate * contentRect.height();
 
-        this.candleRect.set(contentRect.left, contentRect.top, contentRect.right, barTop);
-        this.barRect.set(contentRect.left, barTop, contentRect.right, macdTop);
-        this.macdRect.set(contentRect.left, macdTop, contentRect.right, contentRect.bottom);
+        this.candleRect.set(contentRect.left, contentRect.top, contentRect.right, macdTop);
+        this.macdRect.set(contentRect.left, macdTop, contentRect.right, barTop);
+        this.barRect.set(contentRect.left, barTop, contentRect.right, contentRect.bottom);
+
         this.contentRect = contentRect;
     }
 
@@ -146,7 +143,7 @@ public class KlinePaint {
 
         // set the entry draw area.
         canvas.save();
-        canvas.clipRect(candleRect.left, candleRect.top, candleRect.right, macdRect.bottom);
+        canvas.clipRect(candleRect.left, candleRect.top, candleRect.right, contentRect.bottom);
         for (int i = 0; i < points.size(); i++) {
             KLinePoint entry = points.get(i);
             // draw step 0: set color
@@ -301,7 +298,7 @@ public class KlinePaint {
         canvas.drawText(
                 "VOL",
                 textX,
-                macdRect.height() * 3 / 5 + barRect.bottom,
+                macdRect.height() * 3 / 5 + barRect.top,
                 mLabelPaint);
 
         canvas.save();
