@@ -1,6 +1,7 @@
 package com.cgmn.msxl.utils;
 
 import android.net.Uri;
+import com.cgmn.msxl.service.OkHttpClientManager;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -228,4 +229,14 @@ public class CommonUtil {
         return fmt.format(date1).compareTo(fmt.format(date2));
     }
 
+
+    public static OkHttpClientManager.Param[] map2PostParams(Map<String, String> map){
+        Integer count =  map.keySet().size();
+        OkHttpClientManager.Param[] list = new OkHttpClientManager.Param[count];
+        Integer index = 0;
+        for(Map.Entry<String, String> en : map.entrySet()){
+            list[index++] = new OkHttpClientManager.Param(en.getKey(), en.getValue());
+        }
+        return list;
+    }
 }

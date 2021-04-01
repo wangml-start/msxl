@@ -6,7 +6,6 @@ import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
 import android.os.Message;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -14,23 +13,21 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.PopupWindow;
+import com.alipay.sdk.app.EnvUtils;
 import com.alipay.sdk.app.PayTask;
 import com.cgmn.msxl.R;
-import com.cgmn.msxl.ac.MainActivity;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.bean.AliPayResult;
 import com.cgmn.msxl.comp.CustmerToast;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.cgmn.msxl.in.PaymentListener;
 import com.cgmn.msxl.server_interface.BaseData;
-import com.cgmn.msxl.server_interface.VipDataSetting;
 import com.cgmn.msxl.service.GlobalDataHelper;
 import com.cgmn.msxl.service.OkHttpClientManager;
 import com.cgmn.msxl.service.PropertyService;
 import com.cgmn.msxl.utils.CommonUtil;
 import com.cgmn.msxl.utils.MessageUtil;
 import com.cgmn.msxl.utils.ShowDialog;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 
@@ -60,6 +57,10 @@ public class PayPop extends PopupWindow {
         paymentListener = payls;
         Init();
         initMessageHandler();
+        if("dev".equals(PropertyService.getInstance().getKey("environment"))){
+            //沙箱环境
+            EnvUtils.setEnv(EnvUtils.EnvEnum.SANDBOX);
+        }
     }
 
     public Map<String, String> getParams() {
@@ -177,10 +178,9 @@ public class PayPop extends PopupWindow {
                 String action = "/payment/alipay_add_signature";
                 Map<String, String> params = getParams();
                 params.put("token", GlobalDataHelper.getToken(mContext));
-                String url = CommonUtil.buildGetUrl(
-                        PropertyService.getInstance().getKey("serverUrl"),
-                        action, params);
-                OkHttpClientManager.getAsyn(url,
+                String url = String.format("%s%s",
+                        PropertyService.getInstance().getKey("serverUrl"), action);
+                OkHttpClientManager.postAsyn(url,
                         new OkHttpClientManager.ResultCallback<BaseData>() {
                             @Override
                             public void onError(com.squareup.okhttp.Request request, Exception e) {
@@ -206,7 +206,8 @@ public class PayPop extends PopupWindow {
                                 }
                                 mHandler.sendMessage(message);
                             }
-                        });
+                        },
+                        CommonUtil.map2PostParams(params));
             }
         });
     }
@@ -223,6 +224,7 @@ public class PayPop extends PopupWindow {
                 PayTask alipay = new PayTask((Activity) mContext);
                 //第二个参数设置为true，将会在调用pay接口的时候直接唤起一个loading
                 Map<String, String> result = alipay.payV2(orderInfo, true);
+                Log.i("orderInfo", orderInfo);
                 Log.i("msp", result.toString());
 
                 Message msg = new Message();
