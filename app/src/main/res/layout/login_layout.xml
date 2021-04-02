@@ -6,98 +6,122 @@
         tools:context=".ac.LoginActivity">
 
     <LinearLayout
-            android:layout_marginTop="30dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:focusable="true"
-            android:focusableInTouchMode = "true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="8dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="vertical">
+
         <LinearLayout
-                android:focusable="true"
-                android:focusableInTouchMode = "true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="horizontal">
+
             <com.cgmn.msxl.comp.view.ClearEditTextView
                     android:id="@+id/tx_email"
-                    android:hint="@string/sign_email"
-                    android:inputType="textEmailAddress"
+                    style="@style/register_input"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:background="@drawable/edittext_border"
-                    style="@style/register_input">
+                    android:hint="@string/sign_email"
+                    android:inputType="textEmailAddress">
+
                 <requestFocus />
             </com.cgmn.msxl.comp.view.ClearEditTextView>
+
             <ImageView
                     android:id="@+id/acc_down_list"
-                    android:layout_marginTop="10dp"
                     android:layout_width="15dp"
                     android:layout_height="wrap_content"
-                    android:tint="@color/colorAccent"
-                    android:src="@drawable/down" />
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/down"
+                    android:tint="@color/colorAccent" />
 
         </LinearLayout>
+
         <com.cgmn.msxl.comp.view.ClearEditTextView
                 android:id="@+id/tx_pwd"
-                android:hint="@string/sign_user_wd"
-                android:inputType="textPassword"
+                style="@style/register_input"
                 android:layout_marginRight="15dp"
                 android:background="@drawable/edittext_border"
-                style="@style/register_input"
-                />
+                android:hint="@string/sign_user_wd"
+                android:inputType="textPassword" />
     </LinearLayout>
 
-        <LinearLayout style="@style/register_item">
+    <LinearLayout style="@style/register_item">
+
         <TextView
                 android:id="@+id/lb_dis_pws"
                 style="@style/register_label"
                 android:text="@string/show_pws" />
+
         <com.cgmn.msxl.comp.view.showPassworCheckBox
                 android:id="@+id/ck_dis_pws"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="false" />
+
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="35dp"
-                android:text="@string/auto_register"/>
+                android:text="@string/auto_register" />
     </LinearLayout>
 
     <LinearLayout
             style="@style/register_item"
+            android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:layout_height="38dp"
-            android:weightSum="100"
-            >
+            android:orientation="vertical"
+            android:weightSum="100">
+
         <Button
                 android:id="@+id/bt_login"
-                android:background="@drawable/bt_back_nomal"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginLeft="10dp"
-                android:layout_marginRight="5dp"
-                android:enabled="false"
-                android:textColor="@color/bg_white"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
                 android:layout_weight="50"
-                android:textSize="@dimen/size16"
-                android:text="@string/signin" />
+                android:background="@drawable/bt_back_nomal"
+                android:enabled="false"
+                android:text="@string/signin"
+                android:textColor="@color/bg_white"
+                android:textSize="@dimen/size16" />
+
         <Button
                 android:id="@+id/bt_forget"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bt_back_nomal"
-                android:layout_marginLeft="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:textColor="@color/bg_white"
                 android:layout_weight="50"
+                android:background="@drawable/bt_back_nomal"
                 android:enabled="true"
-                android:textSize="@dimen/size16"
-                android:text="@string/forget_pws" />
+                android:text="@string/forget_pws"
+                android:textColor="@color/bg_white"
+                android:textSize="@dimen/size16" />
     </LinearLayout>
+
+    <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:gravity="bottom">
+        <TextView
+                android:id="@+id/txt_agrement"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:gravity="center"
+                android:textSize="@dimen/size14"
+                />
+    </RelativeLayout>
 </LinearLayout>

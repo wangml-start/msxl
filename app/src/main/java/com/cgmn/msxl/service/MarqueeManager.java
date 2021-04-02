@@ -7,6 +7,7 @@ import com.cgmn.msxl.comp.view.MyMarqueeView;
 import com.cgmn.msxl.data.CatchItem;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.utils.CommonUtil;
+import com.cgmn.msxl.utils.ConstantHelper;
 
 import java.util.*;
 
@@ -66,7 +67,7 @@ public class MarqueeManager {
                     params.put("LAST_NUMBER", obj.toString());
                 }
                 String url = CommonUtil.buildGetUrl(
-                        PropertyService.getInstance().getKey("serverUrl"),
+                        ConstantHelper.serverUrl,
                         action, params);
                 OkHttpClientManager.getAsyn(url,
                         new OkHttpClientManager.ResultCallback<BaseData>() {

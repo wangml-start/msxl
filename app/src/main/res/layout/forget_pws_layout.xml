@@ -30,13 +30,35 @@
                 android:background="@drawable/edittext_border"
                 style="@style/register_input"
                 android:inputType="textPassword"/>
-        <com.cgmn.msxl.comp.view.ClearEditTextView
-                android:id="@+id/tx_valid_code"
-                style="@style/register_input"
-                android:hint="@string/lb_valid_code"
-                android:maxLength="6"
-                android:background="@drawable/edittext_border"
-                android:inputType="number"/>
+        <LinearLayout
+                android:layout_marginTop="5dp"
+                android:focusable="true"
+                android:focusableInTouchMode = "true"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:orientation="horizontal"
+                >
+            <com.cgmn.msxl.comp.view.ClearEditTextView
+                    android:id="@+id/tx_valid_code"
+                    style="@style/register_input"
+                    android:layout_height="match_parent"
+                    android:hint="@string/lb_valid_code"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_marginTop="0dp"
+                    android:maxLength="6"
+                    android:background="@drawable/edittext_border"
+                    android:inputType="number"/>
+            <Button
+                    android:id="@+id/bt_send_mail"
+                    android:layout_width="150dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/bt_back_nomal"
+                    android:enabled="true"
+                    android:textColor="@color/bg_white"
+                    android:textSize="@dimen/size16"
+                    android:text="@string/send_email" />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout style="@style/register_item">
@@ -55,34 +77,23 @@
             style="@style/register_item"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:layout_height="38dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:weightSum="100">
 
         <Button
                 android:id="@+id/bt_login"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginLeft="10dp"
-                android:layout_marginRight="5dp"
+                android:layout_marginRight="10dp"
                 android:layout_weight="50"
                 android:background="@drawable/bt_back_nomal"
                 android:enabled="false"
                 android:textColor="@color/bg_white"
                 android:textSize="@dimen/size16"
                 android:text="@string/signin" />
-
-        <Button
-                android:id="@+id/bt_send_mail"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="10dp"
-                android:layout_weight="50"
-                android:background="@drawable/bt_back_nomal"
-                android:enabled="true"
-                android:textColor="@color/bg_white"
-                android:textSize="@dimen/size16"
-                android:text="@string/send_email" />
     </LinearLayout>
 
 </LinearLayout>

@@ -30,11 +30,7 @@ import com.cgmn.msxl.receiver.ReceiverMessage;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.service.GlobalDataHelper;
 import com.cgmn.msxl.service.OkHttpClientManager;
-import com.cgmn.msxl.service.PropertyService;
-import com.cgmn.msxl.utils.CommonUtil;
-import com.cgmn.msxl.utils.FileUtil;
-import com.cgmn.msxl.utils.ImageUtil;
-import com.cgmn.msxl.utils.MessageUtil;
+import com.cgmn.msxl.utils.*;
 import com.squareup.okhttp.Request;
 import org.apache.shiro.codec.Base64;
 
@@ -376,7 +372,7 @@ public class EditHeaderActivity extends BaseActivity{
                         new OkHttpClientManager.Param("small", cut)
                 };
                 String url = String.format("%s%s",
-                        PropertyService.getInstance().getKey("serverUrl"), "/user/upload_portrait");
+                        ConstantHelper.serverUrl, "/user/upload_portrait");
                 try {
                     OkHttpClientManager.postAsyn(url,
                             new OkHttpClientManager.ResultCallback<BaseData>() {

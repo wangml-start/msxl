@@ -24,8 +24,8 @@ import com.cgmn.msxl.in.PaymentListener;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.service.GlobalDataHelper;
 import com.cgmn.msxl.service.OkHttpClientManager;
-import com.cgmn.msxl.service.PropertyService;
 import com.cgmn.msxl.utils.CommonUtil;
+import com.cgmn.msxl.utils.ConstantHelper;
 import com.cgmn.msxl.utils.MessageUtil;
 import com.cgmn.msxl.utils.ShowDialog;
 
@@ -58,7 +58,7 @@ public class PayPop extends PopupWindow {
         paymentListener = payls;
         Init();
         initMessageHandler();
-        if("dev".equals(PropertyService.getInstance().getKey("environment"))){
+        if("dev".equals(ConstantHelper.environment)){
             //沙箱环境
             EnvUtils.setEnv(EnvUtils.EnvEnum.SANDBOX);
         }
@@ -180,7 +180,7 @@ public class PayPop extends PopupWindow {
                 Map<String, String> params = getParams();
                 params.put("token", GlobalDataHelper.getToken(mContext));
                 String url = String.format("%s%s",
-                        PropertyService.getInstance().getKey("serverUrl"), action);
+                        ConstantHelper.serverUrl, action);
                 OkHttpClientManager.postAsyn(url,
                         new OkHttpClientManager.ResultCallback<BaseData>() {
                             @Override

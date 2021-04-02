@@ -32,10 +32,7 @@ import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.server_interface.KlineSet;
 import com.cgmn.msxl.server_interface.StockDetail;
 import com.cgmn.msxl.service.*;
-import com.cgmn.msxl.utils.CommonUtil;
-import com.cgmn.msxl.utils.GsonUtil;
-import com.cgmn.msxl.utils.MessageUtil;
-import com.cgmn.msxl.utils.ShowDialog;
+import com.cgmn.msxl.utils.*;
 import com.squareup.okhttp.Request;
 import org.apache.commons.lang3.StringUtils;
 
@@ -92,7 +89,7 @@ public class RealControlActivity extends AppCompatActivity
         Map<String, String> params = new HashMap<>();
         params.put("token", GlobalDataHelper.getToken(mContxt));
         return CommonUtil.buildGetUrl(
-                PropertyService.getInstance().getKey("serverUrl"),
+                ConstantHelper.serverUrl,
                 action, params);
     }
 
@@ -212,7 +209,7 @@ public class RealControlActivity extends AppCompatActivity
                 params.put("token", GlobalDataHelper.getToken(mContxt));
                 params.put("train_type", trainType+"");
                 String url = CommonUtil.buildGetUrl(
-                        PropertyService.getInstance().getKey("serverUrl"),
+                        ConstantHelper.serverUrl,
                         "/stock/account_info", params);
                 OkHttpClientManager.getAsyn(url,
                         new OkHttpClientManager.ResultCallback<BaseData>() {
@@ -311,7 +308,7 @@ public class RealControlActivity extends AppCompatActivity
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         int screenHeight = dm.heightPixels;
         LinearLayout.LayoutParams kparams =(LinearLayout.LayoutParams) chartParent.getLayoutParams();
-        kparams.height = ((Double)(screenHeight * 0.5)).intValue();
+        kparams.height = ((Double)(screenHeight * 0.55)).intValue();
         chartParent.setLayoutParams(kparams);
 
         chart = new KLineContent(this);
@@ -426,7 +423,7 @@ public class RealControlActivity extends AppCompatActivity
                         new OkHttpClientManager.Param("token", token),
                         new OkHttpClientManager.Param("content", GsonUtil.toJson(nodes))};
                 String url = String.format("%s%s",
-                        PropertyService.getInstance().getKey("serverUrl"), "/stock/upload_trading");
+                        ConstantHelper.serverUrl, "/stock/upload_trading");
                 OkHttpClientManager.postAsyn(url,
                         new OkHttpClientManager.ResultCallback<BaseData>() {
                             @Override

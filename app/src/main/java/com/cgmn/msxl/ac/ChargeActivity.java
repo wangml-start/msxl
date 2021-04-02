@@ -15,11 +15,7 @@ import com.cgmn.msxl.comp.adpter.ChargeAdpter;
 import com.cgmn.msxl.comp.pop.PayPop;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.cgmn.msxl.in.PaymentListener;
-import com.cgmn.msxl.server_interface.VipDataSetting;
 import com.cgmn.msxl.service.GlobalDataHelper;
-import com.cgmn.msxl.service.OkHttpClientManager;
-import com.cgmn.msxl.service.PropertyService;
-import com.cgmn.msxl.utils.CommonUtil;
 import com.cgmn.msxl.utils.MessageUtil;
 
 import java.util.ArrayList;

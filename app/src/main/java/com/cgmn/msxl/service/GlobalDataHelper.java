@@ -5,6 +5,7 @@ import android.os.Environment;
 import com.cgmn.msxl.application.AppApplication;
 import com.cgmn.msxl.db.AppSqlHelper;
 import com.cgmn.msxl.utils.CommonUtil;
+import com.cgmn.msxl.utils.ConstantHelper;
 import org.apache.shiro.codec.Base64;
 
 import java.util.HashMap;
@@ -100,7 +101,7 @@ public class GlobalDataHelper {
         Map<String, String> p = new HashMap<>();
         p.put("token", getToken(context));
         return CommonUtil.buildGetUrl(
-                PropertyService.getInstance().getKey("serverUrl"),
+                ConstantHelper.serverUrl,
                 "/user/portrait_view", p);
     }
 
@@ -116,7 +117,7 @@ public class GlobalDataHelper {
     }
 
     public static String getDownloadVersionUrl(Context context){
-        return String.format("%s/%s?token=%s",PropertyService.getInstance().getKey("serverUrl"),
+        return String.format("%s/%s?token=%s",ConstantHelper.serverUrl,
                 "common/download_version",GlobalDataHelper.getToken(context));
     }
 

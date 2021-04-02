@@ -27,8 +27,8 @@ import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.service.GlobalDataHelper;
 import com.cgmn.msxl.service.OkHttpClientManager;
-import com.cgmn.msxl.service.PropertyService;
 import com.cgmn.msxl.utils.CommonUtil;
+import com.cgmn.msxl.utils.ConstantHelper;
 import com.cgmn.msxl.utils.MessageUtil;
 
 import java.util.*;
@@ -265,7 +265,7 @@ public class DisgussSubActivity extends DisgussBaseActivity {
                 params.put("token", GlobalDataHelper.getToken(mContext));
                 params.put("comment_id", comment.getId() + "");
                 String url = CommonUtil.buildGetUrl(
-                        PropertyService.getInstance().getKey("serverUrl"),
+                        ConstantHelper.serverUrl,
                         "/chat/query_replay_list", params);
                 OkHttpClientManager.getAsyn(url,
                         new OkHttpClientManager.ResultCallback<BaseData>() {
@@ -306,7 +306,7 @@ public class DisgussSubActivity extends DisgussBaseActivity {
                 params.put("token", GlobalDataHelper.getToken(mContext));
                 params.put("view_record_id", recordId + "");
                 String url = CommonUtil.buildGetUrl(
-                        PropertyService.getInstance().getKey("serverUrl"),
+                        ConstantHelper.serverUrl,
                         "/chat/query_comment_info", params);
                 OkHttpClientManager.getAsyn(url,
                         new OkHttpClientManager.ResultCallback<BaseData>() {
@@ -348,7 +348,7 @@ public class DisgussSubActivity extends DisgussBaseActivity {
                 params.put("comment_id", comment.getId() + "");
                 params.put("token", GlobalDataHelper.getToken(mContext));
                 String url = CommonUtil.buildGetUrl(
-                        PropertyService.getInstance().getKey("serverUrl"),
+                        ConstantHelper.serverUrl,
                         "/chat/query_replay_list", params);
                 OkHttpClientManager.getAsyn(url,
                         new OkHttpClientManager.ResultCallback<BaseData>() {
@@ -424,7 +424,7 @@ public class DisgussSubActivity extends DisgussBaseActivity {
                         new OkHttpClientManager.Param("comment_user_id", beReplayUserId + "")
                 };
                 String url = String.format("%s%s",
-                        PropertyService.getInstance().getKey("serverUrl"), "/chat/replay_comment");
+                        ConstantHelper.serverUrl, "/chat/replay_comment");
                 OkHttpClientManager.postAsyn(url,
                         new OkHttpClientManager.ResultCallback<BaseData>() {
                             @Override

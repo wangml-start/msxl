@@ -7,9 +7,9 @@ import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.CustmerToast;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.service.OkHttpClientManager;
-import com.cgmn.msxl.service.PropertyService;
 import com.cgmn.msxl.service.GlobalDataHelper;
 import com.cgmn.msxl.utils.CommonUtil;
+import com.cgmn.msxl.utils.ConstantHelper;
 import com.squareup.okhttp.Request;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
@@ -81,7 +81,7 @@ public class GlobalExceptionHandler {
                         new OkHttpClientManager.Param("message", e.getMessage()),
                         new OkHttpClientManager.Param("info", ExceptionUtils.getStackTrace(e))};
                 String url = String.format("%s%s",
-                        PropertyService.getInstance().getKey("serverUrl"), "/common/reveive_exception");
+                        ConstantHelper.serverUrl, "/common/reveive_exception");
                 OkHttpClientManager.postAsyn(url,
                         new OkHttpClientManager.ResultCallback<BaseData>() {
                             @Override

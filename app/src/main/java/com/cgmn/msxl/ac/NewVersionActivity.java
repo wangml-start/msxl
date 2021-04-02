@@ -15,8 +15,8 @@ import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.service.GlobalDataHelper;
 import com.cgmn.msxl.service.OkHttpClientManager;
-import com.cgmn.msxl.service.PropertyService;
 import com.cgmn.msxl.utils.CommonUtil;
+import com.cgmn.msxl.utils.ConstantHelper;
 import com.cgmn.msxl.utils.MessageUtil;
 import org.apache.commons.lang3.StringUtils;
 
@@ -54,11 +54,11 @@ public class NewVersionActivity extends BaseOtherActivity {
             public void run() {
                 String action = "/common/query_new_version";
                 Map<String, String> params = new HashMap<>();
-                params.put("version", PropertyService.getInstance().getKey("version"));
+                params.put("version", ConstantHelper.version);
                 params.put("type", "android");
                 params.put("token", GlobalDataHelper.getToken(mContext));
                 String url = CommonUtil.buildGetUrl(
-                        PropertyService.getInstance().getKey("serverUrl"),
+                        ConstantHelper.serverUrl,
                         action, params);                                                                                                                  OkHttpClientManager.getAsyn(url,
                         new OkHttpClientManager.ResultCallback<BaseData>() {
                             @Override
@@ -97,7 +97,7 @@ public class NewVersionActivity extends BaseOtherActivity {
         mHandler = new Handler(new Handler.Callback() {
             @Override
             public boolean handleMessage(Message msg) {
-                String cVersion = PropertyService.getInstance().getKey("version");
+                String cVersion = ConstantHelper.version;
                 if(MessageUtil.REQUEST_SUCCESS == msg.what){
                     StringBuffer message = new StringBuffer();
                     if(msg.obj != null){

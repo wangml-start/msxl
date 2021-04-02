@@ -9,7 +9,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 30
         versionCode 1
-        versionName "3.2.6"
+        versionName "3.3.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -19,7 +19,7 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true //启用代码混淆
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }

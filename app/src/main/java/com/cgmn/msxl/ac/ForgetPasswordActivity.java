@@ -16,7 +16,6 @@ import com.cgmn.msxl.data.User;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.service.OkHttpClientManager;
-import com.cgmn.msxl.service.PropertyService;
 import com.cgmn.msxl.utils.*;
 
 import java.util.HashMap;
@@ -187,7 +186,7 @@ public class ForgetPasswordActivity extends LoginBaseActivity {
 
     private void sendValidCodeMessage(Map<String, String> p) {
         String url = CommonUtil.buildGetUrl(
-                PropertyService.getInstance().getKey("serverUrl"),
+                ConstantHelper.serverUrl,
                 "/user/valid_code", p);
         OkHttpClientManager.getAsyn(url,
                 new OkHttpClientManager.ResultCallback<BaseData>() {

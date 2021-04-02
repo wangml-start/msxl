@@ -21,6 +21,7 @@ public class PageMainItem {
     public static int CHECK_NEW_VERSION = 14;
     public static int TREND_BREAK_UP = 15;
     public static int OPTIONAL_STOCKS = 16;
+    public static int USER_AGREMENT = 17;
 
     private int aIcon;
     private String aName;

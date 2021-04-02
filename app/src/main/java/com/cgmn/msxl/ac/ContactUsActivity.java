@@ -11,8 +11,8 @@ import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.service.GlobalDataHelper;
 import com.cgmn.msxl.service.OkHttpClientManager;
-import com.cgmn.msxl.service.PropertyService;
 import com.cgmn.msxl.utils.CommonUtil;
+import com.cgmn.msxl.utils.ConstantHelper;
 import com.cgmn.msxl.utils.MessageUtil;
 
 import java.util.ArrayList;
@@ -54,7 +54,7 @@ public class ContactUsActivity extends BaseOtherActivity {
                 params.put("type", "customer_service");
                 params.put("token", GlobalDataHelper.getToken(mContext));
                 String url = CommonUtil.buildGetUrl(
-                        PropertyService.getInstance().getKey("serverUrl"),
+                        ConstantHelper.serverUrl,
                         action, params);
                 OkHttpClientManager.getAsyn(url,
                         new OkHttpClientManager.ResultCallback<BaseData>() {

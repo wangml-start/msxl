@@ -39,4 +39,6 @@
     <string name="trend_break_up">趋势突破</string>
     <string name="optional_stock">自选股池</string>
 
+    <string name="user_agrement_title">用户协议</string>
+
 </resources>

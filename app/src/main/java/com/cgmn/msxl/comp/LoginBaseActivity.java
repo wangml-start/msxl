@@ -13,8 +13,8 @@ import com.cgmn.msxl.db.AppSqlHelper;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.service.GlobalDataHelper;
 import com.cgmn.msxl.service.OkHttpClientManager;
-import com.cgmn.msxl.service.PropertyService;
 import com.cgmn.msxl.utils.CommonUtil;
+import com.cgmn.msxl.utils.ConstantHelper;
 import com.cgmn.msxl.utils.MessageUtil;
 
 import java.util.Map;
@@ -64,7 +64,7 @@ public abstract class LoginBaseActivity extends BaseActivity
     public void onLoginRequest(Map<String, String> values,
                                final Context mContext, final Handler mHandler) {
         String url = CommonUtil.buildGetUrl(
-                PropertyService.getInstance().getKey("serverUrl"),
+                ConstantHelper.serverUrl,
                 "/user/login", values);
         OkHttpClientManager.getAsyn(url,
                 new OkHttpClientManager.ResultCallback<BaseData>() {

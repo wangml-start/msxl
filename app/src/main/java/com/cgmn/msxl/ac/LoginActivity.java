@@ -3,14 +3,22 @@ package com.cgmn.msxl.ac;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.bean.PopuBean;
@@ -39,6 +47,7 @@ public class LoginActivity extends LoginBaseActivity {
 
     private Button bt_login;
     private Button bt_forget_pws;
+    private TextView txt_agrement;
     private showPassworCheckBox ck_show;
     private ImageView acc_down_list;
 
@@ -211,6 +220,8 @@ public class LoginActivity extends LoginBaseActivity {
         bt_login = findViewById(R.id.bt_login);
         bt_forget_pws = findViewById(R.id.bt_forget);
         ck_show = findViewById(R.id.ck_dis_pws);
+        txt_agrement = findViewById(R.id.txt_agrement);
+        setAgrementText();
 
         bt_login.setOnClickListener(this);
         bt_forget_pws.setOnClickListener(this);
@@ -304,5 +315,20 @@ public class LoginActivity extends LoginBaseActivity {
                 }
             }
         });
+    }
+
+    private void setAgrementText(){
+        String base = "登录即表示您已同意";
+        String agrement = "《用户协议》";
+        SpannableString span = new SpannableString(base+agrement);
+        span.setSpan(new ClickableSpan(){
+            @Override
+            public void onClick(View widget) {
+                Intent intent = new Intent(mContext, UserAgrementActivity.class);
+                startActivity(intent);
+            }
+        }, base.length(), base.length()+agrement.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+        txt_agrement.setText(span);
+        txt_agrement.setMovementMethod(LinkMovementMethod.getInstance());
     }
 }

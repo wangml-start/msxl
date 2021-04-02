@@ -27,7 +27,6 @@ import com.cgmn.msxl.data.TradeStatistic;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.service.OkHttpClientManager;
-import com.cgmn.msxl.service.PropertyService;
 import com.cgmn.msxl.service.GlobalDataHelper;
 import com.cgmn.msxl.utils.*;
 import com.github.mikephil.charting.charts.LineChart;
@@ -140,7 +139,7 @@ public class StatisticActivity extends BaseOtherActivity {
                     params.put("userModelId", userModelId + "");
                 }
                 String url = CommonUtil.buildGetUrl(
-                        PropertyService.getInstance().getKey("serverUrl"),
+                        ConstantHelper.serverUrl,
                         "/stock/get_statistics", params);
                 OkHttpClientManager.getAsyn(url,
                         new OkHttpClientManager.ResultCallback<BaseData>() {
@@ -460,7 +459,7 @@ public class StatisticActivity extends BaseOtherActivity {
                 new OkHttpClientManager.Param("comment", p.get("comment"))
         };
         String url = String.format("%s%s",
-                PropertyService.getInstance().getKey("serverUrl"), "/chat/publish_comment");
+                ConstantHelper.serverUrl, "/chat/publish_comment");
         OkHttpClientManager.postAsyn(url,
                 new OkHttpClientManager.ResultCallback<BaseData>() {
                     @Override

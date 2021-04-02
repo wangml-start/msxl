@@ -21,8 +21,8 @@ import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.service.GlobalDataHelper;
 import com.cgmn.msxl.service.OkHttpClientManager;
-import com.cgmn.msxl.service.PropertyService;
 import com.cgmn.msxl.utils.CommonUtil;
+import com.cgmn.msxl.utils.ConstantHelper;
 import com.cgmn.msxl.utils.FixStringBuffer;
 import com.cgmn.msxl.utils.MessageUtil;
 
@@ -122,7 +122,7 @@ public class DanFragment extends Fragment {
         params.put("danRank", danRank+"");
         params.put("token", GlobalDataHelper.getToken(mContext));
         return CommonUtil.buildGetUrl(
-                PropertyService.getInstance().getKey("serverUrl"),
+                ConstantHelper.serverUrl,
                 action, params);
     }
 

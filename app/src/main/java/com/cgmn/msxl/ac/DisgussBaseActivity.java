@@ -36,8 +36,8 @@ import com.cgmn.msxl.in.TdataListener;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.service.GlobalDataHelper;
 import com.cgmn.msxl.service.OkHttpClientManager;
-import com.cgmn.msxl.service.PropertyService;
 import com.cgmn.msxl.utils.CommonUtil;
+import com.cgmn.msxl.utils.ConstantHelper;
 import com.cgmn.msxl.utils.ImageUtil;
 import com.cgmn.msxl.utils.MessageUtil;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -205,7 +205,7 @@ public abstract class DisgussBaseActivity extends Activity
                 params.put("comment_user_id", commentsList.get(position).getUserId() + "");
 
                 String url = CommonUtil.buildGetUrl(
-                        PropertyService.getInstance().getKey("serverUrl"),
+                        ConstantHelper.serverUrl,
                         "/chat/approve_comment", params);
                 OkHttpClientManager.getAsyn(url,
                         new OkHttpClientManager.ResultCallback<BaseData>() {
@@ -330,7 +330,7 @@ public abstract class DisgussBaseActivity extends Activity
                 params.put("comment_id", commentId + "");
 
                 String url = CommonUtil.buildGetUrl(
-                        PropertyService.getInstance().getKey("serverUrl"),
+                        ConstantHelper.serverUrl,
                         "/chat/delete_comment", params);
                 OkHttpClientManager.getAsyn(url,
                         new OkHttpClientManager.ResultCallback<BaseData>() {

@@ -62,6 +62,8 @@
         <activity android:name=".ac.UserInfoActivity"/>
         <activity android:name=".ac.MarketTrendActivity"/>
         <activity android:name=".ac.OptionalStockActivity"/>
+        <activity android:name=".ac.UserAgrementActivity"/>
+
     </application>
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />

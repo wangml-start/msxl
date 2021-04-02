@@ -25,8 +25,8 @@ import com.cgmn.msxl.in.PaymentListener;
 import com.cgmn.msxl.server_interface.VipDataSetting;
 import com.cgmn.msxl.service.GlobalDataHelper;
 import com.cgmn.msxl.service.OkHttpClientManager;
-import com.cgmn.msxl.service.PropertyService;
 import com.cgmn.msxl.utils.CommonUtil;
+import com.cgmn.msxl.utils.ConstantHelper;
 import com.cgmn.msxl.utils.MessageUtil;
 
 import java.util.HashMap;
@@ -212,7 +212,7 @@ public class VIPActivity extends BaseOtherActivity {
                 Map<String, String> params = new HashMap<>();
                 params.put("token", GlobalDataHelper.getToken(mContext));
                 String url = CommonUtil.buildGetUrl(
-                        PropertyService.getInstance().getKey("serverUrl"),
+                        ConstantHelper.serverUrl,
                         action, params);
                 OkHttpClientManager.getAsyn(url,
                         new OkHttpClientManager.ResultCallback<VipDataSetting>() {
@@ -255,7 +255,7 @@ public class VIPActivity extends BaseOtherActivity {
                 Map<String, String> params = getParms();
                 params.put("token", GlobalDataHelper.getToken(mContext));
                 String url = CommonUtil.buildGetUrl(
-                        PropertyService.getInstance().getKey("serverUrl"),
+                        ConstantHelper.serverUrl,
                         action, params);
                 OkHttpClientManager.getAsyn(url,
                         new OkHttpClientManager.ResultCallback<VipDataSetting>() {

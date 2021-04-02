@@ -30,9 +30,9 @@ import com.cgmn.msxl.server_interface.MarketData;
 import com.cgmn.msxl.server_interface.TrendStock;
 import com.cgmn.msxl.service.GlobalDataHelper;
 import com.cgmn.msxl.service.OkHttpClientManager;
-import com.cgmn.msxl.service.PropertyService;
 import com.cgmn.msxl.service.StockDisplayManager;
 import com.cgmn.msxl.utils.CommonUtil;
+import com.cgmn.msxl.utils.ConstantHelper;
 import com.cgmn.msxl.utils.MessageUtil;
 import com.cgmn.msxl.utils.ShowDialog;
 
@@ -350,7 +350,7 @@ public class MarketTrendActivity extends BaseOtherActivity {
                 Map<String, String> params = new HashMap<>();
                 params.put("token", GlobalDataHelper.getToken(mContext));
                 String url = CommonUtil.buildGetUrl(
-                        PropertyService.getInstance().getKey("serverUrl"),
+                        ConstantHelper.serverUrl,
                         action, params);
                 OkHttpClientManager.getAsyn(url,
                         new OkHttpClientManager.ResultCallback<BaseData>() {
@@ -394,7 +394,7 @@ public class MarketTrendActivity extends BaseOtherActivity {
                 params.put("add_vol", selectedVol);
                 params.put("token", GlobalDataHelper.getToken(mContext));
                 String url = CommonUtil.buildGetUrl(
-                        PropertyService.getInstance().getKey("serverUrl"),
+                        ConstantHelper.serverUrl,
                         action, params);
                 OkHttpClientManager.getAsyn(url,
                         new OkHttpClientManager.ResultCallback<BaseData>() {
@@ -436,7 +436,7 @@ public class MarketTrendActivity extends BaseOtherActivity {
                 params.put("code", code);
                 params.put("token", GlobalDataHelper.getToken(mContext));
                 String url = CommonUtil.buildGetUrl(
-                        PropertyService.getInstance().getKey("serverUrl"),
+                        ConstantHelper.serverUrl,
                         action, params);
                 OkHttpClientManager.getAsyn(url,
                         new OkHttpClientManager.ResultCallback<BaseData>() {
@@ -480,7 +480,7 @@ public class MarketTrendActivity extends BaseOtherActivity {
                 params.put("operation", "add");
                 params.put("token", GlobalDataHelper.getToken(mContext));
                 String url = CommonUtil.buildGetUrl(
-                        PropertyService.getInstance().getKey("serverUrl"),
+                        ConstantHelper.serverUrl,
                         action, params);
                 OkHttpClientManager.getAsyn(url,
                         new OkHttpClientManager.ResultCallback<BaseData>() {
@@ -562,7 +562,7 @@ public class MarketTrendActivity extends BaseOtherActivity {
                         Map<String, String> params = new HashMap<>();
                         params.put("token", GlobalDataHelper.getToken(mContext));
                         String url = CommonUtil.buildGetUrl(
-                                PropertyService.getInstance().getKey("serverUrl"),
+                                ConstantHelper.serverUrl,
                                 action, params);
                         OkHttpClientManager.getAsyn(url,
                                 new OkHttpClientManager.ResultCallback<BaseData>() {

@@ -16,8 +16,8 @@ import com.cgmn.msxl.receiver.ReceiverMessage;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.service.GlobalDataHelper;
 import com.cgmn.msxl.service.OkHttpClientManager;
-import com.cgmn.msxl.service.PropertyService;
 import com.cgmn.msxl.utils.CommonUtil;
+import com.cgmn.msxl.utils.ConstantHelper;
 import com.cgmn.msxl.utils.MessageUtil;
 
 import java.util.Map;
@@ -39,7 +39,7 @@ public abstract class EditBaseActivity extends BaseActivity{
                 try{
                     final Map<String, String> p = getParams();
                     String url = CommonUtil.buildGetUrl(
-                            PropertyService.getInstance().getKey("serverUrl"),
+                            ConstantHelper.serverUrl,
                             "/user/edit", p);
                     OkHttpClientManager.getAsyn(url,
                             new OkHttpClientManager.ResultCallback<BaseData>() {

@@ -27,9 +27,9 @@ import com.cgmn.msxl.receiver.ReceiverMessage;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.service.GlobalDataHelper;
 import com.cgmn.msxl.service.OkHttpClientManager;
-import com.cgmn.msxl.service.PropertyService;
 import com.cgmn.msxl.service.TokenInterceptor;
 import com.cgmn.msxl.utils.CommonUtil;
+import com.cgmn.msxl.utils.ConstantHelper;
 import com.cgmn.msxl.utils.MessageUtil;
 
 import java.util.HashMap;
@@ -188,12 +188,12 @@ public class AppMainActivity extends AppCompatActivity
             public void run() {
                 String action = "/common/query_new_version";
                 Map<String, String> params = new HashMap<>();
-                params.put("version", PropertyService.getInstance().getKey("version"));
+                params.put("version", ConstantHelper.version);
                 params.put("type", "android");
                 params.put("required", "1");
                 params.put("token", GlobalDataHelper.getToken(mContxt));
                 String url = CommonUtil.buildGetUrl(
-                        PropertyService.getInstance().getKey("serverUrl"),
+                        ConstantHelper.serverUrl,
                         action, params);                                                                                                                  OkHttpClientManager.getAsyn(url,
                         new OkHttpClientManager.ResultCallback<BaseData>() {
                             @Override

@@ -20,6 +20,7 @@ import com.cgmn.msxl.data.StockHolder;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.service.*;
 import com.cgmn.msxl.utils.CommonUtil;
+import com.cgmn.msxl.utils.ConstantHelper;
 import com.cgmn.msxl.utils.MessageUtil;
 import org.apache.commons.lang3.StringUtils;
 
@@ -270,7 +271,7 @@ public class TradingPop extends PopupWindow
                 params.put("token", GlobalDataHelper.getToken(mContext));
                 String action = "/common/outstanding_trade";
                 String url = CommonUtil.buildGetUrl(
-                        PropertyService.getInstance().getKey("serverUrl"),
+                        ConstantHelper.serverUrl,
                         action, params);
                 OkHttpClientManager.getAsyn(url,
                         new OkHttpClientManager.ResultCallback<BaseData>() {

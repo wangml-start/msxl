@@ -46,7 +46,7 @@ public class MayFragment extends Fragment {
         mData.add(new SplitItem(getString(R.string.system)));
         mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.contact_us), PageMainItem.CONTACT_US));
         mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.check_new_version), PageMainItem.CHECK_NEW_VERSION));
-
+        mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.user_agrement_title), PageMainItem.USER_AGREMENT));
 
         myAdapter = new MutiLayoutAdapter(mContxt, mData);
         list_content.setAdapter(myAdapter);
@@ -86,6 +86,11 @@ public class MayFragment extends Fragment {
                             intent = new Intent(mContxt, NewVersionActivity.class);
                             startActivity(intent);
                             break;
+                        case 17:
+                            intent = new Intent(mContxt, UserAgrementActivity.class);
+                            startActivity(intent);
+                            break;
+
                     }
                 }
             }
