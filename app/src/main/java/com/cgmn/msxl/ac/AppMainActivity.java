@@ -124,7 +124,7 @@ public class AppMainActivity extends AppCompatActivity
                                 .setApkVersionCode(2)
 //                                .setApkVersionName("2.1.8")
 //                                .setApkSize("4.0")
-                                .setApkDescription("当前版本太低,请更新到最新版本!")
+                                .setApkDescription("当前版本已停止维护,请更新到最新版本!")
                                 .download();
                     }
                 } else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
