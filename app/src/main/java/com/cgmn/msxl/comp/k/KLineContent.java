@@ -88,7 +88,7 @@ public class KLineContent extends RelativeLayout{
         }
         float ohterRate = KlineStyle.kWidth/oldWidth;
         KlineStyle.mBarSpace = KlineStyle.mBarSpace*ohterRate;
-        KlineStyle.kLineBold = KlineStyle.kLineBold*ohterRate;
+//        KlineStyle.kLineBold = KlineStyle.kLineBold*ohterRate;
 
         int count = chart.getKlinePaint().getEndx() - chart.getKlinePaint().getStartx();
         int visibleCount = (int) ((chart.getWidth()-KlineStyle.rightWidth) / (KlineStyle.kWidth+KlineStyle.mBarSpace));
