@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -69,7 +70,7 @@ public class RealControlActivity extends AppCompatActivity
     MyMarqueeView marqueeview;
     MarqueeManager marqueeManager;
     TradeAutoRunManager autoRunManager;
-
+    MediaPlayer music;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -528,6 +529,7 @@ public class RealControlActivity extends AppCompatActivity
 
     @Override
     public void onClick(View v) {
+        PlayMusic();
         if(v.getId() == R.id.bt_next){
             onNextClick();
         }else if(v.getId() == R.id.bt_buy){
@@ -610,6 +612,11 @@ public class RealControlActivity extends AppCompatActivity
         OkHttpClientManager.getInstance().addIntercept(new TokenInterceptor(mContxt));
     }
 
+
+    private void PlayMusic() {
+        music = MediaPlayer.create(this, R.raw.btn_wav);
+        music.start();
+    }
 
     @Override
     public void finish() {
