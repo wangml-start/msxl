@@ -180,7 +180,7 @@
         <TextView
                 android:id="@+id/btn_pay"
                 android:layout_width="match_parent"
-                android:layout_height="41dp"
+                android:layout_height="@dimen/btn_height"
                 android:textSize="@dimen/size16"
                 android:gravity="center"
                 android:text="@string/vip_pay"

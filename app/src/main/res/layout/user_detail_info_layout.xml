@@ -239,7 +239,7 @@
     <TextView
             android:id="@+id/btn_update"
             android:layout_width="match_parent"
-            android:layout_height="35dp"
+            android:layout_height="@dimen/btn_height"
             android:layout_alignParentBottom="true"
             android:layout_margin="8dp"
             android:background="@drawable/bt_back_nomal"

@@ -27,6 +27,7 @@ import com.cgmn.msxl.comp.swb.State;
 import com.cgmn.msxl.data.*;
 import com.cgmn.msxl.db.AppSqlHelper;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
+import com.cgmn.msxl.in.AutoNextListener;
 import com.cgmn.msxl.receiver.ReceiverMessage;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.server_interface.KlineSet;
@@ -67,6 +68,7 @@ public class RealControlActivity extends AppCompatActivity
     Button bt_next, bt_buy,bt_sell, bt_change, bt_exit;
     MyMarqueeView marqueeview;
     MarqueeManager marqueeManager;
+    TradeAutoRunManager autoRunManager;
 
 
     @Override
@@ -198,6 +200,8 @@ public class RealControlActivity extends AppCompatActivity
         chart.invalidateView();
         updateTopBar();
         initStockHolder();
+
+        autoRunManager.resetManager();
     }
 
     private void loadAccCash(){
@@ -325,6 +329,22 @@ public class RealControlActivity extends AppCompatActivity
         Bundle bundle = intent.getBundleExtra("datas");
         trainType = bundle.getInt("train_type");
         userModelId =  bundle.getInt("user_model_id");
+
+        //记时3秒自动下一步
+        autoRunManager = new TradeAutoRunManager();
+        autoRunManager.setListener(new AutoNextListener() {
+            @Override
+            public void onTicket(Integer sec) {
+                bt_next.setText(String.format("%s%ss", getResources().getString(R.string.next), sec));
+            }
+
+            @Override
+            public void onComplete() {
+                bt_next.setText(String.format("%s",  getResources().getString(R.string.next)));
+                onNextClick();
+            }
+        });
+        autoRunManager.startManager();
     }
 
     private void onNextClick(){
@@ -344,6 +364,7 @@ public class RealControlActivity extends AppCompatActivity
                 lb_close_rate.setTextColor(getResources().getColor(R.color.kline_down));
             }
             stockView.getStockHolder().nextPrice(current.getEnd(), false);
+            autoRunManager.resetManager();
         }else{
             //在还未到一下天前检测
             //交易模式检测
@@ -383,6 +404,7 @@ public class RealControlActivity extends AppCompatActivity
                 stockView.getStockHolder().nextPrice(current.getStart(), true);
                 //更新持仓天数
                 stockView.getStockHolder().whenNextDay();
+                autoRunManager.resetManager();
             }else{
                 settleThisTrading();
                 bt_buy.setEnabled(false);
@@ -396,7 +418,9 @@ public class RealControlActivity extends AppCompatActivity
                 );
                 new ShowDialog().showTips(mContxt, tips);
             }
+
         }
+        stockView.invalidateView();
     }
 
     private void settleThisTrading(){
@@ -483,6 +507,7 @@ public class RealControlActivity extends AppCompatActivity
                 } else {
                     bt_change.setEnabled(false);
                 }
+                autoRunManager.resumeManager();
             }
         });
     }
@@ -505,13 +530,14 @@ public class RealControlActivity extends AppCompatActivity
     public void onClick(View v) {
         if(v.getId() == R.id.bt_next){
             onNextClick();
-            stockView.invalidateView();
         }else if(v.getId() == R.id.bt_buy){
             if(stockView.getStockHolder().getTotAmt() < 100){
                 new ShowDialog().showTips(mContxt, "当前账户资金不足！");
             }
+            autoRunManager.pause();
             showPopFormBottom(v, "BUY");
         }else if(v.getId() == R.id.bt_sell){
+            autoRunManager.pause();
             showPopFormBottom(v, "SELL");
         }else if(v.getId() == R.id.bt_change){
             onChageStock();
@@ -588,6 +614,7 @@ public class RealControlActivity extends AppCompatActivity
     @Override
     public void finish() {
         marqueeManager.tiemrCancel();
+        autoRunManager.tiemrCancel();
         super.finish();
     }
 }
