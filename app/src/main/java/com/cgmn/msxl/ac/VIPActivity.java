@@ -346,8 +346,13 @@ public class VIPActivity extends BaseOtherActivity {
         }
         Map<String, String> p = getParms();
         Integer orderAmt = Double.valueOf(p.get("amt")).intValue();
-        mPayPopWindow.setAmt((orderAmt-subAmt)+"");
-        p.put("amt", (orderAmt-subAmt)+"");
+        Integer delta = orderAmt-subAmt;
+        if(delta <= 0){
+            CustmerToast.makeText(mContext, "参数异常,差值为负数").show();
+            return;
+        }
+        mPayPopWindow.setAmt(delta+"");
+        p.put("amt", delta+"");
         mPayPopWindow.setParams(p);
 
         View rootView = LayoutInflater.from(mContext)

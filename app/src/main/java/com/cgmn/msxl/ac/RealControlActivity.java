@@ -485,6 +485,7 @@ public class RealControlActivity extends AppCompatActivity
             CustmerToast.makeText(mContxt, getString(R.string.down_stop_reject)).show();
             return;
         }
+        autoRunManager.pause();
         TradingPop popWin = new TradingPop(this,
                 stockView.getStockHolder(), realtradeManage, action);
 //        设置Popupwindow显示位置（从底部弹出）
@@ -536,10 +537,8 @@ public class RealControlActivity extends AppCompatActivity
             if(stockView.getStockHolder().getTotAmt() < 100){
                 new ShowDialog().showTips(mContxt, "当前账户资金不足！");
             }
-            autoRunManager.pause();
             showPopFormBottom(v, "BUY");
         }else if(v.getId() == R.id.bt_sell){
-            autoRunManager.pause();
             showPopFormBottom(v, "SELL");
         }else if(v.getId() == R.id.bt_change){
             onChageStock();
