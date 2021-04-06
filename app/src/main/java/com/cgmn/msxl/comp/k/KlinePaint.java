@@ -206,8 +206,8 @@ public class KlinePaint {
             //draw char B\S\T
             if(entry.opChar != null){
                 float dotHeight = 15*KlineStyle.pxScaleRate;
-                float dotR = 2*KlineStyle.pxScaleRate;
-                float textR = 6*KlineStyle.pxScaleRate;
+                float dotR = 1.5f*KlineStyle.pxScaleRate;
+                float textR = 5f*KlineStyle.pxScaleRate;
                 float distance = 8*KlineStyle.pxScaleRate;
 
                 Paint chPint = otPaint;
