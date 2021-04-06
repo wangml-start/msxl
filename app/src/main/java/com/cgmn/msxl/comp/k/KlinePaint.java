@@ -23,6 +23,8 @@ public class KlinePaint {
     protected RectF barRect = new RectF();
     protected RectF macdRect = new RectF();
 
+    private float textSize = KlineStyle.kTextSize*0.85f;
+
     protected int startx = 0;
     protected int endx = 0;
 
@@ -68,10 +70,11 @@ public class KlinePaint {
 
         mGridPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mGridPaint.setStyle(Paint.Style.STROKE);
-        mGridPaint.setStrokeWidth(1f);
+        mGridPaint.setStrokeWidth(KlineStyle.gridLine);
         mGridPaint.setColor(Color.GRAY);
 
         mLabelPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mLabelPaint.setTextSize(textSize);
         mLabelPaint.setColor(Color.BLACK);
 
         mk5Paint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -107,8 +110,8 @@ public class KlinePaint {
         whitePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         whitePaint.setStyle(Paint.Style.FILL);
         whitePaint.setColor(Color.WHITE);
-        whitePaint.setTextSize(25);
-        whitePaint.setStrokeWidth(2f);
+        whitePaint.setTextSize(textSize);
+        whitePaint.setStrokeWidth(KlineStyle.kLineBold);
 
     }
 
@@ -202,9 +205,10 @@ public class KlinePaint {
 
             //draw char B\S\T
             if(entry.opChar != null){
-                float dotHeight = 45;
-                float textR = 16;
-                float distance = 16;
+                float dotHeight = 15*KlineStyle.pxScaleRate;
+                float dotR = 2*KlineStyle.pxScaleRate;
+                float textR = 6*KlineStyle.pxScaleRate;
+                float distance = 8*KlineStyle.pxScaleRate;
 
                 Paint chPint = otPaint;
                 if("B".equals(entry.opChar)){
@@ -218,7 +222,7 @@ public class KlinePaint {
                         float starty = entry.highPt[1];
                         float[] startPt =new float[]{entry.highPt[0], starty-distance};
                         float[] endPt =new float[]{entry.highPt[0], starty-distance-dotHeight};
-                        canvas.drawCircle(startPt[0],startPt[1],5f, chPint);
+                        canvas.drawCircle(startPt[0],startPt[1],dotR, chPint);
                         canvas.drawLine(startPt[0],startPt[1], endPt[0],endPt[1], chPint);
                         canvas.drawCircle(endPt[0], endPt[1]-textR, textR,chPint);
                         canvas.drawText(
@@ -230,7 +234,7 @@ public class KlinePaint {
                         float starty = entry.lowPt[1];
                         float[] startPt =new float[]{entry.lowPt[0], starty+distance};
                         float[] endPt =new float[]{entry.highPt[0], starty+distance+dotHeight};
-                        canvas.drawCircle(startPt[0],startPt[1],5f, chPint);
+                        canvas.drawCircle(startPt[0],startPt[1],dotR, chPint);
                         canvas.drawLine(startPt[0],startPt[1], endPt[0], endPt[1], chPint);
                         canvas.drawCircle(endPt[0], endPt[1]+textR, textR,chPint);
                         canvas.drawText(
@@ -244,7 +248,7 @@ public class KlinePaint {
                         float starty = entry.highPt[1];
                         float[] startPt =new float[]{entry.highPt[0], starty-distance};
                         float[] endPt =new float[]{entry.highPt[0], starty-distance-dotHeight};
-                        canvas.drawCircle(startPt[0],startPt[1],5f, chPint);
+                        canvas.drawCircle(startPt[0],startPt[1],dotR, chPint);
                         canvas.drawLine(startPt[0],startPt[1], endPt[0], endPt[1], chPint);
                         canvas.drawCircle(endPt[0], endPt[1]-textR, textR,chPint);
                         canvas.drawText(
@@ -256,7 +260,7 @@ public class KlinePaint {
                         float starty = entry.lowPt[1];
                         float[] startPt =new float[]{entry.lowPt[0], starty+distance};
                         float[] endPt =new float[]{entry.lowPt[0], starty+distance+dotHeight};
-                        canvas.drawCircle(startPt[0],startPt[1],5f, chPint);
+                        canvas.drawCircle(startPt[0],startPt[1],dotR, chPint);
                         canvas.drawLine(startPt[0],startPt[1], endPt[0], endPt[1], chPint);
                         canvas.drawCircle(endPt[0], endPt[1]+textR, textR,chPint);
                         canvas.drawText(
@@ -276,16 +280,15 @@ public class KlinePaint {
      * Draw x and y labels.
      */
     protected void renderLabels(Canvas canvas) {
-        float textX = canvas.getWidth()-10;
+        float textX = canvas.getWidth()-2;
         // DRAW Y LABELS
         mLabelPaint.setTextAlign(Paint.Align.RIGHT);
-        mLabelPaint.setTextSize(30);
         mLabelPaint.getFontMetrics(fontMetrics);
-        float moveY = 28;
+        float moveY = 10 * KlineStyle.pxScaleRate;
         for(PriceLinePoint pt : pricePts){
             canvas.drawLine(pt.pstartPt[0],pt.pstartPt[1],pt.pendPt[0],pt.pendPt[1], mGridPaint);
             if(pricePts.indexOf(pt) == 4){
-                moveY = -10;
+                moveY = -3 * KlineStyle.pxScaleRate;
             }
             canvas.drawText(pt.price,textX, pt.pendPt[1]+moveY, mLabelPaint);
         }

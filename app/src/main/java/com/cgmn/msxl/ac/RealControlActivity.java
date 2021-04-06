@@ -20,6 +20,7 @@ import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.CustmerToast;
 import com.cgmn.msxl.comp.k.KLineContent;
+import com.cgmn.msxl.comp.k.KlineStyle;
 import com.cgmn.msxl.comp.view.MyMarqueeView;
 import com.cgmn.msxl.comp.view.StockHolderView;
 import com.cgmn.msxl.comp.pop.TradingPop;
@@ -55,7 +56,7 @@ public class RealControlActivity extends AppCompatActivity
     private Handler mHandler;
 
     private LinearLayout chartParent, holderParent;
-
+    private LinearLayout bottomBar;
     private BroadcastReceiver receiver;
     private LocalBroadcastManager broadcastManager;
 
@@ -298,6 +299,7 @@ public class RealControlActivity extends AppCompatActivity
         bt_sell = findViewById(R.id.bt_sell);
         bt_change = findViewById(R.id.bt_change);
         bt_exit = findViewById(R.id.bt_exit);
+        bottomBar = findViewById(R.id.pop_div);
 
         bt_next.setOnClickListener(this);
         bt_buy.setOnClickListener(this);
@@ -313,8 +315,13 @@ public class RealControlActivity extends AppCompatActivity
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         int screenHeight = dm.heightPixels;
         LinearLayout.LayoutParams kparams =(LinearLayout.LayoutParams) chartParent.getLayoutParams();
-        kparams.height = ((Double)(screenHeight * 0.55)).intValue();
+        kparams.height = ((Double)(screenHeight * 0.45)).intValue();
         chartParent.setLayoutParams(kparams);
+        setKlineBaseDatas(screenHeight);
+
+        RelativeLayout.LayoutParams bottomParams =(RelativeLayout.LayoutParams) bottomBar.getLayoutParams();
+        bottomParams.height = ((Double)(screenHeight * 0.05)).intValue();
+        bottomBar.setLayoutParams(bottomParams);
 
         chart = new KLineContent(this);
         chart.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
@@ -615,6 +622,14 @@ public class RealControlActivity extends AppCompatActivity
     private void PlayMusic() {
         music = MediaPlayer.create(this, R.raw.btn_wav);
         music.start();
+    }
+
+    private void setKlineBaseDatas(float height){
+        KlineStyle.initSize();
+        float baseHeight = 480f;
+        KlineStyle.pxScaleRate = height/baseHeight;
+        KlineStyle.resetSize();
+
     }
 
     @Override

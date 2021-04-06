@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
 import com.cgmn.msxl.R;
+import com.cgmn.msxl.comp.k.KlineStyle;
 import com.cgmn.msxl.data.StockHolder;
 import com.cgmn.msxl.utils.CommonUtil;
 
@@ -14,8 +15,10 @@ public class StockHolderView extends View {
     private float contentMinOffset;
 
     private float headSpace = 120.0f;
-    private float topSpace = 5.0f;
-    private float vSpace = 2;
+    private float topSpace = 2.0f * KlineStyle.pxScaleRate;
+    private float vSpace = 0.5f * KlineStyle.pxScaleRate;
+    private float textSize = KlineStyle.kTextSize;
+
 
     protected Paint mGridPaint, mLabelPaint;
     protected Paint mDownPaint, mUpPaint;
@@ -40,25 +43,27 @@ public class StockHolderView extends View {
 
         mGridPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mGridPaint.setStyle(Paint.Style.STROKE);
-        mGridPaint.setStrokeWidth(1.0f);
+        mGridPaint.setStrokeWidth(KlineStyle.gridLine);
         mGridPaint.setColor(Color.GRAY);
 
         mLabelPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mLabelPaint.setColor(Color.BLACK);
-        mLabelPaint.setTextSize(35);
+        mLabelPaint.setTextSize(textSize);
         mLabelPaint.getFontMetrics(fontMetrics);
 
         mDownPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mDownPaint.setStyle(Paint.Style.FILL);
-        mDownPaint.setStrokeWidth(1);
-        mDownPaint.setTextSize(35);
+        mDownPaint.setStrokeWidth(KlineStyle.gridLine);
+        mDownPaint.setTextSize(textSize);
         mDownPaint.setColor(getResources().getColor(R.color.kline_down));
 
         mUpPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mUpPaint.setStyle(Paint.Style.FILL);
-        mUpPaint.setStrokeWidth(1);
-        mUpPaint.setTextSize(35);
+        mUpPaint.setStrokeWidth(KlineStyle.gridLine);
+        mUpPaint.setTextSize(textSize);
         mUpPaint.setColor(getResources().getColor(R.color.kline_up));
+
+        headSpace = reCalcHeadSpace();
     }
 
     public StockHolder getStockHolder() {
@@ -380,6 +385,12 @@ public class StockHolderView extends View {
         stockHolder.setTotAmt(totalAmount);
         stockHolder.setAvaiAmt(totalAmount);
         stockHolder.setInitTotAmt(totalAmount);
+    }
+
+    public float reCalcHeadSpace(){
+        float textHight = fontMetrics.bottom - fontMetrics.top;
+
+        return textHight*2.5f;
     }
 
 }
