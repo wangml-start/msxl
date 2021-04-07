@@ -41,14 +41,14 @@ public class ApproveFragment extends RelatedFrgment {
             @Override
             public boolean handleMessage(Message msg) {
                 if (msg.what == MessageUtil.REQUEST_SUCCESS) {
+                    if(action.equals(REFRESH)){
+                        mData.clear();
+                        scrollView.stopRefresh();
+                        scrollView.setScrollY(0);
+                    }else{
+                        appendList = false;
+                    }
                     if (!CommonUtil.isEmpty(msg.obj)) {
-                        if(action.equals(REFRESH)){
-                            mData.clear();
-                            scrollView.stopRefresh();
-                            scrollView.setScrollY(0);
-                        }else{
-                            appendList = false;
-                        }
                         mData.addAll((List<RelatedToMe>) msg.obj);
                         adpter.notifyDataSetChanged();
                     }

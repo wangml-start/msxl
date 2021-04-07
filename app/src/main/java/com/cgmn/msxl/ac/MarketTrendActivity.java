@@ -20,6 +20,7 @@ import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.CustmerToast;
 import com.cgmn.msxl.comp.adpter.MarketAdapter;
 import com.cgmn.msxl.comp.k.KLineContent;
+import com.cgmn.msxl.comp.k.KlineStyle;
 import com.cgmn.msxl.comp.pop.PayPop;
 import com.cgmn.msxl.comp.pop.UnlockPop;
 import com.cgmn.msxl.data.SelectionItem;
@@ -281,6 +282,7 @@ public class MarketTrendActivity extends BaseOtherActivity {
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         int screenHeight = dm.heightPixels;
+        setKlineBaseDatas(screenHeight);
         LinearLayout.LayoutParams kparams = (LinearLayout.LayoutParams) chartParent.getLayoutParams();
         kparams.height = ((Double) (screenHeight * 0.5)).intValue();
         chartParent.setLayoutParams(kparams);
@@ -305,7 +307,8 @@ public class MarketTrendActivity extends BaseOtherActivity {
         add_optional_st.setOnClickListener(lis);
 
         Drawable right = getResources().getDrawable(R.drawable.down);
-        right.setBounds(0, 0, 25, 25);//必须设置图片的大小否则没有作用
+        right.setBounds(0, 0, (int) (10*KlineStyle.pxScaleRate),
+                (int) (10*KlineStyle.pxScaleRate));//必须设置图片的大小否则没有作用
         Drawable wrappedDrawable = DrawableCompat.wrap(right);
         DrawableCompat.setTint(wrappedDrawable, getColor(R.color.colorPrimary));
 
@@ -598,6 +601,13 @@ public class MarketTrendActivity extends BaseOtherActivity {
                 .inflate(R.layout.activity_main, null);
         mPhotoPopupWindow.showAtLocation(rootView,
                 Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+    }
+
+    private void setKlineBaseDatas(float height){
+        KlineStyle.initSize();
+        float baseHeight = 480f;
+        KlineStyle.pxScaleRate = height/baseHeight;
+        KlineStyle.resetSize();
     }
 
 }

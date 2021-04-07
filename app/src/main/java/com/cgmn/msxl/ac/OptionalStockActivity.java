@@ -17,6 +17,7 @@ import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.CustmerToast;
 import com.cgmn.msxl.comp.adpter.MarketAdapter;
 import com.cgmn.msxl.comp.k.KLineContent;
+import com.cgmn.msxl.comp.k.KlineStyle;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.server_interface.MarketData;
@@ -118,8 +119,9 @@ public class OptionalStockActivity extends AppCompatActivity {
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         int screenHeight = dm.heightPixels;
+        setKlineBaseDatas(screenHeight);
         LinearLayout.LayoutParams kparams = (LinearLayout.LayoutParams) chartParent.getLayoutParams();
-        kparams.height = ((Double) (screenHeight * 0.6)).intValue();
+        kparams.height = ((Double) (screenHeight * 0.5)).intValue();
         chartParent.setLayoutParams(kparams);
         View.OnClickListener lis = new View.OnClickListener() {
             @Override
@@ -296,5 +298,12 @@ public class OptionalStockActivity extends AppCompatActivity {
             }
         });
         builder.show();
+    }
+
+    private void setKlineBaseDatas(float height){
+        KlineStyle.initSize();
+        float baseHeight = 480f;
+        KlineStyle.pxScaleRate = height/baseHeight;
+        KlineStyle.resetSize();
     }
 }

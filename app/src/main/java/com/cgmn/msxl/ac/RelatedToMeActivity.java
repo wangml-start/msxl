@@ -7,8 +7,6 @@ import com.cgmn.msxl.R;
 import com.cgmn.msxl.comp.frag.ApproveFragment;
 import com.cgmn.msxl.comp.frag.CommentFragment;
 import com.cgmn.msxl.server_interface.BaseData;
-import com.cgmn.msxl.server_interface.SimpleResponse;
-import com.cgmn.msxl.service.GlobalDataHelper;
 import com.google.android.material.tabs.TabLayout;
 
 
