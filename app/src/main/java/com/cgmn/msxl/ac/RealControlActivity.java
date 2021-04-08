@@ -543,6 +543,7 @@ public class RealControlActivity extends AppCompatActivity
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.bt_next){
+            autoRunManager.pause();
             onNextClick();
         }else if(v.getId() == R.id.bt_buy){
             if(stockView.getStockHolder().getTotAmt() < 100){
