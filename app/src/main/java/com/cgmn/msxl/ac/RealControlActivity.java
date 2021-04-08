@@ -624,12 +624,25 @@ public class RealControlActivity extends AppCompatActivity
 
 
     private void PlayMusic() {
-        if(music == null){
-            music = MediaPlayer.create(this, R.raw.btn_wav);
-        }
+        // 当用户很快的点击播放不同的音频时，就先释放，否则快速点击音频会有声音重叠
+        releaseMediaPlayer();
+        music = MediaPlayer.create(this, R.raw.btn_wav);
         music.start();
-        music.release();
-        music = null;
+        // 播放完成可以释放资源
+        music.setOnCompletionListener(new MediaPlayer.OnCompletionListener(){
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                releaseMediaPlayer();
+            }
+        });
+    }
+
+
+    private void releaseMediaPlayer() {
+        if (music != null) {
+            music.release();
+            music = null;
+        }
     }
 
     private void setKlineBaseDatas(float height){
