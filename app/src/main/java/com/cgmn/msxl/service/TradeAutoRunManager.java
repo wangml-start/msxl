@@ -36,7 +36,7 @@ public class TradeAutoRunManager {
         mTimerTask = new TimerTask() {
             @Override
             public void run() {
-                Log.i("A", "Auto Trade Running");
+//                Log.i("A", "Auto Trade Running");
                 if(autoRunStatus == TradeStatus.running){
                     if(counter < total){
                         if(listener != null){

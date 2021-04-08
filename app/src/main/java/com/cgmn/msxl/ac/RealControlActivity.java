@@ -73,6 +73,8 @@ public class RealControlActivity extends AppCompatActivity
     TradeAutoRunManager autoRunManager;
     MediaPlayer music;
 
+    private Boolean singleClickHandle=false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -349,7 +351,7 @@ public class RealControlActivity extends AppCompatActivity
             @Override
             public void onComplete() {
                 bt_next.setText(String.format("%s",  getResources().getString(R.string.next)));
-                onNextClick();
+                onNextClick(" Auto");
             }
         });
         autoRunManager.startManager();
@@ -359,8 +361,8 @@ public class RealControlActivity extends AppCompatActivity
         }
     }
 
-    private void onNextClick(){
-        PlayMusic();
+    private void onNextClick(String flagString){
+        PlayMusic(flagString);
         if(RealTradeManage.OPEN.equals(realtradeManage.getkStatus())){
             realtradeManage.showNextClose();
             chart.setData(realtradeManage.getGroup());
@@ -542,9 +544,13 @@ public class RealControlActivity extends AppCompatActivity
 
     @Override
     public void onClick(View v) {
+        if(singleClickHandle){
+            return;
+        }
+        singleClickHandle = true;
         if(v.getId() == R.id.bt_next){
             autoRunManager.pause();
-            onNextClick();
+            onNextClick("Click");
         }else if(v.getId() == R.id.bt_buy){
             if(stockView.getStockHolder().getTotAmt() < 100){
                 new ShowDialog().showTips(mContxt, "当前账户资金不足！");
@@ -567,6 +573,7 @@ public class RealControlActivity extends AppCompatActivity
                 }
             });
         }
+        singleClickHandle = false;
     }
 
     public void jumpToChargetPage(String type){
@@ -624,7 +631,8 @@ public class RealControlActivity extends AppCompatActivity
     }
 
 
-    private void PlayMusic() {
+    private void PlayMusic(String flag) {
+        Log.e("PlayMusic","PlayMusic"+flag);
         // 当用户很快的点击播放不同的音频时，就先释放，否则快速点击音频会有声音重叠
         releaseMediaPlayer();
         music = MediaPlayer.create(this, R.raw.btn_wav);
