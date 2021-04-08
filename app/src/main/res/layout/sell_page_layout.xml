@@ -156,9 +156,9 @@
         <TextView
                 android:id="@+id/btn_action"
                 android:layout_width="match_parent"
-                android:layout_height="41dp"
+                android:layout_height="@dimen/btn_height"
                 android:gravity="center"
-                android:textSize="@dimen/NormalSize"
+                android:textSize="@dimen/size16"
                 android:layout_marginTop="10dp"
                 android:layout_below="@id/buy_layout"
                 android:text="@string/trade_sell"
