@@ -296,8 +296,8 @@ public class StatisticActivity extends BaseOtherActivity {
     private void initLineDataSet(LineDataSet lineDataSet, int color, LineDataSet.Mode mode) {
         lineDataSet.setColor(color);
         lineDataSet.setCircleColor(color);
-        lineDataSet.setLineWidth(1f);
-        lineDataSet.setCircleRadius(3f);
+        lineDataSet.setLineWidth(0.7f);
+        lineDataSet.setCircleRadius(1.5f);
         lineDataSet.setDrawCircles(false);
         //设置曲线值的圆点是实心还是空心
         lineDataSet.setDrawCircleHole(false);
@@ -306,8 +306,8 @@ public class StatisticActivity extends BaseOtherActivity {
 
         //设置折线图填充
         lineDataSet.setDrawFilled(true);
-        lineDataSet.setFormLineWidth(1f);
-        lineDataSet.setFormSize(15.f);
+        lineDataSet.setFormLineWidth(0.5f);
+        lineDataSet.setFormSize(20.f);
         lineDataSet.setValueFormatter(new IValueFormatter() {
             @Override
             public String getFormattedValue(float value, Entry entry,
@@ -380,7 +380,7 @@ public class StatisticActivity extends BaseOtherActivity {
             return;
         }
         list.add(0, 0f);
-        showLineChart(list, "X轴代表训练次数", getResources().getColor(R.color.kline_up));
+        showLineChart(list, "X轴代表训练次数", getResources().getColor(R.color.main_red_color));
         Drawable drawable = getResources().getDrawable(R.drawable.fade_blue);
         setChartFillDrawable(drawable);
         setMarkerView();

@@ -12,7 +12,7 @@ public class TradeAutoRunManager {
     private TradeStatus autoRunStatus;
     Timer mTimer;
     TimerTask mTimerTask;
-    private final Integer total = 2;
+    private Integer total = 2;
     private Integer counter=0;
 
     private Handler mHandler;
@@ -22,6 +22,14 @@ public class TradeAutoRunManager {
     public TradeAutoRunManager(){
         autoRunStatus = TradeStatus.ready;
         this.mHandler = new Handler();
+    }
+
+    public Integer getTotal() {
+        return total;
+    }
+
+    public void setTotal(Integer total) {
+        this.total = total;
     }
 
     public void startManager() {

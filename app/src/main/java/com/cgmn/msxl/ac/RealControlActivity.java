@@ -353,6 +353,10 @@ public class RealControlActivity extends AppCompatActivity
             }
         });
         autoRunManager.startManager();
+
+        if(trainType == StockHolder.LEADING_STRATEGY){
+            autoRunManager.setTotal(5);
+        }
     }
 
     private void onNextClick(){

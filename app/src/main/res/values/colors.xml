@@ -32,8 +32,8 @@
     <color name="kline_ave_10">#FFC800</color>
     <color name="kline_ave_20">#E81689</color>
 
-    <color name="start_color">#F4A4A4</color>
-    <color name="end_color">#00ff0000</color>
+    <color name="start_color">#F68686</color>
+    <color name="end_color">#ffffff</color>
 
     <color name="kline_ave_52">#ED4713</color>
 
