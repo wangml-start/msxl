@@ -101,11 +101,80 @@
                 android:layout_height="18dp"
                 android:background="@color/bg_white"
                 app:mvAnimDuration="500"
-                app:mvInterval="1500"
+                app:mvInterval="2500"
                 app:mvDirection="top_to_bottom"
                 >
 
         </com.cgmn.msxl.comp.view.MyMarqueeView>
+
+        <LinearLayout
+                android:id="@+id/pop_div"
+                android:layout_margin="1dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/bg_white"
+                android:orientation="horizontal">
+            <Button
+                    android:id="@+id/bt_exit"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/exit_stock"
+                    android:textColor="@color/text_topbar"
+                    android:textSize="@dimen/size14"
+                    style="@style/trading_page_btns"
+                    />
+            <Button
+                    android:id="@+id/bt_change"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:drawablePadding="2dp"
+                    android:gravity="center"
+                    android:text="@string/change_stock"
+                    android:textColor="@color/text_topbar"
+                    android:textSize="@dimen/size14"
+                    style="@style/trading_page_btns"
+                    />
+            <Button
+                    android:id="@+id/bt_buy"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:drawablePadding="2dp"
+                    android:gravity="center"
+                    android:text="@string/trade_buy"
+                    android:textColor="@color/main_red_color"
+                    android:textSize="@dimen/size14"
+                    style="@style/trading_page_btns"
+                    />
+            <Button
+                    android:id="@+id/bt_sell"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:drawablePadding="2dp"
+                    android:gravity="center"
+                    android:text="@string/trade_sell"
+                    android:textColor="@color/main_blue_color"
+                    android:textSize="@dimen/size14"
+                    style="@style/trading_page_btns"
+                    />
+            <Button
+                    android:id="@+id/bt_next"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:drawablePadding="2dp"
+                    android:gravity="center"
+                    android:text="@string/next"
+                    android:textColor="@color/text_topbar"
+                    android:textSize="@dimen/size12"
+                    style="@style/trading_page_btns"
+                    />
+        </LinearLayout>
+
         <!--stock holder -->
         <LinearLayout
                 android:id="@+id/holder_parent"
@@ -118,75 +187,5 @@
 
         </LinearLayout>
         <!--stock holder -->
-    </LinearLayout>
-
-
-    <LinearLayout
-            android:id="@+id/pop_div"
-            android:layout_margin="2dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="@color/bg_white"
-            android:orientation="horizontal">
-        <Button
-                android:id="@+id/bt_exit"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/exit_stock"
-                android:textColor="@color/text_topbar"
-                android:textSize="@dimen/size14"
-                style="@style/trading_page_btns"
-                />
-        <Button
-                android:id="@+id/bt_change"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:drawablePadding="2dp"
-                android:gravity="center"
-                android:text="@string/change_stock"
-                android:textColor="@color/text_topbar"
-                android:textSize="@dimen/size14"
-                style="@style/trading_page_btns"
-                />
-        <Button
-                android:id="@+id/bt_next"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:drawablePadding="2dp"
-                android:gravity="center"
-                android:text="@string/next"
-                android:textColor="@color/text_topbar"
-                android:textSize="@dimen/size12"
-                style="@style/trading_page_btns"
-                />
-        <Button
-                android:id="@+id/bt_buy"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:drawablePadding="2dp"
-                android:gravity="center"
-                android:text="@string/trade_buy"
-                android:textColor="@color/main_red_color"
-                android:textSize="@dimen/size14"
-                style="@style/trading_page_btns"
-                />
-        <Button
-                android:id="@+id/bt_sell"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:drawablePadding="2dp"
-                android:gravity="center"
-                android:text="@string/trade_sell"
-                android:textColor="@color/main_blue_color"
-                android:textSize="@dimen/size14"
-                style="@style/trading_page_btns"
-                />
     </LinearLayout>
 </RelativeLayout>

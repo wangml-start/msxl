@@ -319,7 +319,7 @@ public class RealControlActivity extends AppCompatActivity
         chartParent.setLayoutParams(kparams);
         setKlineBaseDatas(screenHeight);
 
-        RelativeLayout.LayoutParams bottomParams =(RelativeLayout.LayoutParams) bottomBar.getLayoutParams();
+        LinearLayout.LayoutParams bottomParams =(LinearLayout.LayoutParams) bottomBar.getLayoutParams();
         bottomParams.height = ((Double)(screenHeight * 0.05)).intValue();
         bottomBar.setLayoutParams(bottomParams);
 
