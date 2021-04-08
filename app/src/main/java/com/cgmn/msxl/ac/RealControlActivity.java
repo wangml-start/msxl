@@ -67,13 +67,12 @@ public class RealControlActivity extends AppCompatActivity
     TextView lb_close_rate;
     TextView lb_left_day;
     TextView lb_left_s,lb_last_rate;
-    Button bt_next, bt_buy,bt_sell, bt_change, bt_exit;
+    TextView bt_next, bt_buy,bt_sell, bt_change, bt_exit;
     MyMarqueeView marqueeview;
     MarqueeManager marqueeManager;
     TradeAutoRunManager autoRunManager;
     MediaPlayer music;
 
-    private Boolean singleClickHandle=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -544,10 +543,6 @@ public class RealControlActivity extends AppCompatActivity
 
     @Override
     public void onClick(View v) {
-        if(singleClickHandle){
-            return;
-        }
-        singleClickHandle = true;
         if(v.getId() == R.id.bt_next){
             autoRunManager.pause();
             onNextClick("Click");
@@ -573,7 +568,6 @@ public class RealControlActivity extends AppCompatActivity
                 }
             });
         }
-        singleClickHandle = false;
     }
 
     public void jumpToChargetPage(String type){
