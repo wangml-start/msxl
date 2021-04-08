@@ -624,8 +624,12 @@ public class RealControlActivity extends AppCompatActivity
 
 
     private void PlayMusic() {
-        music = MediaPlayer.create(this, R.raw.btn_wav);
+        if(music == null){
+            music = MediaPlayer.create(this, R.raw.btn_wav);
+        }
         music.start();
+        music.release();
+        music = null;
     }
 
     private void setKlineBaseDatas(float height){
