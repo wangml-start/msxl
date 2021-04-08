@@ -24,7 +24,6 @@ import com.cgmn.msxl.comp.k.KlineStyle;
 import com.cgmn.msxl.comp.view.MyMarqueeView;
 import com.cgmn.msxl.comp.view.StockHolderView;
 import com.cgmn.msxl.comp.pop.TradingPop;
-import com.cgmn.msxl.comp.k.KlineChart;
 import com.cgmn.msxl.comp.swb.State;
 import com.cgmn.msxl.data.*;
 import com.cgmn.msxl.db.AppSqlHelper;
