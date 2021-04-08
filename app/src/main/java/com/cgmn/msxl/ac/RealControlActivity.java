@@ -545,19 +545,15 @@ public class RealControlActivity extends AppCompatActivity
         if(v.getId() == R.id.bt_next){
             onNextClick();
         }else if(v.getId() == R.id.bt_buy){
-            PlayMusic();
             if(stockView.getStockHolder().getTotAmt() < 100){
                 new ShowDialog().showTips(mContxt, "当前账户资金不足！");
             }
             showPopFormBottom(v, "BUY");
         }else if(v.getId() == R.id.bt_sell){
-            PlayMusic();
             showPopFormBottom(v, "SELL");
         }else if(v.getId() == R.id.bt_change){
-            PlayMusic();
             onChageStock();
         }else if(v.getId() == R.id.bt_exit){
-            PlayMusic();
             new ShowDialog().show(mContxt, getString(R.string.sure_to_do_this), new ShowDialog.OnBottomClickListener() {
                 @Override
                 public void positive() {
