@@ -233,14 +233,17 @@ public class StatisticActivity extends BaseOtherActivity {
         //保证Y轴从0开始，不然会上移一点
 //        leftYAxis.setAxisMinimum(0f);
 
-        rightYaxis.setDrawGridLines(false);
-        leftYAxis.setDrawGridLines(true);
-        leftYAxis.setDrawAxisLine(false); //不显示左侧Y轴
-        leftYAxis.enableGridDashedLine(10f, 10f, 0f);
-        rightYaxis.setEnabled(false);
+        leftYAxis.setEnabled(false);
+        leftYAxis.setDrawGridLines(false);
+        leftYAxis.setDrawAxisLine(true); //不显示左侧Y轴
+//        leftYAxis.enableGridDashedLine(10f, 10f, 0f);
+        rightYaxis.setDrawGridLines(true);
+        rightYaxis.enableGridDashedLine(10f, 10f, 0f);
+        rightYaxis.setEnabled(true);
+        rightYaxis.setDrawAxisLine(false); //不显示右侧Y轴
         xAxis.setLabelCount(8, false);
 
-        leftYAxis.setValueFormatter(new IAxisValueFormatter() {
+        rightYaxis.setValueFormatter(new IAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
                 return getYformatValue(value);
