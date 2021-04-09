@@ -40,6 +40,7 @@ import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -267,7 +268,8 @@ public class StatisticActivity extends BaseOtherActivity {
 
     public String getYformatValue(float value){
         if(trainType == StockHolder.EARNING_CURVE_SUMMARY){
-            return CommonUtil.formatPercent(value);
+            DecimalFormat formatP = new DecimalFormat("0.0%");
+            return formatP.format(value);
         }else{
             return CommonUtil.formatAmt(value);
         }
