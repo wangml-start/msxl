@@ -122,7 +122,11 @@ public class VIPActivity extends BaseOtherActivity {
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(v.getId() == R.id.line_level1){
+                if (v.getId() == R.id.line_level1) {
+                    if (setting != null && "Level2".equals(setting.getLevel())) {
+                        CustmerToast.makeText(mContext, "您当前已是最高权限").show();
+                        return;
+                    }
                     permissionKey = LEVEL_1;
                     myAdapter.setRate(1);
                     myAdapter.notifyDataSetChanged();

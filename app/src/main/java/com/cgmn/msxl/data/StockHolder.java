@@ -305,7 +305,14 @@ public class StockHolder {
         if (brofee < 5) {
             brofee = 5;
         }
-        float fee = brofee + yhfee;
+        float ghfee=0f;
+        if (!CommonUtil.isEmpty(code) && code.startsWith("6")) {
+            ghfee = count * guohuRate;
+            if (ghfee < 1) {
+                ghfee = 1;
+            }
+        }
+        float fee = brofee + yhfee + ghfee;
         exchange += fee;
         holdPl -= fee;
         holdAmt -= sellAmt;

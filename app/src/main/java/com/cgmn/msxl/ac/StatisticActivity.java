@@ -358,7 +358,7 @@ public class StatisticActivity extends BaseOtherActivity {
         LineChartMarkView mv = new LineChartMarkView(
                 this,
                 xAxis.getValueFormatter(),
-                leftYAxis.getValueFormatter());
+                rightYaxis.getValueFormatter());
         mv.setChartView(mLineChart);
         mLineChart.setMarker(mv);
         mLineChart.invalidate();
