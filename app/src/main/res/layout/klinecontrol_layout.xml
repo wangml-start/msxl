@@ -85,14 +85,14 @@
         <!--top bar-->
 
         <!--k line -->
-        <LinearLayout
+        <com.helin.loadinglayout.LoadingLayout
                 android:id="@+id/chart_parent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:background="@color/bg_white"
-                android:orientation="vertical" />
+                app:loadingView="@layout/loading_layout" />
         <!--k line -->
         <!--跑马灯-->
         <com.cgmn.msxl.comp.view.MyMarqueeView
@@ -176,16 +176,15 @@
         </LinearLayout>
 
         <!--stock holder -->
-        <LinearLayout
+        <com.helin.loadinglayout.LoadingLayout
                 android:id="@+id/holder_parent"
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:background="@color/bg_white"
-                android:orientation="vertical">
-
-        </LinearLayout>
+                app:loadingView="@layout/loading_layout">
+        </com.helin.loadinglayout.LoadingLayout>
         <!--stock holder -->
     </LinearLayout>
 </RelativeLayout>

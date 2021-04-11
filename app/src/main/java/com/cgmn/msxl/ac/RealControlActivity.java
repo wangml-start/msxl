@@ -35,6 +35,7 @@ import com.cgmn.msxl.server_interface.KlineSet;
 import com.cgmn.msxl.server_interface.StockDetail;
 import com.cgmn.msxl.service.*;
 import com.cgmn.msxl.utils.*;
+import com.helin.loadinglayout.LoadingLayout;
 import com.squareup.okhttp.Request;
 import org.apache.commons.lang3.StringUtils;
 
@@ -54,7 +55,7 @@ public class RealControlActivity extends AppCompatActivity
     //消息处理
     private Handler mHandler;
 
-    private LinearLayout chartParent, holderParent;
+    private LoadingLayout chartParent, holderParent;
     private LinearLayout bottomBar;
     private BroadcastReceiver receiver;
     private LocalBroadcastManager broadcastManager;
@@ -128,7 +129,7 @@ public class RealControlActivity extends AppCompatActivity
     }
 
     private void loadKLineSet(){
-//        CustmerToast.makeText(mContxt, R.string.get_stock_datas).show();
+        chartParent.showLoading();
         GlobalTreadPools.getInstance(mContxt).execute(new Runnable() {
             @Override
             public void run() {
@@ -137,6 +138,12 @@ public class RealControlActivity extends AppCompatActivity
                         new OkHttpClientManager.ResultCallback<BaseData>() {
                             @Override
                             public void onError(com.squareup.okhttp.Request request, Exception e) {
+                                chartParent.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        chartParent.showState("加载失败，点击重试！");
+                                    }
+                                });
                                 Message message = Message.obtain();
                                 message.what = MessageUtil.EXCUTE_EXCEPTION;
                                 message.obj = e;
@@ -169,10 +176,12 @@ public class RealControlActivity extends AppCompatActivity
             @Override
             public boolean handleMessage(Message msg) {
                 if (msg.what == MessageUtil.REQUEST_SUCCESS) {
+                    chartParent.showContent();
                     realtradeManage.resetManager();
                     realtradeManage.setKlineset((KlineSet) msg.obj) ;
                     startChartInit();
                 } else if(msg.what == MessageUtil.GET_CASH_ACC_SUCCESS){
+                    holderParent.showContent();
                     SettledAccount acc = (SettledAccount) msg.obj;
                     stockView.initAccount(acc.getCashAmt());
                     stockView.invalidateView();
@@ -207,6 +216,7 @@ public class RealControlActivity extends AppCompatActivity
     }
 
     private void loadAccCash(){
+        holderParent.showLoading();
         //获取资金账户信息
         GlobalTreadPools.getInstance(mContxt).execute(new Runnable() {
             @Override
@@ -222,6 +232,12 @@ public class RealControlActivity extends AppCompatActivity
                             @Override
                             public void onError(com.squareup.okhttp.Request request, Exception e) {
                                 Message message = Message.obtain();
+                                holderParent.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        holderParent.showState("加载失败，点击重试！");
+                                    }
+                                });
                                 message.what = MessageUtil.EXCUTE_EXCEPTION;
                                 message.obj = new RuntimeException(getString(R.string.get_cash_acc_fail));
                                 mHandler.sendMessage(message);
@@ -314,9 +330,19 @@ public class RealControlActivity extends AppCompatActivity
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         int screenHeight = dm.heightPixels;
-        LinearLayout.LayoutParams kparams =(LinearLayout.LayoutParams) chartParent.getLayoutParams();
-        kparams.height = ((Double)(screenHeight * 0.45)).intValue();
-        chartParent.setLayoutParams(kparams);
+        chartParent.getLayoutParams().height=((Double)(screenHeight * 0.45)).intValue();
+        chartParent.setStateClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadKLineSet();
+            }
+        });
+        holderParent.setStateClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadAccCash();
+            }
+        });
         setKlineBaseDatas(screenHeight);
 
         LinearLayout.LayoutParams bottomParams =(LinearLayout.LayoutParams) bottomBar.getLayoutParams();

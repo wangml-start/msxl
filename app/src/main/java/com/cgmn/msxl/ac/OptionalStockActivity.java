@@ -14,7 +14,6 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
-import com.cgmn.msxl.comp.CustmerToast;
 import com.cgmn.msxl.comp.adpter.MarketAdapter;
 import com.cgmn.msxl.comp.k.KLineContent;
 import com.cgmn.msxl.comp.k.KlineStyle;
@@ -28,6 +27,7 @@ import com.cgmn.msxl.service.StockDisplayManager;
 import com.cgmn.msxl.utils.CommonUtil;
 import com.cgmn.msxl.utils.ConstantHelper;
 import com.cgmn.msxl.utils.MessageUtil;
+import com.helin.loadinglayout.LoadingLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,7 +42,7 @@ public class OptionalStockActivity extends AppCompatActivity {
     public Context mContext;
 
     private RelativeLayout img_back,img_add,img_delete;
-    private LinearLayout chartParent;
+    private LoadingLayout chartParent;
     private KLineContent chart;
     private TextView txt_title;
 
@@ -83,6 +83,7 @@ public class OptionalStockActivity extends AppCompatActivity {
                     }
                     adapter.notifyDataSetChanged();
                 } else if (msg.what == MessageUtil.REQUEST_STOCK_DETAIL_SUCCESS) {
+                    chartParent.showContent();
                     MarketData mkData = (MarketData) msg.obj;
                     if(!CommonUtil.isEmpty(mkData.getStocks())){
                         stockManager.resetManager();
@@ -120,9 +121,14 @@ public class OptionalStockActivity extends AppCompatActivity {
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         int screenHeight = dm.heightPixels;
         setKlineBaseDatas(screenHeight);
-        LinearLayout.LayoutParams kparams = (LinearLayout.LayoutParams) chartParent.getLayoutParams();
-        kparams.height = ((Double) (screenHeight * 0.5)).intValue();
-        chartParent.setLayoutParams(kparams);
+        chartParent.getLayoutParams().height=((Double) (screenHeight * 0.5)).intValue();
+        chartParent.setStateClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadStockDetails(adpterDatas.get(selectedListIndex).getStackCode());
+            }
+        });
+
         View.OnClickListener lis = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -201,6 +207,7 @@ public class OptionalStockActivity extends AppCompatActivity {
     }
 
     private void loadStockDetails(final String code) {
+        chartParent.showLoading();
         GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
             @Override
             public void run() {
@@ -215,6 +222,12 @@ public class OptionalStockActivity extends AppCompatActivity {
                         new OkHttpClientManager.ResultCallback<BaseData>() {
                             @Override
                             public void onError(com.squareup.okhttp.Request request, Exception e) {
+                                chartParent.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        chartParent.showState("加载失败，点击重试！");
+                                    }
+                                });
                                 Message message = Message.obtain();
                                 message.what = MessageUtil.EXCUTE_EXCEPTION;
                                 message.obj = e;

@@ -46,7 +46,7 @@ public class MainActivity extends LoginBaseActivity {
 //        btn.setOnClickListener(this);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-        Integer time = 500;    //设置等待时间，单位为毫秒
+        Integer time = 1000;    //设置等待时间，单位为毫秒
         Handler handler = new Handler();
         //当计时结束时，跳转至主界面
         handler.postDelayed(new Runnable() {
@@ -54,6 +54,8 @@ public class MainActivity extends LoginBaseActivity {
             public void run() {
                 if(!NetworkUtil.isNetworkConnected(mContext)){
                     CustmerToast.makeText(mContext, R.string.no_network).show();
+                    startActivity(new Intent(mContext, LoginActivity.class));
+                    finish();
                 }else{
                     autoLogin();
                 }

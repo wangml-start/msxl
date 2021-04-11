@@ -36,6 +36,7 @@ import com.cgmn.msxl.utils.CommonUtil;
 import com.cgmn.msxl.utils.ConstantHelper;
 import com.cgmn.msxl.utils.MessageUtil;
 import com.cgmn.msxl.utils.ShowDialog;
+import com.helin.loadinglayout.LoadingLayout;
 
 import java.util.*;
 
@@ -44,7 +45,7 @@ public class MarketTrendActivity extends BaseOtherActivity {
 
     private Handler mHandler;
     private TextView txt_day_list, txt_date, txt_vol,txt_des,txt_unlock_des;
-    private LinearLayout chartParent;
+    private LoadingLayout chartParent;
     private RelativeLayout add_optional_st;
     private ListView list_content;
     private MarketAdapter adapter;
@@ -89,6 +90,7 @@ public class MarketTrendActivity extends BaseOtherActivity {
             @Override
             public boolean handleMessage(Message msg) {
                 if (MessageUtil.REQUEST_SUCCESS == msg.what) {
+                    chartParent.showContent();
                     marketData = (MarketData) msg.obj;
                     adpterDatas.addAll(marketData.getTrendList());
                     initOptions();
@@ -113,6 +115,7 @@ public class MarketTrendActivity extends BaseOtherActivity {
                     }
                     adapter.notifyDataSetChanged();
                 } else if (msg.what == MessageUtil.REQUEST_STOCK_DETAIL_SUCCESS) {
+                    chartParent.showContent();
                     MarketData mkData = (MarketData) msg.obj;
                     if(!CommonUtil.isEmpty(mkData.getStocks())){
                         stockManager.resetManager();
@@ -283,9 +286,14 @@ public class MarketTrendActivity extends BaseOtherActivity {
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         int screenHeight = dm.heightPixels;
         setKlineBaseDatas(screenHeight);
-        LinearLayout.LayoutParams kparams = (LinearLayout.LayoutParams) chartParent.getLayoutParams();
-        kparams.height = ((Double) (screenHeight * 0.5)).intValue();
-        chartParent.setLayoutParams(kparams);
+        chartParent.getLayoutParams().height=((Double) (screenHeight * 0.5)).intValue();
+        chartParent.setStateClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadStockDetails(adpterDatas.get(selectedListIndex).getStackCode());
+            }
+        });
+
         txt_complete.setEnabled(false);
         View.OnClickListener lis = new View.OnClickListener() {
             @Override
@@ -307,8 +315,8 @@ public class MarketTrendActivity extends BaseOtherActivity {
         add_optional_st.setOnClickListener(lis);
 
         Drawable right = getResources().getDrawable(R.drawable.down);
-        right.setBounds(0, 0, (int) (10*KlineStyle.pxScaleRate),
-                (int) (10*KlineStyle.pxScaleRate));//必须设置图片的大小否则没有作用
+        right.setBounds(0, 0, (int) (6*KlineStyle.pxScaleRate),
+                (int) (6*KlineStyle.pxScaleRate));//必须设置图片的大小否则没有作用
         Drawable wrappedDrawable = DrawableCompat.wrap(right);
         DrawableCompat.setTint(wrappedDrawable, getColor(R.color.colorPrimary));
 
@@ -320,7 +328,7 @@ public class MarketTrendActivity extends BaseOtherActivity {
         chart = new KLineContent(this);
         chart.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         chartParent.addView(chart);
-
+        chartParent.showLoading();
         list_content.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -431,6 +439,7 @@ public class MarketTrendActivity extends BaseOtherActivity {
     }
 
     private void loadStockDetails(final String code) {
+        chartParent.showLoading();
         GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
             @Override
             public void run() {
@@ -445,6 +454,12 @@ public class MarketTrendActivity extends BaseOtherActivity {
                         new OkHttpClientManager.ResultCallback<BaseData>() {
                             @Override
                             public void onError(com.squareup.okhttp.Request request, Exception e) {
+                                chartParent.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        chartParent.showState("加载失败，点击重试！");
+                                    }
+                                });
                                 Message message = Message.obtain();
                                 message.what = MessageUtil.EXCUTE_EXCEPTION;
                                 message.obj = e;

@@ -55,7 +55,7 @@ public class KlineStyle {
         //K线间隔
         mBarSpace = 1.6f;
         //K线宽度
-        kWidth = 5f;
+        kWidth = 4f;
         kWidthMax = 20f;
         kWidthmin = 0.8f;
          //

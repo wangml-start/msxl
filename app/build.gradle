@@ -9,7 +9,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 30
         versionCode 1
-        versionName "3.5.7"
+        versionName "3.5.8"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -41,6 +41,7 @@ dependencies {
     implementation 'com.xj.marqueeView:marqueeView:0.1.20'
     implementation 'com.azhon:appupdateX:3.0.3'
     implementation 'com.contrarywind:Android-PickerView:4.1.9'
+    implementation 'com.helin.loadinglayout:loadinglayout:0.0.1'
     testImplementation 'junit:junit:4.12'
     implementation (name: 'alipaysdk-15.8.02.210308182128', ext: 'aar')
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
