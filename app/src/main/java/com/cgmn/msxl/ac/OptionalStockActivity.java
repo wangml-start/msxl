@@ -206,6 +206,15 @@ public class OptionalStockActivity extends AppCompatActivity {
         });
     }
 
+    public void showReloadView(final LoadingLayout loadingLayout){
+        loadingLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                loadingLayout.showState("加载失败，点击重试！");
+            }
+        });
+    }
+
     private void loadStockDetails(final String code) {
         chartParent.showLoading();
         GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
@@ -222,12 +231,7 @@ public class OptionalStockActivity extends AppCompatActivity {
                         new OkHttpClientManager.ResultCallback<BaseData>() {
                             @Override
                             public void onError(com.squareup.okhttp.Request request, Exception e) {
-                                chartParent.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        chartParent.showState("加载失败，点击重试！");
-                                    }
-                                });
+                                showReloadView(chartParent);
                                 Message message = Message.obtain();
                                 message.what = MessageUtil.EXCUTE_EXCEPTION;
                                 message.obj = e;
@@ -242,6 +246,7 @@ public class OptionalStockActivity extends AppCompatActivity {
                                     message.obj = data.getMarketData();
                                     Integer status = data.getStatus();
                                     if (status == null || status == -1) {
+                                        showReloadView(chartParent);
                                         throw new Exception(data.getError());
                                     }
                                 } catch (Exception e) {

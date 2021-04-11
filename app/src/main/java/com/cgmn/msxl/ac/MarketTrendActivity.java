@@ -454,12 +454,7 @@ public class MarketTrendActivity extends BaseOtherActivity {
                         new OkHttpClientManager.ResultCallback<BaseData>() {
                             @Override
                             public void onError(com.squareup.okhttp.Request request, Exception e) {
-                                chartParent.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        chartParent.showState("加载失败，点击重试！");
-                                    }
-                                });
+                                showReloadView(chartParent);
                                 Message message = Message.obtain();
                                 message.what = MessageUtil.EXCUTE_EXCEPTION;
                                 message.obj = e;
@@ -474,6 +469,7 @@ public class MarketTrendActivity extends BaseOtherActivity {
                                     message.obj = data.getMarketData();
                                     Integer status = data.getStatus();
                                     if (status == null || status == -1) {
+                                        showReloadView(chartParent);
                                         throw new Exception(data.getError());
                                     }
                                 } catch (Exception e) {
@@ -483,6 +479,15 @@ public class MarketTrendActivity extends BaseOtherActivity {
                                 mHandler.sendMessage(message);
                             }
                         });
+            }
+        });
+    }
+
+    public void showReloadView(final LoadingLayout loadingLayout){
+        loadingLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                loadingLayout.showState("加载失败，点击重试！");
             }
         });
     }

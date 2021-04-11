@@ -130,6 +130,7 @@ public class RealControlActivity extends AppCompatActivity
 
     private void loadKLineSet(){
         chartParent.showLoading();
+        autoRunManager.pause();
         GlobalTreadPools.getInstance(mContxt).execute(new Runnable() {
             @Override
             public void run() {
@@ -138,12 +139,7 @@ public class RealControlActivity extends AppCompatActivity
                         new OkHttpClientManager.ResultCallback<BaseData>() {
                             @Override
                             public void onError(com.squareup.okhttp.Request request, Exception e) {
-                                chartParent.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        chartParent.showState("加载失败，点击重试！");
-                                    }
-                                });
+                                showReloadView(chartParent);
                                 Message message = Message.obtain();
                                 message.what = MessageUtil.EXCUTE_EXCEPTION;
                                 message.obj = e;
@@ -157,6 +153,7 @@ public class RealControlActivity extends AppCompatActivity
                                     message.obj = data.getKLineSet();
                                     Integer status = data.getStatus();
                                     if (status == null || status == -1) {
+                                        showReloadView(chartParent);
                                         throw new Exception(data.getError());
                                     }
                                 } catch (Exception e) {
@@ -211,7 +208,6 @@ public class RealControlActivity extends AppCompatActivity
         chart.invalidateView();
         updateTopBar();
         initStockHolder();
-
         autoRunManager.resetManager();
     }
 
@@ -232,12 +228,7 @@ public class RealControlActivity extends AppCompatActivity
                             @Override
                             public void onError(com.squareup.okhttp.Request request, Exception e) {
                                 Message message = Message.obtain();
-                                holderParent.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        holderParent.showState("加载失败，点击重试！");
-                                    }
-                                });
+                                showReloadView(holderParent);
                                 message.what = MessageUtil.EXCUTE_EXCEPTION;
                                 message.obj = new RuntimeException(getString(R.string.get_cash_acc_fail));
                                 mHandler.sendMessage(message);
@@ -250,6 +241,7 @@ public class RealControlActivity extends AppCompatActivity
                                     message.obj = data.getSettledAccount();
                                     Integer status = data.getStatus();
                                     if (status == null || status == -1) {
+                                        showReloadView(holderParent);
                                         throw new Exception(data.getError());
                                     }
                                 } catch (Exception e) {
@@ -629,6 +621,15 @@ public class RealControlActivity extends AppCompatActivity
         }
     }
 
+
+    public void showReloadView(final LoadingLayout loadingLayout){
+        loadingLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                loadingLayout.showState("加载失败，点击重试！");
+            }
+        });
+    }
 
     @Override
     public void onBackPressed() {
