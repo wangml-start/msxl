@@ -37,7 +37,7 @@
     <string name="system">系统</string>
     <string name="market">行情</string>
     <string name="trend_break_up">趋势突破</string>
-    <string name="optional_stock">自选股池</string>
+    <string name="optional_stock">关注列表</string>
 
     <string name="user_agrement_title">用户协议</string>
 

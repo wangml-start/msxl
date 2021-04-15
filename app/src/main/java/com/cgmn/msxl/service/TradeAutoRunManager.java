@@ -48,6 +48,7 @@ public class TradeAutoRunManager {
                                 }
                             });
                         }
+                        counter++;
                     }else {
                         autoRunStatus = TradeStatus.arrived;
                         if(listener != null){
@@ -59,7 +60,6 @@ public class TradeAutoRunManager {
                             });
                         }
                     }
-                    counter++;
                 }
             }
         };

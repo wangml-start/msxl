@@ -127,7 +127,7 @@ public class StatisticActivity extends BaseOtherActivity {
     }
 
     private void loadDatas() {
-        CustmerToast.makeText(mContext, R.string.get_stock_datas).show();
+//        CustmerToast.makeText(mContext, R.string.get_stock_datas).show();
         GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
             @Override
             public void run() {
@@ -185,7 +185,7 @@ public class StatisticActivity extends BaseOtherActivity {
                         txt_complete.setEnabled(true);
                     }
                 } else if(msg.what == MessageUtil.PUBLISHED_COMMENT){
-                    new ShowDialog().showTips(mContext, "分享成功");
+                    new ShowDialog().showTips(mContext, "已分享到讨论区！");
                 }else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
                     GlobalExceptionHandler.getInstance(mContext).handlerException((Exception) msg.obj);
                 }

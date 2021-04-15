@@ -133,7 +133,7 @@ public class MarketTrendActivity extends BaseOtherActivity {
                 } else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
                     GlobalExceptionHandler.getInstance(mContext).handlerException((Exception) msg.obj);
                 } else if(msg.what == MessageUtil.OPTINAL_STOCK_ADD){
-                    CustmerToast.makeText(mContext, "已成功加入自选").show();
+                    CustmerToast.makeText(mContext, "已加入自选").show();
                 }
                 return false;
             }

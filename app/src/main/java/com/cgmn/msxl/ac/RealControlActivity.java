@@ -658,7 +658,7 @@ public class RealControlActivity extends AppCompatActivity
 //        Log.e("PlayMusic","PlayMusic"+flag);
         // 当用户很快的点击播放不同的音频时，就先释放，否则快速点击音频会有声音重叠
         releaseMediaPlayer();
-        music = MediaPlayer.create(this, R.raw.btn_wav);
+        music = MediaPlayer.create(this, R.raw.water13);
         music.start();
         // 播放完成可以释放资源
         music.setOnCompletionListener(new MediaPlayer.OnCompletionListener(){
@@ -687,6 +687,7 @@ public class RealControlActivity extends AppCompatActivity
 
     @Override
     public void finish() {
+        settleThisTrading();
         marqueeManager.tiemrCancel();
         autoRunManager.tiemrCancel();
         super.finish();
