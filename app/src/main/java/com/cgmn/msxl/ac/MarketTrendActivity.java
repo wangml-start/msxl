@@ -367,6 +367,13 @@ public class MarketTrendActivity extends BaseOtherActivity {
                         new OkHttpClientManager.ResultCallback<BaseData>() {
                             @Override
                             public void onError(com.squareup.okhttp.Request request, Exception e) {
+                                showReloadView(chartParent);
+                                chartParent.setStateClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        loadInfo();
+                                    }
+                                });
                                 Message message = Message.obtain();
                                 message.what = MessageUtil.EXCUTE_EXCEPTION;
                                 message.obj = e;
@@ -381,8 +388,21 @@ public class MarketTrendActivity extends BaseOtherActivity {
                                     message.obj = data.getMarketData();
                                     Integer status = data.getStatus();
                                     if (status == null || status == -1) {
+                                        showReloadView(chartParent);
+                                        chartParent.setStateClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                loadInfo();
+                                            }
+                                        });
                                         throw new Exception(data.getError());
                                     }
+                                    chartParent.setStateClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            loadStockDetails(adpterDatas.get(selectedListIndex).getStackCode());
+                                        }
+                                    });
                                 } catch (Exception e) {
                                     message.what = MessageUtil.EXCUTE_EXCEPTION;
                                     message.obj = e;
