@@ -15,12 +15,24 @@
              />
     <TextView
             android:id="@+id/txt_aname"
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
+
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="32dp"
+            android:layout_marginRight="60dp"
             android:gravity="left|center_vertical"
+            android:textColor="@color/text_topbar"
+            android:textSize="@dimen/size16" />
+    <TextView
+            android:id="@+id/txt_right_des"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="5dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:gravity="right|center_vertical"
             android:textColor="@color/text_topbar"
             android:textSize="@dimen/size16" />
 </RelativeLayout>

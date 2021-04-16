@@ -26,6 +26,9 @@ public class PageMainItem {
     private int aIcon;
     private String aName;
     private int itemType;
+    private int rightColor;
+
+    private String rightDec;
 
     public PageMainItem() {
 
@@ -58,5 +61,21 @@ public class PageMainItem {
     }
     public int getItemType() {
         return itemType;
+    }
+
+    public String getRightDec() {
+        return rightDec;
+    }
+
+    public void setRightDec(String rightDec) {
+        this.rightDec = rightDec;
+    }
+
+    public int getRightColor() {
+        return rightColor;
+    }
+
+    public void setRightColor(int rightColor) {
+        this.rightColor = rightColor;
     }
 }

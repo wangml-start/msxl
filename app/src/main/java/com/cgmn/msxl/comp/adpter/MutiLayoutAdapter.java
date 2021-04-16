@@ -1,6 +1,7 @@
 package com.cgmn.msxl.comp.adpter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,6 +74,7 @@ public class MutiLayoutAdapter extends BaseAdapter {
                     convertView = LayoutInflater.from(mContext).inflate(R.layout.main_list_item, parent, false);
                     itemHolder.img_icon = (ImageView) convertView.findViewById(R.id.img_icon);
                     itemHolder.txt_aname = (TextView) convertView.findViewById(R.id.txt_aname);
+                    itemHolder.txt_right_des = (TextView) convertView.findViewById(R.id.txt_right_des);
                     convertView.setTag(R.id.tag_main_item,itemHolder);
                     break;
                 case TYPE_SPLIT_ITEM:
@@ -101,6 +103,14 @@ public class MutiLayoutAdapter extends BaseAdapter {
                 if(item != null){
                     itemHolder.img_icon.setImageResource(item.getaIcon());
                     itemHolder.txt_aname.setText(item.getaName());
+                    if(item.getRightDec() != null){
+                        itemHolder.txt_right_des.setText(item.getRightDec());
+                        if(item.getRightColor() > 0){
+                            itemHolder.txt_right_des.setTextColor(mContext.getColor(item.getRightColor()));
+                        }else{
+                            itemHolder.txt_right_des.setTextColor(Color.BLACK);
+                        }
+                    }
                 }
                 break;
             case TYPE_SPLIT_ITEM:
@@ -117,7 +127,7 @@ public class MutiLayoutAdapter extends BaseAdapter {
     //两个不同的ViewHolder
     private static class ItemViewHolder{
         ImageView img_icon;
-        TextView txt_aname;
+        TextView txt_aname, txt_right_des;
     }
 
     private static class SplitViewHolder{
