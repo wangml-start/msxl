@@ -202,7 +202,7 @@ public class TradingPop extends PopupWindow
                 //标记
                 manage.getCurrentK().setOpChar("T");
             }
-            if(stoHolder.getHoldShare() == 0 && rate >= 0.2){
+            if(stoHolder.getHoldShare() == 0 && (rate >= 0.2 || rate <= -1)){
                 //上传出色交易
                 uploadTrade(rate);
             }

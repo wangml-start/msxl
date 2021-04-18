@@ -569,8 +569,14 @@ public class RealControlActivity extends AppCompatActivity
             if(stockView.getStockHolder().getTotAmt() < 100){
                 new ShowDialog().showTips(mContxt, "当前账户资金不足！");
             }
+            if(realtradeManage.getCurrentK() == null){
+                return;
+            }
             showPopFormBottom(v, "BUY");
         }else if(v.getId() == R.id.bt_sell){
+            if(realtradeManage.getCurrentK() == null){
+                return;
+            }
             showPopFormBottom(v, "SELL");
         }else if(v.getId() == R.id.bt_change){
             onChageStock();

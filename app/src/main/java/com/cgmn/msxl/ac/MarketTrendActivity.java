@@ -354,6 +354,7 @@ public class MarketTrendActivity extends BaseOtherActivity {
 
 
     private void loadInfo() {
+        chartParent.showLoading();
         GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
             @Override
             public void run() {
