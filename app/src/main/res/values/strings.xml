@@ -7,14 +7,14 @@
     <string name="signin_out">退出</string>
     <string name="sign_email">邮箱地址</string>
     <string name="sign_user_name">用户名</string>
-    <string name="sign_user_wd">密码</string>
-    <string name="new_user_wd">新密码</string>
+    <string name="sign_user_wd">密码(8位以上)</string>
+    <string name="new_user_wd">新密码(8位以上)</string>
     <string name="wd_reqiure_8">8位以上</string>
     <string name="wd_valid_code">6位</string>
     <string name="valid_fails">验证失败</string>
     <string name="email_user_for">忘记密码时用于找回</string>
     <string name="forget_pws">忘记密码</string>
-    <string name="lb_valid_code">验证码</string>
+    <string name="lb_valid_code">验证码(6位)</string>
     <string name="send_email">邮箱验证</string>
     <string name="show_pws">显示密码</string>
     <string name="auto_register">用户不存在时自动注册</string>
