@@ -116,7 +116,7 @@ public class CommonUtil {
         if( number > 9999.0){
             return formatLargeAmt.format(number/10000 * symbol)+"万";
         }else{
-            return formatAmt.format(number);
+            return formatAmt.format(number* symbol);
         }
     }
 

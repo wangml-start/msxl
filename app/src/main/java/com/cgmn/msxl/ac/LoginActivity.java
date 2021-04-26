@@ -319,7 +319,7 @@ public class LoginActivity extends LoginBaseActivity {
 
     private void setAgrementText(){
         String base = "登录即表示您已同意";
-        String agrement = "《用户协议》";
+        String agrement = "《用户协议和隐私政策》";
         SpannableString span = new SpannableString(base+agrement);
         span.setSpan(new ClickableSpan(){
             @Override
