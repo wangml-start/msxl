@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/pop_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/bg_white"
+        android:orientation="vertical">
+
+    <TextView
+            android:id="@+id/txt_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="15dp"
+            android:textStyle="bold"
+            android:textColor="@color/text_black"
+            android:text="服务协议和隐私政策"
+            android:textSize="@dimen/size16" />
+    <TextView
+            android:id="@+id/txt_agrement"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:layout_margin="10dp"
+            android:textColor="@color/text_black"
+            android:text=""
+            android:textSize="@dimen/size14" />
+
+
+    <LinearLayout
+            android:id="@+id/bottom_view"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="5dp"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal"
+            android:gravity="bottom">
+        <TextView
+                android:id="@+id/btn_no"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="暂不使用"
+                android:layout_marginLeft="25dp"
+                android:background="@color/bg_white_title"
+                android:textSize="@dimen/size16"
+                android:layout_alignParentLeft="true"
+                />
+        <TextView
+                android:id="@+id/btn_yes"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:drawablePadding="10dp"
+                android:textStyle="bold"
+                android:text="同意"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:background="@color/bg_white_title"
+                android:textColor="@color/main_blue_color"
+                android:textSize="@dimen/size16"
+                android:layout_alignParentRight="true"
+                />
+    </LinearLayout>
+
+</LinearLayout>

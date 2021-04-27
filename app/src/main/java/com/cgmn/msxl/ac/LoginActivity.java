@@ -3,27 +3,21 @@ package com.cgmn.msxl.ac;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.TextPaint;
-import android.text.method.LinkMovementMethod;
-import android.text.style.ClickableSpan;
-import android.text.style.UnderlineSpan;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.view.WindowManager;
+import android.widget.*;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.bean.PopuBean;
 import com.cgmn.msxl.comp.CustmerToast;
 import com.cgmn.msxl.comp.LoginBaseActivity;
+import com.cgmn.msxl.comp.pop.AgrementPop;
 import com.cgmn.msxl.comp.view.ClearEditTextView;
 import com.cgmn.msxl.comp.view.PopuWindowView;
 import com.cgmn.msxl.comp.view.showPassworCheckBox;
@@ -47,7 +41,6 @@ public class LoginActivity extends LoginBaseActivity {
 
     private Button bt_login;
     private Button bt_forget_pws;
-    private TextView txt_agrement;
     private showPassworCheckBox ck_show;
     private ImageView acc_down_list;
 
@@ -58,12 +51,46 @@ public class LoginActivity extends LoginBaseActivity {
     //消息处理
     private Handler mHandler;
 
+    private Boolean isShowAgreement=false;
+
 
     @Override
     protected void init(){
         initMessageHandle();
         bindView();
         loadAccountList();
+    }
+
+    private void checkAgrements(){
+        final AppSqlHelper dbHelper = new AppSqlHelper(mContext);
+        if(!dbHelper.userAgreeContract()){
+            DisplayMetrics dm = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(dm);
+            AgrementPop popWin = new AgrementPop(mContext, (int) (dm.widthPixels*0.85));
+            popWin.showAtLocation(getWindow().getDecorView(), Gravity.CENTER, 0, 0);
+            final WindowManager.LayoutParams[] params = {getWindow().getAttributes()};
+            //当弹出Popupwindow时，背景变半透明
+            params[0].alpha = 0.7f;
+            getWindow().setAttributes(params[0]);
+            //设置Popupwindow关闭监听，当Popupwindow关闭，背景恢复1f
+            popWin.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                @Override
+                public void onDismiss() {
+                    params[0] = getWindow().getAttributes();
+                    params[0].alpha = 1f;
+                    getWindow().setAttributes(params[0]);
+                }
+            });
+            popWin.setBackgroundDrawable(getResources().getDrawable(R.drawable.rounded_corners_pop));
+        }
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus){
+        if(!isShowAgreement){
+            isShowAgreement = true;
+            checkAgrements();
+        }
     }
 
     protected String setTitle(){
@@ -220,8 +247,6 @@ public class LoginActivity extends LoginBaseActivity {
         bt_login = findViewById(R.id.bt_login);
         bt_forget_pws = findViewById(R.id.bt_forget);
         ck_show = findViewById(R.id.ck_dis_pws);
-        txt_agrement = findViewById(R.id.txt_agrement);
-        setAgrementText();
 
         bt_login.setOnClickListener(this);
         bt_forget_pws.setOnClickListener(this);
@@ -317,18 +342,4 @@ public class LoginActivity extends LoginBaseActivity {
         });
     }
 
-    private void setAgrementText(){
-        String base = "登录即表示您已同意";
-        String agrement = "《用户协议和隐私政策》";
-        SpannableString span = new SpannableString(base+agrement);
-        span.setSpan(new ClickableSpan(){
-            @Override
-            public void onClick(View widget) {
-                Intent intent = new Intent(mContext, UserAgrementActivity.class);
-                startActivity(intent);
-            }
-        }, base.length(), base.length()+agrement.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-        txt_agrement.setText(span);
-        txt_agrement.setMovementMethod(LinkMovementMethod.getInstance());
-    }
 }
