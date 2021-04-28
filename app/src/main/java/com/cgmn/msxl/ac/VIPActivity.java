@@ -42,7 +42,7 @@ public class VIPActivity extends BaseOtherActivity {
     private GridView grid_view;
     private NetImageView icon_head;
     private TextView txt_u_name, txt_des, btn_pay;
-
+    private TextView txt_level1_des, txt_level2_des, txt_gain, txt_up_grade_des;
     private String permissionKey = LEVEL_2;
 
     private Handler mHandler;
@@ -101,6 +101,7 @@ public class VIPActivity extends BaseOtherActivity {
             public boolean handleMessage(Message msg) {
                 if (msg.what == MessageUtil.REQUEST_SUCCESS) {
                     setting = (VipDataSetting) msg.obj;
+                    setDescriptions(setting.getVipDescriptions());
                     afterLoad();
                 } else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
                     dialog.cancel();
@@ -169,6 +170,11 @@ public class VIPActivity extends BaseOtherActivity {
 
         dialog = new ProgressDialog(mContext);
         dialog.setMessage("正在提交...");
+        txt_level1_des = findViewById(R.id.txt_level1_des);
+        txt_level2_des = findViewById(R.id.txt_level2_des);
+        txt_gain = findViewById(R.id.txt_gain);
+        txt_up_grade_des = findViewById(R.id.txt_up_grade_des);
+
     }
 
     private void setPermission(){
@@ -366,6 +372,16 @@ public class VIPActivity extends BaseOtherActivity {
 
     }
 
+
+    private void setDescriptions(String des){
+        if(!CommonUtil.isEmpty(des)){
+            String[] arr = des.split("#");
+            txt_level1_des.setText(arr[0]);
+            txt_level2_des.setText(arr[1]);
+            txt_gain.setText(arr[2]);
+            txt_up_grade_des.setText(arr[3]);
+        }
+    }
 
     @Override
     public void finish() {

@@ -18,6 +18,8 @@ public class VipDataSetting {
 
     private Integer upGradeAmt;
 
+    private String vipDescriptions;
+
 
     public List<VipItem> getList() {
         return list;
@@ -73,5 +75,13 @@ public class VipDataSetting {
 
     public void setUpGradeAmt(Integer upGradeAmt) {
         this.upGradeAmt = upGradeAmt;
+    }
+
+    public String getVipDescriptions() {
+        return vipDescriptions;
+    }
+
+    public void setVipDescriptions(String vipDescriptions) {
+        this.vipDescriptions = vipDescriptions;
     }
 }

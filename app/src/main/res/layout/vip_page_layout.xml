@@ -82,10 +82,11 @@
                     android:textSize="@dimen/NormalSize" />
 
             <TextView
+                    android:id="@+id/txt_level1_des"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:gravity="center"
-                    android:text="趋势波段训练"
+                    android:text=""
                     android:textColor="@color/main_bg_orange_light"
                     android:textSize="@dimen/size12" />
         </LinearLayout>
@@ -118,10 +119,11 @@
                     android:textSize="@dimen/NormalSize" />
 
             <TextView
+                    android:id="@+id/txt_level2_des"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:gravity="center"
-                    android:text="趋势波段训练+连板战法训练"
+                    android:text=""
                     android:textColor="@color/main_bg_orange_light"
                     android:textSize="@dimen/size12" />
         </LinearLayout>
@@ -153,7 +155,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginTop="20dp"
             android:gravity="center|left"
-            android:text="首次开通赠送20万操盘资金"
+            android:text=""
             android:textColor="@color/main_bg_orange_light"
             android:textSize="@dimen/size16" />
     <TextView
@@ -164,7 +166,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginTop="10dp"
             android:gravity="center|left"
-            android:text="升级计算：订单金额-Level剩余金额"
+            android:text=""
             android:textColor="@color/main_bg_orange_light"
             android:textSize="@dimen/size16" />
     <View
