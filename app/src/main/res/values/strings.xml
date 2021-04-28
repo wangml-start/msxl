@@ -23,7 +23,7 @@
     <string name="so_many_task">当前执行的任务过多，请稍后再试</string>
 
 
-    <string name="tab_menu_xunlian">训练</string>
+    <string name="tab_menu_xunlian">功能</string>
     <string name="tab_menu_statistic">统计</string>
     <string name="tab_menu_alert">提醒</string>
     <string name="tab_menu_may">我的</string>
@@ -55,5 +55,8 @@
     <string name="sbslj">随便说两句...</string>
     <string name="personal_info">个人信息</string>
     <string name="zan_no_rank">暂无排行数据</string>
+    <string name="approve_to_me">点赞我的</string>
+    <string name="comment_to_me">评论我的</string>
+    <string name="my_dynamic">动态</string>
 
 </resources>

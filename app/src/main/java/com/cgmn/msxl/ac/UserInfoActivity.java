@@ -34,7 +34,7 @@ public class UserInfoActivity extends BaseOtherActivity {
     private NetImageView icon_head;
     private TextView txt_user_name, txt_account,txt_user_type,txt_valid_at;
     private TextView txt_total_cash, txt_pl,txt_train_times,txt_win_rate;
-    private TextView txt_dan, txt_b_day,txt_signature,btn_update;
+    private TextView txt_dan, txt_b_day,txt_signature;
 
     @Override
     protected int getContentView() {
@@ -106,9 +106,7 @@ public class UserInfoActivity extends BaseOtherActivity {
         txt_dan = findViewById(R.id.txt_dan);
         txt_b_day = findViewById(R.id.txt_b_day);
         txt_signature = findViewById(R.id.txt_signature);
-        btn_update = findViewById(R.id.btn_update);
-        txt_complete.setText("个人信息");
-        txt_complete.setTextSize(10);
+
         mHandler = new Handler(new Handler.Callback() {
             @Override
             public boolean handleMessage(Message msg) {
@@ -120,22 +118,6 @@ public class UserInfoActivity extends BaseOtherActivity {
                 return false;
             }
         });
-        View.OnClickListener ls = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(v.getId() == R.id.btn_update){
-                    AppSqlHelper sqlHeper = new AppSqlHelper(mContext);
-                    sqlHeper.excuteSql(String.format("UPDATE users SET last_active=2 WHERE phone='%s'", GlobalDataHelper.getUserAcc(mContext)));
-                    startActivity(new Intent(mContext, LoginActivity.class));
-                }else if(v.getId() == R.id.txt_complete){
-                    Intent intent = new Intent(mContext, AccountInfoActivity.class);
-                    startActivity(intent);
-                }
-
-            }
-        };
-        btn_update.setOnClickListener(ls);
-        txt_complete.setOnClickListener(ls);
     }
 
     @Override
@@ -144,7 +126,7 @@ public class UserInfoActivity extends BaseOtherActivity {
     }
     @Override
     protected boolean showComplate(){
-        return true;
+        return false;
     }
     @Override
     protected void onCompletedClick(){

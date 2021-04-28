@@ -62,7 +62,7 @@ public class AppMainActivity extends AppCompatActivity
         mContxt = this;
         bindAppMainView();
         fManager = getFragmentManager();
-        txt_xunlian.performClick();
+        queryPagePermissions();
         checkVersion();
 
         registerTokenListener();
@@ -127,7 +127,10 @@ public class AppMainActivity extends AppCompatActivity
                                 .setApkDescription("当前版本已停止维护,请更新版本!")
                                 .download();
                     }
-                } else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
+                } else if(msg.what == MessageUtil.REQUEST_PAGE_LIMIT_SUCCESS){
+                    GlobalDataHelper.setData("pagePermissions", msg.obj);
+                    txt_xunlian.performClick();
+                }else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
                     GlobalExceptionHandler.getInstance(mContxt).handlerException((Exception) msg.obj);
                 }
                 return false;
@@ -244,4 +247,44 @@ public class AppMainActivity extends AppCompatActivity
         OkHttpClientManager.getInstance().addIntercept(new TokenInterceptor(mContxt));
     }
 
+    private void queryPagePermissions(){
+        GlobalTreadPools.getInstance(mContxt).execute(new Runnable() {
+            @Override
+            public void run() {
+                String action = "/common/app_main_pages";
+                Map<String, String> params = new HashMap<>();
+                params.put("channle", "android");
+                params.put("token", GlobalDataHelper.getToken(mContxt));
+                String url = CommonUtil.buildGetUrl(
+                        ConstantHelper.serverUrl,
+                        action, params);                                                                                                                  OkHttpClientManager.getAsyn(url,
+                        new OkHttpClientManager.ResultCallback<BaseData>() {
+                            @Override
+                            public void onError(com.squareup.okhttp.Request request, Exception e) {
+                                Message message = Message.obtain();
+                                message.what = MessageUtil.EXCUTE_EXCEPTION;
+                                message.obj = e;
+                                mHandler.sendMessage(message);
+                            }
+
+                            @Override
+                            public void onResponse(BaseData data) {
+                                Message message = Message.obtain();
+                                message.what = MessageUtil.REQUEST_PAGE_LIMIT_SUCCESS;
+                                try {
+                                    message.obj = data.getInfoList();
+                                    Integer status = data.getStatus();
+                                    if (status == null || status == -1) {
+                                        throw new Exception(data.getError());
+                                    }
+                                } catch (Exception e) {
+                                    message.what = MessageUtil.EXCUTE_EXCEPTION;
+                                    message.obj = e;
+                                }
+                                mHandler.sendMessage(message);
+                            }
+                        });
+            }
+        });
+    }
 }

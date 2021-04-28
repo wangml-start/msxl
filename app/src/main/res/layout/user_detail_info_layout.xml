@@ -235,16 +235,4 @@
                 android:text="--"
                 android:layout_height="80dp" />
     </LinearLayout>
-
-    <TextView
-            android:id="@+id/btn_update"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/btn_height"
-            android:layout_alignParentBottom="true"
-            android:layout_margin="8dp"
-            android:background="@drawable/bt_back_nomal"
-            android:gravity="center"
-            android:text="@string/signin_out"
-            android:textColor="@color/main_text_color"
-            android:textSize="@dimen/size16" />
 </RelativeLayout>

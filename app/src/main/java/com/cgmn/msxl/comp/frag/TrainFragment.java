@@ -4,22 +4,39 @@ import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import com.azhon.appupdate.config.UpdateConfiguration;
+import com.azhon.appupdate.manager.DownloadManager;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.ac.*;
+import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.adpter.MutiLayoutAdapter;
 import com.cgmn.msxl.comp.view.NetImageView;
 import com.cgmn.msxl.data.PageMainItem;
 import com.cgmn.msxl.data.SplitItem;
 import com.cgmn.msxl.data.StockHolder;
+import com.cgmn.msxl.handdler.GlobalExceptionHandler;
+import com.cgmn.msxl.server_interface.BaseData;
+import com.cgmn.msxl.service.GlobalDataHelper;
+import com.cgmn.msxl.service.OkHttpClientManager;
+import com.cgmn.msxl.utils.CommonUtil;
+import com.cgmn.msxl.utils.ConstantHelper;
+import com.cgmn.msxl.utils.MessageUtil;
+import com.cgmn.msxl.utils.PagePermissionUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @SuppressLint("ValidFragment")
 public class TrainFragment extends Fragment{
@@ -28,6 +45,7 @@ public class TrainFragment extends Fragment{
     private NetImageView user_header;
     private ArrayList<Object> mData = null;
     private MutiLayoutAdapter myAdapter = null;
+    private Handler mHandler;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -35,30 +53,34 @@ public class TrainFragment extends Fragment{
         bindView(view);
         initAdpter();
 
+        loadRaleatedTome();
+
         return view;
     }
 
     private void initAdpter(){
-        mData = new ArrayList<Object>();
-        mData.add(new SplitItem(getString(R.string.trading)));
-        mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.dragTrain), PageMainItem.LEADING_STRATEGY));
-        mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.tradTrain), PageMainItem.NORMAL_STRATEGY));
-        mData.add(new SplitItem(getString(R.string.pl_rate_line)));
-//        mData.add(new PageMainItem(R.drawable.head, getString(R.string.train_sum_line), PageMainItem.SUM_PL_LINE));
-        mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.train_sum_line), PageMainItem.SUM_PL_LINE));
-        mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.leading_line), PageMainItem.LEADING_LINE));
-        mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.normal_line), PageMainItem.NORMARL_LINE));
-        mData.add(new SplitItem(getString(R.string.ranking)));
-        mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.total_ranking), PageMainItem.TOTAL_RANK));
-        mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.dan_ranking), PageMainItem.DAN_RANK));
-//        mData.add(new PageMainItem(R.drawable.head, getString(R.string.day_ranking), PageMainItem.DAY_RANK));
-        mData.add(new SplitItem(getString(R.string.market)));
-        mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.trend_break_up), PageMainItem.TREND_BREAK_UP));
-        mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.optional_stock), PageMainItem.OPTIONAL_STOCKS));
-        mData.add(new SplitItem(getString(R.string.mode_title)));
-        mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.mode_setting), PageMainItem.MODEL_SETTING));
-        mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.violate_mode_detai), PageMainItem.VIOLATE_MODE_DETAI));
+        List<Integer> list = new ArrayList<>();
+        list.add(PageMainItem.LEADING_STRATEGY);
+        list.add(PageMainItem.NORMAL_STRATEGY);
+        list.add(PageMainItem.SUM_PL_LINE);
+        list.add(PageMainItem.LEADING_LINE);
 
+        list.add(PageMainItem.NORMARL_LINE);
+        list.add(PageMainItem.TOTAL_RANK);
+        list.add(PageMainItem.DAN_RANK);
+        list.add(PageMainItem.TREND_BREAK_UP);
+
+        list.add(PageMainItem.OPTIONAL_STOCKS);
+        list.add(PageMainItem.MODEL_SETTING);
+        list.add(PageMainItem.VIOLATE_MODE_DETAI);
+
+        list.add(PageMainItem.COMMENT_TO_ME);
+        list.add(PageMainItem.APPROVE_TO_ME);
+
+        mData = PagePermissionUtils.getPageDatas(list, this);
+        if(mData == null){
+            new ArrayList<>();
+        }
         myAdapter = new MutiLayoutAdapter(mContxt, mData);
         list_content.setAdapter(myAdapter);
     }
@@ -152,6 +174,22 @@ public class TrainFragment extends Fragment{
                             intent = new Intent(mContxt, OptionalStockActivity.class);
                             startActivity(intent);
                             break;
+                        case 18:
+                            resetNewVersionTip(18);
+                            intent = new Intent(mContxt, RelatedToMeActivity.class);
+                            bundle = new Bundle();
+                            bundle.putInt("type", 1);
+                            intent.putExtra("datas", bundle);
+                            startActivity(intent);
+                            break;
+                        case 19:
+                            resetNewVersionTip(19);
+                            intent = new Intent(mContxt, RelatedToMeActivity.class);
+                            bundle = new Bundle();
+                            bundle.putInt("type", 0);
+                            intent.putExtra("datas", bundle);
+                            startActivity(intent);
+                            break;
                     }
                 }
             }
@@ -166,6 +204,24 @@ public class TrainFragment extends Fragment{
             }
         });
 
+
+        mHandler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message msg) {
+                if(MessageUtil.LOAD_RELATED_TO_ME == msg.what){
+                    BaseData response = (BaseData) msg.obj;
+                    if(response != null){
+                        setNewVersionTip(response.getCommentToMe(), PageMainItem.COMMENT_TO_ME);
+                        setNewVersionTip(response.getApproveToMe(), PageMainItem.APPROVE_TO_ME);
+                    }
+                } else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
+                    GlobalExceptionHandler.getInstance(mContxt).handlerException((Exception) msg.obj);
+                }
+                return false;
+            }
+        });
+
+
 //        user_header = view.findViewById(R.id.user_header);
 //        user_header.setImageContent(GlobalDataHelper.getUserCut(mContxt));
 //        user_header.setOnClickListener(new View.OnClickListener() {
@@ -176,6 +232,84 @@ public class TrainFragment extends Fragment{
 //                startActivity(intent);
 //            }
 //        });
+    }
+
+
+    private void setNewVersionTip(Integer num, Integer type){
+        if(num != null && num > 0){
+            PageMainItem version = null;
+            for(Object ob : mData){
+                if(ob instanceof  PageMainItem){
+                    PageMainItem item = (PageMainItem) ob;
+                    if(item.getItemType() == type){
+                        version = item;
+                        break;
+                    }
+                }
+            }
+            if(version != null){
+                version.setRightDec(String.format("%s", num));
+                version.setRightColor(R.color.colorPrimary);
+                myAdapter.notifyDataSetChanged();
+            }
+        }
+    }
+
+    private void resetNewVersionTip(Integer type){
+        PageMainItem version = null;
+        for(Object ob : mData){
+            if(ob instanceof  PageMainItem){
+                PageMainItem item = (PageMainItem) ob;
+                if(item.getItemType() == type){
+                    version = item;
+                    break;
+                }
+            }
+        }
+        if(version != null){
+            version.setRightDec(null);
+            myAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private void loadRaleatedTome(){
+        GlobalTreadPools.getInstance(mContxt).execute(new Runnable() {
+            @Override
+            public void run() {
+                Map<String, String> params = new HashMap<>();
+                params.put("token", GlobalDataHelper.getToken(mContxt));
+                String url = CommonUtil.buildGetUrl(
+                        ConstantHelper.serverUrl,
+                        "/chat/related_to_me", params);
+                OkHttpClientManager.getAsyn(url,
+                        new OkHttpClientManager.ResultCallback<BaseData>() {
+                            @Override
+                            public void onError(com.squareup.okhttp.Request request, Exception e) {
+                                Message message = Message.obtain();
+                                message.what = MessageUtil.EXCUTE_EXCEPTION;
+                                message.obj = e;
+                                mHandler.sendMessage(message);
+                            }
+
+                            @Override
+                            public void onResponse(BaseData data) {
+                                Message message = Message.obtain();
+                                message.what = MessageUtil.LOAD_RELATED_TO_ME;
+                                try {
+                                    message.obj = data;
+                                    Integer status = data.getStatus();
+                                    if (status == null || status == -1) {
+                                        throw new Exception(data.getError());
+                                    }
+                                } catch (Exception e) {
+                                    message.what = MessageUtil.EXCUTE_EXCEPTION;
+                                    message.obj = e;
+                                }
+                                mHandler.sendMessage(message);
+                            }
+                        });
+            }
+        });
     }
 
 }

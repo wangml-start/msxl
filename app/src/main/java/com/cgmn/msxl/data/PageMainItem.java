@@ -23,6 +23,11 @@ public class PageMainItem {
     public static int OPTIONAL_STOCKS = 16;
     public static int USER_AGREMENT = 17;
 
+    public static int COMMENT_TO_ME = 18;
+    public static int APPROVE_TO_ME = 19;
+
+    public static int PERSONAL_INFO = 20;
+
     private int aIcon;
     private String aName;
     private int itemType;

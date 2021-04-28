@@ -30,6 +30,7 @@ import com.cgmn.msxl.service.OkHttpClientManager;
 import com.cgmn.msxl.utils.CommonUtil;
 import com.cgmn.msxl.utils.ConstantHelper;
 import com.cgmn.msxl.utils.MessageUtil;
+import com.cgmn.msxl.utils.PagePermissionUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,17 +57,19 @@ public class MayFragment extends Fragment {
     }
 
     private void initAdpter() {
+        List<Integer> list = new ArrayList<>();
+        list.add(PageMainItem.MY_GENERAL_INFO);
+        list.add(PageMainItem.PERSONAL_INFO);
+        list.add(PageMainItem.VIP_INFO);
+        list.add(PageMainItem.CHARGE_INFO);
 
-        mData = new ArrayList<Object>();
-        mData.add(new SplitItem(getString(R.string.personal)));
-        mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.acct_info), PageMainItem.MY_GENERAL_INFO));
-        mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.vip_way), PageMainItem.VIP_INFO));
-        mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.chargev_way), PageMainItem.CHARGE_INFO));
-        mData.add(new SplitItem(getString(R.string.system)));
-        mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.contact_us), PageMainItem.CONTACT_US));
-        mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.check_new_version), PageMainItem.CHECK_NEW_VERSION));
-        mData.add(new PageMainItem(R.drawable.item_header, getString(R.string.user_agrement_title), PageMainItem.USER_AGREMENT));
-
+        list.add(PageMainItem.CONTACT_US);
+        list.add(PageMainItem.CHECK_NEW_VERSION);
+        list.add(PageMainItem.USER_AGREMENT);
+        mData = PagePermissionUtils.getPageDatas(list, this);
+        if(mData == null){
+            new ArrayList<>();
+        }
         myAdapter = new MutiLayoutAdapter(mContxt, mData);
         list_content.setAdapter(myAdapter);
     }
@@ -109,6 +112,10 @@ public class MayFragment extends Fragment {
                             intent = new Intent(mContxt, UserAgrementActivity.class);
                             startActivity(intent);
                             break;
+                        case 20:
+                            intent = new Intent(mContxt, AccountInfoActivity.class);
+                            startActivity(intent);
+                            break;
 
                     }
                 }
@@ -120,13 +127,9 @@ public class MayFragment extends Fragment {
             public boolean handleMessage(Message msg) {
                 if (MessageUtil.REQUEST_SUCCESS == msg.what) {
                     List<String> list = (List<String>) msg.obj;
-                    if (!CommonUtil.isEmpty(list)) {
-                        ((PageMainItem)mData.get(6)).setRightDec("New");
-                        ((PageMainItem)mData.get(6)).setRightColor(R.color.main_red_color);
-                        myAdapter.notifyDataSetChanged();
-                    } else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
-                        GlobalExceptionHandler.getInstance(mContxt).handlerException((Exception) msg.obj);
-                    }
+                    setNewVersionTip(list);
+                } else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
+                    GlobalExceptionHandler.getInstance(mContxt).handlerException((Exception) msg.obj);
                 }
                 return false;
             }
@@ -174,5 +177,25 @@ public class MayFragment extends Fragment {
                         });
             }
         });
+    }
+
+    private void setNewVersionTip(List<String> list){
+        if (!CommonUtil.isEmpty(list)) {
+            PageMainItem version = null;
+            for(Object ob : mData){
+                if(ob instanceof  PageMainItem){
+                    PageMainItem item = (PageMainItem) ob;
+                    if(item.getItemType() == PageMainItem.CHECK_NEW_VERSION){
+                        version = item;
+                        break;
+                    }
+                }
+            }
+            if(version != null){
+                version.setRightDec("New");
+                version.setRightColor(R.color.main_red_color);
+                myAdapter.notifyDataSetChanged();
+            }
+        }
     }
 }

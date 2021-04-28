@@ -8,8 +8,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.comp.adpter.AccountAdapter;
@@ -29,7 +29,7 @@ public class AccountInfoActivity extends BaseOtherActivity {
     private AccountAdapter myAdapter = null;
     private BroadcastReceiver receiver;
     private LocalBroadcastManager broadcastManager;
-
+    private TextView btn_update;
 
     @Override
     protected int getContentView() {
@@ -71,6 +71,18 @@ public class AccountInfoActivity extends BaseOtherActivity {
 
     private void bindView(){
         mContext = this;
+        btn_update = findViewById(R.id.btn_update);
+        View.OnClickListener ls = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(v.getId() == R.id.btn_update){
+                    AppSqlHelper sqlHeper = new AppSqlHelper(mContext);
+                    sqlHeper.excuteSql(String.format("UPDATE users SET last_active=2 WHERE phone='%s'", GlobalDataHelper.getUserAcc(mContext)));
+                    startActivity(new Intent(mContext, LoginActivity.class));
+                }
+            }
+        };
+        btn_update.setOnClickListener(ls);
         list_content = findViewById(R.id.list_content);
         list_content.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override

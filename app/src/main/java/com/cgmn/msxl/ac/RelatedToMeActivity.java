@@ -3,6 +3,8 @@ package com.cgmn.msxl.ac;
 import android.annotation.SuppressLint;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
+import android.os.Bundle;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.comp.frag.ApproveFragment;
 import com.cgmn.msxl.comp.frag.CommentFragment;
@@ -21,7 +23,16 @@ public class RelatedToMeActivity extends BaseOtherActivity {
     @Override
     protected void init(){
         bindView();
-        onSelected(0);
+
+        Intent intent = getIntent();
+        Bundle bundle = intent.getBundleExtra("datas");
+        if(bundle != null){
+            tabLayout.getTabAt(bundle.getInt("type")).select();
+            onSelected(bundle.getInt("type"));
+        }else{
+            tabLayout.getTabAt(0).select();
+            onSelected(0);
+        }
     };
 
     @Override

@@ -110,6 +110,8 @@ public class MutiLayoutAdapter extends BaseAdapter {
                         }else{
                             itemHolder.txt_right_des.setTextColor(Color.BLACK);
                         }
+                    }else{
+                        itemHolder.txt_right_des.setText(null);
                     }
                 }
                 break;

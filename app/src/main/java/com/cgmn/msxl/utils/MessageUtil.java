@@ -52,6 +52,8 @@ public class MessageUtil {
 
     public static int OPTINAL_STOCK_ADD = 0x026;
 
+    public static int REQUEST_PAGE_LIMIT_SUCCESS = 0x027;
+
     public static int EXCUTE_EXCEPTION = 0x999;
 
 

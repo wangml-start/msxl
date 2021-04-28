@@ -26,12 +26,12 @@
         <com.google.android.material.tabs.TabItem
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="点赞我" />
+                android:text="@string/approve_to_me" />
 
         <com.google.android.material.tabs.TabItem
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="评论我" />
+                android:text="@string/comment_to_me" />
     </com.google.android.material.tabs.TabLayout>
 
 
