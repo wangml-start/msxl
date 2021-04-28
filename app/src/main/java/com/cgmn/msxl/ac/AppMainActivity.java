@@ -10,18 +10,24 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.PopupWindow;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.azhon.appupdate.config.UpdateConfiguration;
 import com.azhon.appupdate.manager.DownloadManager;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
+import com.cgmn.msxl.comp.pop.AgrementPop;
 import com.cgmn.msxl.comp.view.GuideIconView;
 import com.cgmn.msxl.comp.frag.MayFragment;
 import com.cgmn.msxl.comp.frag.TrainFragment;
+import com.cgmn.msxl.db.AppSqlHelper;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.cgmn.msxl.receiver.ReceiverMessage;
 import com.cgmn.msxl.server_interface.BaseData;
@@ -54,6 +60,8 @@ public class AppMainActivity extends AppCompatActivity
 
     private BroadcastReceiver receiver;
     private LocalBroadcastManager broadcastManager;
+
+    private Boolean isShowAgreement=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -287,4 +295,37 @@ public class AppMainActivity extends AppCompatActivity
             }
         });
     }
+
+    private void checkAgrements(){
+        final AppSqlHelper dbHelper = new AppSqlHelper(mContxt);
+        if(!dbHelper.userAgreeContract()){
+            DisplayMetrics dm = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(dm);
+            AgrementPop popWin = new AgrementPop(mContxt, (int) (dm.widthPixels*0.85));
+            popWin.showAtLocation(getWindow().getDecorView(), Gravity.CENTER, 0, 0);
+            final WindowManager.LayoutParams[] params = {getWindow().getAttributes()};
+            //当弹出Popupwindow时，背景变半透明
+            params[0].alpha = 0.7f;
+            getWindow().setAttributes(params[0]);
+            //设置Popupwindow关闭监听，当Popupwindow关闭，背景恢复1f
+            popWin.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                @Override
+                public void onDismiss() {
+                    params[0] = getWindow().getAttributes();
+                    params[0].alpha = 1f;
+                    getWindow().setAttributes(params[0]);
+                }
+            });
+            popWin.setBackgroundDrawable(getResources().getDrawable(R.drawable.rounded_corners_pop));
+        }
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus){
+        if(!isShowAgreement){
+            isShowAgreement = true;
+            checkAgrements();
+        }
+    }
+
 }
