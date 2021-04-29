@@ -27,6 +27,11 @@ public class PageMainItem {
     public static int APPROVE_TO_ME = 19;
 
     public static int PERSONAL_INFO = 20;
+    public static int FREE_KLINE = 21;
+    public static int FREE_TIME_SHARE = 22;
+
+    public static int FREE_RANK_LIST = 23;
+    public static int FREE_RATE_CURV = 24;
 
     private int aIcon;
     private String aName;

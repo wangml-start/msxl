@@ -62,12 +62,20 @@ public class TrainFragment extends Fragment{
         List<Integer> list = new ArrayList<>();
         list.add(PageMainItem.LEADING_STRATEGY);
         list.add(PageMainItem.NORMAL_STRATEGY);
+
+        list.add(PageMainItem.FREE_KLINE);
+        list.add(PageMainItem.FREE_TIME_SHARE);
+
         list.add(PageMainItem.SUM_PL_LINE);
         list.add(PageMainItem.LEADING_LINE);
-
         list.add(PageMainItem.NORMARL_LINE);
+        list.add(PageMainItem.FREE_RATE_CURV);
+
+
         list.add(PageMainItem.TOTAL_RANK);
         list.add(PageMainItem.DAN_RANK);
+        list.add(PageMainItem.FREE_RANK_LIST);
+
         list.add(PageMainItem.TREND_BREAK_UP);
 
         list.add(PageMainItem.OPTIONAL_STOCKS);
@@ -190,6 +198,18 @@ public class TrainFragment extends Fragment{
                             intent.putExtra("datas", bundle);
                             startActivity(intent);
                             break;
+                        case 21:
+                            intent = new Intent(mContxt, KLineSimulateActivity.class);
+                            startActivity(intent);
+                            break;
+                        case 23:
+                            intent = new Intent(mContxt, NormalRankingActivity.class);
+                            startActivity(intent);
+                            break;
+                        case 24:
+                            intent = new Intent(mContxt, NormalStatisticActivity.class);
+                            startActivity(intent);
+
                     }
                 }
             }

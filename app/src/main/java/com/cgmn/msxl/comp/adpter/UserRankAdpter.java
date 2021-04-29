@@ -31,10 +31,16 @@ public class UserRankAdpter extends BaseAdapter {
     private List<RankEntity> mData = null;
     private String tranType;
 
+    private Boolean hiddeCash=false;
+
     public UserRankAdpter(Context mContext, List<RankEntity> mData, String tranType) {
         this.mContext = mContext;
         this.mData = mData;
         this.tranType = tranType;
+    }
+
+    public void setHiddeCash(Boolean hiddeCash) {
+        this.hiddeCash = hiddeCash;
     }
 
     @Override
@@ -82,7 +88,7 @@ public class UserRankAdpter extends BaseAdapter {
 
         holder.txt_user_name.setText(span);
         holder.txt_amt.setText(CommonUtil.formatAmt(map.getStAmt()));
-        if(tranType.equals(StockHolder.RANK_SUMMARY+"")){
+        if(tranType.equals(StockHolder.RANK_SUMMARY+"") || tranType.equals("1")  || tranType.equals("2") ){
             holder.txt_rate.setText(CommonUtil.formatPercent(map.getRate()));
         }else{
             holder.txt_rate.setText(CommonUtil.formatAmt(map.getRate()));
@@ -128,6 +134,10 @@ public class UserRankAdpter extends BaseAdapter {
             txt_amt = convertView.findViewById(R.id.txt_amt);
             txt_rate = convertView.findViewById(R.id.txt_rate);
             head = convertView.findViewById(R.id.img_head);
+
+            if(hiddeCash){
+                txt_amt.setVisibility(View.GONE);
+            }
         }
     }
 

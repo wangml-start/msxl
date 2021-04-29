@@ -1,11 +1,9 @@
 package com.cgmn.msxl.ac;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
@@ -15,19 +13,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import androidx.annotation.RequiresApi;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.CustmerToast;
 import com.cgmn.msxl.comp.view.LineChartMarkView;
 import com.cgmn.msxl.comp.view.NetImageView;
-import com.cgmn.msxl.data.StockHolder;
 import com.cgmn.msxl.data.TradeStatistic;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.cgmn.msxl.server_interface.BaseData;
-import com.cgmn.msxl.service.OkHttpClientManager;
 import com.cgmn.msxl.service.GlobalDataHelper;
+import com.cgmn.msxl.service.OkHttpClientManager;
 import com.cgmn.msxl.utils.*;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.*;
@@ -46,8 +42,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class StatisticActivity extends BaseOtherActivity {
-    private static final String TAG = StatisticActivity.class.getSimpleName();
+public class NormalStatisticActivity extends BaseOtherActivity {
+    private static final String TAG = NormalStatisticActivity.class.getSimpleName();
     private LineChart mLineChart;
 
     private Context mContext;
@@ -61,13 +57,6 @@ public class StatisticActivity extends BaseOtherActivity {
     private YAxis rightYaxis;           //右侧Y轴
     private Legend legend;              //图例
 
-    private Integer trainType;
-    private Integer userModelId;
-
-    private TextView  tx_st_pl, tx_st_baseAmt,lb_st_plrate,lb_st_baseAmt,
-            tx_st_ex,  tx_st_plrate, tx_st_leftAmt;
-    private String title;
-
     private TradeStatistic statistic;
 
     @Override
@@ -79,12 +68,12 @@ public class StatisticActivity extends BaseOtherActivity {
 
     @Override
     protected int getContentView() {
-        return R.layout.statistics_layout;
+        return R.layout.normal_statistics_layout;
     }
 
     @Override
     protected String setTitle(){
-        return title;
+        return "训练曲线";
     }
 
     @Override
@@ -100,48 +89,21 @@ public class StatisticActivity extends BaseOtherActivity {
     private void bindView() {
         mContext = this;
         mLineChart = findViewById(R.id.lineChart);
+
         initChart(mLineChart);
-        tx_st_pl = findViewById(R.id.tx_st_pl);
-        tx_st_ex = findViewById(R.id.tx_st_ex);
-        tx_st_plrate = findViewById(R.id.tx_st_plrate);
-        tx_st_baseAmt = findViewById(R.id.tx_st_baseAmt);
-        tx_st_leftAmt = findViewById(R.id.tx_st_leftAmt);
-        lb_st_plrate = findViewById(R.id.lb_st_plrate);
-        lb_st_baseAmt = findViewById(R.id.lb_st_baseAmt);
         txt_complete.setText("");
         txt_complete.setEnabled(false);
-        Intent intent = getIntent();
-        Bundle bundle = intent.getBundleExtra("datas");
-        if (bundle != null) {
-            trainType = bundle.getInt("train_type");
-            userModelId = bundle.getInt("user_model_id");
-            title = bundle.getString("title");
-        }
-
-        if(trainType != StockHolder.EARNING_CURVE_SUMMARY){
-            tx_st_baseAmt.setVisibility(View.GONE);
-            tx_st_plrate.setVisibility(View.GONE);
-            lb_st_plrate.setVisibility(View.GONE);
-            lb_st_baseAmt.setVisibility(View.GONE);
-        }
     }
 
     private void loadDatas() {
-//        CustmerToast.makeText(mContext, R.string.get_stock_datas).show();
         GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
             @Override
             public void run() {
                 Map<String, String> params = new HashMap<>();
                 params.put("token", GlobalDataHelper.getToken(mContext));
-                if (trainType != null) {
-                    params.put("train_type", trainType + "");
-                }
-                if (userModelId != null) {
-                    params.put("userModelId", userModelId + "");
-                }
                 String url = CommonUtil.buildGetUrl(
                         ConstantHelper.serverUrl,
-                        "/stock/get_statistics", params);
+                        "/stock/get_normal_statistics", params);
                 OkHttpClientManager.getAsyn(url,
                         new OkHttpClientManager.ResultCallback<BaseData>() {
                             @Override
@@ -186,7 +148,7 @@ public class StatisticActivity extends BaseOtherActivity {
                         txt_complete.setText("分享");
                     }
                 } else if(msg.what == MessageUtil.PUBLISHED_COMMENT){
-                    new ShowDialog().showTips(mContext, "已分享到讨论区！");
+                    new ShowDialog().showTips(mContext, "已分享到交流区！");
                 }else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
                     GlobalExceptionHandler.getInstance(mContext).handlerException((Exception) msg.obj);
                 }
@@ -268,12 +230,8 @@ public class StatisticActivity extends BaseOtherActivity {
     }
 
     public String getYformatValue(float value){
-        if(trainType == StockHolder.EARNING_CURVE_SUMMARY){
-            DecimalFormat formatP = new DecimalFormat("0.0%");
-            return formatP.format(value);
-        }else{
-            return CommonUtil.formatAmt(value);
-        }
+        DecimalFormat formatP = new DecimalFormat("0.0%");
+        return formatP.format(value);
     }
 
     /**
@@ -390,32 +348,12 @@ public class StatisticActivity extends BaseOtherActivity {
         Drawable drawable = getResources().getDrawable(R.drawable.fade_blue);
         setChartFillDrawable(drawable);
         setMarkerView();
-
-        tx_st_baseAmt.setText(CommonUtil.formatAmt(statistic.getBaseAmt()));
-        tx_st_leftAmt.setText(CommonUtil.formatAmt(statistic.getCashAmt()));
-        tx_st_pl.setText(CommonUtil.formatAmt(statistic.getPl()));
-        tx_st_plrate.setText(CommonUtil.formatPercent(statistic.getPl() / statistic.getBaseAmt()));
-        if (statistic.getPl() > 0) {
-            tx_st_pl.setTextColor(getResources().getColor(R.color.kline_up));
-            tx_st_plrate.setTextColor(getResources().getColor(R.color.kline_up));
-        } else if (statistic.getPl() < 0) {
-            tx_st_pl.setTextColor(getResources().getColor(R.color.kline_down));
-            tx_st_plrate.setTextColor(getResources().getColor(R.color.kline_down));
-        }
-        tx_st_ex.setText(CommonUtil.formatAmt(statistic.getFee()));
     }
 
     private String getComment(){
         FixStringBuffer text = new FixStringBuffer();
-        String trianTypeStr = "趋势波段";
-        if(trainType == StockHolder.LEADING_STRATEGY){
-            trianTypeStr = "连板战法";
-        }else if(trainType == StockHolder.EARNING_CURVE_SUMMARY){
-            trianTypeStr = "综合训练";
-        }
-        text.append("我在%s中通过%s次训练，获得总收益为%s",
-                trianTypeStr, statistic.getList().size(),
-                CommonUtil.formatPercent(statistic.getPl() / statistic.getBaseAmt()));
+        text.append("我在基础训练中获得的总收益率为%s",
+                CommonUtil.formatPercent(statistic.getPl()));
 
         return text.toString();
     }

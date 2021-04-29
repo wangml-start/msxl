@@ -1,4 +1,4 @@
-package com.cgmn.msxl.page.ranking;
+package com.cgmn.msxl.page.normal;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -15,7 +15,6 @@ import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.adpter.UserRankAdpter;
 import com.cgmn.msxl.data.RankEntity;
-import com.cgmn.msxl.data.StockHolder;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.service.GlobalDataHelper;
@@ -31,24 +30,21 @@ import java.util.Map;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class RankFragment extends Fragment {
+public class normalRankFragment extends Fragment {
     private ListView listView;
     private Context mContext;
-    private static final String trainTypeKey = "trainType";
-    private static final String rankTypeKey = "rankType";
     private String trainType;
-    private String rankType;
     private Handler mHandler;
     private List<RankEntity> mData = null;
     private UserRankAdpter adpter;
-    private TextView txt_rank;
+    private TextView txt_rank,tx_cash;
+    private static final String trainTypeKey = "trainType";
 
-    public RankFragment() { }
-    public static RankFragment newInstance(String trainType, String rankType) {
-        RankFragment fragment = new RankFragment();
+    public normalRankFragment() { }
+    public static normalRankFragment newInstance(String trainType) {
+        normalRankFragment fragment = new normalRankFragment();
         Bundle args = new Bundle();
         args.putString(trainTypeKey, trainType);
-        args.putString(rankTypeKey, rankType);
         fragment.setArguments(args);
         return fragment;
     }
@@ -59,7 +55,6 @@ public class RankFragment extends Fragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             trainType = bundle.getString(trainTypeKey);
-            rankType = bundle.getString(rankTypeKey);
         }
     }
 
@@ -77,6 +72,8 @@ public class RankFragment extends Fragment {
         mContext = view.getContext();
         listView = view.findViewById(R.id.list_content);
         txt_rank = view.findViewById(R.id.txt_rank);
+        tx_cash = view.findViewById(R.id.tx_cash);
+        tx_cash.setVisibility(View.GONE);
         mHandler = new Handler(new Handler.Callback() {
             @Override
             public boolean handleMessage(Message msg) {
@@ -84,6 +81,7 @@ public class RankFragment extends Fragment {
                     mData = (List<RankEntity>) msg.obj;
                     if(!CommonUtil.isEmpty(mData)){
                         adpter = new UserRankAdpter(mContext, mData, trainType);
+                        adpter.setHiddeCash(true);
                         listView.setAdapter(adpter);
                         String txt = "我的排名： ";
                         Integer rankNo = mData.get(0).getMyRank();
@@ -101,10 +99,6 @@ public class RankFragment extends Fragment {
                 return false;
             }
         });
-        TextView txtEarn = view.findViewById(R.id.txtEarn);
-        if(!trainType.equals(StockHolder.RANK_SUMMARY+"")){
-            txtEarn.setText("收益");
-        }
     }
 
     @Override
@@ -113,12 +107,9 @@ public class RankFragment extends Fragment {
     }
 
     private String getUrl(){
-        String action = "/statistic/daily_ranking";
-        if(rankType.equals("SUM")){
-            action = "/statistic/total_ranking";
-        }
+        String action = "/statistic/normal_ranking";
         Map<String, String> params = new HashMap<>();
-        params.put("train_type", trainType);
+        params.put("train_type",trainType);
         params.put("token", GlobalDataHelper.getToken(mContext));
         return CommonUtil.buildGetUrl(
                 ConstantHelper.serverUrl,

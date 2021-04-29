@@ -554,7 +554,6 @@ public class RealControlActivity extends AppCompatActivity
     }
 
     private void onExit(){
-        settleThisTrading();
         finish();
     }
 
