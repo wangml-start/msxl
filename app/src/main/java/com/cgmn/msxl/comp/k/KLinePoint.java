@@ -27,14 +27,4 @@ public class KLinePoint {
     String opChar;
 }
 
-class PriceLinePoint {
-    float[] pstartPt;
-    float[] pendPt;
-    String price;
 
-    public PriceLinePoint(float[] sPt, float[] ePt, String p){
-        pstartPt = sPt;
-        pendPt = ePt;
-        price = p;
-    }
-}

@@ -44,6 +44,8 @@ public class BaseData {
 
     String alipaySignature;
 
+    List<TimeShare> timeShareList;
+
     public Integer getStatus() {
         return status;
     }
@@ -210,5 +212,13 @@ public class BaseData {
 
     public void setAlipaySignature(String alipaySignature) {
         this.alipaySignature = alipaySignature;
+    }
+
+    public List<TimeShare> getTimeShareList() {
+        return timeShareList;
+    }
+
+    public void setTimeShareList(List<TimeShare> timeShareList) {
+        this.timeShareList = timeShareList;
     }
 }

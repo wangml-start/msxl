@@ -417,7 +417,6 @@ public class KLineSimulateActivity extends AppCompatActivity implements View.OnC
 
     @Override
     public void onClick(View v) {
-        v.setEnabled(false);
         if (v.getId() == R.id.bt_next) {
             autoRunManager.pause();
             onNextClick();
@@ -448,7 +447,6 @@ public class KLineSimulateActivity extends AppCompatActivity implements View.OnC
                 }
             });
         }
-        v.setEnabled(true);
     }
 
     private void releaseMediaPlayer() {

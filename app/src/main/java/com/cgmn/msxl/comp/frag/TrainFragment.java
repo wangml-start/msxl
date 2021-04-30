@@ -202,6 +202,10 @@ public class TrainFragment extends Fragment{
                             intent = new Intent(mContxt, KLineSimulateActivity.class);
                             startActivity(intent);
                             break;
+                        case 22:
+                            intent = new Intent(mContxt, NormalTimeShareActivity.class);
+                            startActivity(intent);
+                            break;
                         case 23:
                             intent = new Intent(mContxt, NormalRankingActivity.class);
                             startActivity(intent);

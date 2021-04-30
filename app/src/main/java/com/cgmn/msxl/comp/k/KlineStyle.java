@@ -51,7 +51,7 @@ public class KlineStyle {
         //画笔宽度
         kLineBold = 0.8f;
         //K线间隔
-        gridLine = 0.2f;
+        gridLine = 0.05f;
         //K线间隔
         mBarSpace = 1.6f;
         //K线宽度

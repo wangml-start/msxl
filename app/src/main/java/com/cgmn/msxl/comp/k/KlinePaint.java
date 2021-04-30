@@ -69,7 +69,7 @@ public class KlinePaint {
         mimdlePaint.setColor(Color.GRAY);
 
         mGridPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mGridPaint.setStyle(Paint.Style.STROKE);
+        mGridPaint.setStyle(Paint.Style.FILL);
         mGridPaint.setStrokeWidth(KlineStyle.gridLine);
         mGridPaint.setColor(Color.GRAY);
 
