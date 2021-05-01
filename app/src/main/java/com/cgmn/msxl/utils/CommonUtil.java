@@ -20,6 +20,9 @@ public class CommonUtil {
     private static DecimalFormat formatAmt = new DecimalFormat("#,##0");
     private static DecimalFormat formatLargeAmt = new DecimalFormat("#,##0.00");
 
+    private static DecimalFormat formatVol = new DecimalFormat("##0");
+    private static DecimalFormat formatLargeVol = new DecimalFormat("##0.0");
+
     public static boolean isEmpty(Object o){
         if(o == null){
             return true;
@@ -117,6 +120,19 @@ public class CommonUtil {
             return formatLargeAmt.format(number/10000 * symbol)+"万";
         }else{
             return formatAmt.format(number* symbol);
+        }
+    }
+
+
+    public static String formatVolume(Object num){
+        if(isEmpty(num)){
+            return "";
+        }
+        Double number = Math.abs(Double.valueOf(num.toString()));
+        if( number >= 10000){
+            return formatLargeVol.format(number/10000)+"万";
+        }else{
+            return formatVol.format(number);
         }
     }
 

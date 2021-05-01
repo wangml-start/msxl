@@ -51,46 +51,12 @@ public class LoginActivity extends LoginBaseActivity {
     //消息处理
     private Handler mHandler;
 
-    private Boolean isShowAgreement=false;
-
 
     @Override
     protected void init(){
         initMessageHandle();
         bindView();
         loadAccountList();
-    }
-
-    private void checkAgrements(){
-        final AppSqlHelper dbHelper = new AppSqlHelper(mContext);
-        if(!dbHelper.userAgreeContract()){
-            DisplayMetrics dm = new DisplayMetrics();
-            getWindowManager().getDefaultDisplay().getMetrics(dm);
-            AgrementPop popWin = new AgrementPop(mContext, (int) (dm.widthPixels*0.85));
-            popWin.showAtLocation(getWindow().getDecorView(), Gravity.CENTER, 0, 0);
-            final WindowManager.LayoutParams[] params = {getWindow().getAttributes()};
-            //当弹出Popupwindow时，背景变半透明
-            params[0].alpha = 0.7f;
-            getWindow().setAttributes(params[0]);
-            //设置Popupwindow关闭监听，当Popupwindow关闭，背景恢复1f
-            popWin.setOnDismissListener(new PopupWindow.OnDismissListener() {
-                @Override
-                public void onDismiss() {
-                    params[0] = getWindow().getAttributes();
-                    params[0].alpha = 1f;
-                    getWindow().setAttributes(params[0]);
-                }
-            });
-            popWin.setBackgroundDrawable(getResources().getDrawable(R.drawable.rounded_corners_pop));
-        }
-    }
-
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus){
-        if(!isShowAgreement){
-            isShowAgreement = true;
-            checkAgrements();
-        }
     }
 
     protected String setTitle(){

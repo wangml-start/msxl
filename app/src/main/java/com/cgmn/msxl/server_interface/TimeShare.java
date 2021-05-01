@@ -12,6 +12,15 @@ public class TimeShare {
 
     private String charType;
     private Float lastClose;
+    private String tradeDate;
+
+    public String getTradeDate() {
+        return tradeDate;
+    }
+
+    public void setTradeDate(String tradeDate) {
+        this.tradeDate = tradeDate;
+    }
 
     public String getStockCode() {
         return stockCode;
@@ -67,5 +76,12 @@ public class TimeShare {
 
     public void setLastClose(Float lastClose) {
         this.lastClose = lastClose;
+    }
+
+    public String getShowTime(){
+        String hour = timeStr.substring(0, 2);
+        String munite = timeStr.substring(2, 4);
+
+        return String.format("%s:%s", hour, munite);
     }
 }

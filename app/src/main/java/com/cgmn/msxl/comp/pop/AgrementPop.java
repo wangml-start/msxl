@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.ac.UserAgrementActivity;
 import com.cgmn.msxl.db.AppSqlHelper;
+import com.cgmn.msxl.in.CommonListener;
 import com.cgmn.msxl.service.GlobalDataHelper;
 
 public class AgrementPop extends PopupWindow
@@ -26,6 +27,8 @@ public class AgrementPop extends PopupWindow
     private View view;
     private Context mContext;
     private TextView txt_agrement, btn_no, btn_yes;
+
+    private CommonListener commonListener;
 
     public AgrementPop(Context mContext, Integer width) {
         this.mContext = mContext;
@@ -75,6 +78,9 @@ public class AgrementPop extends PopupWindow
     }
 
 
+    public void setCommonListener(CommonListener commonListener) {
+        this.commonListener = commonListener;
+    }
 
     @Override
     public void onClick(View v) {
@@ -89,6 +95,9 @@ public class AgrementPop extends PopupWindow
             values.put("setting_value", "1");
             dbHelper.upsert("user_settings", values, "setting_name");
             GlobalDataHelper.updateUser(mContext);
+            if(commonListener != null){
+                commonListener.onCallBack();
+            }
             dismiss();
         }
     }

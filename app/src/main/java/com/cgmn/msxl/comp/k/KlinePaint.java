@@ -23,7 +23,7 @@ public class KlinePaint {
     protected RectF barRect = new RectF();
     protected RectF macdRect = new RectF();
 
-    private float textSize = KlineStyle.kTextSize*0.85f;
+    private float textSize = KlineStyle.kTextSize*0.7f;
 
     protected int startx = 0;
     protected int endx = 0;
@@ -284,7 +284,7 @@ public class KlinePaint {
         // DRAW Y LABELS
         mLabelPaint.setTextAlign(Paint.Align.RIGHT);
         mLabelPaint.getFontMetrics(fontMetrics);
-        float moveY = 10 * KlineStyle.pxScaleRate;
+        float moveY = 7 * KlineStyle.pxScaleRate;
         for(PriceLinePoint pt : pricePts){
             canvas.drawLine(pt.pstartPt[0],pt.pstartPt[1],pt.pendPt[0],pt.pendPt[1], mGridPaint);
             if(pricePts.indexOf(pt) == 4){

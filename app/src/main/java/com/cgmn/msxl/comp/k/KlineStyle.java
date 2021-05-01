@@ -6,6 +6,8 @@ public class KlineStyle {
     public static float macdRate = 0.16f;
 
     //画笔宽度
+    public static float timeShareBold;
+    //画笔宽度
     public static float kLineBold;
     //K线间隔
     public static float mBarSpace;
@@ -38,6 +40,7 @@ public class KlineStyle {
         kWidth = kWidth * pxScaleRate;
         mBarSpace = mBarSpace * pxScaleRate;
         kLineBold = kLineBold * pxScaleRate;
+        timeShareBold = timeShareBold * pxScaleRate;
         kWidthMax = kWidthMax * pxScaleRate;
         kWidthmin = kWidthmin * pxScaleRate;
         gridLine = gridLine * pxScaleRate;
@@ -50,6 +53,7 @@ public class KlineStyle {
     public static void initSize(){
         //画笔宽度
         kLineBold = 0.8f;
+        timeShareBold = 0.5f;
         //K线间隔
         gridLine = 0.05f;
         //K线间隔

@@ -20,23 +20,134 @@
             android:layout_below="@id/top_div"
             android:fitsSystemWindows="true"
             android:orientation="vertical">
+        <LinearLayout
+                android:id="@+id/speed_div"
+                android:layout_margin="1dp"
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:background="@color/bg_white"
+                android:orientation="horizontal">
+            <Button
+                    android:id="@+id/bt_1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="X1"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/size12"
+                    style="@style/trading_page_btns"
+                    />
+            <Button
+                    android:id="@+id/bt_3"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:drawablePadding="2dp"
+                    android:gravity="center"
+                    android:text="X3"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/size12"
+                    style="@style/trading_page_btns"
+                    />
+            <Button
+                    android:id="@+id/bt_10"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:drawablePadding="2dp"
+                    android:gravity="center"
+                    android:text="X10"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/size12"
+                    style="@style/trading_page_btns"
+                    />
+            <Button
+                    android:id="@+id/bt_30"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:drawablePadding="2dp"
+                    android:gravity="center"
+                    android:text="X30"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/size12"
+                    style="@style/trading_page_btns"
+                    />
+            <Button
+                    android:id="@+id/bt_60"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:drawablePadding="2dp"
+                    android:gravity="center"
+                    android:text="X60"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/size12"
+                    style="@style/trading_page_btns"
+                    />
+            <Button
+                    android:id="@+id/bt_120"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:drawablePadding="2dp"
+                    android:gravity="center"
+                    android:text="X120"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/size12"
+                    style="@style/trading_page_btns"
+                    />
+        </LinearLayout>
         <!--top bar-->
         <LinearLayout
                 android:id="@+id/lb_open_div"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="20dp"
                 android:background="@color/bg_white"
                 android:orientation="horizontal">
             <TextView
-                    android:id="@+id/lb_open_price"
-                    style="@style/kline_top_bar" />
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                     />
             <TextView
-                    android:id="@+id/lb_open_rate"
-                    style="@style/kline_top_bar" />
+                    android:id="@+id/lb_current_speed"
+                    android:layout_height="match_parent"
+                    android:layout_width="40dp"
+                    android:gravity="right"
+                    android:textColor="@color/colorPrimary"
+                    android:text=""
+                    android:textSize="@dimen/size14"
+                    />
+            <TextView
+                    android:id="@+id/lb_current_price"
+                    android:layout_height="match_parent"
+                    android:layout_width="40dp"
+                    android:gravity="right"
+                    android:text=""
+                    android:textColor="@color/text_topbar"
+                    android:textSize="@dimen/size14"
+                     />
+            <TextView
+                    android:id="@+id/lb_current_rate"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="left"
+                    android:text=""
+                    android:textColor="@color/text_topbar"
+                    android:textSize="@dimen/size14"
+                    android:layout_width="40dp"
+                     />
+            <TextView
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    />
         </LinearLayout>
 
         <!--top bar-->
-
         <!--k line -->
         <com.helin.loadinglayout.LoadingLayout
                 android:id="@+id/chart_parent"

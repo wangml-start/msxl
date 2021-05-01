@@ -4,7 +4,9 @@ public class MinuteCounter {
     String hour;
     String minutes;
     String second;
-    Integer distance = 3;
+    Integer distance = 1;
+
+    Boolean isOver = false;
 
     public void setTime(String timeStr){
         if(timeStr == null || timeStr.length() != 6){
@@ -16,8 +18,12 @@ public class MinuteCounter {
     }
 
     public void nextStep(){
+        if(isOver){
+            return;
+        }
         Integer temp = distance + Integer.valueOf(second);
         if(temp == 60){
+            second = "00";
             carryMinites();
         }else{
             second = String.format("%02d", temp);
@@ -27,17 +33,24 @@ public class MinuteCounter {
     public void carryMinites(){
         Integer temp = 1 + Integer.valueOf(minutes);
         if(temp == 60){
-            second = "00";
+            minutes = "00";
             carryHour();
         }else{
-            minutes = String.format("%02d", temp);
+            if(Integer.valueOf(String.format("%s%s", hour,minutes)).equals(1130)){
+                hour="13";
+                minutes = "00";
+            }else{
+                minutes = String.format("%02d", temp);
+            }
         }
     }
 
     public void carryHour(){
-        minutes = "00";
         Integer temp = 1 + Integer.valueOf(hour);
         hour = String.format("%02d", temp);
+        if(15 == Integer.valueOf(hour)){
+            isOver = true;
+        }
     }
 
 

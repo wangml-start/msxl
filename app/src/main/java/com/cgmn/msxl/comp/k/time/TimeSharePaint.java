@@ -2,6 +2,7 @@ package com.cgmn.msxl.comp.k.time;
 
 import android.graphics.*;
 import com.cgmn.msxl.comp.k.*;
+import com.cgmn.msxl.server_interface.TimeShare;
 import com.cgmn.msxl.utils.CommonUtil;
 
 import java.util.ArrayList;
@@ -20,17 +21,15 @@ public class TimeSharePaint {
     protected List<ChartPoint> solidPts = new ArrayList<>();
 
     protected RectF contentRect = new RectF();
-    protected RectF candleRect = new RectF();
-    protected RectF barRect = new RectF();
 
-    private float textSize = KlineStyle.kTextSize*0.85f;
+    private float textSize = KlineStyle.kTextSize*0.7f;
 
     protected float priceDelta;
 
     protected Boolean showDetail = true;
 
-    protected float margin = 2.5f * KlineStyle.pxScaleRate, padding = 1.2f * KlineStyle.pxScaleRate;
-
+    protected float margin = 4f * KlineStyle.pxScaleRate, padding = 2.5f * KlineStyle.pxScaleRate;
+    float chartHeight,chartWeight,candleWidth,volWidth;
 
     public void setShowDetail(Boolean showDetail) {
         this.showDetail = showDetail;
@@ -43,12 +42,12 @@ public class TimeSharePaint {
 
         avgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         avgPaint.setStyle(Paint.Style.FILL);
-        avgPaint.setStrokeWidth(KlineStyle.kLineBold);
+        avgPaint.setStrokeWidth(KlineStyle.timeShareBold);
         avgPaint.setColor(Color.parseColor("#FFC800"));
 
         timePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         timePaint.setStyle(Paint.Style.FILL);
-        timePaint.setStrokeWidth(KlineStyle.kLineBold);
+        timePaint.setStrokeWidth(KlineStyle.timeShareBold);
         timePaint.setColor(Color.parseColor("#577DAF"));
 
         mdotGridPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -88,17 +87,15 @@ public class TimeSharePaint {
     }
 
     public void setContentRect(RectF contentRect) {
-        float width = contentRect.width()-margin*2;
-        if(showDetail){
-            float candleWidth = width * 0.8f;
-            float startX = contentRect.left+margin;
-            this.candleRect.set(startX, contentRect.top+padding, contentRect.left+candleWidth, contentRect.bottom-padding);
-            float barstartX = contentRect.left+margin+candleWidth+padding;
-            this.barRect.set(barstartX, contentRect.top+padding, contentRect.right-margin, contentRect.bottom-padding);
-        }else{
-            this.candleRect.set(contentRect.left+margin, contentRect.top+padding, contentRect.right-margin, contentRect.bottom-padding);
-        }
         this.contentRect = contentRect;
+        chartHeight = contentRect.height()-2*padding;
+        chartWeight = contentRect.width()-2*margin;
+        candleWidth = chartWeight;
+        volWidth = 0;
+        if(showDetail){
+            candleWidth = chartWeight * 0.74f;
+            volWidth = chartWeight-candleWidth;
+        }
     }
 
     public void setData(TimeShareGroup data) {
@@ -109,7 +106,7 @@ public class TimeSharePaint {
      * draw everything.
      */
     public void render(Canvas canvas) {
-        canvas.clipRect(contentRect.left+margin, contentRect.top+padding, contentRect.right-margin, contentRect.bottom-padding);
+        canvas.clipRect(contentRect.left, contentRect.top, contentRect.right, contentRect.bottom);
         // CALC
         calcChartPoint();
         //表格线
@@ -121,15 +118,17 @@ public class TimeSharePaint {
         // DRAW LABELS
         renderLabels(canvas);
 
+        drawTradeDetails(canvas);
+
         // set the entry draw area.
         canvas.save();
         Integer endIndex = timePoints.size();
         for (int i = 0; i < endIndex; i++) {
             ChartPoint timePt = timePoints.get(i);
-            ChartPoint solidPt = timePoints.get(i);
+            ChartPoint solidPt = solidPts.get(i);
             if (i > 0) {
                 ChartPoint ltimePt = timePoints.get(i-1);
-                ChartPoint lsolidPt = timePoints.get(i-1);
+                ChartPoint lsolidPt = solidPts.get(i-1);
 
                 canvas.drawLine(ltimePt.x, ltimePt.y, timePt.x, timePt.y, timePaint);
                 canvas.drawLine(lsolidPt.x, lsolidPt.y, solidPt.x, solidPt.y, avgPaint);
@@ -188,18 +187,84 @@ public class TimeSharePaint {
         for(PriceLinePoint line : yLines){
             canvas.drawLine(line.pstartPt[0],line.pstartPt[1],line.pendPt[0],line.pendPt[1], mGridPaint);
         }
+        if(showDetail){
+            canvas.drawLine(contentRect.right-margin,contentRect.top+padding,contentRect.right-margin,contentRect.bottom-padding, mGridPaint);
+
+            canvas.drawLine(margin+candleWidth,padding,contentRect.right-margin,padding, mGridPaint);
+            canvas.drawLine(margin+candleWidth,contentRect.bottom-padding,contentRect.right-margin,contentRect.bottom-padding, mGridPaint);
+        }
     }
 
+    protected void drawTradeDetails(Canvas canvas){
+        if(showDetail){
+            float marginX = 2f * KlineStyle.pxScaleRate;
+            float itemHeight = reCalcHeadSpace();
+
+            mLabelPaint.setTextAlign(Paint.Align.LEFT);
+            buyPaint.setTextAlign(Paint.Align.RIGHT);
+            sellPaint.setTextAlign(Paint.Align.RIGHT);
+            float timeWidth = mUpPaint.measureText("15:00");
+            Integer showCount = (int)(chartHeight/itemHeight);
+            Integer index = 0;
+
+            Integer length = data.showList.size();
+
+            float distanceX = marginX;
+            float baseX = margin + candleWidth;
+            Paint defPaint,pricePaint;
+            while(index < showCount){
+                if(length == 0 || index>=length){
+                    break;
+                }
+                TimeShare item = data.showList.get(length-1-index);
+
+                float y = itemHeight*(showCount-index) + (chartHeight-itemHeight*showCount);
+                defPaint = mLabelPaint;
+                String time = item.getShowTime();
+                canvas.drawText(time, baseX+distanceX, y, defPaint);
+                String suffix = "";
+                if("B".equals(item.getCharType())){
+                    defPaint = mUpPaint;
+                    suffix = "↑";
+                }else if("S".equals(item.getCharType())){
+                    defPaint = mDownPaint;
+                    suffix = "↓";
+                }
+                if("09:25".equals(time)){
+                    defPaint = mLabelPaint;
+                    suffix = "";
+                }
+
+                pricePaint = mLabelPaint;
+                if(item.getPrice() > data.lastClosePrice){
+                    pricePaint = mUpPaint;
+                }else if(item.getPrice() < data.lastClosePrice){
+                    pricePaint = mDownPaint;
+                }
+                String price = CommonUtil.formatNumer(item.getPrice());
+                float priceWidth = mUpPaint.measureText(price);
+                canvas.drawText(price, baseX+distanceX+timeWidth+distanceX, y, pricePaint);
+                canvas.drawText(suffix, baseX+distanceX+timeWidth+distanceX+priceWidth, y, defPaint);
+
+                String volText = CommonUtil.formatVolume(item.getVolume());
+                float volWidth = mUpPaint.measureText(volText);
+                canvas.drawText(volText, contentRect.right-margin-volWidth-distanceX, y, defPaint);
+
+                index++;
+            }
+            canvas.save();
+            canvas.restore();
+        }
+    }
     /**
      * 计算坐标
      */
     protected void calcChartPoint(){
         Integer count = 4 * 60;
-        float chartHeight = candleRect.height();
         priceDelta = data.calExtremeNum();
         float delta = priceDelta*2;
         float punit = chartHeight / delta;
-        float distanceX = candleRect.width() / count;
+        float distanceX = candleWidth / count;
         float mYMax = priceDelta+data.lastClosePrice;
 
         timePoints.clear();
@@ -210,12 +275,12 @@ public class TimeSharePaint {
             CMinute node = data.timePrices.get(i);
             CMinute snode = data.solidPrices.get(i);
 
-            float startx = distanceX * i;
-            ChartPoint timeItem = new ChartPoint(startx, (mYMax - node.price) * punit);
+            float startx = distanceX * i + margin;
+            ChartPoint timeItem = new ChartPoint(startx, (mYMax - node.price) * punit + padding);
             timePoints.add(timeItem);
-            solidPts.add(new ChartPoint(startx, (mYMax - snode.price) * punit));
+            solidPts.add(new ChartPoint(startx, (mYMax - snode.price) * punit + padding));
             if(node.opChar != null){
-                timeItem.setOpInfo(startx, (mYMax - node.opPrice) * punit, node.opChar);
+                timeItem.setOpInfo(startx, (mYMax - node.opPrice) * punit + padding, node.opChar);
             }
         }
     }
@@ -224,29 +289,21 @@ public class TimeSharePaint {
      */
     protected void calcGridLinePoint(){
         xLines.clear();
-        float chartHeight = candleRect.height();
-        float pstartx = 0;
-        float pendx = candleRect.width();
+        float pstartx = margin;
+        float pendx = margin+candleWidth;
         Integer count = 0;
 
         while(count < 5){
             float y = chartHeight * count / 4;
-            if(y==0){
-                y += 1.5f*KlineStyle.pxScaleRate;;
-            }
-            xLines.add(new PriceLinePoint(new float[]{pstartx, y}, new float[]{pendx, y}, null));
+            xLines.add(new PriceLinePoint(new float[]{pstartx, y+padding}, new float[]{pendx, y+padding}, null));
             count++;
         }
 
         yLines.clear();
-        float viewWidth = candleRect.width();
         Integer countY = 0;
         while(countY < 5){
-            float x = viewWidth * countY / 4;
-            if(x==0){
-                x += 3f*KlineStyle.pxScaleRate;;
-            }
-            yLines.add(new PriceLinePoint(new float[]{x, candleRect.top}, new float[]{x, candleRect.bottom}, null));
+            float x = candleWidth * countY / 4;
+            yLines.add(new PriceLinePoint(new float[]{x+margin, contentRect.top+padding}, new float[]{x+margin, contentRect.bottom-padding}, null));
             countY++;
         }
     }
@@ -257,27 +314,33 @@ public class TimeSharePaint {
     protected void calcTextPricePoint(){
         textPrices.clear();
         float moveY = 8 * KlineStyle.pxScaleRate;
-        float moveBY = 5 * KlineStyle.pxScaleRate;
-        float textWidth = mUpPaint.measureText("-10.08%");
-        float startX = 3 * KlineStyle.pxScaleRate;
+        float moveBY = 3 * KlineStyle.pxScaleRate;
+        String downRate = "-"+CommonUtil.formatPercent(priceDelta/data.lastClosePrice);
+        float textWidth = mUpPaint.measureText(downRate);
+        float startX = margin+2f*KlineStyle.pxScaleRate;
         textPrices.add(new PriceLinePoint(
-                new float[]{startX, candleRect.top+moveY},null,
+                new float[]{startX, contentRect.top+moveY+padding},null,
                 CommonUtil.formatNumer(data.lastClosePrice+priceDelta)));
         textPrices.add(new PriceLinePoint(
-                new float[]{candleRect.right-textWidth, candleRect.top+moveY},null,
+                new float[]{margin+candleWidth-textWidth, contentRect.top+moveY+padding},null,
                 CommonUtil.formatPercent(priceDelta/data.lastClosePrice)));
         textPrices.add(new PriceLinePoint(
-                new float[]{startX, candleRect.height()/2},null,
+                new float[]{startX, contentRect.height()/2+moveBY},null,
                 CommonUtil.formatNumer(data.lastClosePrice)));
         textPrices.add(new PriceLinePoint(
-                new float[]{startX, candleRect.bottom-moveBY},null,
+                new float[]{startX, contentRect.bottom-moveBY-padding},null,
                 CommonUtil.formatNumer(data.lastClosePrice-priceDelta)));
         textPrices.add(new PriceLinePoint(
-                new float[]{candleRect.right-textWidth, candleRect.bottom-moveBY},null,
-                "-"+CommonUtil.formatPercent(priceDelta/data.lastClosePrice)));
+                new float[]{margin+candleWidth-textWidth, contentRect.bottom-moveBY-padding},null,
+                downRate));
 
     }
 
 
+    public float reCalcHeadSpace(){
+        float textHight = fontMetrics.bottom - fontMetrics.top;
+
+        return textHight*1f;
+    }
 }
 

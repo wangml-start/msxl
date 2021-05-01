@@ -11,16 +11,16 @@ import java.util.Map;
 
 public class TimeShareGroup {
 
-    Float lastClosePrice;
+    public Float lastClosePrice;
 
+    //分时均价计算
     Float totAmt=0f;
     Float totVol=0f;
 
-    MinuteCounter timer;
+    public MinuteCounter timer;
     Integer startNum = 93000;
-    Integer endNum = 153000;
 
-    TimeShare current, last;
+    public TimeShare current, last;
 
     List<TimeShare> showList = new ArrayList<>();
     List<TimeShare> leftList = new ArrayList<>();
@@ -62,11 +62,12 @@ public class TimeShareGroup {
                 break;
             }
         }
-        updateCurrentNode("0925");
-
         if(current == null){
-            Log.i("D","NODE: NULL");
+            Log.i("Current NUll","CODE: " + list.get(0).getStockCode() + " Date: " + list.get(0).getTradeDate());
+            return false;
         }
+
+        updateCurrentNode("0925");
         return true;
     }
 
@@ -93,6 +94,9 @@ public class TimeShareGroup {
 
 
     public void onNextStep(){
+        if(timer.isOver){
+            return;
+        }
         last = current;
         timer.nextStep();
         String time = timer.getTimeStr();
@@ -131,6 +135,9 @@ public class TimeShareGroup {
         }
         updateMinuteNode(timePrices, current.getPrice(), time);
         updateMinuteNode(solidPrices, totAmt/totVol, time);
+//        Log.i("Time",time);
+//        Log.i("timePrices",current.getPrice()+"");
+//        Log.i("solidPrices",totAmt/totVol+"");
     }
 
     public void updateMinuteNode(List<CMinute> list, float price, String time){
