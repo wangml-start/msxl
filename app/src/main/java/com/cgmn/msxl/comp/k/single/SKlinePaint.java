@@ -1,12 +1,13 @@
-package com.cgmn.msxl.comp.k;
+package com.cgmn.msxl.comp.k.single;
 
 import android.graphics.*;
+import com.cgmn.msxl.comp.k.*;
 import com.cgmn.msxl.utils.CommonUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class KlinePaint {
+public class SKlinePaint {
     protected final Paint mDownPaint, mUpPaint,mimdlePaint;
     protected final Paint buyPaint, sellPaint,otPaint;
     protected final Paint mGridPaint, mLabelPaint;
@@ -19,9 +20,6 @@ public class KlinePaint {
     protected List<PriceLinePoint> pricePts = new ArrayList<>();
 
     protected RectF contentRect = new RectF();
-    protected RectF candleRect = new RectF();
-    protected RectF barRect = new RectF();
-    protected RectF macdRect = new RectF();
 
     private float textSize = KlineStyle.kTextSize*0.7f;
     private float ltextSize = KlineStyle.kTextSize*0.85f;
@@ -55,7 +53,7 @@ public class KlinePaint {
         mk20Paint.setColor(ave20);
     }
 
-    public KlinePaint() {
+    public SKlinePaint() {
         mDownPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mDownPaint.setStyle(Paint.Style.FILL);
         mDownPaint.setStrokeWidth(KlineStyle.kLineBold);
@@ -117,13 +115,6 @@ public class KlinePaint {
     }
 
     public void setContentRect(RectF contentRect) {
-        float macdTop  = contentRect.bottom - (1-KlineStyle.chartRate) * contentRect.height();
-        float barTop = macdTop + KlineStyle.macdRate * contentRect.height();
-
-        this.candleRect.set(contentRect.left, contentRect.top, contentRect.right, macdTop);
-        this.macdRect.set(contentRect.left, macdTop, contentRect.right, barTop);
-        this.barRect.set(contentRect.left, barTop, contentRect.right, contentRect.bottom);
-
         this.contentRect = contentRect;
     }
 
@@ -147,7 +138,7 @@ public class KlinePaint {
 
         // set the entry draw area.
         canvas.save();
-        canvas.clipRect(candleRect.left, candleRect.top, candleRect.right, contentRect.bottom);
+        canvas.clipRect(contentRect.left, contentRect.top, contentRect.right, contentRect.bottom);
         for (int i = 0; i < points.size(); i++) {
             KLinePoint entry = points.get(i);
             // draw step 0: set color
@@ -168,15 +159,6 @@ public class KlinePaint {
                 canvas.drawLine(entry.highPt[0], entry.highPt[1], entry.lowPt[0], entry.lowPt[1], tempKpint);
             }
 
-            // draw step 3: draw volume
-            if(entry.state >= 0){
-                canvas.drawRect(entry.volBPt[0], entry.volumePt[1],
-                        entry.volBPt[0]+KlineStyle.kWidth, entry.volBPt[1],mUpPaint);
-            }else{
-                canvas.drawRect(entry.volBPt[0], entry.volumePt[1],
-                        entry.volBPt[0]+KlineStyle.kWidth, entry.volBPt[1],mDownPaint);
-            }
-
             //draw step 4: MA5 10 20
             if (i > 0) {
                 KLinePoint preEntry = points.get(i - 1);
@@ -189,19 +171,6 @@ public class KlinePaint {
                 if (preEntry.line20Pt != null) {
                     canvas.drawLine(preEntry.line20Pt[0], preEntry.line20Pt[1], entry.line20Pt[0], entry.line20Pt[1], mk20Paint);
                 }
-            }
-
-            //draw step 4: MACD
-            if (entry.macdState > 0) {
-                canvas.drawLine(entry.macdPt[0],entry.macdPt[1], entry.macdBPt[0], entry.macdBPt[1], mUpPaint);
-            } else {
-                canvas.drawLine(entry.macdPt[0],entry.macdPt[1], entry.macdBPt[0], entry.macdBPt[1], mDownPaint);
-            }
-
-            if (i > 0) {
-                KLinePoint preEntry = points.get(i - 1);
-                canvas.drawLine(preEntry.difPt[0], preEntry.difPt[1], entry.difPt[0], entry.difPt[1], mk5Paint);
-                canvas.drawLine(preEntry.deaPt[0], preEntry.deaPt[1], entry.deaPt[0], entry.deaPt[1], mk10Paint);
             }
 
             //draw char B\S\T
@@ -293,18 +262,6 @@ public class KlinePaint {
             }
             canvas.drawText(pt.price,textX, pt.pendPt[1]+moveY, mLabelPaint);
         }
-        canvas.drawText(
-                "MACD",
-                textX,
-                barRect.height() * 3 / 5 + candleRect.bottom,
-                mLabelPaint);
-
-        canvas.drawText(
-                "VOL",
-                textX,
-                macdRect.height() * 3 / 5 + barRect.top,
-                mLabelPaint);
-
         canvas.save();
         canvas.restore();
     }
@@ -324,23 +281,15 @@ public class KlinePaint {
         data.calcMinMax(startx, endx);
         List<KLine> temList = data.getNodes().subList(startx, endx);
 
-        float viewHeight = contentRect.height();
-        float chartHeight = viewHeight * KlineStyle.chartRate;
-        float volmeHeight = viewHeight * KlineStyle.volRate;
-        float macdHeight = viewHeight * KlineStyle.macdRate;
+        float chartHeight = contentRect.height();
 
         float half = KlineStyle.kWidth / 2;
         float ySpace = KlineStyle.chartSpace;
-        float macdY = chartHeight+KlineStyle.macdSpace;
-        float volumeY = chartHeight+macdHeight+KlineStyle.volSpace;
 
         float startx = 0;
 
         float priceDelta = data.mYMax - data.mYMin;
-        float punit = (chartHeight-KlineStyle.chartSpace*2) / priceDelta;
-        float vunit = (volmeHeight-KlineStyle.volSpace*2) / data.mMaxYVolume;
-        float macdDelta = data.mYMaxMacd - data.mYMinMacd;
-        float munit = (macdHeight-KlineStyle.macdSpace*2) / macdDelta;
+        float punit = (chartHeight-ySpace*2) / priceDelta;
 
         points.clear();
         for (int i = 0; i < temList.size(); i++) {
@@ -355,13 +304,6 @@ public class KlinePaint {
             pt.lowPt = new float[]{startx+half, (data.mYMax - node.low)*punit + ySpace};
             pt.state = node.getState();
             pt.isOpen = node.isOpen;
-            pt.volumePt = new float[]{startx, (data.mMaxYVolume - node.volume)*vunit + volumeY};
-            pt.volBPt = new float[]{startx, chartHeight+macdHeight+volmeHeight};
-            pt.difPt = new float[]{startx+half, (data.mYMaxMacd - node.dif)*munit + macdY};
-            pt.deaPt = new float[]{startx+half, (data.mYMaxMacd - node.dea)*munit + macdY};
-            pt.macdPt = new float[]{startx+half, (data.mYMaxMacd - node.macd)*munit + macdY};
-            pt.macdBPt = new float[]{startx+half, data.mYMaxMacd*munit + macdY};
-            pt.macdState = node.macd >= 0 ? 1 : -1;
             pt.maxPt = new float[]{startx+half, priceDelta*punit + ySpace};
             pt.minPt = new float[]{startx+half, ySpace};
             pt.opChar = node.ch;
@@ -377,18 +319,14 @@ public class KlinePaint {
                 pt.line20Pt = new float[]{startx+half, (data.mYMax - node.avg20)* punit+ySpace};
             }
 
-            //价格线
-
-
         }
     }
     /**
      * 计算价格线
      */
     protected void calcPriceLinePoint(){
-        pricePts.clear();;
-        float viewHeight = contentRect.height();
-        float chartHeight = viewHeight * KlineStyle.chartRate;
+        pricePts.clear();
+        float chartHeight = contentRect.height();
         float priceDelta = data.mYMax - data.mYMin;
         float punit = chartHeight / priceDelta;
 

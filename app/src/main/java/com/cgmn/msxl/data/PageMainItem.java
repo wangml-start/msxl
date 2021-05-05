@@ -33,6 +33,8 @@ public class PageMainItem {
     public static int FREE_RANK_LIST = 23;
     public static int FREE_RATE_CURV = 24;
 
+    public static int TIMESHARE_KLINE = 25;
+
     private int aIcon;
     private String aName;
     private int itemType;

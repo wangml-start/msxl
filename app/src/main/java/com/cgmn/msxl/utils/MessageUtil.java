@@ -54,6 +54,8 @@ public class MessageUtil {
 
     public static int REQUEST_PAGE_LIMIT_SUCCESS = 0x027;
 
+    public static int TIME_SHARE_DATA_SUCCESS = 0x028;
+
     public static int EXCUTE_EXCEPTION = 0x999;
 
 

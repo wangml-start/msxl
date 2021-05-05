@@ -61,4 +61,8 @@ public class MinuteCounter {
     public String getTimeMinute(){
         return String.format("%s%s", hour,minutes);
     }
+
+    public Boolean getOver() {
+        return isOver;
+    }
 }

@@ -322,12 +322,12 @@ public class StockHolderView extends View {
 
         float[] avaiNum = calcDetailPts(stockHolder.getHoldShare(), 1, 1/4.0f, orginY);
         canvas.drawText(
-                CommonUtil.formatNumer(stockHolder.getHoldShare()),
+                stockHolder.getHoldShare()+"",
                 avaiNum[0], avaiNum[1],
                 mLabelPaint);
         float[] holdNum = calcDetailPts(stockHolder.getAvaiLabelShare(), 2, 1/4.0f, orginY);
         canvas.drawText(
-                CommonUtil.formatNumer(stockHolder.getAvaiLabelShare()),
+                stockHolder.getAvaiLabelShare()+"",
                 holdNum[0], holdNum[1],
                 mLabelPaint);
 

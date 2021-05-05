@@ -182,4 +182,28 @@ public class RealTradeManage {
         return flag;
     }
 
+
+    public int canTradingStatus(String rating){
+        int flag = 0;
+        String rate = rating.replace("%", "");
+        if(CommonUtil.isEmpty(rate)){
+            return flag;
+        }
+        if(kStatus == OPEN){
+            if(Double.valueOf(rate) > 9.85){
+                flag = 10;
+            }
+            if(Double.valueOf(rate) < -9.85){
+                flag = -10;
+            }
+        }else{
+            if(Double.valueOf(rate) > 9.85 && currentK.getHigh() - currentK.getEnd() < 0.001){
+                flag = 10;
+            }
+            if(Double.valueOf(rate) < -9.85 && currentK.getEnd() - currentK.getLow()  < 0.001){
+                flag = -10;
+            }
+        }
+        return flag;
+    }
 }

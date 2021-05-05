@@ -2,26 +2,23 @@ package com.cgmn.msxl.comp.pop;
 
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.CustmerToast;
+import com.cgmn.msxl.comp.k.time.TimeShareGroup;
 import com.cgmn.msxl.data.SettingItem;
 import com.cgmn.msxl.data.StockHolder;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.service.*;
 import com.cgmn.msxl.utils.CommonUtil;
 import com.cgmn.msxl.utils.ConstantHelper;
-import com.cgmn.msxl.utils.MessageUtil;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -36,6 +33,7 @@ public class TradingPop extends PopupWindow
     private StockHolder stoHolder;
     private RealTradeManage manage;
     private static String action;
+    private TimeShareGroup timeShare;
 
     private View view;
 
@@ -69,6 +67,20 @@ public class TradingPop extends PopupWindow
         });
     }
 
+    public void setTimeShare(TimeShareGroup timeShare) {
+        this.timeShare = timeShare;
+    }
+
+    public String getPrice(){
+        String price = "0";
+        if(timeShare != null && timeShare.current != null){
+            price = CommonUtil.formatNumer(timeShare.current.getPrice());
+        }else {
+             price = manage.getCurenPrice();
+        }
+        et_price.setText(price);
+        return price;
+    }
 
     private void bindview() {
         if (this.action.equals("BUY")) {
@@ -102,8 +114,8 @@ public class TradingPop extends PopupWindow
         one_fourth_buy.setOnClickListener(this);
         btn_action.setOnClickListener(this);
 
-        String price = manage.getCurenPrice();
-        et_price.setText(price);
+        String price = getPrice();
+
         if (this.action.equals("BUY")) {
             float avaiCount = stoHolder.getAvaiBuyCount(price);
             tx_candle_count.setText("可买： " + avaiCount  + "股");
@@ -139,7 +151,7 @@ public class TradingPop extends PopupWindow
     }
 
     private void positionManage(float persent){
-        float price = CommonUtil.castFloatFromString(manage.getCurenPrice());
+        float price = CommonUtil.castFloatFromString(getPrice());
         if (this.action.equals("BUY")) {
             int avaiCount = stoHolder.getAvaiBuyCount(manage.getCurenPrice(), persent);
             et_count.setText(avaiCount + "");
@@ -152,7 +164,7 @@ public class TradingPop extends PopupWindow
     }
 
     private void onAction(){
-        float price = CommonUtil.castFloatFromString(manage.getCurenPrice());
+        float price = CommonUtil.castFloatFromString(getPrice());
         if(CommonUtil.isEmpty(et_count.getText().toString())){
             CustmerToast.makeText(mContext, mContext.getString(R.string.need_vol)).show();
             return;
@@ -192,6 +204,9 @@ public class TradingPop extends PopupWindow
             }
             //标记
             manage.getCurrentK().setOpChar("B");
+            if(timeShare != null && timeShare.current != null){
+                timeShare.setOpInfo("B", price, timeShare.timer.getTimeMinute());
+            }
         }else{
             float rate = stoHolder.getPlRateNum();
             stoHolder.sellStock(count, price);
@@ -201,6 +216,9 @@ public class TradingPop extends PopupWindow
             }else{
                 //标记
                 manage.getCurrentK().setOpChar("T");
+            }
+            if(timeShare != null && timeShare.current != null){
+                timeShare.setOpInfo("S", price, timeShare.timer.getTimeMinute());
             }
             if(stoHolder.getHoldShare() == 0 && (rate >= 0.2 || rate <= -1)){
                 //上传出色交易
@@ -217,9 +235,9 @@ public class TradingPop extends PopupWindow
             count = Integer.valueOf(et_count.getText().toString());
         }
         int changed = count + 100*rate;
-        float price = CommonUtil.castFloatFromString(manage.getCurenPrice());
+        float price = CommonUtil.castFloatFromString(getPrice());
         if (this.action.equals("BUY")) {
-            int avaiCount = stoHolder.getAvaiBuyCount(manage.getCurenPrice());
+            int avaiCount = stoHolder.getAvaiBuyCount(getPrice());
             if(changed > avaiCount || changed < 0){
                 return;
             }

@@ -17,6 +17,8 @@ public class PagePermissionUtils {
         Map<String, String> hash = new HashMap();
         hash.put(PageMainItem.LEADING_STRATEGY+"", String.format("%s##%s##trading", fragment.getString(R.string.dragTrain), fragment.getString(R.string.trading)));
         hash.put(PageMainItem.NORMAL_STRATEGY+"", String.format("%s##%s##trading", fragment.getString(R.string.tradTrain), fragment.getString(R.string.trading)));
+        hash.put(PageMainItem.TIMESHARE_KLINE+"", String.format("%s##%s##trading", fragment.getString(R.string.time_share_kline), fragment.getString(R.string.trading)));
+
         hash.put(PageMainItem.FREE_KLINE+"", String.format("%s##%s##trading", fragment.getString(R.string.free_kline), fragment.getString(R.string.trading)));
         hash.put(PageMainItem.FREE_TIME_SHARE+"", String.format("%s##%s##trading", fragment.getString(R.string.free_time_share), fragment.getString(R.string.trading)));
 

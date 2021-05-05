@@ -57,7 +57,7 @@ public class StockHolder {
     //违反的原则
     private List<Integer> unprinciple;
     private int trainType;
-    private int modelRecordId;
+    private int modelRecordId=1;
 
     public int getTrainType() {
         return trainType;

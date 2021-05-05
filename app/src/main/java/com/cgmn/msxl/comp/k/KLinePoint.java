@@ -1,30 +1,30 @@
 package com.cgmn.msxl.comp.k;
 
 public class KLinePoint {
-    float[] openPt;
-    float[] closePt;
-    float[] highPt;
-    float[] lowPt;
-    Integer state;
-    Boolean isOpen;
+    public float[] openPt;
+    public float[] closePt;
+    public float[] highPt;
+    public float[] lowPt;
+    public Integer state;
+    public Boolean isOpen;
 
-    float[] volumePt;
-    float[] volBPt;
+    public float[] volumePt;
+    public float[] volBPt;
 
-    float[] line5Pt;
-    float[] line10Pt;
-    float[] line20Pt;
+    public float[] line5Pt;
+    public float[] line10Pt;
+    public float[] line20Pt;
 
-    float[] difPt;
-    float[] deaPt;
-    float[] macdPt;
-    float[] macdBPt;
-    Integer macdState;
+    public float[] difPt;
+    public float[] deaPt;
+    public float[] macdPt;
+    public float[] macdBPt;
+    public Integer macdState;
 
-    float[] maxPt;
-    float[] minPt;
+    public float[] maxPt;
+    public float[] minPt;
 
-    String opChar;
+    public String opChar;
 }
 
 

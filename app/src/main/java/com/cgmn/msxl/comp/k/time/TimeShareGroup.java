@@ -165,4 +165,9 @@ public class TimeShareGroup {
             }
         }
     }
+
+    public String currentRate(){
+        return CommonUtil.formatPercent(
+                (current.getPrice()-lastClosePrice)/lastClosePrice);
+    }
 }

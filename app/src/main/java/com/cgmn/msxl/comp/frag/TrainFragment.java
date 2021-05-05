@@ -62,6 +62,7 @@ public class TrainFragment extends Fragment{
         List<Integer> list = new ArrayList<>();
         list.add(PageMainItem.LEADING_STRATEGY);
         list.add(PageMainItem.NORMAL_STRATEGY);
+        list.add(PageMainItem.TIMESHARE_KLINE);
 
         list.add(PageMainItem.FREE_KLINE);
         list.add(PageMainItem.FREE_TIME_SHARE);
@@ -213,7 +214,9 @@ public class TrainFragment extends Fragment{
                         case 24:
                             intent = new Intent(mContxt, NormalStatisticActivity.class);
                             startActivity(intent);
-
+                        case 25:
+                            intent = new Intent(mContxt, TimeShareKLineActivity.class);
+                            startActivity(intent);
                     }
                 }
             }

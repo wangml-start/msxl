@@ -9,6 +9,7 @@
     <string name="trading">操盘</string>
     <string name="mode_setting">模式设置</string>
     <string name="dragTrain">连板战法训练</string>
+    <string name="time_share_kline">连板战法训练(分时)</string>
     <string name="tradTrain">趋势波段训练</string>
     <string name="free_kline">K线盘感训练</string>
     <string name="free_time_share">分时盘感训练</string>

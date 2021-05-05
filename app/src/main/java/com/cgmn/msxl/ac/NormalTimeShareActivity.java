@@ -13,7 +13,6 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
-import com.cgmn.msxl.bean.TradeStatus;
 import com.cgmn.msxl.comp.k.KlineStyle;
 import com.cgmn.msxl.comp.k.time.TimeShareChart;
 import com.cgmn.msxl.comp.k.time.TimeShareGroup;
@@ -365,8 +364,7 @@ public class NormalTimeShareActivity extends AppCompatActivity implements View.O
         if(timeShareGroup.current != null){
             float currentPrice = timeShareGroup.current.getPrice();
             lb_current_price.setText(CommonUtil.formatNumer(currentPrice));
-            lb_current_rate.setText(CommonUtil.formatPercent(
-                    (currentPrice-timeShareGroup.lastClosePrice)/timeShareGroup.lastClosePrice));
+            lb_current_rate.setText(timeShareGroup.currentRate());
             if(currentPrice > timeShareGroup.lastClosePrice){
                 lb_current_price.setTextColor(getResources().getColor(R.color.kline_up));
                 lb_current_rate.setTextColor(getResources().getColor(R.color.kline_up));
@@ -385,16 +383,10 @@ public class NormalTimeShareActivity extends AppCompatActivity implements View.O
     public void playSpeed(Integer speed){
         if(currentSpeed != speed){
             lb_current_speed.setText("X"+speed);
-            if(mTimerTask != null){
-                mTimerTask.cancel();
-            }
-            if(mTimer != null){
-                mTimer.cancel();
-            }
+            stopTimeChart();
             mTimerTask = new TimerTask() {
                 @Override
                 public void run() {
-//                Log.i("A", "Timer Trade Running");
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
@@ -413,14 +405,21 @@ public class NormalTimeShareActivity extends AppCompatActivity implements View.O
         }
     }
 
-    @Override
-    public void finish() {
-        if(mTimerTask != null){
-            mTimerTask.cancel();
-        }
+    private void stopTimeChart() {
         if(mTimer != null){
             mTimer.cancel();
+            mTimer = null;
         }
+        if(mTimerTask != null){
+            mTimerTask.cancel();
+            mTimerTask = null;
+        }
+    }
+
+
+    @Override
+    public void finish() {
+        stopTimeChart();
         settleThisTrading();
         super.finish();
     }
