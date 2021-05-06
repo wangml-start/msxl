@@ -820,6 +820,7 @@ public class TimeShareKLineActivity extends AppCompatActivity
         if(timeShareGroup.init(list)){
             timeChart.setData(timeShareGroup);
             timeChart.invalidateView();
+            onNextMunite();
             currentSpeed = 0;
             bt_next.setEnabled(false);
             playSpeed(1);

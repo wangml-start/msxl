@@ -154,6 +154,7 @@ public class NormalTimeShareActivity extends AppCompatActivity implements View.O
         if(timeShareGroup.init(list)){
             chart.setData(timeShareGroup);
             chart.invalidateView();
+            onNextMunite();
             currentSpeed = 0;
             playSpeed(1);
         }else{
