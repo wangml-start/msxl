@@ -101,6 +101,9 @@ public class KLineSimulateActivity extends AppCompatActivity implements View.OnC
 
         LinearLayout.LayoutParams bottomParams = (LinearLayout.LayoutParams) bottomBar.getLayoutParams();
         bottomParams.height = ((Double) (screenHeight * 0.055)).intValue();
+        if(bottomParams.height > 80){
+            bottomParams.height = 80;
+        }
         bottomBar.setLayoutParams(bottomParams);
         pop_div_text.setLayoutParams(bottomParams);
 
@@ -279,16 +282,16 @@ public class KLineSimulateActivity extends AppCompatActivity implements View.OnC
         if (!holder.needSettle()) {
             return;
         }
+        final OkHttpClientManager.Param[] params = new OkHttpClientManager.Param[]{
+                new OkHttpClientManager.Param("token", GlobalDataHelper.getToken(mContxt)),
+                new OkHttpClientManager.Param("rate", holder.getRate().toString()),
+                new OkHttpClientManager.Param("train_type", "1"),
+                new OkHttpClientManager.Param("code", holder.getCode())};
+        holder.resetHolder();
         // send trade to server
         GlobalTreadPools.getInstance(mContxt).execute(new Runnable() {
             @Override
             public void run() {
-                final String token = GlobalDataHelper.getToken(mContxt);
-                OkHttpClientManager.Param[] params = new OkHttpClientManager.Param[]{
-                        new OkHttpClientManager.Param("token", token),
-                        new OkHttpClientManager.Param("rate", holder.getRate().toString()),
-                        new OkHttpClientManager.Param("train_type", "1"),
-                        new OkHttpClientManager.Param("code", holder.getCode())};
                 String url = String.format("%s%s",
                         ConstantHelper.serverUrl, "/stock/normal_upload_trading");
                 OkHttpClientManager.postAsyn(url,
@@ -301,7 +304,6 @@ public class KLineSimulateActivity extends AppCompatActivity implements View.OnC
                             @Override
                             public void onResponse(BaseData data) {
                                 if (data.getStatus() == 0) {
-                                    holder.resetHolder();
                                     Log.d(TAG, "UPLOAD TRADING SUCCESS!");
                                 } else {
                                     Message message = Message.obtain();
@@ -397,9 +399,9 @@ public class KLineSimulateActivity extends AppCompatActivity implements View.OnC
             realtradeManage.getCurrentK().setOpChar("B");
         } else {
             if (holder.canSell()) {
+                settleThisTrading();
                 updateReceiveRate();
                 realtradeManage.getCurrentK().setOpChar("S");
-                settleThisTrading();
             }
         }
         autoRunManager.resumeManager();

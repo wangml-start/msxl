@@ -447,6 +447,9 @@ public class TimeShareKLineActivity extends AppCompatActivity
 
         LinearLayout.LayoutParams bottomParams =(LinearLayout.LayoutParams) bottomBar.getLayoutParams();
         bottomParams.height = ((Double)(screenHeight * 0.055)).intValue();
+        if(bottomParams.height > 80){
+            bottomParams.height = 80;
+        }
         bottomBar.setLayoutParams(bottomParams);
 
         chart = new SKLineContent(this);

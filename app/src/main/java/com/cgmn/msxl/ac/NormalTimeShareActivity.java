@@ -115,11 +115,17 @@ public class NormalTimeShareActivity extends AppCompatActivity implements View.O
 
         LinearLayout.LayoutParams bottomParams = (LinearLayout.LayoutParams) bottomBar.getLayoutParams();
         bottomParams.height = ((Double) (screenHeight * 0.055)).intValue();
+        if(bottomParams.height > 80){
+            bottomParams.height = 80;
+        }
         bottomBar.setLayoutParams(bottomParams);
         pop_div_text.setLayoutParams(bottomParams);
 
         LinearLayout.LayoutParams bottomParams2 = (LinearLayout.LayoutParams) speed_div.getLayoutParams();
         bottomParams2.height = ((Double) (screenHeight * 0.055)).intValue();
+        if(bottomParams2.height > 80){
+            bottomParams2.height = 80;
+        }
         speed_div.setLayoutParams(bottomParams2);
 
         chart = new TimeShareChart(this);
