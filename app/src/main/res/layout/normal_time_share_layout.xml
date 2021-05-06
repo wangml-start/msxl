@@ -113,6 +113,15 @@
                     android:layout_width="0dp"
                      />
             <TextView
+                    android:id="@+id/lb_current_time"
+                    android:layout_height="match_parent"
+                    android:layout_width="60dp"
+                    android:gravity="left"
+                    android:textColor="@color/colorPrimary"
+                    android:text="09:25:00"
+                    android:textSize="@dimen/size14"
+                    />
+            <TextView
                     android:id="@+id/lb_current_speed"
                     android:layout_height="match_parent"
                     android:layout_width="50dp"

@@ -261,7 +261,7 @@ public class TimeSharePaint {
      */
     protected void calcChartPoint(){
         Integer count = 4 * 60;
-        priceDelta = data.calExtremeNum();
+        priceDelta = data.getPriceDelta();
         float delta = priceDelta*2;
         float punit = chartHeight / delta;
         float distanceX = candleWidth / count;

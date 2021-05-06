@@ -56,6 +56,8 @@ public class MessageUtil {
 
     public static int TIME_SHARE_DATA_SUCCESS = 0x028;
 
+    public static int TIMER_TASK = 0x029;
+
     public static int EXCUTE_EXCEPTION = 0x999;
 
 

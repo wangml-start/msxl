@@ -100,7 +100,7 @@ public class KLineSimulateActivity extends AppCompatActivity implements View.OnC
         setKlineBaseDatas(screenHeight);
 
         LinearLayout.LayoutParams bottomParams = (LinearLayout.LayoutParams) bottomBar.getLayoutParams();
-        bottomParams.height = ((Double) (screenHeight * 0.04)).intValue();
+        bottomParams.height = ((Double) (screenHeight * 0.055)).intValue();
         bottomBar.setLayoutParams(bottomParams);
         pop_div_text.setLayoutParams(bottomParams);
 
@@ -380,6 +380,7 @@ public class KLineSimulateActivity extends AppCompatActivity implements View.OnC
         if(realtradeManage.getCurrentK() == null){
             return;
         }
+        autoRunManager.pause();
         int flag = realtradeManage.canTradingStatus();
         if (flag == 10 && action.equals("BUY")) {
             CustmerToast.makeText(mContxt, getString(R.string.up_stop_reject)).show();
@@ -396,11 +397,12 @@ public class KLineSimulateActivity extends AppCompatActivity implements View.OnC
             realtradeManage.getCurrentK().setOpChar("B");
         } else {
             if (holder.canSell()) {
-                settleThisTrading();
                 updateReceiveRate();
                 realtradeManage.getCurrentK().setOpChar("S");
+                settleThisTrading();
             }
         }
+        autoRunManager.resumeManager();
     }
 
     private void onChageStock() {

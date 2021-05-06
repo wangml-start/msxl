@@ -10,7 +10,7 @@ import com.cgmn.msxl.utils.CommonUtil;
 import java.util.*;
 
 public class AppSqlHelper extends SQLiteOpenHelper {
-    private static final int VERSION =14;
+    private static final int VERSION =15;
     public final static String DB_NAME = "app.db";
 
     public AppSqlHelper(Context context) {
@@ -44,18 +44,20 @@ public class AppSqlHelper extends SQLiteOpenHelper {
         mode.append(");");
         db.execSQL(mode.toString());
 
+        StringBuffer useting = new StringBuffer();
+        useting.append("CREATE TABLE user_settings(");
+        useting.append("id INTEGER PRIMARY KEY AUTOINCREMENT,");
+        useting.append("setting_name VARCHAR(32),");
+        useting.append("setting_value VARCHAR(128)");
+        useting.append(");");
+        db.execSQL(useting.toString());
+
     }
 
     //软件版本号发生改变时调用
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        StringBuffer sql = new StringBuffer();
-        sql.append("CREATE TABLE user_settings(");
-        sql.append("id INTEGER PRIMARY KEY AUTOINCREMENT,");
-        sql.append("setting_name VARCHAR(32),");
-        sql.append("setting_value VARCHAR(128)");
-        sql.append(");");
-        db.execSQL(sql.toString());
+
     }
 
     public void upsert(String tableName, ContentValues values, String key) {

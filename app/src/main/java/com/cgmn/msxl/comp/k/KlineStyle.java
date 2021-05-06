@@ -53,7 +53,7 @@ public class KlineStyle {
     public static void initSize(){
         //画笔宽度
         kLineBold = 0.8f;
-        timeShareBold = 0.5f;
+        timeShareBold = 0.8f;
         //K线间隔
         gridLine = 0.05f;
         //K线间隔

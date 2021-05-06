@@ -73,7 +73,7 @@ public class TimeShareKLineActivity extends AppCompatActivity
     TextView lb_last_rate;
     Button bt_next, bt_buy,bt_sell, bt_change, bt_exit;
     Button bt_1, bt_3, bt_10, bt_30, bt_60, bt_120;
-    TextView lb_current_price, lb_current_rate,lb_current_speed;
+    TextView lb_current_price, lb_current_rate,lb_current_speed,lb_current_time;
 
 
     Timer mTimer;
@@ -421,7 +421,7 @@ public class TimeShareKLineActivity extends AppCompatActivity
         lb_current_price = findViewById(R.id.lb_current_price);
         lb_current_rate = findViewById(R.id.lb_current_rate);
         lb_current_speed = findViewById(R.id.lb_current_speed);
-
+        lb_current_time = findViewById(R.id.lb_current_time);
 
         chartParent = findViewById(R.id.chart_parent);
         holderParent = findViewById(R.id.holder_parent);
@@ -446,7 +446,7 @@ public class TimeShareKLineActivity extends AppCompatActivity
         setKlineBaseDatas(screenHeight);
 
         LinearLayout.LayoutParams bottomParams =(LinearLayout.LayoutParams) bottomBar.getLayoutParams();
-        bottomParams.height = ((Double)(screenHeight * 0.05)).intValue();
+        bottomParams.height = ((Double)(screenHeight * 0.055)).intValue();
         bottomBar.setLayoutParams(bottomParams);
 
         chart = new SKLineContent(this);
@@ -848,7 +848,7 @@ public class TimeShareKLineActivity extends AppCompatActivity
             mTimerTask = new TimerTask() {
                 @Override
                 public void run() {
-//                Log.i("A", "Timer Trade Running");
+                    timeShareGroup.onNextStep();
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
@@ -858,12 +858,12 @@ public class TimeShareKLineActivity extends AppCompatActivity
                 }
             };
             mTimer = new Timer();
-            Integer delay = 2000;
+            Integer delay = 3000;
             if(currentSpeed > 0){
                 delay = 0;
             }
             currentSpeed = speed;
-            mTimer.schedule(mTimerTask, delay, 1000/currentSpeed);
+            mTimer.schedule(mTimerTask, delay, 3000/currentSpeed);
         }
     }
 
@@ -871,13 +871,12 @@ public class TimeShareKLineActivity extends AppCompatActivity
      * 分时播放执行
      */
     public void onNextMunite(){
-//        Log.i("A", "Timer Trade Running" + (new Date()).getTime());
-        timeShareGroup.onNextStep();
         timeChart.invalidateView();
         if(timeShareGroup.current != null){
             float currentPrice = timeShareGroup.current.getPrice();
             lb_current_price.setText(CommonUtil.formatNumer(currentPrice));
             lb_current_rate.setText(timeShareGroup.currentRate());
+            lb_current_time.setText(timeShareGroup.timer.showTimeStr());
             if(currentPrice > timeShareGroup.lastClosePrice){
                 lb_current_price.setTextColor(getResources().getColor(R.color.kline_up));
                 lb_current_rate.setTextColor(getResources().getColor(R.color.kline_up));

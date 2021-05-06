@@ -41,7 +41,7 @@ public class NormalTimeShareActivity extends AppCompatActivity implements View.O
     private TimeShareChart chart;
     Button bt_buy, bt_sell, bt_change, bt_exit;
     Button bt_1, bt_3, bt_10, bt_30, bt_60, bt_120;
-    TextView lb_current_price, lb_current_rate,lb_current_speed;
+    TextView lb_current_price, lb_current_rate,lb_current_speed,lb_current_time;
     TextView lb_buy_cost, lb_rate;
 
     private LinearLayout bottomBar, pop_div_text, speed_div;
@@ -97,6 +97,7 @@ public class NormalTimeShareActivity extends AppCompatActivity implements View.O
         lb_current_speed = findViewById(R.id.lb_current_speed);
         lb_buy_cost = findViewById(R.id.lb_buy_cost);
         lb_rate = findViewById(R.id.lb_rate);
+        lb_current_time = findViewById(R.id.lb_current_time);
 
 
         chartParent = findViewById(R.id.chart_parent);
@@ -113,12 +114,12 @@ public class NormalTimeShareActivity extends AppCompatActivity implements View.O
         setKlineBaseDatas(screenHeight);
 
         LinearLayout.LayoutParams bottomParams = (LinearLayout.LayoutParams) bottomBar.getLayoutParams();
-        bottomParams.height = ((Double) (screenHeight * 0.04)).intValue();
+        bottomParams.height = ((Double) (screenHeight * 0.055)).intValue();
         bottomBar.setLayoutParams(bottomParams);
         pop_div_text.setLayoutParams(bottomParams);
 
         LinearLayout.LayoutParams bottomParams2 = (LinearLayout.LayoutParams) speed_div.getLayoutParams();
-        bottomParams2.height = ((Double) (screenHeight * 0.035)).intValue();
+        bottomParams2.height = ((Double) (screenHeight * 0.055)).intValue();
         speed_div.setLayoutParams(bottomParams2);
 
         chart = new TimeShareChart(this);
@@ -359,12 +360,12 @@ public class NormalTimeShareActivity extends AppCompatActivity implements View.O
     }
 
     public void onNextMunite(){
-        timeShareGroup.onNextStep();
         chart.invalidateView();
         if(timeShareGroup.current != null){
             float currentPrice = timeShareGroup.current.getPrice();
             lb_current_price.setText(CommonUtil.formatNumer(currentPrice));
             lb_current_rate.setText(timeShareGroup.currentRate());
+            lb_current_time.setText(timeShareGroup.timer.showTimeStr());
             if(currentPrice > timeShareGroup.lastClosePrice){
                 lb_current_price.setTextColor(getResources().getColor(R.color.kline_up));
                 lb_current_rate.setTextColor(getResources().getColor(R.color.kline_up));
@@ -387,6 +388,7 @@ public class NormalTimeShareActivity extends AppCompatActivity implements View.O
             mTimerTask = new TimerTask() {
                 @Override
                 public void run() {
+                    timeShareGroup.onNextStep();
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
@@ -396,12 +398,12 @@ public class NormalTimeShareActivity extends AppCompatActivity implements View.O
                 }
             };
             mTimer = new Timer();
-            Integer delay = 2000;
+            Integer delay = 3000;
             if(currentSpeed > 0){
                 delay = 0;
             }
             currentSpeed = speed;
-            mTimer.schedule(mTimerTask, delay, 1000/currentSpeed);
+            mTimer.schedule(mTimerTask, delay, 3000/currentSpeed);
         }
     }
 

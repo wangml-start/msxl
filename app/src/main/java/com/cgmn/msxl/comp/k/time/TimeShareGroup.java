@@ -29,6 +29,8 @@ public class TimeShareGroup {
     List<CMinute> solidPrices = new ArrayList<>();
 
     private Map<String, Integer> exist = new HashMap<>();
+    Integer leftIndex=0;
+    float priceDelta;
 
 
     public Boolean init(List<TimeShare> list){
@@ -74,7 +76,7 @@ public class TimeShareGroup {
 
 
     //计算最大绝对值
-    public float calExtremeNum(){
+    public void calExtremeNum(){
         Float delta = Math.abs(current.getPrice() - lastClosePrice);
         for(TimeShare item : showList){
             String timeStr = item.getTimeStr();
@@ -89,7 +91,7 @@ public class TimeShareGroup {
                 delta = temp;
             }
         }
-        return delta;
+        priceDelta = delta;
     }
 
 
@@ -100,11 +102,11 @@ public class TimeShareGroup {
         last = current;
         timer.nextStep();
         String time = timer.getTimeStr();
-        Integer index=0;
-        for(TimeShare item : leftList){
-            index++;
+        while(leftIndex<leftList.size()){
+            TimeShare item = leftList.get(leftIndex);
             String key = item.getTimeStr();
             if(exist.containsKey(key)){
+                leftIndex++;
                 continue;
             }
             if(Integer.valueOf(key) <= Integer.valueOf(time)){
@@ -113,15 +115,13 @@ public class TimeShareGroup {
                     current = item;
                     exist.put(key, 1);
                 }
+
             }else{
                 break;
             }
+            leftIndex++;
         }
-        if(leftList.size() > 0){
-            List<TimeShare> temp = leftList.subList(index-1, leftList.size());
-            leftList = temp;
-        }
-
+        calExtremeNum();
         updateCurrentNode(null);
     }
 
@@ -169,5 +169,9 @@ public class TimeShareGroup {
     public String currentRate(){
         return CommonUtil.formatPercent(
                 (current.getPrice()-lastClosePrice)/lastClosePrice);
+    }
+
+    public float getPriceDelta() {
+        return priceDelta;
     }
 }
