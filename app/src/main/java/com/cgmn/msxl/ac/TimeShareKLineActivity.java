@@ -24,6 +24,7 @@ import com.cgmn.msxl.comp.k.time.TimeShareChart;
 import com.cgmn.msxl.comp.k.time.TimeShareGroup;
 import com.cgmn.msxl.comp.pop.TradingPop;
 import com.cgmn.msxl.comp.swb.State;
+import com.cgmn.msxl.comp.view.MyMarqueeView;
 import com.cgmn.msxl.comp.view.StockHolderView;
 import com.cgmn.msxl.data.SettingItem;
 import com.cgmn.msxl.data.SettledAccount;
@@ -80,6 +81,8 @@ public class TimeShareKLineActivity extends AppCompatActivity
     Integer currentSpeed=0;
     private TimeShareGroup timeShareGroup;
 
+    MyMarqueeView marqueeview;
+    MarqueeManager marqueeManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -466,6 +469,11 @@ public class TimeShareKLineActivity extends AppCompatActivity
 
         chartParent.addView(chart);
         holderParent.addView(stockView);
+
+
+        marqueeview = findViewById(R.id.marqueeview);
+        marqueeManager = new MarqueeManager(mContxt, marqueeview);
+        marqueeManager.startMarquee();
     }
 
     /**
@@ -776,6 +784,7 @@ public class TimeShareKLineActivity extends AppCompatActivity
         receiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
+                marqueeManager.tiemrCancel();
                 finish();
             }
         };
@@ -896,6 +905,7 @@ public class TimeShareKLineActivity extends AppCompatActivity
     public void finish() {
         stopTimeChart();
         settleThisTrading();
+        marqueeManager.tiemrCancel();
         super.finish();
     }
 }

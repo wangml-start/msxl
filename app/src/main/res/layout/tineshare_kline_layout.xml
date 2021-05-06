@@ -236,6 +236,18 @@
                 app:loadingView="@layout/loading_layout" />
         <!--time share -->
 
+        <!--跑马灯-->
+        <com.cgmn.msxl.comp.view.MyMarqueeView
+                android:id="@+id/marqueeview"
+                android:layout_width="match_parent"
+                android:layout_height="18dp"
+                android:background="@color/bg_white"
+                app:mvAnimDuration="500"
+                app:mvInterval="2500"
+                app:mvDirection="top_to_bottom"
+                >
+
+        </com.cgmn.msxl.comp.view.MyMarqueeView>
         <LinearLayout
                 android:id="@+id/pop_div"
                 android:layout_margin="1dp"
