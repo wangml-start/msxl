@@ -664,6 +664,7 @@ public class TimeShareKLineActivity extends AppCompatActivity
      */
     private void onChageStock(){
         settleThisTrading();
+        stopTimeChart();
         loadKLineSet();
         bt_buy.setEnabled(true);
         bt_sell.setEnabled(true);
