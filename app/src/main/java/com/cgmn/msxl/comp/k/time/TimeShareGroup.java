@@ -70,6 +70,7 @@ public class TimeShareGroup {
         }
 
         updateCurrentNode("0925");
+        calExtremeNum();
         return true;
     }
 
@@ -83,9 +84,9 @@ public class TimeShareGroup {
             if(CommonUtil.isEmpty(timeStr)){
                 continue;
             }
-            if(Integer.valueOf(timeStr) < startNum){
-                continue;
-            }
+//            if(Integer.valueOf(timeStr) < startNum){
+//                continue;
+//            }
             Float temp = Math.abs(item.getPrice() - lastClosePrice);
             if(temp > delta){
                 delta = temp;

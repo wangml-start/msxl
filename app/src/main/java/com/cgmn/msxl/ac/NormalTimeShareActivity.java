@@ -153,7 +153,6 @@ public class NormalTimeShareActivity extends AppCompatActivity implements View.O
         timeShareGroup = new TimeShareGroup();
         if(timeShareGroup.init(list)){
             chart.setData(timeShareGroup);
-            chart.invalidateView();
             onNextMunite();
             currentSpeed = 0;
             playSpeed(1);
@@ -300,6 +299,9 @@ public class NormalTimeShareActivity extends AppCompatActivity implements View.O
     }
 
     public void buySellAction(String action) {
+        if(timeShareGroup.current == null){
+            return;
+        }
         Float price = timeShareGroup.current.getPrice();
         String time = timeShareGroup.timer.getTimeMinute();
         if (action.equals("BUY")) {
