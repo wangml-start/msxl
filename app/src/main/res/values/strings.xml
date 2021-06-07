@@ -7,8 +7,8 @@
     <string name="signin_out">退出</string>
     <string name="sign_email">邮箱地址</string>
     <string name="sign_user_name">用户名</string>
-    <string name="sign_user_wd">密码(8位以上)</string>
-    <string name="new_user_wd">新密码(8位以上)</string>
+    <string name="sign_user_wd">密码8位</string>
+    <string name="new_user_wd">新密码8位</string>
     <string name="wd_reqiure_8">8位以上</string>
     <string name="wd_valid_code">6位</string>
     <string name="valid_fails">验证失败</string>

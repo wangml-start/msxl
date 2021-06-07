@@ -212,7 +212,7 @@ public class NetImageView extends ImageView {
 
 
     public void setImageContent(byte[] bytes){
-        relased();
+//        relased();
         Bitmap bitmap=null;
         if(bytes != null && bytes.length > 0){
             //复制新的输入流

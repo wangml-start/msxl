@@ -1,5 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -21,7 +22,11 @@
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:orientation="horizontal">
-
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/sign_email"/>
             <com.cgmn.msxl.comp.view.ClearEditTextView
                     android:id="@+id/tx_email"
                     style="@style/register_input"
@@ -40,17 +45,28 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:src="@drawable/down"
-                    android:tint="@color/colorAccent" />
+                    app:tint="@color/colorAccent" />
 
         </LinearLayout>
-
-        <com.cgmn.msxl.comp.view.ClearEditTextView
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/sign_user_wd"/>
+            <com.cgmn.msxl.comp.view.ClearEditTextView
                 android:id="@+id/tx_pwd"
                 style="@style/register_input"
                 android:layout_marginRight="15dp"
                 android:background="@drawable/edittext_border"
                 android:hint="@string/sign_user_wd"
                 android:inputType="textPassword" />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout style="@style/register_item">

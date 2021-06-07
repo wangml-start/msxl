@@ -12,8 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import androidx.annotation.RequiresApi;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.CustmerToast;
@@ -104,11 +102,7 @@ public class DisgussSubActivity extends DisgussBaseActivity {
             if (comment.getUserLogo() != null) {
                 comment_item_logo.setImageContent(comment.getUserLogo());
             } else {
-                Glide.with(mContext).load(R.drawable.user_logo)
-                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                        .error(R.mipmap.ic_launcher)
-                        .centerCrop()
-                        .into(comment_item_logo);
+                comment_item_logo.setImageResource(R.drawable.user_logo);
             }
             if (comment.getPicture() != null) {
                 comment_picture.setImageContent(comment.getPicture());

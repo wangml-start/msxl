@@ -5,8 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.comp.view.NetImageView;
 import com.cgmn.msxl.data.CommentBean;
@@ -42,11 +40,7 @@ public class CommentsAdpter extends RelatedBaseAdapter {
             byte[] bytes = Base64.decode(item.getSmallCut());
             holder.comment_item_logo.setImageContent(bytes);
         } else {
-            Glide.with(mContext).load(R.drawable.user_logo)
-                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                    .error(R.mipmap.ic_launcher)
-                    .centerCrop()
-                    .into(holder.comment_item_logo);
+            holder.comment_item_logo.setImageResource(R.drawable.user_logo);
         }
         String content = String.format("%s 回复我的帖子：%s", item.getUserName(), item.getMyContent());
         holder.comment_item_userName.setText(item.getUserName());

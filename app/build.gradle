@@ -36,7 +36,6 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
     implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
     implementation 'com.google.android.material:material:1.0.0'
-    implementation 'com.github.bumptech.glide:glide:3.7.0'
     implementation 'org.apache.shiro:shiro-core:1.2.3'
     implementation 'com.xj.marqueeView:marqueeView:0.1.20'
     implementation 'com.azhon:appupdateX:3.0.3'

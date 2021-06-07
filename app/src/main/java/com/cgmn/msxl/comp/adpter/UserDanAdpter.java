@@ -10,8 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.ac.ImageViewActivity;
 import com.cgmn.msxl.comp.view.CenterImageSpan;
@@ -90,11 +88,7 @@ public class UserDanAdpter extends BaseAdapter {
         if(!CommonUtil.isEmpty(map.getSmallCut())){
             holder.head.setImageContent(Base64.decode(map.getSmallCut()));
         }else{
-            Glide.with(mContext).load(R.drawable.user_logo)
-                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                    .error(R.mipmap.ic_launcher)
-                    .centerCrop()
-                    .into(holder.head);
+            holder.head.setImageResource(R.drawable.user_logo);
         }
 
         return convertView;
