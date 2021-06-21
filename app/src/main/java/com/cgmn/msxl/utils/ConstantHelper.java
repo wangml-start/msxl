@@ -9,5 +9,5 @@ public class ConstantHelper {
     //支付宝支付时用
     public static final String environment = "prod";
 
-    public static final String version = "3.7.5";
+    public static final String version = "3.7.6";
 }
