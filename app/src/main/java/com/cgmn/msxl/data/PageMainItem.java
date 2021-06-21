@@ -35,6 +35,7 @@ public class PageMainItem {
 
     public static int TIMESHARE_KLINE = 25;
 
+    public static int KLINE_SETTING = 27;
     private int aIcon;
     private String aName;
     private int itemType;

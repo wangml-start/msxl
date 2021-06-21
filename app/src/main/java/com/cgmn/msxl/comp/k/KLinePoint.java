@@ -25,6 +25,10 @@ public class KLinePoint {
     public float[] minPt;
 
     public String opChar;
+
+    public float[] kPt;
+    public float[] dPt;
+    public float[] jPt;
 }
 
 

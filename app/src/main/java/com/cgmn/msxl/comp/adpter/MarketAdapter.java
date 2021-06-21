@@ -62,11 +62,14 @@ public class MarketAdapter extends BaseAdapter {
         itemHolder.txt_s_end.setText(item.getEnd());
         itemHolder.txt_s_up_rate.setText(item.getUpRate());
         int color = mContext.getResources().getColor(R.color.text_black);
-        if(item.getUpDown() > 0){
-            color = mContext.getResources().getColor(R.color.kline_up);
-        }else if(item.getUpDown() < 0){
-            color = mContext.getResources().getColor(R.color.kline_down);
+        if(item.getUpDown() != null){
+            if(item.getUpDown() > 0){
+                color = mContext.getResources().getColor(R.color.kline_up);
+            }else if(item.getUpDown() < 0){
+                color = mContext.getResources().getColor(R.color.kline_down);
+            }
         }
+
         itemHolder.txt_s_end.setTextColor(color);
         itemHolder.txt_s_up_rate.setTextColor(color);
 

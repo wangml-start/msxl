@@ -29,6 +29,10 @@ public class KlinePaint {
     protected int startx = 0;
     protected int endx = 0;
 
+    protected String firstIndex = "MACD";
+    protected String secondIndex = "KDJ";
+    private float kdjY;
+
     public int getStartx() {
         return startx;
     }
@@ -45,6 +49,19 @@ public class KlinePaint {
         this.endx = endx;
     }
 
+    public void setFirstIndex(String firstIndex) {
+        if(firstIndex == null || firstIndex.length() == 0){
+            return;
+        }
+        this.firstIndex = firstIndex;
+    }
+
+    public void setSecondIndex(String secondIndex) {
+        if(secondIndex == null || secondIndex.length() == 0){
+            return;
+        }
+        this.secondIndex = secondIndex;
+    }
 
     public void setColors(int klineUpcolor, int klineDowncolor,
                           int ave5, int ave10, int ave20) {
@@ -88,6 +105,10 @@ public class KlinePaint {
         mk10Paint.setStrokeWidth(KlineStyle.kLineBold);
         mk20Paint.setStrokeWidth(KlineStyle.kLineBold);
 
+        mk5Paint.setTextSize(textSize);
+        mk10Paint.setTextSize(textSize);
+        mk20Paint.setTextSize(textSize);
+
         buyPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         sellPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         otPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -118,7 +139,7 @@ public class KlinePaint {
 
     public void setContentRect(RectF contentRect) {
         float macdTop  = contentRect.bottom - (1-KlineStyle.chartRate) * contentRect.height();
-        float barTop = macdTop + KlineStyle.macdRate * contentRect.height();
+        float barTop = macdTop + KlineStyle.indexRate * contentRect.height();
 
         this.candleRect.set(contentRect.left, contentRect.top, contentRect.right, macdTop);
         this.macdRect.set(contentRect.left, macdTop, contentRect.right, barTop);
@@ -168,16 +189,7 @@ public class KlinePaint {
                 canvas.drawLine(entry.highPt[0], entry.highPt[1], entry.lowPt[0], entry.lowPt[1], tempKpint);
             }
 
-            // draw step 3: draw volume
-            if(entry.state >= 0){
-                canvas.drawRect(entry.volBPt[0], entry.volumePt[1],
-                        entry.volBPt[0]+KlineStyle.kWidth, entry.volBPt[1],mUpPaint);
-            }else{
-                canvas.drawRect(entry.volBPt[0], entry.volumePt[1],
-                        entry.volBPt[0]+KlineStyle.kWidth, entry.volBPt[1],mDownPaint);
-            }
-
-            //draw step 4: MA5 10 20
+            //draw step 3: MA5 10 20
             if (i > 0) {
                 KLinePoint preEntry = points.get(i - 1);
                 if (preEntry.line5Pt != null) {
@@ -191,17 +203,39 @@ public class KlinePaint {
                 }
             }
 
-            //draw step 4: MACD
-            if (entry.macdState > 0) {
-                canvas.drawLine(entry.macdPt[0],entry.macdPt[1], entry.macdBPt[0], entry.macdBPt[1], mUpPaint);
-            } else {
-                canvas.drawLine(entry.macdPt[0],entry.macdPt[1], entry.macdBPt[0], entry.macdBPt[1], mDownPaint);
+            // draw step 4: draw volume
+            if(firstIndex.equals("VOL") || secondIndex.equals("VOL")){
+                if(entry.state >= 0){
+                    canvas.drawRect(entry.volBPt[0], entry.volumePt[1],
+                            entry.volBPt[0]+KlineStyle.kWidth, entry.volBPt[1],mUpPaint);
+                }else{
+                    canvas.drawRect(entry.volBPt[0], entry.volumePt[1],
+                            entry.volBPt[0]+KlineStyle.kWidth, entry.volBPt[1],mDownPaint);
+                }
             }
 
-            if (i > 0) {
-                KLinePoint preEntry = points.get(i - 1);
-                canvas.drawLine(preEntry.difPt[0], preEntry.difPt[1], entry.difPt[0], entry.difPt[1], mk5Paint);
-                canvas.drawLine(preEntry.deaPt[0], preEntry.deaPt[1], entry.deaPt[0], entry.deaPt[1], mk10Paint);
+            //draw step 5: MACD
+            if(firstIndex.equals("MACD") || secondIndex.equals("MACD")){
+                if (entry.macdState > 0) {
+                    canvas.drawLine(entry.macdPt[0],entry.macdPt[1], entry.macdBPt[0], entry.macdBPt[1], mUpPaint);
+                } else {
+                    canvas.drawLine(entry.macdPt[0],entry.macdPt[1], entry.macdBPt[0], entry.macdBPt[1], mDownPaint);
+                }
+                if (i > 0) {
+                    KLinePoint preEntry = points.get(i - 1);
+                    canvas.drawLine(preEntry.difPt[0], preEntry.difPt[1], entry.difPt[0], entry.difPt[1], mk5Paint);
+                    canvas.drawLine(preEntry.deaPt[0], preEntry.deaPt[1], entry.deaPt[0], entry.deaPt[1], mk10Paint);
+                }
+            }
+
+            //draw : KDJ
+            if(firstIndex.equals("KDJ") || secondIndex.equals("KDJ")){
+                if (i > 0) {
+                    KLinePoint preEntry = points.get(i - 1);
+                    canvas.drawLine(preEntry.kPt[0], preEntry.kPt[1], entry.kPt[0], entry.kPt[1], mk5Paint);
+                    canvas.drawLine(preEntry.dPt[0], preEntry.dPt[1], entry.dPt[0], entry.dPt[1], mk10Paint);
+                    canvas.drawLine(preEntry.jPt[0], preEntry.jPt[1], entry.jPt[0], entry.jPt[1], mk20Paint);
+                }
             }
 
             //draw char B\S\T
@@ -294,17 +328,40 @@ public class KlinePaint {
             canvas.drawText(pt.price,textX, pt.pendPt[1]+moveY, mLabelPaint);
         }
         canvas.drawText(
-                "MACD",
+                firstIndex,
                 textX,
                 barRect.height() * 3 / 5 + candleRect.bottom,
                 mLabelPaint);
 
         canvas.drawText(
-                "VOL",
+                secondIndex,
                 textX,
                 macdRect.height() * 3 / 5 + barRect.top,
                 mLabelPaint);
 
+        if(firstIndex.equals("KDJ") || secondIndex.equals("KDJ")){
+            KLine k = data.getNodes().getLast();
+            float movekdjY = 3 * KlineStyle.pxScaleRate;
+            float textLength = mLabelPaint.measureText("K 110.00");
+            float startkdjX = 5f;
+            float spacekdjX = 10f;
+            canvas.drawText(
+                    String.format("K %s", CommonUtil.formatNumer(k.k)),
+                    startkdjX,
+                    kdjY+movekdjY,
+                    mk5Paint);
+            canvas.drawText(
+                    String.format("D %s", CommonUtil.formatNumer(k.d)),
+                    startkdjX+textLength+spacekdjX,
+                    kdjY+movekdjY,
+                    mk10Paint);
+            canvas.drawText(
+                    String.format("J %s", CommonUtil.formatNumer(k.j)),
+                    startkdjX+(textLength+spacekdjX)*2,
+                    kdjY+movekdjY,
+                    mk20Paint);
+
+        }
         canvas.save();
         canvas.restore();
     }
@@ -326,21 +383,36 @@ public class KlinePaint {
 
         float viewHeight = contentRect.height();
         float chartHeight = viewHeight * KlineStyle.chartRate;
-        float volmeHeight = viewHeight * KlineStyle.volRate;
-        float macdHeight = viewHeight * KlineStyle.macdRate;
+        float indexHeight = viewHeight * KlineStyle.indexRate;
 
         float half = KlineStyle.kWidth / 2;
         float ySpace = KlineStyle.chartSpace;
-        float macdY = chartHeight+KlineStyle.macdSpace;
-        float volumeY = chartHeight+macdHeight+KlineStyle.volSpace;
+        float firIndexY = chartHeight+KlineStyle.indexSpace;
+        float secIndexY = chartHeight+indexHeight+KlineStyle.indexSpace;
+
+        float volumeY = firIndexY, macdY=firIndexY;
+        kdjY=firIndexY;
+        if(secondIndex.equals("VOL")){
+            volumeY = secIndexY;
+        }
+        if(secondIndex.equals("MACD")){
+            macdY = secIndexY;
+        }
+        if(secondIndex.equals("KDJ")){
+            kdjY = secIndexY;
+        }
 
         float startx = 0;
 
         float priceDelta = data.mYMax - data.mYMin;
         float punit = (chartHeight-KlineStyle.chartSpace*2) / priceDelta;
-        float vunit = (volmeHeight-KlineStyle.volSpace*2) / data.mMaxYVolume;
+        float vunit = (indexHeight-KlineStyle.indexSpace*2) / data.mMaxYVolume;
         float macdDelta = data.mYMaxMacd - data.mYMinMacd;
-        float munit = (macdHeight-KlineStyle.macdSpace*2) / macdDelta;
+        float munit = (indexHeight-KlineStyle.indexSpace*2) / macdDelta;
+        float kdjDelta = data.mYMaxKdj - data.mYMinKdj;
+        float kdjunit = (indexHeight-KlineStyle.indexSpace*2) / kdjDelta;
+
+
 
         points.clear();
         for (int i = 0; i < temList.size(); i++) {
@@ -355,8 +427,10 @@ public class KlinePaint {
             pt.lowPt = new float[]{startx+half, (data.mYMax - node.low)*punit + ySpace};
             pt.state = node.getState();
             pt.isOpen = node.isOpen;
+
             pt.volumePt = new float[]{startx, (data.mMaxYVolume - node.volume)*vunit + volumeY};
-            pt.volBPt = new float[]{startx, chartHeight+macdHeight+volmeHeight};
+            pt.volBPt = new float[]{startx, volumeY+data.mMaxYVolume*vunit};
+
             pt.difPt = new float[]{startx+half, (data.mYMaxMacd - node.dif)*munit + macdY};
             pt.deaPt = new float[]{startx+half, (data.mYMaxMacd - node.dea)*munit + macdY};
             pt.macdPt = new float[]{startx+half, (data.mYMaxMacd - node.macd)*munit + macdY};
@@ -365,6 +439,10 @@ public class KlinePaint {
             pt.maxPt = new float[]{startx+half, priceDelta*punit + ySpace};
             pt.minPt = new float[]{startx+half, ySpace};
             pt.opChar = node.ch;
+
+            pt.kPt = new float[]{startx+half, (data.mYMaxKdj - node.k)*kdjunit + kdjY};
+            pt.dPt = new float[]{startx+half, (data.mYMaxKdj - node.d)*kdjunit + kdjY};
+            pt.jPt = new float[]{startx+half, (data.mYMaxKdj - node.j)*kdjunit + kdjY};
 
             //均线
             if(node.avg5 != -1){
@@ -376,10 +454,6 @@ public class KlinePaint {
             if(node.avg20 != -1){
                 pt.line20Pt = new float[]{startx+half, (data.mYMax - node.avg20)* punit+ySpace};
             }
-
-            //价格线
-
-
         }
     }
     /**

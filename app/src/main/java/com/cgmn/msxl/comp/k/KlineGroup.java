@@ -1,5 +1,6 @@
 package com.cgmn.msxl.comp.k;
 
+import com.cgmn.msxl.comp.k.index.KDJCalculation;
 import com.cgmn.msxl.comp.k.index.MACDCalculation;
 
 import java.util.LinkedList;
@@ -14,6 +15,9 @@ public class KlineGroup {
     public float mMaxYVolume = 0.0f;
     public float mYMaxMacd = 0.0f;
     public float mYMinMacd = 0.0f;
+
+    public float mYMaxKdj = 0.0f;
+    public float mYMinKdj = 0.0f;
 
     public LinkedList<Float> ks5 = new LinkedList<>();
     public LinkedList<Float> ks10 = new LinkedList<>();
@@ -40,6 +44,9 @@ public class KlineGroup {
         mMaxYVolume = -Float.MAX_VALUE;
         mYMaxMacd = -Float.MAX_VALUE;
         mYMinMacd = Float.MAX_VALUE;
+
+        mYMaxKdj = -Float.MAX_VALUE;
+        mYMinKdj = Float.MAX_VALUE;
 
         for (int i = start; i <= lastIndex; i++) {
             KLine entry = nodes.get(i);
@@ -71,6 +78,14 @@ public class KlineGroup {
             if(entry.macd < mYMinMacd){
                 mYMinMacd = entry.macd;
             }
+
+            mYMaxKdj = Math.max(mYMaxKdj, entry.k);
+            mYMaxKdj = Math.max(mYMaxKdj, entry.d);
+            mYMaxKdj = Math.max(mYMaxKdj, entry.j);
+
+            mYMinKdj = Math.min(mYMinKdj, entry.k);
+            mYMinKdj = Math.min(mYMinKdj, entry.d);
+            mYMinKdj = Math.min(mYMinKdj, entry.j);
         }
     }
 
@@ -101,8 +116,12 @@ public class KlineGroup {
         return sum / days;
     }
 
+    /**
+     * 计算指标各项数据
+     */
     public void calcAverageMACD() {
         Map<String, List<Float>> map = MACDCalculation.MACD(12, 26, 9, nodes);
+        Map<String, List<Float>> kdjMap = KDJCalculation.KDJ(nodes,9,3,3,1);
         int length = nodes.size();
         for (int i = 0; i < length; i++) {
             KLine kline = nodes.get(i);
@@ -127,6 +146,10 @@ public class KlineGroup {
             kline.dif = map.get("dif").get(i);
             kline.dea = map.get("dea").get(i);
             kline.macd = map.get("macd").get(i);
+
+            kline.k = kdjMap.get("k").get(i);
+            kline.d = kdjMap.get("d").get(i);
+            kline.j = kdjMap.get("j").get(i);
         }
     }
 

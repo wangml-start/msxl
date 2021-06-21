@@ -16,6 +16,7 @@ import com.cgmn.msxl.comp.CustmerToast;
 import com.cgmn.msxl.comp.k.KLineContent;
 import com.cgmn.msxl.comp.k.KlineStyle;
 import com.cgmn.msxl.data.*;
+import com.cgmn.msxl.db.AppSqlHelper;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.cgmn.msxl.in.AutoNextListener;
 import com.cgmn.msxl.server_interface.*;
@@ -111,22 +112,34 @@ public class KLineSimulateActivity extends AppCompatActivity implements View.OnC
         chart.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         chartParent.addView(chart);
 
-        //记时3秒自动下一步
-        autoRunManager = new TradeAutoRunManager();
-        autoRunManager.setListener(new AutoNextListener() {
-            @Override
-            public void onTicket(Integer sec) {
-                bt_next.setText(String.format("%s%ss", getResources().getString(R.string.next), sec));
-            }
+        final AppSqlHelper dbHelper = new AppSqlHelper(mContxt);
+        Map<String, String> map =  dbHelper.getSystenSettings();
 
-            @Override
-            public void onComplete() {
-                bt_next.setText(String.format("%s", getResources().getString(R.string.next)));
-                onNextClick();
-                PlayMusic();
+        if(map.get("AUTO_NEXT_STEP") == null || "0".equals(map.get("AUTO_NEXT_STEP"))){
+            if(map.get("TREND_TIME") == null || Integer.valueOf(map.get("TREND_TIME")) > 0){
+                //记时3秒自动下一步
+                autoRunManager = new TradeAutoRunManager();
+                autoRunManager.setListener(new AutoNextListener() {
+                    @Override
+                    public void onTicket(Integer sec) {
+                        bt_next.setText(String.format("%s%ss", getResources().getString(R.string.next), sec));
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        bt_next.setText(String.format("%s",  getResources().getString(R.string.next)));
+                        onNextClick();
+                        PlayMusic();
+                    }
+                });
+                autoRunManager.startManager();
+                if(map.get("TREND_TIME") == null){
+                    autoRunManager.setTotal(2);
+                }else{
+                    autoRunManager.setTotal(Integer.valueOf(map.get("TREND_TIME")));
+                }
             }
-        });
-        autoRunManager.startManager();
+        }
     }
 
     private void initMessageHandle() {
@@ -154,7 +167,9 @@ public class KLineSimulateActivity extends AppCompatActivity implements View.OnC
         realtradeManage.showNextOpen();
         chart.setData(realtradeManage.getGroup());
         chart.invalidateView();
-        autoRunManager.resetManager();
+        if(autoRunManager != null){
+            autoRunManager.resetManager();
+        }
         updateTopBar();
     }
 
@@ -169,7 +184,9 @@ public class KLineSimulateActivity extends AppCompatActivity implements View.OnC
 
     private void loadKLineSet() {
         chartParent.showLoading();
-        autoRunManager.pause();
+        if(autoRunManager != null){
+            autoRunManager.pause();
+        }
         GlobalTreadPools.getInstance(mContxt).execute(new Runnable() {
             @Override
             public void run() {
@@ -239,7 +256,9 @@ public class KLineSimulateActivity extends AppCompatActivity implements View.OnC
             }
             holder.nextPrice(current.getEnd(), false);
             updateReceiveRate();
-            autoRunManager.resetManager();
+            if(autoRunManager != null){
+                autoRunManager.resetManager();
+            }
         } else {
             //在还未到一下天前检测
             if (realtradeManage.showNextOpen()) {
@@ -256,7 +275,9 @@ public class KLineSimulateActivity extends AppCompatActivity implements View.OnC
                 }
                 holder.nextPrice(current.getStart(), true);
                 updateReceiveRate();
-                autoRunManager.resetManager();
+                if(autoRunManager != null){
+                    autoRunManager.resetManager();
+                }
             } else {
                 settleThisTrading();
                 bt_buy.setEnabled(false);
@@ -382,7 +403,9 @@ public class KLineSimulateActivity extends AppCompatActivity implements View.OnC
         if(realtradeManage.getCurrentK() == null){
             return;
         }
-        autoRunManager.pause();
+        if(autoRunManager != null){
+            autoRunManager.pause();
+        }
         int flag = realtradeManage.canTradingStatus();
         if (flag == 10 && action.equals("BUY")) {
             CustmerToast.makeText(mContxt, getString(R.string.up_stop_reject)).show();
@@ -404,7 +427,9 @@ public class KLineSimulateActivity extends AppCompatActivity implements View.OnC
                 realtradeManage.getCurrentK().setOpChar("S");
             }
         }
-        autoRunManager.resumeManager();
+        if(autoRunManager != null){
+            autoRunManager.resumeManager();
+        }
     }
 
     private void onChageStock() {
@@ -422,7 +447,9 @@ public class KLineSimulateActivity extends AppCompatActivity implements View.OnC
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.bt_next) {
-            autoRunManager.pause();
+            if(autoRunManager != null){
+                autoRunManager.pause();
+            }
             onNextClick();
             PlayMusic();
         } else if (v.getId() == R.id.bt_buy) {
@@ -479,7 +506,9 @@ public class KLineSimulateActivity extends AppCompatActivity implements View.OnC
     @Override
     public void finish() {
         settleThisTrading();
-        autoRunManager.tiemrCancel();
+        if(autoRunManager != null){
+            autoRunManager.tiemrCancel();
+        }
         super.finish();
     }
 }

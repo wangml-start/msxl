@@ -130,7 +130,9 @@ public class RealControlActivity extends AppCompatActivity
 
     private void loadKLineSet(){
         chartParent.showLoading();
-        autoRunManager.pause();
+        if(autoRunManager != null){
+            autoRunManager.pause();
+        }
         GlobalTreadPools.getInstance(mContxt).execute(new Runnable() {
             @Override
             public void run() {
@@ -208,7 +210,9 @@ public class RealControlActivity extends AppCompatActivity
         chart.invalidateView();
         updateTopBar();
         initStockHolder();
-        autoRunManager.resetManager();
+        if(autoRunManager != null){
+            autoRunManager.resetManager();
+        }
     }
 
     private void loadAccCash(){
@@ -359,25 +363,59 @@ public class RealControlActivity extends AppCompatActivity
         trainType = bundle.getInt("train_type");
         userModelId =  bundle.getInt("user_model_id");
 
-        //记时3秒自动下一步
-        autoRunManager = new TradeAutoRunManager();
-        autoRunManager.setListener(new AutoNextListener() {
-            @Override
-            public void onTicket(Integer sec) {
-                bt_next.setText(String.format("%s%ss", getResources().getString(R.string.next), sec));
-            }
+        final AppSqlHelper dbHelper = new AppSqlHelper(mContxt);
+        Map<String, String> map =  dbHelper.getSystenSettings();
 
-            @Override
-            public void onComplete() {
-                bt_next.setText(String.format("%s",  getResources().getString(R.string.next)));
-                onNextClick();
-                PlayMusic();
-            }
-        });
-        autoRunManager.startManager();
+        if(map.get("AUTO_NEXT_STEP") == null || "0".equals(map.get("AUTO_NEXT_STEP"))){
+            if(trainType == StockHolder.LEADING_STRATEGY){
+                if(map.get("SHORT_TIME") == null || Integer.valueOf(map.get("SHORT_TIME")) > 0){
+                    //记时3秒自动下一步
+                    autoRunManager = new TradeAutoRunManager();
+                    autoRunManager.setListener(new AutoNextListener() {
+                        @Override
+                        public void onTicket(Integer sec) {
+                            bt_next.setText(String.format("%s%ss", getResources().getString(R.string.next), sec));
+                        }
 
-        if(trainType == StockHolder.LEADING_STRATEGY){
-            autoRunManager.setTotal(5);
+                        @Override
+                        public void onComplete() {
+                            bt_next.setText(String.format("%s",  getResources().getString(R.string.next)));
+                            onNextClick();
+                            PlayMusic();
+                        }
+                    });
+                    autoRunManager.startManager();
+                    if(map.get("SHORT_TIME") == null){
+                        autoRunManager.setTotal(5);
+                    }else{
+                        autoRunManager.setTotal(Integer.valueOf(map.get("SHORT_TIME")));
+                    }
+                }
+            }else{
+                if(map.get("TREND_TIME") == null || Integer.valueOf(map.get("TREND_TIME")) > 0){
+                    //记时3秒自动下一步
+                    autoRunManager = new TradeAutoRunManager();
+                    autoRunManager.setListener(new AutoNextListener() {
+                        @Override
+                        public void onTicket(Integer sec) {
+                            bt_next.setText(String.format("%s%ss", getResources().getString(R.string.next), sec));
+                        }
+
+                        @Override
+                        public void onComplete() {
+                            bt_next.setText(String.format("%s",  getResources().getString(R.string.next)));
+                            onNextClick();
+                            PlayMusic();
+                        }
+                    });
+                    autoRunManager.startManager();
+                    if(map.get("TREND_TIME") == null){
+                        autoRunManager.setTotal(2);
+                    }else{
+                        autoRunManager.setTotal(Integer.valueOf(map.get("TREND_TIME")));
+                    }
+                }
+            }
         }
     }
 
@@ -398,7 +436,9 @@ public class RealControlActivity extends AppCompatActivity
                 lb_close_rate.setTextColor(getResources().getColor(R.color.kline_down));
             }
             stockView.getStockHolder().nextPrice(current.getEnd(), false);
-            autoRunManager.resetManager();
+            if(autoRunManager != null){
+                autoRunManager.resetManager();
+            }
         }else{
             //在还未到一下天前检测
             //交易模式检测
@@ -438,7 +478,9 @@ public class RealControlActivity extends AppCompatActivity
                 stockView.getStockHolder().nextPrice(current.getStart(), true);
                 //更新持仓天数
                 stockView.getStockHolder().whenNextDay();
-                autoRunManager.resetManager();
+                if(autoRunManager != null){
+                    autoRunManager.resetManager();
+                }
             }else{
                 settleThisTrading();
                 bt_buy.setEnabled(false);
@@ -518,7 +560,9 @@ public class RealControlActivity extends AppCompatActivity
             CustmerToast.makeText(mContxt, getString(R.string.down_stop_reject)).show();
             return;
         }
-        autoRunManager.pause();
+        if(autoRunManager != null){
+            autoRunManager.pause();
+        }
         TradingPop popWin = new TradingPop(this,
                 stockView.getStockHolder(), realtradeManage, action);
 //        设置Popupwindow显示位置（从底部弹出）
@@ -542,7 +586,9 @@ public class RealControlActivity extends AppCompatActivity
                 } else {
                     bt_change.setEnabled(false);
                 }
-                autoRunManager.resumeManager();
+                if(autoRunManager != null){
+                    autoRunManager.resumeManager();
+                }
             }
         });
     }
@@ -564,7 +610,9 @@ public class RealControlActivity extends AppCompatActivity
     public void onClick(View v) {
         v.setEnabled(false);
         if(v.getId() == R.id.bt_next){
-            autoRunManager.pause();
+            if(autoRunManager != null){
+                autoRunManager.pause();
+            }
             onNextClick();
             PlayMusic();
         }else if(v.getId() == R.id.bt_buy){
@@ -697,7 +745,9 @@ public class RealControlActivity extends AppCompatActivity
     public void finish() {
         settleThisTrading();
         marqueeManager.tiemrCancel();
-        autoRunManager.tiemrCancel();
+        if(autoRunManager != null){
+            autoRunManager.tiemrCancel();
+        }
         super.finish();
     }
 }

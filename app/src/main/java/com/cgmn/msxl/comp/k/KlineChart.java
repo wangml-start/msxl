@@ -6,6 +6,9 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.*;
 import com.cgmn.msxl.R;
+import com.cgmn.msxl.db.AppSqlHelper;
+
+import java.util.Map;
 
 public class KlineChart extends View {
 
@@ -38,6 +41,11 @@ public class KlineChart extends View {
                 getResources().getColor(R.color.kline_ave_10),
                 getResources().getColor(R.color.kline_ave_20)
         );
+
+        final AppSqlHelper dbHelper = new AppSqlHelper(context);
+        Map<String, String> map =  dbHelper.getSystenSettings();
+        klinePaint.setFirstIndex(map.get("FIRST_INDEX"));
+        klinePaint.setSecondIndex(map.get("SECOND_INDEX"));
     }
 
     @Override

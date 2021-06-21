@@ -17,6 +17,10 @@ public class KLine {
   public float dea;
   public float macd;
 
+  public float k;
+  public float d;
+  public float j;
+
   public String ch;
 
   public boolean isOpen=false;

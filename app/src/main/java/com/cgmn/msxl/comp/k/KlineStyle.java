@@ -2,8 +2,7 @@ package com.cgmn.msxl.comp.k;
 
 public class KlineStyle {
     public static float chartRate = 0.68f;
-    public static float volRate = 0.16f;
-    public static float macdRate = 0.16f;
+    public static float indexRate = 0.16f;
 
     //画笔宽度
     public static float timeShareBold;
@@ -23,8 +22,7 @@ public class KlineStyle {
     //
     public static float rightWidth;
     public static float chartSpace;
-    public static float volSpace;
-    public static float macdSpace;
+    public static float indexSpace;
 
     public  static float kTextSize;
 
@@ -46,13 +44,12 @@ public class KlineStyle {
         gridLine = gridLine * pxScaleRate;
 
         chartSpace = chartSpace * pxScaleRate;
-        volSpace = volSpace * pxScaleRate;
-        macdSpace = macdSpace * pxScaleRate;
+        indexSpace = indexSpace * pxScaleRate;
     }
 
     public static void initSize(){
         //画笔宽度
-        kLineBold = 0.8f;
+        kLineBold = 0.6f;
         timeShareBold = 0.8f;
         //K线间隔
         gridLine = 0.05f;
@@ -65,8 +62,7 @@ public class KlineStyle {
          //
         rightWidth = 20f;
         chartSpace = 12f;
-        volSpace = 2.5f;
-        macdSpace = 2.5f;
+        indexSpace = 2.5f;
         kTextSize = 10f;
     }
 }

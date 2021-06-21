@@ -237,4 +237,20 @@ public class AppSqlHelper extends SQLiteOpenHelper {
         }
         return true;
     }
+
+    public Map<String, String> getSystenSettings(){
+        String sql = "SELECT * FROM user_settings";
+        String[] params = new String[]{};
+        String[] fields = {"setting_name", "setting_value"};
+        List<Map<String, Object>> list = query(sql, params, fields);
+        Map<String, String> res = new HashMap<>();
+        if(list != null){
+            for (int i = 0; i < list.size(); i++) {
+                String settingName = list.get(i).get("setting_name").toString();
+                String settingValue = list.get(i).get("setting_value").toString();
+                res.put(settingName, settingValue);
+            }
+        }
+        return res;
+    }
 }

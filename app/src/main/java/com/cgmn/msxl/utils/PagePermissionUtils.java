@@ -46,7 +46,7 @@ public class PagePermissionUtils {
         hash.put(PageMainItem.VIP_INFO+"", String.format("%s##%s##personal", fragment.getString(R.string.vip_way), fragment.getString(R.string.personal)));
         hash.put(PageMainItem.CHARGE_INFO+"", String.format("%s##%s##personal", fragment.getString(R.string.chargev_way), fragment.getString(R.string.personal)));
 
-
+        hash.put(PageMainItem.KLINE_SETTING+"", String.format("%s##%s##system", fragment.getString(R.string.kline_setting), fragment.getString(R.string.system)));
         hash.put(PageMainItem.CONTACT_US+"", String.format("%s##%s##system", fragment.getString(R.string.contact_us), fragment.getString(R.string.system)));
         hash.put(PageMainItem.CHECK_NEW_VERSION+"", String.format("%s##%s##system", fragment.getString(R.string.check_new_version), fragment.getString(R.string.system)));
         hash.put(PageMainItem.USER_AGREMENT+"", String.format("%s##%s##system", fragment.getString(R.string.user_agrement_title), fragment.getString(R.string.system)));

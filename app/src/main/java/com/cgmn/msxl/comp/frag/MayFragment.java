@@ -63,9 +63,11 @@ public class MayFragment extends Fragment {
         list.add(PageMainItem.VIP_INFO);
         list.add(PageMainItem.CHARGE_INFO);
 
+        list.add(PageMainItem.KLINE_SETTING);
         list.add(PageMainItem.CONTACT_US);
         list.add(PageMainItem.CHECK_NEW_VERSION);
         list.add(PageMainItem.USER_AGREMENT);
+
         mData = PagePermissionUtils.getPageDatas(list, this);
         if(mData == null){
             new ArrayList<>();
@@ -116,7 +118,10 @@ public class MayFragment extends Fragment {
                             intent = new Intent(mContxt, AccountInfoActivity.class);
                             startActivity(intent);
                             break;
-
+                        case 27:
+                            intent = new Intent(mContxt, KLineSettingActivity.class);
+                            startActivity(intent);
+                            break;
                     }
                 }
             }

@@ -58,5 +58,6 @@
     <string name="approve_to_me">点赞我的</string>
     <string name="comment_to_me">评论我的</string>
     <string name="my_dynamic">动态</string>
+    <string name="kline_setting">系统设置</string>
 
 </resources>

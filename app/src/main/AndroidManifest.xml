@@ -68,6 +68,7 @@
         <activity android:name=".ac.NormalStatisticActivity"/>
         <activity android:name=".ac.NormalTimeShareActivity"/>
         <activity android:name=".ac.TimeShareKLineActivity"/>
+        <activity android:name=".ac.KLineSettingActivity"/>
     </application>
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
