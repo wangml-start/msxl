@@ -340,7 +340,7 @@ public class KlinePaint {
                 mLabelPaint);
 
         if(firstIndex.equals("KDJ") || secondIndex.equals("KDJ")){
-            KLine k = data.getNodes().getLast();
+            KLine k = data.getNodes().get(endx-1);
             float movekdjY = 3 * KlineStyle.pxScaleRate;
             float textLength = mLabelPaint.measureText("K 110.00");
             float startkdjX = 5f;
