@@ -53,7 +53,7 @@ public class ChargeAdpter extends BaseAdapter {
         }
         Integer item = mData.get(position);
         if(item != null){
-            holder.txt_day_des.setText(String.format("%s万操盘金", item));
+            holder.txt_day_des.setText(String.format("%s万操盘金", item*4));
             StringBuffer contentText = new StringBuffer(String.format("￥%s", item));
             SpannableString span = new SpannableString(contentText.toString());
             span.setSpan(new AbsoluteSizeSpan(14, true), 0, 1, Spanned.SPAN_INCLUSIVE_INCLUSIVE);

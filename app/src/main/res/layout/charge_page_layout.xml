@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="top"
-            android:text="该App不支持提现，请理性充值！ 充值比例为1元等于10000操盘资金。"
+            android:text="该App不支持提现，请理性充值！ 充值比例为1元等于40000操盘资金。"
             android:textColor="@color/text_black"
             android:textSize="@dimen/size14" />
 
