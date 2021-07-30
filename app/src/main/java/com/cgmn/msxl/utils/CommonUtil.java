@@ -96,7 +96,12 @@ public class CommonUtil {
     }
 
     public static String formatPercent(Object num){
-        return formatP.format(num);
+        Double number = Double.valueOf(num.toString());
+        if(number >= 100){
+            return format2.format(number/100) + "百倍";
+        }else{
+            return formatP.format(num);
+        }
     }
 
     public static String formatNumer(Object num, int tail){
@@ -116,9 +121,27 @@ public class CommonUtil {
             symbol = -1;
         }
         Double number = Math.abs(Double.valueOf(num.toString()));
-        if( number > 9999.0){
+        if( number > 9999.0 * 10000 ){
+            return formatLargeAmt.format(number/(10000*10000) * symbol)+"亿";
+        }else if(number > 9999.0){
             return formatLargeAmt.format(number/10000 * symbol)+"万";
         }else{
+            return formatAmt.format(number* symbol);
+        }
+    }
+
+    public static String formatHDNumer(Object num){
+        Integer symbol = 1;
+        if(isEmpty(num)){
+            return "";
+        }
+        if(Double.valueOf(num.toString()) < 0){
+            symbol = -1;
+        }
+        Double number = Math.abs(Double.valueOf(num.toString()));
+        if( number > 9999.0 * 10000 ){
+            return formatLargeAmt.format(number/(10000) * symbol)+"万";
+        } else{
             return formatAmt.format(number* symbol);
         }
     }
@@ -140,8 +163,8 @@ public class CommonUtil {
         return format2.format(num);
     }
 
-    public static boolean floatNumEqual(float num1, float num2){
-        float delta = num1 - num2;
+    public static boolean floatNumEqual(Double num1, Double num2){
+        Double delta = num1 - num2;
         if(Math.abs(delta) < 0.00001){
             return true;
         }

@@ -249,7 +249,7 @@ public class TimeShareKLineActivity extends AppCompatActivity
                 } else if(msg.what == MessageUtil.GET_CASH_ACC_SUCCESS){
                     holderParent.showContent();
                     SettledAccount acc = (SettledAccount) msg.obj;
-                    stockView.initAccount(acc.getCashAmt());
+                    stockView.initAccount(Double.valueOf(acc.getCashAmt()));
                     stockView.invalidateView();
                     if(acc.getVipPermission() == 0){
                         jumpToChargetPage("vip");
@@ -338,7 +338,7 @@ public class TimeShareKLineActivity extends AppCompatActivity
      * 初始化持仓view
      */
     private void initStockHolder(){
-        Float totalAmount = stockView.getStockHolder().getTotAmt();
+        Double totalAmount = stockView.getStockHolder().getTotAmt();
         stockView.setStockHolder(new StockHolder());
         stockView.getStockHolder().setTrainType(trainType);
         stockView.initAccount(totalAmount);

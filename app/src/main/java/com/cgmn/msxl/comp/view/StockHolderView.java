@@ -161,9 +161,9 @@ public class StockHolderView extends View {
                 totallb[0], totallb[1],
                 mLabelPaint);
 
-        float[] totalamt = calcTextPoint(stockHolder.getTotAmt(), 2, 0, topSpace);
+        float[] totalamt = calcTextPoint(CommonUtil.formatHDNumer(stockHolder.getTotAmt()), 2, 0, topSpace);
         canvas.drawText(
-                CommonUtil.formatNumer(stockHolder.getTotAmt()),
+                CommonUtil.formatHDNumer(stockHolder.getTotAmt()),
                 totalamt[0], totalamt[1],
                 mLabelPaint);
 
@@ -172,9 +172,9 @@ public class StockHolderView extends View {
                 stockHolder.getAvaiAmtLb(),
                 avaiLb[0], avaiLb[1],
                 mLabelPaint);
-        float[] avaiamt = calcTextPoint(stockHolder.getAvaiAmt(), 2, 1/3.0f, topSpace);
+        float[] avaiamt = calcTextPoint(CommonUtil.formatHDNumer(stockHolder.getAvaiAmt()), 2, 1/3.0f, topSpace);
         canvas.drawText(
-                CommonUtil.formatNumer(stockHolder.getAvaiAmt()),
+                CommonUtil.formatHDNumer(stockHolder.getAvaiAmt()),
                 avaiamt[0], avaiamt[1],
                 mLabelPaint);
 
@@ -183,9 +183,9 @@ public class StockHolderView extends View {
                 stockHolder.getExchangeLb(),
                 exchgeLb[0], exchgeLb[1],
                 mLabelPaint);
-        float[] exchgeamt = calcTextPoint(stockHolder.getExchange(), 2, 2/3.0f, topSpace);
+        float[] exchgeamt = calcTextPoint(CommonUtil.formatHDNumer(stockHolder.getExchange()), 2, 2/3.0f, topSpace);
         canvas.drawText(
-                CommonUtil.formatNumer(stockHolder.getExchange()),
+                CommonUtil.formatHDNumer(stockHolder.getExchange()),
                 exchgeamt[0], exchgeamt[1],
                 mLabelPaint);
 
@@ -197,9 +197,9 @@ public class StockHolderView extends View {
                 holdlb[0], holdlb[1],
                 mLabelPaint);
 
-        float[] holdamt = calcTextPoint(stockHolder.getHoldAmt(), 2, 0, topSpace+headSpace);
+        float[] holdamt = calcTextPoint(CommonUtil.formatHDNumer(stockHolder.getHoldAmt()), 2, 0, topSpace+headSpace);
         canvas.drawText(
-                CommonUtil.formatNumer(stockHolder.getHoldAmt()),
+                CommonUtil.formatHDNumer(stockHolder.getHoldAmt()),
                 holdamt[0], holdamt[1],
                 mLabelPaint);
 
@@ -215,9 +215,9 @@ public class StockHolderView extends View {
         if(stockHolder.getPl() < 0.0){
             tempPain = mDownPaint;
         }
-        float[] realPlamt = calcTextPoint(stockHolder.getPl(), 2, 1/3.0f, topSpace+headSpace);
+        float[] realPlamt = calcTextPoint(CommonUtil.formatHDNumer(stockHolder.getPl()), 2, 1/3.0f, topSpace+headSpace);
         canvas.drawText(
-                CommonUtil.formatNumer(stockHolder.getPl()),
+                CommonUtil.formatHDNumer(stockHolder.getPl()),
                 realPlamt[0], realPlamt[1],
                 tempPain);
 
@@ -284,7 +284,7 @@ public class StockHolderView extends View {
 
     private float[] calcDetailPts(Object value, int yOrder, float ox_rete, float oY){
         String strValue = null;
-        if(value instanceof Float){
+        if(value instanceof Double){
             strValue = CommonUtil.formatNumer(value);
         }else{
             strValue = value.toString();
@@ -314,20 +314,20 @@ public class StockHolderView extends View {
                 stockHolder.getCode(),
                 code[0], code[1],
                 mLabelPaint);
-        float[] occupy = calcDetailPts(stockHolder.getHoldAmt(), 2, 0, orginY);
+        float[] occupy = calcDetailPts(CommonUtil.formatHDNumer(stockHolder.getHoldAmt()), 2, 0, orginY);
         canvas.drawText(
-                CommonUtil.formatNumer(stockHolder.getHoldAmt()),
+                CommonUtil.formatHDNumer(stockHolder.getHoldAmt()),
                 occupy[0], occupy[1],
                 mLabelPaint);
 
-        float[] avaiNum = calcDetailPts(stockHolder.getHoldShare(), 1, 1/4.0f, orginY);
+        float[] avaiNum = calcDetailPts(CommonUtil.formatHDNumer(stockHolder.getHoldShare()), 1, 1/4.0f, orginY);
         canvas.drawText(
-                stockHolder.getHoldShare()+"",
+                CommonUtil.formatHDNumer(stockHolder.getHoldShare()),
                 avaiNum[0], avaiNum[1],
                 mLabelPaint);
-        float[] holdNum = calcDetailPts(stockHolder.getAvaiLabelShare(), 2, 1/4.0f, orginY);
+        float[] holdNum = calcDetailPts(CommonUtil.formatHDNumer(stockHolder.getAvaiLabelShare()), 2, 1/4.0f, orginY);
         canvas.drawText(
-                stockHolder.getAvaiLabelShare()+"",
+                CommonUtil.formatHDNumer(stockHolder.getAvaiLabelShare()),
                 holdNum[0], holdNum[1],
                 mLabelPaint);
 
@@ -348,9 +348,9 @@ public class StockHolderView extends View {
         }else if(stockHolder.getHoldPl() < 0){
             tempPain = mDownPaint;
         }
-        float[] plAmt = calcDetailPts(stockHolder.getHoldPl(), 1, 3/4.0f, orginY);
+        float[] plAmt = calcDetailPts(CommonUtil.formatHDNumer(stockHolder.getHoldPl()), 1, 3/4.0f, orginY);
         canvas.drawText(
-                CommonUtil.formatNumer(stockHolder.getHoldPl()),
+                CommonUtil.formatHDNumer(stockHolder.getHoldPl()),
                 plAmt[0], plAmt[1],
                 tempPain);
         float[] plRate = calcDetailPts(stockHolder.getPlRate(), 2, 3/4.0f, orginY);
@@ -378,9 +378,9 @@ public class StockHolderView extends View {
         invalidate();
     }
 
-    public void initAccount(Float totalAmount){
+    public void initAccount(Double totalAmount){
         if(totalAmount == null){
-            totalAmount = 0.0f;
+            totalAmount = 0.0;
         }
         stockHolder.setTotAmt(totalAmount);
         stockHolder.setAvaiAmt(totalAmount);

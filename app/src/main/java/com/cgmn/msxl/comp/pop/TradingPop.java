@@ -117,7 +117,7 @@ public class TradingPop extends PopupWindow
         String price = getPrice();
 
         if (this.action.equals("BUY")) {
-            float avaiCount = stoHolder.getAvaiBuyCount(price);
+            long avaiCount = stoHolder.getAvaiBuyCount(price);
             tx_candle_count.setText("可买： " + avaiCount  + "股");
         } else {
             int avaiCount = (int) stoHolder.getAvaiLabelShare();
@@ -153,11 +153,11 @@ public class TradingPop extends PopupWindow
     private void positionManage(float persent){
         float price = CommonUtil.castFloatFromString(getPrice());
         if (this.action.equals("BUY")) {
-            int avaiCount = stoHolder.getAvaiBuyCount(manage.getCurenPrice(), persent);
+            long avaiCount = stoHolder.getAvaiBuyCount(manage.getCurenPrice(), persent);
             et_count.setText(avaiCount + "");
             setAmountText(CommonUtil.formatNumer(avaiCount*price));
         }else{
-            int avaiCount = stoHolder.getAvaiSellCount(persent);
+            long avaiCount = stoHolder.getAvaiSellCount(persent);
             et_count.setText(avaiCount+"");
             setAmountText(CommonUtil.formatNumer(avaiCount*price));
         }
@@ -237,7 +237,7 @@ public class TradingPop extends PopupWindow
         int changed = count + 100*rate;
         float price = CommonUtil.castFloatFromString(getPrice());
         if (this.action.equals("BUY")) {
-            int avaiCount = stoHolder.getAvaiBuyCount(getPrice());
+            long avaiCount = stoHolder.getAvaiBuyCount(getPrice());
             if(changed > avaiCount || changed < 0){
                 return;
             }

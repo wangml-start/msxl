@@ -90,8 +90,10 @@ public class DisgussSubActivity extends DisgussBaseActivity {
         comment_total = findViewById(R.id.comment_total);
         approve_total = findViewById(R.id.approve_total);
         comment = (CommentDetailBean) GlobalDataHelper.getData("comment");
+        GlobalDataHelper.removeKey("comment");
         setHeader();
         Object obj = GlobalDataHelper.getData("viewId");
+        GlobalDataHelper.removeKey("viewId");
         if(!CommonUtil.isEmpty(obj)){
             recordId = (int) obj;
         }

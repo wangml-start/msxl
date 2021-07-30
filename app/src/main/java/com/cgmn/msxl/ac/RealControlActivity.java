@@ -182,7 +182,7 @@ public class RealControlActivity extends AppCompatActivity
                 } else if(msg.what == MessageUtil.GET_CASH_ACC_SUCCESS){
                     holderParent.showContent();
                     SettledAccount acc = (SettledAccount) msg.obj;
-                    stockView.initAccount(acc.getCashAmt());
+                    stockView.initAccount(Double.valueOf(acc.getCashAmt()));
                     stockView.invalidateView();
                     if(acc.getVipPermission() == 0){
                         jumpToChargetPage("vip");
@@ -261,7 +261,7 @@ public class RealControlActivity extends AppCompatActivity
     }
 
     private void initStockHolder(){
-        Float totalAmount = stockView.getStockHolder().getTotAmt();
+        Double totalAmount = stockView.getStockHolder().getTotAmt();
         stockView.setStockHolder(new StockHolder());
         stockView.getStockHolder().setModelRecordId(userModelId);
         stockView.getStockHolder().setTrainType(trainType);
@@ -616,7 +616,7 @@ public class RealControlActivity extends AppCompatActivity
             onNextClick();
             PlayMusic();
         }else if(v.getId() == R.id.bt_buy){
-            if(stockView.getStockHolder().getTotAmt() < 100){
+            if(stockView.getStockHolder().getAvaiAmt() < 100){
                 new ShowDialog().showTips(mContxt, "当前账户资金不足！");
             }
             if(realtradeManage.getCurrentK() == null){

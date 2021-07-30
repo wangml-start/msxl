@@ -33,21 +33,20 @@ public class StockHolder {
     private String code = "";
     private String stackName = "";
 
-    private Float initTotAmt = 0.0f;
+    private Double initTotAmt = 0.0;
 
-    private Float totAmt = 0.0f;
-    private Float holdAmt = 0.0f;
-    private Float holdPl = 0.0f;
-    private Float avaiAmt = 0.0f;
-    private Float costPrice = 0.0f;
-    private Float price = 0.0f;
-    private Float pl = 0.0f;
+    private Double totAmt = 0.0;
+    private Double holdAmt = 0.0;
+    private Double holdPl = 0.0;
+    private Double avaiAmt = 0.0;
+    private Double costPrice = 0.0;
+    private Double price = 0.0;
+    private Double pl = 0.0;
 
-    private int holdShare = 0;
-    private int avaiLabelShare = 0;
+    private long holdShare = 0;
+    private long avaiLabelShare = 0;
 
-    private Float exchange = 0.0f;
-
+    private Double exchange = 0.0;
     //1代表已结算
     private int settleStatus = 0;
     private int holdDays = 0;
@@ -121,11 +120,11 @@ public class StockHolder {
         this.nodes = nodes;
     }
 
-    public Float getTotAmt() {
+    public Double getTotAmt() {
         return totAmt;
     }
 
-    public void setTotAmt(Float totAmt) {
+    public void setTotAmt(Double totAmt) {
         this.totAmt = totAmt;
     }
 
@@ -137,11 +136,11 @@ public class StockHolder {
         return rateLb;
     }
 
-    public Float getHoldAmt() {
+    public Double getHoldAmt() {
         return holdAmt;
     }
 
-    public void setHoldAmt(Float holdAmt) {
+    public void setHoldAmt(Double holdAmt) {
         this.holdAmt = holdAmt;
     }
 
@@ -150,11 +149,11 @@ public class StockHolder {
     }
 
 
-    public Float getHoldPl() {
+    public Double getHoldPl() {
         return holdPl;
     }
 
-    public void setHoldPl(Float holdPl) {
+    public void setHoldPl(Double holdPl) {
         this.holdPl = holdPl;
     }
 
@@ -163,11 +162,11 @@ public class StockHolder {
     }
 
 
-    public Float getAvaiAmt() {
+    public Double getAvaiAmt() {
         return avaiAmt;
     }
 
-    public void setAvaiAmt(Float avaiAmt) {
+    public void setAvaiAmt(Double avaiAmt) {
         this.avaiAmt = avaiAmt;
     }
 
@@ -190,31 +189,31 @@ public class StockHolder {
         this.code = code;
     }
 
-    public Float getCostPrice() {
+    public Double getCostPrice() {
         return costPrice;
     }
 
-    public void setCostPrice(Float costPrice) {
+    public void setCostPrice(Double costPrice) {
         this.costPrice = costPrice;
     }
 
-    public Float getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(Float price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
-    public Float getPl() {
+    public Double getPl() {
         return pl;
     }
 
-    public void setPl(Float pl) {
+    public void setPl(Double pl) {
         this.pl = pl;
     }
 
-    public int getHoldShare() {
+    public long getHoldShare() {
         return holdShare;
     }
 
@@ -222,19 +221,19 @@ public class StockHolder {
         this.holdShare = holdShare;
     }
 
-    public int getAvaiLabelShare() {
+    public long getAvaiLabelShare() {
         return avaiLabelShare;
     }
 
-    public void setAvaiLabelShare(int avaiLabelShare) {
+    public void setAvaiLabelShare(long avaiLabelShare) {
         this.avaiLabelShare = avaiLabelShare;
     }
 
-    public Float getExchange() {
+    public Double getExchange() {
         return exchange;
     }
 
-    public void setExchange(Float exchange) {
+    public void setExchange(Double exchange) {
         this.exchange = exchange;
     }
 
@@ -243,18 +242,18 @@ public class StockHolder {
     }
 
     public float getPlRateNum() {
-        return (price - costPrice) / costPrice;
+        return ((Double)((price - costPrice) / costPrice)).floatValue();
     }
 
     public String getExchangeLb() {
         return exchangeLb;
     }
 
-    public Float getInitTotAmt() {
+    public Double getInitTotAmt() {
         return initTotAmt;
     }
 
-    public void setInitTotAmt(Float initTotAmt) {
+    public void setInitTotAmt(Double initTotAmt) {
         this.initTotAmt = initTotAmt;
     }
 
@@ -269,9 +268,9 @@ public class StockHolder {
         code = scode;
         stackName = sName;
         holdShare += count;
-        price = pri;
-        float buyAmt = pri * count;
-        float fee = 0;
+        price = Double.valueOf(pri);
+        Double buyAmt = price * count;
+        Double fee = 0.0;
         if (scode.startsWith("6")) {
             float ghfee = count * guohuRate;
             if (ghfee < 1) {
@@ -279,9 +278,9 @@ public class StockHolder {
             }
             fee += ghfee;
         }
-        float brofee = buyAmt * brokerRate;
+        Double brofee = buyAmt * brokerRate;
         if (brofee < 5) {
-            brofee = 5;
+            brofee = 5.0;
         }
         fee += brofee;
         exchange += fee;
@@ -293,17 +292,18 @@ public class StockHolder {
         pl = totAmt - initTotAmt;
     }
 
-    public void sellStock(int count, Float pri) {
+    public void sellStock(long count, Float pri) {
         holdShare -= count;
         avaiLabelShare -= count;
-        float sellAmt = price * count;
-        float yhfee = sellAmt * yinhuaRate;
+        price = Double.valueOf(pri);
+        Double sellAmt = price * count;
+        Double yhfee = sellAmt * yinhuaRate;
         if (yhfee < 5) {
-            yhfee = 5;
+            yhfee = 5.0;
         }
-        float brofee = sellAmt * brokerRate;
+        Double brofee = sellAmt * brokerRate;
         if (brofee < 5) {
-            brofee = 5;
+            brofee = 5.0;
         }
         float ghfee=0f;
         if (!CommonUtil.isEmpty(code) && code.startsWith("6")) {
@@ -312,15 +312,15 @@ public class StockHolder {
                 ghfee = 1;
             }
         }
-        float fee = brofee + yhfee + ghfee;
+        Double fee = brofee + yhfee + ghfee;
         exchange += fee;
         holdPl -= fee;
         holdAmt -= sellAmt;
         totAmt -= fee;
         avaiAmt = totAmt - holdAmt;
         if (holdShare == 0) {
-            costPrice = 0f;
-            holdPl = 0.f;
+            costPrice = 0.0;
+            holdPl = 0.0;
             holdDays = 0;
         } else {
             costPrice = (holdAmt - holdPl) / holdShare;
@@ -328,29 +328,29 @@ public class StockHolder {
         pl = totAmt - initTotAmt;
     }
 
-    public int getAvaiBuyCount(String price) {
+    public long getAvaiBuyCount(String price) {
         float priceNum = CommonUtil.castFloatFromString(price);
-        float avaiAmt = getAvaiAmt();
-        int avaiCount = (int) (avaiAmt / priceNum / 100);
+        Double avaiAmt = getAvaiAmt();
+        long avaiCount = (long) (avaiAmt / priceNum / 100);
 
         return 100 * avaiCount;
     }
 
-    public int getAvaiBuyCount(String price, float percent) {
+    public long getAvaiBuyCount(String price, Float percent) {
         float priceNum = CommonUtil.castFloatFromString(price);
-        float avaiAmt = getAvaiAmt() * percent;
-        int avaiCount = (int) (avaiAmt / priceNum / 100);
+        Double avaiAmt = getAvaiAmt() * percent;
+        long avaiCount = (long) (avaiAmt / priceNum / 100);
 
         return 100 * avaiCount;
     }
 
-    public int getAvaiSellCount(float percent) {
-        int avaiCount = (int) (avaiLabelShare * percent / 100);
+    public long getAvaiSellCount(Float percent) {
+        long avaiCount = (long) (avaiLabelShare * Double.valueOf(percent) / 100);
         return 100 * avaiCount;
     }
 
-    public void nextPrice(float pr, Boolean changeDay) {
-        price = pr;
+    public void nextPrice(Float pr, Boolean changeDay) {
+        price = Double.valueOf(pr);
         if (changeDay) {
             avaiLabelShare = holdShare;
         }
@@ -361,7 +361,7 @@ public class StockHolder {
     }
 
     public void settleTrading(Float price) {
-        if (CommonUtil.floatNumEqual(exchange, 0)) {
+        if (CommonUtil.floatNumEqual(exchange, 0.0)) {
             return;
         }
         if (settleStatus == 1) {
@@ -373,7 +373,7 @@ public class StockHolder {
         if (holdShare > 0) {
             sellStock(holdShare, price);
         }
-        Trade trade = new Trade(code, pl, exchange, trainType,
+        Trade trade = new Trade(code, pl.floatValue(), exchange.floatValue(), trainType,
                 modelRecordId, unprinciple);
         nodes.addLast(trade);
     }
@@ -394,15 +394,15 @@ public class StockHolder {
 
 
     public float getStartRate(float amt){
-        return amt / totAmt;
+        return ((Double)(Double.valueOf(amt) / totAmt)).floatValue();
     }
 
     public float getHoldRate(){
-        return holdAmt / totAmt;
+        return ((Double) (holdAmt / totAmt)).floatValue();
     }
 
     public float getLossRate(){
-        return (price - costPrice) / costPrice;
+        return ((Double)((price - costPrice) / costPrice)).floatValue();
     }
 
 }

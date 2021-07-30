@@ -116,6 +116,10 @@ public class GlobalDataHelper {
         return obj;
     }
 
+    public static void removeKey(String key){
+        pageTranfer.remove(key);
+    }
+
     public static String getDownloadVersionUrl(Context context){
         return String.format("%s/%s?token=%s",ConstantHelper.serverUrl,
                 "common/download_version",GlobalDataHelper.getToken(context));
