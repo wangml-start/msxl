@@ -170,7 +170,7 @@ public class TradingPop extends PopupWindow
             return;
         }
         int count = Integer.valueOf(et_count.getText().toString());
-        if(count == 0){
+        if(count <= 0){
             CustmerToast.makeText(mContext, mContext.getString(R.string.need_vol)).show();
             return;
         }
