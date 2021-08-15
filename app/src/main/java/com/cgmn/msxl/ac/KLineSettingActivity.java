@@ -9,10 +9,13 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -26,6 +29,7 @@ import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.bean.PopuBean;
+import com.cgmn.msxl.comp.CustmerToast;
 import com.cgmn.msxl.comp.adpter.AccountAdapter;
 import com.cgmn.msxl.comp.k.KlineStyle;
 import com.cgmn.msxl.comp.swb.State;
@@ -39,13 +43,15 @@ import com.cgmn.msxl.receiver.ReceiverMessage;
 import com.cgmn.msxl.service.GlobalDataHelper;
 import com.cgmn.msxl.utils.AESUtil;
 import com.cgmn.msxl.utils.CommonUtil;
+import com.cgmn.msxl.utils.ConstantHelper;
 import com.cgmn.msxl.utils.MessageUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class KLineSettingActivity extends BaseOtherActivity {
+public class KLineSettingActivity extends BaseOtherActivity
+        implements TextWatcher {
     private static final String TAG = KLineSettingActivity.class.getSimpleName();
     private Context mContext;
 
@@ -54,6 +60,9 @@ public class KLineSettingActivity extends BaseOtherActivity {
 
     private TextView count_minus,et_count,count_plus;
     private TextView count_minus_lb,et_count_lb,count_plus_lb;
+
+    private EditText pos_1_up,pos_2_up,pos_3_up,pos_4_up,pos_5_up;
+    private EditText pos_1_down,pos_2_down,pos_3_down,pos_4_down,pos_5_down;
 
     private OptionsPickerView firstOptions, secondOptions;
     private ArrayList<SelectionItem> firstList = new ArrayList<>(), secondList = new ArrayList<>();
@@ -183,6 +192,27 @@ public class KLineSettingActivity extends BaseOtherActivity {
         //设置图片left这里如果是右边就放到第二个参数里面依次对应
         txt_first_dex_list.setCompoundDrawables(null, null, wrappedDrawable, null);
         txt_second_dex_list.setCompoundDrawables(null, null, wrappedDrawable, null);
+
+        pos_1_up = findViewById(R.id.pos_1_up);
+        pos_2_up = findViewById(R.id.pos_2_up);
+        pos_3_up = findViewById(R.id.pos_3_up);
+        pos_4_up = findViewById(R.id.pos_4_up);
+        pos_5_up = findViewById(R.id.pos_5_up);
+        pos_1_down = findViewById(R.id.pos_1_down);
+        pos_2_down = findViewById(R.id.pos_2_down);
+        pos_3_down = findViewById(R.id.pos_3_down);
+        pos_4_down = findViewById(R.id.pos_4_down);
+        pos_5_down = findViewById(R.id.pos_5_down);
+        pos_1_up.addTextChangedListener(this);
+        pos_2_up.addTextChangedListener(this);
+        pos_3_up.addTextChangedListener(this);
+        pos_4_up.addTextChangedListener(this);
+        pos_5_up.addTextChangedListener(this);
+        pos_1_down.addTextChangedListener(this);
+        pos_2_down.addTextChangedListener(this);
+        pos_3_down.addTextChangedListener(this);
+        pos_4_down.addTextChangedListener(this);
+        pos_5_down.addTextChangedListener(this);
     }
 
     private void setKlineBaseDatas(float height){
@@ -236,6 +266,42 @@ public class KLineSettingActivity extends BaseOtherActivity {
         bt_sw.changeStatus(autoNext);
         et_count.setText(trendTime+"");
         et_count_lb.setText(shortTime+"");
+
+        if(!CommonUtil.isEmpty(map.get("FIRST_POS"))){
+            String[] arr1 = map.get("FIRST_POS").toString().split(ConstantHelper.positionSplit);
+            if(arr1.length == 2){
+                pos_1_up.setText(arr1[0]);
+                pos_1_down.setText(arr1[1]);
+            }
+        }
+        if(!CommonUtil.isEmpty(map.get("SECOND_POS"))){
+            String[] arr2 = map.get("SECOND_POS").toString().split(ConstantHelper.positionSplit);
+            if(arr2.length == 2){
+                pos_2_up.setText(arr2[0]);
+                pos_2_down.setText(arr2[1]);
+            }
+        }
+        if(!CommonUtil.isEmpty(map.get("THIRD_POS"))){
+            String[] arr3 = map.get("THIRD_POS").toString().split(ConstantHelper.positionSplit);
+            if(arr3.length == 2){
+                pos_3_up.setText(arr3[0]);
+                pos_3_down.setText(arr3[1]);
+            }
+        }
+        if(!CommonUtil.isEmpty(map.get("FOUR_POS"))){
+            String[] arr4 = map.get("FOUR_POS").toString().split(ConstantHelper.positionSplit);
+            if(arr4.length == 2){
+                pos_4_up.setText(arr4[0]);
+                pos_4_down.setText(arr4[1]);
+            }
+        }
+        if(!CommonUtil.isEmpty(map.get("FIVE_POS"))){
+            String[] arr5 = map.get("FIVE_POS").toString().split(ConstantHelper.positionSplit);
+            if(arr5.length == 2){
+                pos_5_up.setText(arr5[0]);
+                pos_5_down.setText(arr5[1]);
+            }
+        }
     }
 
     private void calcTime(TextView v , Integer direction, String field){
@@ -257,6 +323,106 @@ public class KLineSettingActivity extends BaseOtherActivity {
                 ContentValues values = new ContentValues();
                 values.put("setting_name", field);
                 values.put("setting_value", value);
+                dbHelper.upsert("user_settings", values, "setting_name");
+                GlobalDataHelper.updateUser(mContext);
+            }
+        });
+    }
+
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+        try{ Integer num = Integer.valueOf(s.toString());
+            if(num <= 0){
+                CustmerToast.makeText(mContext, "无效参数").show();
+                return;
+            }
+            if(validNum()){
+                savePositions();
+            }
+        }catch (Exception e){
+
+        }
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+
+    }
+
+    private boolean validNum(){
+        if(CommonUtil.isEmpty(pos_1_up.getText().toString())){
+            return false;
+        }
+        if(CommonUtil.isEmpty(pos_2_up.getText().toString())){
+            return false;
+        }
+        if(CommonUtil.isEmpty(pos_3_up.getText().toString())){
+            return false;
+        }
+        if(CommonUtil.isEmpty(pos_4_up.getText().toString())){
+            return false;
+        }
+        if(CommonUtil.isEmpty(pos_5_up.getText().toString())){
+            return false;
+        }
+        if(CommonUtil.isEmpty(pos_1_down.getText().toString())){
+            return false;
+        }
+        if(CommonUtil.isEmpty(pos_2_down.getText().toString())){
+            return false;
+        }
+        if(CommonUtil.isEmpty(pos_3_down.getText().toString())){
+            return false;
+        }
+        if(CommonUtil.isEmpty(pos_4_down.getText().toString())){
+            return false;
+        }
+        if(CommonUtil.isEmpty(pos_5_down.getText().toString())){
+            return false;
+        }
+        return true;
+    }
+
+    private void savePositions(){
+        final String first_pos = String.format("%s%s%s", pos_1_up.getText().toString(), ConstantHelper.positionSplit,pos_1_down.getText().toString());
+        final String second_pos = String.format("%s%s%s", pos_2_up.getText().toString(),ConstantHelper.positionSplit,pos_2_down.getText().toString());
+        final String third_pos = String.format("%s%s%s", pos_3_up.getText().toString(),ConstantHelper.positionSplit,pos_3_down.getText().toString());
+        final String four_pos = String.format("%s%s%s", pos_4_up.getText().toString(),ConstantHelper.positionSplit,pos_4_down.getText().toString());
+        final String five_pos = String.format("%s%s%s", pos_5_up.getText().toString(),ConstantHelper.positionSplit,pos_5_down.getText().toString());
+
+        GlobalTreadPools.getInstance(mContext).execute(new Runnable() {
+            @Override
+            public void run() {
+                AppSqlHelper dbHelper = new AppSqlHelper(mContext);
+                ContentValues values = new ContentValues();
+                values.put("setting_name", "FIRST_POS");
+                values.put("setting_value", first_pos);
+                dbHelper.upsert("user_settings", values, "setting_name");
+                GlobalDataHelper.updateUser(mContext);
+
+                values.put("setting_name", "SECOND_POS");
+                values.put("setting_value", second_pos);
+                dbHelper.upsert("user_settings", values, "setting_name");
+                GlobalDataHelper.updateUser(mContext);
+
+                values.put("setting_name", "THIRD_POS");
+                values.put("setting_value", third_pos);
+                dbHelper.upsert("user_settings", values, "setting_name");
+                GlobalDataHelper.updateUser(mContext);
+
+                values.put("setting_name", "FOUR_POS");
+                values.put("setting_value", four_pos);
+                dbHelper.upsert("user_settings", values, "setting_name");
+                GlobalDataHelper.updateUser(mContext);
+
+                values.put("setting_name", "FIVE_POS");
+                values.put("setting_value", five_pos);
                 dbHelper.upsert("user_settings", values, "setting_name");
                 GlobalDataHelper.updateUser(mContext);
             }

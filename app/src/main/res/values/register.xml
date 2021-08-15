@@ -27,7 +27,12 @@
     </style>
 
     <style name="trade_buy_sell">
-        <item name="android:textSize">@dimen/LargeSize</item>
+        <item name="android:textSize">@dimen/size16</item>
+        <item name="android:background">@color/div_white</item>
+        <item name="android:gravity">center</item>
+    </style>
+    <style name="trade_buy_sell2">
+        <item name="android:textSize">@dimen/size16</item>
         <item name="android:background">@drawable/txt_bg</item>
         <item name="android:gravity">center</item>
     </style>

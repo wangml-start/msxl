@@ -15,6 +15,7 @@ import com.cgmn.msxl.comp.CustmerToast;
 import com.cgmn.msxl.comp.k.time.TimeShareGroup;
 import com.cgmn.msxl.data.SettingItem;
 import com.cgmn.msxl.data.StockHolder;
+import com.cgmn.msxl.db.AppSqlHelper;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.service.*;
 import com.cgmn.msxl.utils.CommonUtil;
@@ -39,8 +40,9 @@ public class TradingPop extends PopupWindow
 
     private TextView btn_close, et_price, count_minus, count_plus;
     private TextView et_count, tx_candle_count, tx_candle_amt;
-    private TextView all_buy, half_buy, one_third_buy, one_fourth_buy, btn_action;
+    private TextView first_pos, second_pos, third_pos, four_pos, five_pos, btn_action;
 
+    private Map<String, String> positionMap;
 
     public TradingPop(Context mContext, StockHolder holder,
                       RealTradeManage ma, String buySell) {
@@ -82,6 +84,39 @@ public class TradingPop extends PopupWindow
         return price;
     }
 
+    public void setPositions(){
+        final AppSqlHelper dbHelper = new AppSqlHelper(mContext);
+        positionMap =  dbHelper.getSystenSettings();
+        if(positionMap == null){
+            positionMap = new HashMap<>();
+        }
+        if(!CommonUtil.isEmpty(positionMap.get("FIRST_POS"))){
+            first_pos.setText(positionMap.get("FIRST_POS"));
+        }else{
+            first_pos.setText("满仓");
+        }
+        if(!CommonUtil.isEmpty(positionMap.get("SECOND_POS"))){
+            second_pos.setText(positionMap.get("SECOND_POS"));
+        }else{
+            second_pos.setText("1/2");
+        }
+        if(!CommonUtil.isEmpty(positionMap.get("THIRD_POS"))){
+            third_pos.setText(positionMap.get("THIRD_POS"));
+        }else{
+            third_pos.setText("1/4");
+        }
+        if(!CommonUtil.isEmpty(positionMap.get("FOUR_POS"))){
+            four_pos.setText(positionMap.get("FOUR_POS"));
+        }else{
+            four_pos.setText("1/5");
+        }
+        if(!CommonUtil.isEmpty(positionMap.get("FIVE_POS"))){
+            five_pos.setText(positionMap.get("FIVE_POS"));
+        }else{
+            five_pos.setText("1/10");
+        }
+    }
+
     private void bindview() {
         if (this.action.equals("BUY")) {
             this.view = LayoutInflater.from(mContext).inflate(R.layout.buy_page_layout, null);
@@ -95,10 +130,12 @@ public class TradingPop extends PopupWindow
         count_plus = (TextView) view.findViewById(R.id.count_plus);
         tx_candle_count = (TextView) view.findViewById(R.id.tx_candle_count);
         tx_candle_amt = (TextView) view.findViewById(R.id.tx_candle_amt);
-        all_buy = (TextView) view.findViewById(R.id.all_buy);
-        half_buy = (TextView) view.findViewById(R.id.half_buy);
-        one_third_buy = (TextView) view.findViewById(R.id.one_third_buy);
-        one_fourth_buy = (TextView) view.findViewById(R.id.one_fourth_buy);
+
+        first_pos = (TextView) view.findViewById(R.id.first_pos);
+        second_pos = (TextView) view.findViewById(R.id.second_pos);
+        third_pos = (TextView) view.findViewById(R.id.third_pos);
+        four_pos = (TextView) view.findViewById(R.id.four_pos);
+        five_pos = (TextView) view.findViewById(R.id.five_pos);
         btn_action = (TextView) view.findViewById(R.id.btn_action);
 
 
@@ -108,13 +145,15 @@ public class TradingPop extends PopupWindow
         count_plus.setOnClickListener(this);
         tx_candle_count.setOnClickListener(this);
         tx_candle_amt.setOnClickListener(this);
-        all_buy.setOnClickListener(this);
-        half_buy.setOnClickListener(this);
-        one_third_buy.setOnClickListener(this);
-        one_fourth_buy.setOnClickListener(this);
+        first_pos.setOnClickListener(this);
+        second_pos.setOnClickListener(this);
+        third_pos.setOnClickListener(this);
+        four_pos.setOnClickListener(this);
+        five_pos.setOnClickListener(this);
         btn_action.setOnClickListener(this);
 
         String price = getPrice();
+        setPositions();
 
         if (this.action.equals("BUY")) {
             long avaiCount = stoHolder.getAvaiBuyCount(price);
@@ -257,14 +296,41 @@ public class TradingPop extends PopupWindow
         if (v.getId() == R.id.txt_close) {
             // 销毁弹出框
             dismiss();
-        }else if(v.getId() == R.id.all_buy){
-            positionManage(1);
-        }else if(v.getId() == R.id.half_buy){
-            positionManage(0.5f);
-        }else if(v.getId() == R.id.one_third_buy){
-            positionManage(0.2f);
-        }else if(v.getId() == R.id.one_fourth_buy){
-            positionManage(0.1f);
+        }else if(v.getId() == R.id.first_pos){
+            float rate = calcRate("FIRST_POS");
+            if(rate < 0){
+                positionManage(1);
+            }else{
+                positionManage(rate);
+            }
+        }else if(v.getId() == R.id.second_pos){
+            float rate = calcRate("SECOND_POS");
+            if(rate < 0){
+                positionManage(0.5f);
+            }else{
+                positionManage(rate);
+            }
+        }else if(v.getId() == R.id.third_pos){
+            float rate = calcRate("THIRD_POS");
+            if(rate < 0){
+                positionManage(0.25f);
+            }else{
+                positionManage(rate);
+            }
+        }else if(v.getId() == R.id.four_pos){
+            float rate = calcRate("FOUR_POS");
+            if(rate < 0){
+                positionManage(0.2f);
+            }else{
+                positionManage(rate);
+            }
+        } else if(v.getId() == R.id.five_pos){
+            float rate = calcRate("FIVE_POS");
+            if(rate < 0){
+                positionManage(0.1f);
+            }else{
+                positionManage(rate);
+            }
         }else if(v.getId() == R.id.btn_action){
             onAction();
         }else if(v.getId() == R.id.count_minus){
@@ -272,6 +338,18 @@ public class TradingPop extends PopupWindow
         }else if(v.getId() == R.id.count_plus){
             onCountChange(1);
         }
+    }
+
+    private float calcRate(String name){
+        if(CommonUtil.isEmpty(positionMap.get(name))){
+            return  -1;
+        }
+        String[] arr = positionMap.get(name).split(ConstantHelper.positionSplit);
+        float rate = Float.valueOf(arr[0]) / Float.valueOf(arr[1]);
+        if(rate > 1){
+            rate = 1;
+        }
+        return rate;
     }
 
     /**
