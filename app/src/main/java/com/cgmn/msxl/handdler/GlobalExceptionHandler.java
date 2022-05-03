@@ -46,7 +46,7 @@ public class GlobalExceptionHandler {
             if(e instanceof ConnectException){
                 CustmerToast.makeText(mContxt, mContxt.getString(R.string.network_loss)).show();
             }else if(e instanceof SocketTimeoutException){
-                CustmerToast.makeText(mContxt, mContxt.getString(R.string.network_loss)).show();
+                CustmerToast.makeText(mContxt, mContxt.getString(R.string.server_loss), 1).show();
             }else {
                 if(!CommonUtil.isEmpty(e.getMessage())){
                     CustmerToast.makeText(mContxt, e.getMessage()).show();

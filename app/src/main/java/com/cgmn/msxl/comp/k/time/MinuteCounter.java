@@ -5,6 +5,7 @@ public class MinuteCounter {
     String minutes;
     String second;
     Integer distance = 3;
+    Integer minutye_distance = 60;
 
     Boolean isOver = false;
 
@@ -26,6 +27,19 @@ public class MinuteCounter {
             return;
         }
         Integer temp = distance + Integer.valueOf(second);
+        if(temp == 60){
+            second = "00";
+            carryMinites();
+        }else{
+            second = String.format("%02d", temp);
+        }
+    }
+
+    public void nextMinutes(){
+        if(isOver){
+            return;
+        }
+        Integer temp = minutye_distance + Integer.valueOf(second);
         if(temp == 60){
             second = "00";
             carryMinites();

@@ -18,9 +18,11 @@ public class PagePermissionUtils {
         hash.put(PageMainItem.LEADING_STRATEGY+"", String.format("%s##%s##trading", fragment.getString(R.string.dragTrain), fragment.getString(R.string.trading)));
         hash.put(PageMainItem.NORMAL_STRATEGY+"", String.format("%s##%s##trading", fragment.getString(R.string.tradTrain), fragment.getString(R.string.trading)));
         hash.put(PageMainItem.TIMESHARE_KLINE+"", String.format("%s##%s##trading", fragment.getString(R.string.time_share_kline), fragment.getString(R.string.trading)));
-
         hash.put(PageMainItem.FREE_KLINE+"", String.format("%s##%s##trading", fragment.getString(R.string.free_kline), fragment.getString(R.string.trading)));
         hash.put(PageMainItem.FREE_TIME_SHARE+"", String.format("%s##%s##trading", fragment.getString(R.string.free_time_share), fragment.getString(R.string.trading)));
+
+        hash.put(PageMainItem.KZZ_XL_STRATEGY+"", String.format("%s##%s##zhuanzhai", fragment.getString(R.string.kzz_kline), fragment.getString(R.string.zhuanzhai)));
+        hash.put(PageMainItem.KZZ_XL_TIME_STRATEGY+"", String.format("%s##%s##zhuanzhai", fragment.getString(R.string.kzz_time_share), fragment.getString(R.string.zhuanzhai)));
 
         hash.put(PageMainItem.SUM_PL_LINE+"", String.format("%s##%s##pl_rate_line", fragment.getString(R.string.train_sum_line), fragment.getString(R.string.pl_rate_line)));
         hash.put(PageMainItem.LEADING_LINE+"", String.format("%s##%s##pl_rate_line", fragment.getString(R.string.leading_line), fragment.getString(R.string.pl_rate_line)));

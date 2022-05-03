@@ -123,6 +123,14 @@ public class RealTradeManage {
         group.calcAverageMACD();
     }
 
+    public void setCurrentK(StockDetail kk){
+        this.currentK = kk;
+    }
+
+    public void initkStatus(){
+        this.kStatus = OPEN;
+    }
+
     public int getLeftDay() {
         return klineset.getFutureList().size() - 1;
     }
@@ -156,6 +164,9 @@ public class RealTradeManage {
      */
     public int canTradingStatus(){
         int flag = 0;
+        if(CommonUtil.isKzz(currentK.getStackCode())){
+            return flag;
+        }
         if(kStatus == OPEN){
             String rate = currentK.getOpenrate().replace("%", "").replaceAll("_", "");
             if(CommonUtil.isEmpty(rate)){

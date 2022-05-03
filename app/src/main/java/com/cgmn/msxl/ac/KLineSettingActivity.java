@@ -56,7 +56,7 @@ public class KLineSettingActivity extends BaseOtherActivity
     private Context mContext;
 
     private TextView txt_first_dex_list,txt_second_dex_list;
-    private SwitchButton bt_sw;
+    private SwitchButton bt_sw,bt_voice_sw;
 
     private TextView count_minus,et_count,count_plus;
     private TextView count_minus_lb,et_count_lb,count_plus_lb;
@@ -149,6 +149,7 @@ public class KLineSettingActivity extends BaseOtherActivity
         txt_second_dex_list = findViewById(R.id.txt_second_dex_list);
 
         bt_sw = findViewById(R.id.bt_sw);
+        bt_voice_sw = findViewById(R.id.bt_voice_sw);
         count_minus = findViewById(R.id.count_minus);
         et_count = findViewById(R.id.et_count);
         count_plus = findViewById(R.id.count_plus);
@@ -170,6 +171,13 @@ public class KLineSettingActivity extends BaseOtherActivity
             public void onCheckedChanged(SwitchButton buttonView, final boolean isChecked) {
                 final int status = isChecked ? State.OPEN :  State.CLOSE;
                 upsertSetting("AUTO_NEXT_STEP", status+"");
+            }
+        });
+        bt_voice_sw.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(SwitchButton buttonView, final boolean isChecked) {
+                final int status = isChecked ? State.OPEN :  State.CLOSE;
+                upsertSetting("PLAY_VOICE", status+"");
             }
         });
         count_minus.setOnClickListener(ls);
@@ -240,7 +248,7 @@ public class KLineSettingActivity extends BaseOtherActivity
 
     private void loadSetting(){
         String firstIndex = "MACD", secondIndex="VOL";
-        Integer autoNext = 0;
+        Integer autoNext = 0,playVoice=0;
         Integer trendTime = 3, shortTime = 5;
 
         final AppSqlHelper dbHelper = new AppSqlHelper(mContext);
@@ -254,6 +262,9 @@ public class KLineSettingActivity extends BaseOtherActivity
         if(!CommonUtil.isEmpty(map.get("AUTO_NEXT_STEP"))){
             autoNext = Integer.valueOf(map.get("AUTO_NEXT_STEP"));
         }
+        if(!CommonUtil.isEmpty(map.get("PLAY_VOICE"))){
+            playVoice = Integer.valueOf(map.get("PLAY_VOICE"));
+        }
         if(!CommonUtil.isEmpty(map.get("TREND_TIME"))){
             trendTime = Integer.valueOf(map.get("TREND_TIME"));
         }
@@ -264,6 +275,7 @@ public class KLineSettingActivity extends BaseOtherActivity
         txt_first_dex_list.setText(firstIndex);
         txt_second_dex_list.setText(secondIndex);
         bt_sw.changeStatus(autoNext);
+        bt_voice_sw.changeStatus(playVoice);
         et_count.setText(trendTime+"");
         et_count_lb.setText(shortTime+"");
 

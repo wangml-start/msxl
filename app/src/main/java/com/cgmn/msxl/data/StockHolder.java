@@ -20,12 +20,14 @@ public class StockHolder {
 
     public final static int LEADING_STRATEGY = 100;
     public final static int NORMAL_STRATEGY = 101;
+    public final static int KZZ_STRATEGY = 102;
     public final static int RANK_SUMMARY = 99;
     public final static int EARNING_CURVE_SUMMARY = 98;
 
     private final float brokerRate = 0.00025f;
     private final float yinhuaRate = 0.001f;
     private final float guohuRate = 0.001f;
+    private final float kzzRate = (float) (0.5/10000.0);
 
     LinkedList<Trade> nodes;
 
@@ -264,7 +266,7 @@ public class StockHolder {
         return CommonUtil.formatPercent(pl / initTotAmt);
     }
 
-    public void buyStock(int count, Float pri, String scode, String sName) {
+    public void buyStock(long count, Float pri, String scode, String sName) {
         code = scode;
         stackName = sName;
         holdShare += count;
@@ -282,6 +284,25 @@ public class StockHolder {
         if (brofee < 5) {
             brofee = 5.0;
         }
+        fee += brofee;
+        exchange += fee;
+        totAmt -= fee;
+        holdAmt += buyAmt;
+        holdPl -= fee;
+        avaiAmt = totAmt - holdAmt;
+        costPrice = (holdAmt - holdPl) / holdShare;
+        pl = totAmt - initTotAmt;
+    }
+
+    public void buyKzz(long count, Float pri, String scode, String sName){
+        code = scode;
+        stackName = sName;
+        holdShare += count;
+        avaiLabelShare += count;
+        price = Double.valueOf(pri);
+        Double buyAmt = price * count;
+        Double fee = 0.0;
+        Double brofee = buyAmt * kzzRate;
         fee += brofee;
         exchange += fee;
         totAmt -= fee;
@@ -328,25 +349,66 @@ public class StockHolder {
         pl = totAmt - initTotAmt;
     }
 
-    public long getAvaiBuyCount(String price) {
-        float priceNum = CommonUtil.castFloatFromString(price);
-        Double avaiAmt = getAvaiAmt();
-        long avaiCount = (long) (avaiAmt / priceNum / 100);
-
-        return 100 * avaiCount;
+    public void sellKzz(long count, Float pri) {
+        holdShare -= count;
+        avaiLabelShare -= count;
+        price = Double.valueOf(pri);
+        Double sellAmt = price * count;
+        Double fee = sellAmt * kzzRate;
+        exchange += fee;
+        holdPl -= fee;
+        holdAmt -= sellAmt;
+        totAmt -= fee;
+        avaiAmt = totAmt - holdAmt;
+        if (holdShare == 0) {
+            costPrice = 0.0;
+            holdPl = 0.0;
+            holdDays = 0;
+        } else {
+            costPrice = (holdAmt - holdPl) / holdShare;
+        }
+        pl = totAmt - initTotAmt;
     }
 
-    public long getAvaiBuyCount(String price, Float percent) {
+    public long getAvaiBuyCount(String price, String p_code) {
+        float priceNum = CommonUtil.castFloatFromString(price);
+        Double avaiAmt = getAvaiAmt();
+        int uom = 100;
+        if(CommonUtil.isKzz(p_code)){
+            if(p_code.startsWith("11")) {
+                uom = 10;
+            }
+        }
+        long avaiCount = (long) (avaiAmt / priceNum / uom);
+        return uom * avaiCount;
+    }
+
+    public long getAvaiBuyCount(String price, Float percent, String p_code) {
+        long total = getAvaiBuyCount(price, p_code);
         float priceNum = CommonUtil.castFloatFromString(price);
         Double avaiAmt = getAvaiAmt() * percent;
-        long avaiCount = (long) (avaiAmt / priceNum / 100);
-
-        return 100 * avaiCount;
+        int uom = 100;
+        if(CommonUtil.isKzz(p_code)){
+            if(p_code.startsWith("11")){
+                uom = 10;
+            }
+        }
+        long avaiCount = (long) (avaiAmt / priceNum / uom);
+        if(avaiCount == 0 && total > 0){
+            avaiCount = 1;
+        }
+        return uom * avaiCount;
     }
 
     public long getAvaiSellCount(Float percent) {
-        long avaiCount = (long) (avaiLabelShare * Double.valueOf(percent) / 100);
-        return 100 * avaiCount;
+        int uom = 100;
+        if(CommonUtil.isKzz(code)){
+            if(code.startsWith("11")){
+                uom = 10;
+            }
+        }
+        long avaiCount = (long) (avaiLabelShare * Double.valueOf(percent) / uom);
+        return uom * avaiCount;
     }
 
     public void nextPrice(Float pr, Boolean changeDay) {

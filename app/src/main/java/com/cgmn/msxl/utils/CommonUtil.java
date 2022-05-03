@@ -14,6 +14,7 @@ import java.util.*;
 
 public class CommonUtil {
     private static DecimalFormat formatP = new DecimalFormat("0.00%");
+    private static DecimalFormat format1 = new DecimalFormat("#,##0.0");
     private static DecimalFormat format2 = new DecimalFormat("#,##0.00");
     private static DecimalFormat format3 = new DecimalFormat("#,##0.000");
 
@@ -21,7 +22,7 @@ public class CommonUtil {
     private static DecimalFormat formatLargeAmt = new DecimalFormat("#,##0.00");
 
     private static DecimalFormat formatVol = new DecimalFormat("##0");
-    private static DecimalFormat formatLargeVol = new DecimalFormat("##0.0");
+    private static DecimalFormat formatLargeVol = new DecimalFormat("##0");
 
     public static boolean isEmpty(Object o){
         if(o == null){
@@ -97,8 +98,13 @@ public class CommonUtil {
 
     public static String formatPercent(Object num){
         Double number = Double.valueOf(num.toString());
-        if(number >= 100){
-            return format2.format(number/100) + "百倍";
+        Double temp = number/10000/10000/10000;
+        if(temp >= 1){
+            return format1.format(temp) + "万亿倍";
+        }else if(temp*10000 >= 1){
+            return format1.format(temp*10000) + "亿倍";
+        }else if(temp*10000*10000 >= 1){
+            return format2.format(number/10000) + "万倍";
         }else{
             return formatP.format(num);
         }
@@ -121,32 +127,27 @@ public class CommonUtil {
             symbol = -1;
         }
         Double number = Math.abs(Double.valueOf(num.toString()));
-        if( number > 9999.0 * 10000 ){
-            return formatLargeAmt.format(number/(10000*10000) * symbol)+"亿";
-        }else if(number > 9999.0){
-            return formatLargeAmt.format(number/10000 * symbol)+"万";
+        Double temp = number/10000/10000/10000;
+        if( temp >= 1){
+            return format1.format(temp * symbol)+"万亿";
+        }else if(temp * 10000 >= 1){
+            return formatLargeAmt.format(temp * 10000 * symbol)+"亿";
+        }else if(temp * 10000 * 10000 >= 1){
+            return formatLargeAmt.format(temp * 10000 * 10000 * symbol)+"万";
         }else{
             return formatAmt.format(number* symbol);
         }
     }
 
     public static String formatHDNumer(Object num){
-        Integer symbol = 1;
-        if(isEmpty(num)){
-            return "";
-        }
-        if(Double.valueOf(num.toString()) < 0){
-            symbol = -1;
-        }
-        Double number = Math.abs(Double.valueOf(num.toString()));
-        if( number > 9999.0 * 10000 ){
-            return formatLargeAmt.format(number/(10000) * symbol)+"万";
-        } else{
-            return formatAmt.format(number* symbol);
-        }
+        return formatAmt(num);
     }
 
-
+    /**
+     * 分时交易明细里面的量
+     * @param num
+     * @return
+     */
     public static String formatVolume(Object num){
         if(isEmpty(num)){
             return "";
@@ -277,5 +278,12 @@ public class CommonUtil {
             list[index++] = new OkHttpClientManager.Param(en.getKey(), en.getValue());
         }
         return list;
+    }
+
+    public static boolean isKzz(String code){
+        if(code.startsWith("1"))
+            return true;
+        else
+            return false;
     }
 }

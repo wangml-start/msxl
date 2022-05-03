@@ -38,16 +38,22 @@ public class KDJCalculation {
             float min = getPeriodLowest(list, i, n);
             float max = getPeriodHighest(list, i, n);
             float div = max-min;
-            rsv = ((list.get(i).close - min) / div) * 100;
+            if(div == 0){
+                kValue.add(0.0f);
+                dValue.add(0.0f);
+                jValue.add(0.0f);
+            }else{
+                rsv = ((list.get(i).close - min) / div) * 100;
 
-            float k = countSMA(rsv, P1, m, lastK);
-            float d = countSMA(k, P2, m, lastD);
-            float j = 3 * k - 2 * d;
-            lastK = k;
-            lastD = d;
-            kValue.add(k);
-            dValue.add(d);
-            jValue.add(j);
+                float k = countSMA(rsv, P1, m, lastK);
+                float d = countSMA(k, P2, m, lastD);
+                float j = 3 * k - 2 * d;
+                lastK = k;
+                lastD = d;
+                kValue.add(k);
+                dValue.add(d);
+                jValue.add(j);
+            }
         }
         result.put("k", kValue);
         result.put("d", dValue);

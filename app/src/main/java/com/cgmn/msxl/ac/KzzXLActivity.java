@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -13,19 +12,26 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import com.cgmn.msxl.R;
 import com.cgmn.msxl.application.GlobalTreadPools;
 import com.cgmn.msxl.comp.CustmerToast;
 import com.cgmn.msxl.comp.k.KLineContent;
 import com.cgmn.msxl.comp.k.KlineStyle;
+import com.cgmn.msxl.comp.pop.TradingPop;
 import com.cgmn.msxl.comp.view.MyMarqueeView;
 import com.cgmn.msxl.comp.view.StockHolderView;
-import com.cgmn.msxl.comp.pop.TradingPop;
-import com.cgmn.msxl.comp.swb.State;
-import com.cgmn.msxl.data.*;
+import com.cgmn.msxl.data.SettingItem;
+import com.cgmn.msxl.data.SettledAccount;
+import com.cgmn.msxl.data.StockHolder;
+import com.cgmn.msxl.data.Trade;
 import com.cgmn.msxl.db.AppSqlHelper;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.cgmn.msxl.in.AutoNextListener;
@@ -33,16 +39,28 @@ import com.cgmn.msxl.receiver.ReceiverMessage;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.server_interface.KlineSet;
 import com.cgmn.msxl.server_interface.StockDetail;
-import com.cgmn.msxl.service.*;
-import com.cgmn.msxl.utils.*;
+import com.cgmn.msxl.service.GlobalDataHelper;
+import com.cgmn.msxl.service.MarqueeManager;
+import com.cgmn.msxl.service.OkHttpClientManager;
+import com.cgmn.msxl.service.RealTradeManage;
+import com.cgmn.msxl.service.TokenInterceptor;
+import com.cgmn.msxl.service.TradeAutoRunManager;
+import com.cgmn.msxl.utils.CommonUtil;
+import com.cgmn.msxl.utils.ConstantHelper;
+import com.cgmn.msxl.utils.GsonUtil;
+import com.cgmn.msxl.utils.MessageUtil;
+import com.cgmn.msxl.utils.PlayVoiceUtils;
+import com.cgmn.msxl.utils.ShowDialog;
 import com.helin.loadinglayout.LoadingLayout;
 import com.squareup.okhttp.Request;
-import org.apache.commons.lang3.StringUtils;
 
-import java.util.*;
 
-public class RealControlActivity extends AppCompatActivity
-        implements View.OnClickListener{
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+public class KzzXLActivity extends AppCompatActivity implements View.OnClickListener{
     private static final String TAG = RealControlActivity.class.getSimpleName();
     private Context mContxt;
     private KLineContent chart;
@@ -50,8 +68,8 @@ public class RealControlActivity extends AppCompatActivity
     //设置的模式
     List<SettingItem> modeList;
 
-    private int trainType;
-    private int userModelId;
+    private int trainType = StockHolder.KZZ_STRATEGY;
+    private int userModelId = 1;
     //消息处理
     private Handler mHandler;
 
@@ -63,69 +81,31 @@ public class RealControlActivity extends AppCompatActivity
     private RealTradeManage realtradeManage;
     TextView lb_open_price;
     TextView lb_close_price;
-    TextView lb_open_rate;
-    TextView lb_close_rate;
     TextView lb_left_day;
-    TextView lb_left_s,lb_last_rate;
+    TextView lb_left_s;
     Button bt_next, bt_buy,bt_sell, bt_change, bt_exit;
     MyMarqueeView marqueeview;
     MarqueeManager marqueeManager;
     TradeAutoRunManager autoRunManager;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.klinecontrol_layout);
+        setContentView(R.layout.kzz_prictice_layout);
         bindView();
         initMessageHandle();
         loadAccCash();
         loadKLineSet();
-        loadUserMode();
         registerTokenListener();
     }
 
     private String getUrl(){
-        String action = "/stock/getKlineSet";
-        if(trainType == StockHolder.LEADING_STRATEGY){
-            action = "/stock/getHigherKlineSet";
-        }
+        String action = "/stock/get_kzz_market";
         Map<String, String> params = new HashMap<>();
         params.put("token", GlobalDataHelper.getToken(mContxt));
         return CommonUtil.buildGetUrl(
                 ConstantHelper.serverUrl,
                 action, params);
-    }
-
-    private void loadUserMode(){
-        //获取用户模式
-        GlobalTreadPools.getInstance(mContxt).execute(new Runnable() {
-            @Override
-            public void run() {
-                List<SettingItem> modelList = ModeManager.getInstance().getList();
-                List<SettingItem> selects = new ArrayList<>();
-                AppSqlHelper sqlHeper = new AppSqlHelper(mContxt);
-                Map<String, Object> map = GlobalDataHelper.getUser(mContxt);
-                Map<String, String> hash = sqlHeper.getUserModelSettings((String) map.get("id"));
-                if(!CommonUtil.isEmpty(hash)){
-                    for(SettingItem item : modelList){
-                        String type = item.getModedType()+"";
-                        if(hash.containsKey(type)){
-                            item.setState(Integer.valueOf(hash.get(type)));
-                            if(item.getState() == State.OPEN){
-                                selects.add(item);
-                            }
-                        }
-                    }
-                }
-                modeList = selects;
-                stockView.getStockHolder().setModeList(selects);
-                Message message = Message.obtain();
-                message.what = MessageUtil.LPAD_USER_MODES_SUCCESS;
-                mHandler.sendMessage(message);
-            }
-        });
     }
 
     private void loadKLineSet(){
@@ -189,11 +169,7 @@ public class RealControlActivity extends AppCompatActivity
                     }else if(acc.getCashAmt().intValue() < 100){
                         jumpToChargetPage("charge");
                     }
-                }else if(msg.what == MessageUtil.LPAD_USER_MODES_SUCCESS){
-                    //show current mode
-                    showSelectModes();
-                }
-                else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
+                }else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
                     GlobalExceptionHandler.getInstance(mContxt).handlerException((Exception) msg.obj);
                 }
                 return false;
@@ -270,30 +246,15 @@ public class RealControlActivity extends AppCompatActivity
         stockView.getStockHolder().setModeList(modeList);
     }
 
-    private void showSelectModes(){
-        if(modeList.size() > 0){
-            List<String> texts = new ArrayList<>();
-            for(SettingItem m : modeList){
-                texts.add(m.getModeText());
-            }
-            new ShowDialog().showTips(mContxt, StringUtils.join(texts, "\n") ,"设置的模式");
-        }
-    }
-
     private void updateTopBar(){
         StockDetail current = realtradeManage.getCurrentK();
         StockDetail last = realtradeManage.getLastK();
         lb_open_price.setText("开盘价： " + CommonUtil.formatNumer(current.getStart()));
-        lb_open_rate.setText("涨跌:  " + current.getOpenrate());
         lb_close_price.setText("收盘价： 00.00");
-        lb_close_rate.setText("涨跌:  00.00%");
         lb_left_day.setText("剩余: " + realtradeManage.getLeftDay() + " 天");
-        lb_last_rate.setText("昨换手: "+last.getExchageRate());
-
         lb_close_price.setTextColor(getResources().getColor(R.color.text_topbar));
-        lb_close_rate.setTextColor(getResources().getColor(R.color.text_topbar));
         lb_open_price.setTextColor(getResources().getColor(R.color.text_topbar));
-        lb_open_rate.setTextColor(getResources().getColor(R.color.text_topbar));
+
     }
 
     private void bindView(){
@@ -302,10 +263,7 @@ public class RealControlActivity extends AppCompatActivity
 
         lb_open_price = findViewById(R.id.lb_open_price);
         lb_close_price = findViewById(R.id.lb_close_price);
-        lb_open_rate = findViewById(R.id.lb_open_rate);
-        lb_close_rate = findViewById(R.id.lb_close_rate);
         lb_left_day = findViewById(R.id.lb_left_day);
-        lb_last_rate = findViewById(R.id.lb_last_rate);
         bt_next = findViewById(R.id.bt_next);
         bt_buy = findViewById(R.id.bt_buy);
         bt_sell = findViewById(R.id.bt_sell);
@@ -326,7 +284,7 @@ public class RealControlActivity extends AppCompatActivity
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         int screenHeight = dm.heightPixels;
-        chartParent.getLayoutParams().height=((Double)(screenHeight * 0.45)).intValue();
+        chartParent.getLayoutParams().height=((Double)(screenHeight * 0.5)).intValue();
         chartParent.setStateClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -358,64 +316,34 @@ public class RealControlActivity extends AppCompatActivity
         marqueeManager = new MarqueeManager(mContxt, marqueeview);
         marqueeManager.startMarquee();
 
-        Intent intent = getIntent();
-        Bundle bundle = intent.getBundleExtra("datas");
-        trainType = bundle.getInt("train_type");
-        userModelId =  bundle.getInt("user_model_id");
-
         final AppSqlHelper dbHelper = new AppSqlHelper(mContxt);
         Map<String, String> map =  dbHelper.getSystenSettings();
 
-        if(map.get("AUTO_NEXT_STEP") == null || "0".equals(map.get("AUTO_NEXT_STEP"))){
-            if(trainType == StockHolder.LEADING_STRATEGY){
-                if(map.get("SHORT_TIME") == null || Integer.valueOf(map.get("SHORT_TIME")) > 0){
-                    //记时3秒自动下一步
-                    autoRunManager = new TradeAutoRunManager();
-                    autoRunManager.setListener(new AutoNextListener() {
-                        @Override
-                        public void onTicket(Integer sec) {
-                            bt_next.setText(String.format("%s%ss", getResources().getString(R.string.next), sec));
-                        }
-
-                        @Override
-                        public void onComplete() {
-                            bt_next.setText(String.format("%s",  getResources().getString(R.string.next)));
-                            onNextClick();
-                            PlayVoiceUtils.getInstance().PlayMusic(mContxt);
-                        }
-                    });
-                    autoRunManager.startManager();
-                    if(map.get("SHORT_TIME") == null){
-                        autoRunManager.setTotal(5);
-                    }else{
-                        autoRunManager.setTotal(Integer.valueOf(map.get("SHORT_TIME")));
+        if (map.get("AUTO_NEXT_STEP") == null || "0".equals(map.get("AUTO_NEXT_STEP"))) {
+            if (map.get("TREND_TIME") == null || Integer.valueOf(map.get("TREND_TIME")) > 0) {
+                //记时3秒自动下一步
+                autoRunManager = new TradeAutoRunManager();
+                autoRunManager.setListener(new AutoNextListener() {
+                    @Override
+                    public void onTicket(Integer sec) {
+                        bt_next.setText(String.format("%s%ss", getResources().getString(R.string.next), sec));
                     }
-                }
-            }else{
-                if(map.get("TREND_TIME") == null || Integer.valueOf(map.get("TREND_TIME")) > 0){
-                    //记时3秒自动下一步
-                    autoRunManager = new TradeAutoRunManager();
-                    autoRunManager.setListener(new AutoNextListener() {
-                        @Override
-                        public void onTicket(Integer sec) {
-                            bt_next.setText(String.format("%s%ss", getResources().getString(R.string.next), sec));
-                        }
 
-                        @Override
-                        public void onComplete() {
-                            bt_next.setText(String.format("%s",  getResources().getString(R.string.next)));
-                            onNextClick();
-                            PlayVoiceUtils.getInstance().PlayMusic(mContxt);
-                        }
-                    });
-                    autoRunManager.startManager();
-                    if(map.get("TREND_TIME") == null){
-                        autoRunManager.setTotal(2);
-                    }else{
-                        autoRunManager.setTotal(Integer.valueOf(map.get("TREND_TIME")));
+                    @Override
+                    public void onComplete() {
+                        bt_next.setText(String.format("%s", getResources().getString(R.string.next)));
+                        onNextClick();
+                        PlayVoiceUtils.getInstance().PlayMusic(mContxt);
                     }
+                });
+                autoRunManager.startManager();
+                if (map.get("TREND_TIME") == null) {
+                    autoRunManager.setTotal(2);
+                } else {
+                    autoRunManager.setTotal(Integer.valueOf(map.get("TREND_TIME")));
                 }
             }
+
         }
     }
 
@@ -427,13 +355,10 @@ public class RealControlActivity extends AppCompatActivity
             StockDetail current = realtradeManage.getCurrentK();
             StockDetail last = realtradeManage.getLastK();
             lb_close_price.setText("收盘价：" + CommonUtil.formatNumer(current.getEnd()));
-            lb_close_rate.setText("涨跌: " + current.getUpRate());
             if(current.getEnd() > last.getEnd()){
                 lb_close_price.setTextColor(getResources().getColor(R.color.kline_up));
-                lb_close_rate.setTextColor(getResources().getColor(R.color.kline_up));
             }else{
                 lb_close_price.setTextColor(getResources().getColor(R.color.kline_down));
-                lb_close_rate.setTextColor(getResources().getColor(R.color.kline_down));
             }
             stockView.getStockHolder().nextPrice(current.getEnd(), false);
             if(autoRunManager != null){
@@ -441,28 +366,6 @@ public class RealControlActivity extends AppCompatActivity
             }
         }else{
             //在还未到一下天前检测
-            //交易模式检测
-            List<Integer> holdChecks = ModeManager.getInstance().getHoldCheck();
-            Map<String, Object> values = new HashMap<>();
-            values.put("nodes", realtradeManage.getGroup().getNodes());
-            values.put("kStatus", realtradeManage.getkStatus());
-            values.put("holdDay", stockView.getStockHolder().getHoldDays());
-            values.put("holdStock", stockView.getStockHolder().getAvaiLabelShare() > 0);
-            values.put("lossRate", stockView.getStockHolder().getLossRate());
-            List<String> messges = new ArrayList<>();
-            for(SettingItem sItem : stockView.getStockHolder().getModeList()){
-                if(holdChecks.contains(sItem.getModedType())){
-                    boolean flag = ModeManager.getInstance().assertionOverMode(sItem.getModedType(), values);
-                    if(flag && !stockView.getStockHolder().exists(sItem.getModedType())){
-                        stockView.getStockHolder().addOverType(sItem.getModedType());
-                        messges.add(sItem.getModeText());
-                    }
-                }
-            }
-            if(messges.size() > 0){
-                CustmerToast.makeText(mContxt,
-                        "违背模式\n " + StringUtils.join(messges, "\n"), Toast.LENGTH_LONG).show();
-            }
             if(realtradeManage.showNextOpen()){
                 StockDetail current = realtradeManage.getCurrentK();
                 chart.setData(realtradeManage.getGroup());
@@ -470,10 +373,10 @@ public class RealControlActivity extends AppCompatActivity
                 updateTopBar();
                 if(realtradeManage.openWithUp()){
                     lb_open_price.setTextColor(getResources().getColor(R.color.kline_up));
-                    lb_open_rate.setTextColor(getResources().getColor(R.color.kline_up));
+
                 }else if(realtradeManage.openWithDown()){
                     lb_open_price.setTextColor(getResources().getColor(R.color.kline_down));
-                    lb_open_rate.setTextColor(getResources().getColor(R.color.kline_down));
+
                 }
                 stockView.getStockHolder().nextPrice(current.getStart(), true);
                 //更新持仓天数
@@ -708,6 +611,7 @@ public class RealControlActivity extends AppCompatActivity
 
         OkHttpClientManager.getInstance().addIntercept(new TokenInterceptor(mContxt));
     }
+
 
     private void setKlineBaseDatas(float height){
         KlineStyle.initSize();

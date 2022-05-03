@@ -9,7 +9,7 @@
     <string name="trading">操盘</string>
     <string name="mode_setting">模式设置</string>
     <string name="dragTrain">连板战法训练</string>
-    <string name="time_share_kline">连板战法训练(分时)</string>
+    <string name="time_share_kline">连板战法训练-分时</string>
     <string name="tradTrain">趋势波段训练</string>
     <string name="free_kline">K线盘感训练</string>
     <string name="free_time_share">分时盘感训练</string>
@@ -21,6 +21,9 @@
     <string name="dan_ranking">段位榜</string>
     <string name="day_ranking">日榜</string>
     <string name="free_rank_list">收益率榜</string>
+    <string name="zhuanzhai">转债</string>
+    <string name="kzz_kline">可转债训练-K线图</string>
+    <string name="kzz_time_share">可转债训练-分时图</string>
 
     <string name="train_sum_line">收益率曲线</string>
     <string name="leading_line">连板战法曲线</string>

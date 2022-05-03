@@ -36,7 +36,9 @@
         <activity android:name=".ac.LoginActivity" />
         <activity android:name=".ac.ForgetPasswordActivity" />
         <activity android:name=".ac.AppMainActivity" />
-        <activity android:name=".ac.RealControlActivity" />
+        <activity android:name=".ac.RealControlActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".ac.KzzXLActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".ac.KzzTimeShareActivity" android:screenOrientation="portrait"/>
         <activity android:name=".ac.StatisticActivity"/>
         <activity android:name=".ac.ModeSettingActivity"/>
         <activity android:name=".ac.VIPActivity"/>
@@ -61,13 +63,13 @@
         <activity android:name=".ac.NewVersionActivity"/>
         <activity android:name=".ac.UserInfoActivity"/>
         <activity android:name=".ac.MarketTrendActivity"/>
-        <activity android:name=".ac.OptionalStockActivity"/>
-        <activity android:name=".ac.UserAgrementActivity"/>
-        <activity android:name=".ac.KLineSimulateActivity"/>
-        <activity android:name=".ac.NormalRankingActivity"/>
-        <activity android:name=".ac.NormalStatisticActivity"/>
-        <activity android:name=".ac.NormalTimeShareActivity"/>
-        <activity android:name=".ac.TimeShareKLineActivity"/>
+        <activity android:name=".ac.OptionalStockActivity" />
+        <activity android:name=".ac.UserAgrementActivity" />
+        <activity android:name=".ac.KLineSimulateActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".ac.NormalRankingActivity" />
+        <activity android:name=".ac.NormalStatisticActivity" />
+        <activity android:name=".ac.NormalTimeShareActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".ac.TimeShareKLineActivity" android:screenOrientation="portrait"/>
         <activity android:name=".ac.KLineSettingActivity"/>
     </application>
 

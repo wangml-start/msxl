@@ -446,13 +446,20 @@ public class KlinePaint {
 
             //均线
             if(node.avg5 != -1){
-                pt.line5Pt = new float[]{startx+half, (data.mYMax - node.avg5)* punit+ySpace};
+                float l5y = (data.mYMax - node.avg5)* punit+ySpace;
+                if(firIndexY > l5y)
+                    pt.line5Pt = new float[]{startx+half, l5y};
+
             }
             if(node.avg10 != -1){
-                pt.line10Pt = new float[]{startx+half, (data.mYMax - node.avg10)* punit+ySpace};
+                float l10y = (data.mYMax - node.avg10)* punit+ySpace;
+                if(firIndexY > l10y)
+                    pt.line10Pt = new float[]{startx+half, l10y};
             }
             if(node.avg20 != -1){
-                pt.line20Pt = new float[]{startx+half, (data.mYMax - node.avg20)* punit+ySpace};
+                float l20y = (data.mYMax - node.avg20)* punit+ySpace;
+                if(firIndexY > l20y)
+                    pt.line20Pt = new float[]{startx+half, l20y};
             }
         }
     }

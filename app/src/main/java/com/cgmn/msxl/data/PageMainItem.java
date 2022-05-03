@@ -36,6 +36,9 @@ public class PageMainItem {
     public static int TIMESHARE_KLINE = 25;
 
     public static int KLINE_SETTING = 27;
+    public static int KZZ_XL_STRATEGY = 29; //可转债训练
+    public static int KZZ_XL_TIME_STRATEGY = 30; //可转债训练-分时
+
     private int aIcon;
     private String aName;
     private int itemType;

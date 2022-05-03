@@ -43,7 +43,7 @@ public class KLineSimulateActivity extends AppCompatActivity implements View.OnC
     TextView lb_close_rate;
     TextView lb_left_day, lb_buy_cost, lb_rate;
     TextView lb_left_s, lb_last_rate;
-    MediaPlayer music;
+
     private LinearLayout bottomBar, pop_div_text;
     private RealTradeManage realtradeManage;
     TradeAutoRunManager autoRunManager;
@@ -129,7 +129,7 @@ public class KLineSimulateActivity extends AppCompatActivity implements View.OnC
                     public void onComplete() {
                         bt_next.setText(String.format("%s",  getResources().getString(R.string.next)));
                         onNextClick();
-                        PlayMusic();
+                        PlayVoiceUtils.getInstance().PlayMusic(mContxt);
                     }
                 });
                 autoRunManager.startManager();
@@ -451,7 +451,7 @@ public class KLineSimulateActivity extends AppCompatActivity implements View.OnC
                 autoRunManager.pause();
             }
             onNextClick();
-            PlayMusic();
+            PlayVoiceUtils.getInstance().PlayMusic(mContxt);
         } else if (v.getId() == R.id.bt_buy) {
             if (realtradeManage.getCurrentK() == null) {
                 return;
@@ -479,29 +479,6 @@ public class KLineSimulateActivity extends AppCompatActivity implements View.OnC
             });
         }
     }
-
-    private void releaseMediaPlayer() {
-        if (music != null) {
-            music.release();
-            music = null;
-        }
-    }
-
-    private void PlayMusic() {
-//        Log.e("PlayMusic","PlayMusic"+flag);
-        // 当用户很快的点击播放不同的音频时，就先释放，否则快速点击音频会有声音重叠
-        releaseMediaPlayer();
-        music = MediaPlayer.create(this, R.raw.btn_wav);
-        music.start();
-        // 播放完成可以释放资源
-        music.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                releaseMediaPlayer();
-            }
-        });
-    }
-
 
     @Override
     public void finish() {

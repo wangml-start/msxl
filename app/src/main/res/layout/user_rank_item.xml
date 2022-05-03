@@ -33,22 +33,29 @@
             android:textColor="@color/text_topbar"
             android:layout_marginLeft="8dp"
             android:id="@+id/txt_user_name"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:scrollHorizontally="false"
             />
     <TextView
-            android:layout_width="80dp"
+            android:layout_width="100dp"
             android:layout_height="match_parent"
             android:textSize="@dimen/smallSize"
             android:textColor="@color/text_topbar"
             android:gravity="right|center_vertical"
             android:id="@+id/txt_amt"
+            android:ellipsize="end"
+            android:maxLines="1"
             />
     <TextView
-            android:layout_width="80dp"
+            android:layout_width="100dp"
             android:layout_height="match_parent"
             android:textSize="@dimen/smallSize"
             android:gravity="right|center_vertical"
             android:textColor="@color/text_topbar"
             android:layout_marginRight="15dp"
             android:id="@+id/txt_rate"
+            android:ellipsize="end"
+            android:maxLines="1"
             />
 </LinearLayout>

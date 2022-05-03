@@ -59,13 +59,16 @@ public class TrainFragment extends Fragment{
     }
 
     private void initAdpter(){
+        //对应界面展示顺序
         List<Integer> list = new ArrayList<>();
         list.add(PageMainItem.LEADING_STRATEGY);
         list.add(PageMainItem.NORMAL_STRATEGY);
         list.add(PageMainItem.TIMESHARE_KLINE);
-
         list.add(PageMainItem.FREE_KLINE);
         list.add(PageMainItem.FREE_TIME_SHARE);
+
+        list.add(PageMainItem.KZZ_XL_STRATEGY);
+        list.add(PageMainItem.KZZ_XL_TIME_STRATEGY);
 
         list.add(PageMainItem.SUM_PL_LINE);
         list.add(PageMainItem.LEADING_LINE);
@@ -217,6 +220,14 @@ public class TrainFragment extends Fragment{
                             break;
                         case 25:
                             intent = new Intent(mContxt, TimeShareKLineActivity.class);
+                            startActivity(intent);
+                            break;
+                        case 29:
+                            intent = new Intent(mContxt, KzzXLActivity.class);
+                            startActivity(intent);
+                            break;
+                        case 30:
+                            intent = new Intent(mContxt, KzzTimeShareActivity.class);
                             startActivity(intent);
                             break;
                     }

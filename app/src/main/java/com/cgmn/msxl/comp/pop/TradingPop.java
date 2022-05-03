@@ -91,7 +91,11 @@ public class TradingPop extends PopupWindow
             positionMap = new HashMap<>();
         }
         if(!CommonUtil.isEmpty(positionMap.get("FIRST_POS"))){
-            first_pos.setText(positionMap.get("FIRST_POS"));
+            if("1/1".equals(positionMap.get("FIRST_POS"))){
+                first_pos.setText("满仓");
+            }else{
+                first_pos.setText(positionMap.get("FIRST_POS"));
+            }
         }else{
             first_pos.setText("满仓");
         }
@@ -155,12 +159,16 @@ public class TradingPop extends PopupWindow
         String price = getPrice();
         setPositions();
 
+        String uom = "股";
+        if(CommonUtil.isKzz(manage.getCurrentK().getStackCode())){
+            uom = "张";
+        }
         if (this.action.equals("BUY")) {
-            long avaiCount = stoHolder.getAvaiBuyCount(price);
-            tx_candle_count.setText("可买： " + avaiCount  + "股");
+            long avaiCount = stoHolder.getAvaiBuyCount(price, manage.getCurrentK().getStackCode());
+            tx_candle_count.setText("可买： " + CommonUtil.formatAmt(avaiCount)  + uom);
         } else {
-            int avaiCount = (int) stoHolder.getAvaiLabelShare();
-            tx_candle_count.setText("可卖： " + avaiCount + "股");
+            Long avaiCount = stoHolder.getAvaiLabelShare();
+            tx_candle_count.setText("可卖： " + CommonUtil.formatAmt(avaiCount) + uom);
         }
 
         /* 设置弹出窗口特征 */
@@ -192,13 +200,13 @@ public class TradingPop extends PopupWindow
     private void positionManage(float persent){
         float price = CommonUtil.castFloatFromString(getPrice());
         if (this.action.equals("BUY")) {
-            long avaiCount = stoHolder.getAvaiBuyCount(manage.getCurenPrice(), persent);
+            long avaiCount = stoHolder.getAvaiBuyCount(getPrice(), persent, manage.getCurrentK().getStackCode());
             et_count.setText(avaiCount + "");
-            setAmountText(CommonUtil.formatNumer(avaiCount*price));
+            setAmountText(CommonUtil.formatAmt(avaiCount*price));
         }else{
             long avaiCount = stoHolder.getAvaiSellCount(persent);
             et_count.setText(avaiCount+"");
-            setAmountText(CommonUtil.formatNumer(avaiCount*price));
+            setAmountText(CommonUtil.formatAmt(avaiCount*price));
         }
     }
 
@@ -214,33 +222,41 @@ public class TradingPop extends PopupWindow
             return;
         }
         if (this.action.equals("BUY")) {
-            stoHolder.buyStock(count, price,
-                    manage.getCurrentK().getStackCode(),
-                    manage.getCurrentK().getStackName());
+            if(CommonUtil.isKzz(manage.getCurrentK().getStackCode())){
+                stoHolder.buyKzz(count, price,
+                        manage.getCurrentK().getStackCode(),
+                        manage.getCurrentK().getStackName());
+            }else{
+                stoHolder.buyStock(count, price,
+                        manage.getCurrentK().getStackCode(),
+                        manage.getCurrentK().getStackName());
+                List<Integer> bcks = ModeManager.getInstance().getBuyCheck();
+                Map<String, Object> values = new HashMap<>();
+                values.put("nodes", manage.getGroup().getNodes());
+                values.put("kStatus", manage.getkStatus());
+                values.put("isCreateHold", count == stoHolder.getHoldShare());
+                values.put("startRate", stoHolder.getStartRate(count*price));
+                values.put("totalRate", stoHolder.getHoldRate());
+                List<String> messges = new ArrayList<>();
+                for(SettingItem sItem : stoHolder.getModeList()){
+                    if(bcks.contains(sItem.getModedType())){
+                        boolean flag = ModeManager.getInstance().assertionOverMode(sItem.getModedType(), values);
+                        if(flag && !stoHolder.exists(sItem.getModedType())){
+                            stoHolder.addOverType(sItem.getModedType());
+                            messges.add(sItem.getModeText());
+                        }
+                    }
+                }
+                if(messges.size() > 0){
+                    CustmerToast.makeText(mContext,
+                            "违背模式\n " + StringUtils.join(messges, "\n"), Toast.LENGTH_LONG).show();
+                }
+            }
+
             if(count == stoHolder.getHoldShare()){
                 stoHolder.whenNextDay();
             }
-            List<Integer> bcks = ModeManager.getInstance().getBuyCheck();
-            Map<String, Object> values = new HashMap<>();
-            values.put("nodes", manage.getGroup().getNodes());
-            values.put("kStatus", manage.getkStatus());
-            values.put("isCreateHold", count == stoHolder.getHoldShare());
-            values.put("startRate", stoHolder.getStartRate(count*price));
-            values.put("totalRate", stoHolder.getHoldRate());
-            List<String> messges = new ArrayList<>();
-            for(SettingItem sItem : stoHolder.getModeList()){
-                if(bcks.contains(sItem.getModedType())){
-                    boolean flag = ModeManager.getInstance().assertionOverMode(sItem.getModedType(), values);
-                    if(flag && !stoHolder.exists(sItem.getModedType())){
-                        stoHolder.addOverType(sItem.getModedType());
-                        messges.add(sItem.getModeText());
-                    }
-                }
-            }
-            if(messges.size() > 0){
-                CustmerToast.makeText(mContext,
-                        "违背模式\n " + StringUtils.join(messges, "\n"), Toast.LENGTH_LONG).show();
-            }
+
             //标记
             manage.getCurrentK().setOpChar("B");
             if(timeShare != null && timeShare.current != null){
@@ -248,7 +264,11 @@ public class TradingPop extends PopupWindow
             }
         }else{
             float rate = stoHolder.getPlRateNum();
-            stoHolder.sellStock(count, price);
+            if(CommonUtil.isKzz(this.stoHolder.getCode())){
+                stoHolder.sellKzz(count, price);
+            }else{
+                stoHolder.sellStock(count, price);
+            }
             if(stoHolder.getHoldShare() == 0){
                 //标记
                 manage.getCurrentK().setOpChar("S");
@@ -261,7 +281,8 @@ public class TradingPop extends PopupWindow
             }
             if(stoHolder.getHoldShare() == 0 && (rate >= 0.2 || rate <= -1)){
                 //上传出色交易
-                uploadTrade(rate);
+                if(!CommonUtil.isEmpty(stoHolder.getStackName()))
+                    uploadTrade(rate);
             }
         }
         // 销毁弹出框
@@ -273,10 +294,16 @@ public class TradingPop extends PopupWindow
         if(!CommonUtil.isEmpty(et_count.getText().toString())){
             count = Integer.valueOf(et_count.getText().toString());
         }
-        int changed = count + 100*rate;
+        int uom = 100;
+        if(CommonUtil.isKzz(manage.getCurrentK().getStackCode())){
+            if(manage.getCurrentK().getStackCode().startsWith("11")){
+                uom = 10;
+            }
+        }
+        int changed = count + uom*rate;
         float price = CommonUtil.castFloatFromString(getPrice());
         if (this.action.equals("BUY")) {
-            long avaiCount = stoHolder.getAvaiBuyCount(getPrice());
+            long avaiCount = stoHolder.getAvaiBuyCount(getPrice(), manage.getCurrentK().getStackCode());
             if(changed > avaiCount || changed < 0){
                 return;
             }

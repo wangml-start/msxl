@@ -54,7 +54,7 @@ public class TimeShareGroup {
                     return false;
                 }
             }
-            if(Integer.valueOf(timeStr) < startNum){
+            if(Integer.valueOf(timeStr) <= startNum){
                 if(item.getVolume() > 0){
                     showList.add(item);
                     current = item;
@@ -126,19 +126,54 @@ public class TimeShareGroup {
         updateCurrentNode(null);
     }
 
+    /**
+     * 一分钟数据时候
+     */
+    public void onNextMinu(){
+        if(timer.isOver){
+            return;
+        }
+        last = current;
+        timer.nextMinutes();
+        String time = timer.getTimeStr();
+        while(leftIndex<leftList.size()){
+            TimeShare item = leftList.get(leftIndex);
+            String key = item.getTimeStr();
+            if(exist.containsKey(key)){
+                leftIndex++;
+                continue;
+            }
+            if(Integer.valueOf(key) <= Integer.valueOf(time)){
+                if(item.getVolume() > 0){
+                    showList.add(item);
+                    current = item;
+                    exist.put(key, 1);
+                }
+
+            }else{
+                break;
+            }
+            leftIndex++;
+        }
+        calExtremeNum();
+        updateCurrentNode(null);
+    }
+
+
     public void updateCurrentNode(String time){
         if(last == null || !last.getTimeStr().equals(current.getTimeStr())){
             totAmt += current.getAmt();
-            totVol += 100 * current.getVolume();
+            int uom = 100;
+            if(CommonUtil.isKzz(current.getStockCode())){
+                uom = 10;
+            }
+            totVol += uom * current.getVolume();
         }
         if(time == null){
             time = timer.getTimeMinute();
         }
         updateMinuteNode(timePrices, current.getPrice(), time);
         updateMinuteNode(solidPrices, totAmt/totVol, time);
-//        Log.i("Time",time);
-//        Log.i("timePrices",current.getPrice()+"");
-//        Log.i("solidPrices",totAmt/totVol+"");
     }
 
     public void updateMinuteNode(List<CMinute> list, float price, String time){
