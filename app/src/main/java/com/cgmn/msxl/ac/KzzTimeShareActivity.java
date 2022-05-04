@@ -188,6 +188,7 @@ public class KzzTimeShareActivity extends AppCompatActivity implements View.OnCl
             onNextMunite();
             StockDetail stockDetail = new StockDetail();
             stockDetail.setStackCode(timeShareGroup.current.getStockCode());
+            stockDetail.setStackName(timeShareGroup.current.getStockCode());
             stockDetail.setStart(timeShareGroup.current.getPrice());
             realtradeManage.initkStatus();
             realtradeManage.setCurrentK(stockDetail);

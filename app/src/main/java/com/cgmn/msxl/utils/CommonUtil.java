@@ -286,4 +286,14 @@ public class CommonUtil {
         else
             return false;
     }
+
+    public static String getUpdateString(String version, List<String> list){
+        StringBuffer message = new StringBuffer();
+        message.append("当前版本: V");
+        message.append(version);
+        message.append("\n\n");
+        message.append(StringUtils.join(list, "\n\n").replaceAll("-(0|1)", ""));
+        return message.toString();
+    }
+
 }

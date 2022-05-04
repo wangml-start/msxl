@@ -100,18 +100,18 @@ public class NewVersionActivity extends BaseOtherActivity {
                 String cVersion = ConstantHelper.version;
                 if(MessageUtil.REQUEST_SUCCESS == msg.what){
                     StringBuffer message = new StringBuffer();
-                    if(msg.obj != null){
-                        message.append("当前版本: V");
-                        message.append(cVersion);
-                        message.append("\n\n");
-                        List<String> list = (List<String>) msg.obj;
-                        message.append(StringUtils.join(list, "\n\n"));
+                    List<String> vs = (List<String>) msg.obj;
+                    if(!CommonUtil.isEmpty(vs)){
+                        message.append(CommonUtil.getUpdateString(cVersion, vs));
                         btn_update.setVisibility(View.VISIBLE);
+                        txt_content.setText(message.toString());
+                        onUpdateClick();
                     }else{
                         message.append("当前版本已是最新版V"+ cVersion);
+                        txt_content.setText(message.toString());
                         btn_update.setVisibility(View.GONE);
                     }
-                    txt_content.setText(message.toString());
+
                 } else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
                     GlobalExceptionHandler.getInstance(mContext).handlerException((Exception) msg.obj);
                 }

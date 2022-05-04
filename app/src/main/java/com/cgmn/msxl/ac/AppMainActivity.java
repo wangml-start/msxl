@@ -74,6 +74,15 @@ public class AppMainActivity extends AppCompatActivity
         registerTokenListener();
     }
 
+    private boolean forcedUpdate(List<String> list){
+        for(String version : list){
+            String[] arr = version.split("-");
+            if(arr.length == 2 && "1".equals(arr[1])){
+                return true;
+            }
+        }
+        return false;
+    }
 
     private void bindAppMainView() {
         mContxt = this;
@@ -92,6 +101,7 @@ public class AppMainActivity extends AppCompatActivity
                 if(MessageUtil.REQUEST_SUCCESS == msg.what){
                     List<String> list = (List<String>) msg.obj;
                     if(!CommonUtil.isEmpty(list)){
+                        boolean forceUpdate = forcedUpdate(list);
                         UpdateConfiguration configuration = new UpdateConfiguration()
                                 //输出错误日志
                                 .setEnableLog(true)
@@ -114,7 +124,7 @@ public class AppMainActivity extends AppCompatActivity
                                 //设置是否上报数据
                                 .setUsePlatform(false)
                                 //设置强制更新
-                                .setForcedUpgrade(true);
+                                .setForcedUpgrade(forceUpdate);
                                 //设置对话框按钮的点击监听
 //                                .setButtonClickListener(this)
                                 //设置下载过程的监听
@@ -122,6 +132,10 @@ public class AppMainActivity extends AppCompatActivity
 
                         manager = DownloadManager.getInstance(mContxt);
                         String url = GlobalDataHelper.getDownloadVersionUrl(mContxt);
+                        String updateStr = CommonUtil.getUpdateString(ConstantHelper.version, (List<String>) msg.obj);
+                        if(forceUpdate){
+                            updateStr = "当前版本已停止维护,请更新版本!";
+                        }
                         manager.setApkName("tzwd.apk")
                                 .setApkUrl(url)
                                 .setSmallIcon(R.drawable.app_main)
@@ -130,7 +144,7 @@ public class AppMainActivity extends AppCompatActivity
                                 .setApkVersionCode(2)
 //                                .setApkVersionName("2.1.8")
 //                                .setApkSize("4.0")
-                                .setApkDescription("当前版本已停止维护,请更新版本!")
+                                .setApkDescription(updateStr)
                                 .download();
                     }
                 } else if(msg.what == MessageUtil.REQUEST_PAGE_LIMIT_SUCCESS){
@@ -199,7 +213,7 @@ public class AppMainActivity extends AppCompatActivity
                 Map<String, String> params = new HashMap<>();
                 params.put("version", ConstantHelper.version);
                 params.put("type", "android");
-                params.put("required", "1");
+//                params.put("required", "1");
                 params.put("token", GlobalDataHelper.getToken(mContxt));
                 String url = CommonUtil.buildGetUrl(
                         ConstantHelper.serverUrl,

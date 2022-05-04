@@ -1,5 +1,6 @@
 package com.cgmn.msxl.handdler;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 import com.cgmn.msxl.R;
@@ -21,8 +22,13 @@ public class GlobalExceptionHandler {
     private static String TAG = GlobalExceptionHandler.class.getSimpleName();
     private static GlobalExceptionHandler handler;
 
+    static Integer LOSS_SERVER_COUNT = 0;
     private GlobalExceptionHandler(){
 
+    }
+
+    public static void resetLossCount(){
+        LOSS_SERVER_COUNT = 0;
     }
 
     public Context getmContxt() {
@@ -41,12 +47,18 @@ public class GlobalExceptionHandler {
         return handler;
     }
 
+    @SuppressLint("WrongConstant")
     public void handlerException(Exception e){
         try{
             if(e instanceof ConnectException){
                 CustmerToast.makeText(mContxt, mContxt.getString(R.string.network_loss)).show();
             }else if(e instanceof SocketTimeoutException){
-                CustmerToast.makeText(mContxt, mContxt.getString(R.string.server_loss), 1).show();
+                LOSS_SERVER_COUNT++;
+                if(LOSS_SERVER_COUNT > 3){
+                    CustmerToast.makeText(mContxt, mContxt.getString(R.string.server_loss), 1).show();
+                }else{
+                    CustmerToast.makeText(mContxt, mContxt.getString(R.string.network_loss)).show();
+                }
             }else {
                 if(!CommonUtil.isEmpty(e.getMessage())){
                     CustmerToast.makeText(mContxt, e.getMessage()).show();

@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.widget.ImageView;
 
+import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.google.gson.Gson;
 import com.google.gson.internal.$Gson$Types;
 import com.squareup.okhttp.*;
@@ -36,8 +37,8 @@ public class OkHttpClientManager{
         mOkHttpClient = new OkHttpClient();
         //cookie enabled
         mOkHttpClient.setCookieHandler(new CookieManager(null, CookiePolicy.ACCEPT_ORIGINAL_SERVER));
-        mOkHttpClient.setConnectTimeout(10, TimeUnit.SECONDS);
-        mOkHttpClient.setReadTimeout(20, TimeUnit.SECONDS);
+        mOkHttpClient.setConnectTimeout(5, TimeUnit.SECONDS);
+        mOkHttpClient.setReadTimeout(10, TimeUnit.SECONDS);
         mDelivery = new Handler(Looper.getMainLooper());
         mGson = new Gson();
     }
@@ -551,6 +552,7 @@ public class OkHttpClientManager{
             {
                 try
                 {
+                    GlobalExceptionHandler.resetLossCount();
                     final String string = response.body().string();
                     if (callback.mType == String.class)
                     {

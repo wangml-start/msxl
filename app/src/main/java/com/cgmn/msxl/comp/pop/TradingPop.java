@@ -281,8 +281,8 @@ public class TradingPop extends PopupWindow
             }
             if(stoHolder.getHoldShare() == 0 && (rate >= 0.2 || rate <= -1)){
                 //上传出色交易
-                if(!CommonUtil.isEmpty(stoHolder.getStackName()))
-                    uploadTrade(rate);
+                uploadTrade(rate);
+
             }
         }
         // 销毁弹出框
