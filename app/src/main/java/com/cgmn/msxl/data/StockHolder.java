@@ -340,6 +340,7 @@ public class StockHolder {
         totAmt -= fee;
         avaiAmt = totAmt - holdAmt;
         if (holdShare == 0) {
+            holdAmt = 0.0;
             costPrice = 0.0;
             holdPl = 0.0;
             holdDays = 0;
@@ -364,6 +365,7 @@ public class StockHolder {
             costPrice = 0.0;
             holdPl = 0.0;
             holdDays = 0;
+            holdAmt = 0.0;
         } else {
             costPrice = (holdAmt - holdPl) / holdShare;
         }
