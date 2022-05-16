@@ -104,7 +104,7 @@ public class NormalTimeShareActivity extends AppCompatActivity implements View.O
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         int screenHeight = dm.heightPixels;
-        chartParent.getLayoutParams().height = ((Double) (screenHeight * 0.35)).intValue();
+        chartParent.getLayoutParams().height = ((Double) (screenHeight * 0.5)).intValue();
         chartParent.setStateClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

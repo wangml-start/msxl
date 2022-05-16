@@ -119,7 +119,7 @@ public class KzzTimeShareActivity extends AppCompatActivity implements View.OnCl
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         int screenHeight = dm.heightPixels;
-        chartParent.getLayoutParams().height = ((Double) (screenHeight * 0.45)).intValue();
+        chartParent.getLayoutParams().height = ((Double) (screenHeight * 0.5)).intValue();
         chartParent.setStateClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

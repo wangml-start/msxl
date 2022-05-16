@@ -9,7 +9,7 @@ public class ConstantHelper {
     //支付宝支付时用
     public static final String environment = "prod";
 
-    public static final String version = "4.1.2";
+    public static final String version = "4.1.3";
 
     public static final String positionSplit = "/";
 }

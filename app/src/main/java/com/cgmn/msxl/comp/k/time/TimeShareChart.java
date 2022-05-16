@@ -29,6 +29,10 @@ public class TimeShareChart extends View {
         this.chartPaint.setShowDetail(showDetail);
     }
 
+    public void setShowBVol(Boolean bVol) {
+        this.chartPaint.setShowBVol(bVol);
+    }
+
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         contentRect.set(0, 0, w , h);

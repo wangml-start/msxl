@@ -459,6 +459,7 @@ public class TimeShareKLineActivity extends AppCompatActivity
         timeChart = new TimeShareChart(this);
         timeChart.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         timeChart.setShowDetails(true);
+        timeChart.setShowBVol(false);
 
         timeParent.getLayoutParams().height = ((Double) (screenHeight * 0.25)).intValue();
         timeParent.setStateClickListener(new View.OnClickListener() {

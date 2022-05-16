@@ -30,7 +30,7 @@ public class TimeShareGroup {
 
     private Map<String, Integer> exist = new HashMap<>();
     Integer leftIndex=0;
-    float priceDelta;
+    float priceDelta,deltaVol=0;
 
 
     public Boolean init(List<TimeShare> list){
@@ -93,6 +93,11 @@ public class TimeShareGroup {
             }
         }
         priceDelta = delta;
+        for(CMinute min : timePrices){
+            if(min.vol > deltaVol){
+                deltaVol = min.vol;
+            }
+        }
     }
 
 
@@ -122,8 +127,8 @@ public class TimeShareGroup {
             }
             leftIndex++;
         }
-        calExtremeNum();
         updateCurrentNode(null);
+        calExtremeNum();
     }
 
     /**
@@ -155,8 +160,8 @@ public class TimeShareGroup {
             }
             leftIndex++;
         }
-        calExtremeNum();
         updateCurrentNode(null);
+        calExtremeNum();
     }
 
 
@@ -172,20 +177,21 @@ public class TimeShareGroup {
         if(time == null){
             time = timer.getTimeMinute();
         }
-        updateMinuteNode(timePrices, current.getPrice(), time);
-        updateMinuteNode(solidPrices, totAmt/totVol, time);
+        updateMinuteNode(timePrices, current.getPrice(), time,current.getVolume());
+        updateMinuteNode(solidPrices, totAmt/totVol, time,current.getVolume());
     }
 
-    public void updateMinuteNode(List<CMinute> list, float price, String time){
+    public void updateMinuteNode(List<CMinute> list, float price, String time, Integer vol){
         if(CommonUtil.isEmpty(list)){
-            list.add(new CMinute(price, time));
+            list.add(new CMinute(price, time,vol));
         }else{
             Integer last = list.size();
             CMinute lastItem = list.get(last-1);
             if(time.equals(lastItem.timeMinute)){
                 lastItem.price = price;
+                lastItem.vol += vol;
             }else if(time.compareTo(lastItem.timeMinute) > 0){
-                list.add(new CMinute(price, time));
+                list.add(new CMinute(price, time,vol));
             }
         }
     }

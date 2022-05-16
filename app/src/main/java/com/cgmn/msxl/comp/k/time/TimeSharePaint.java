@@ -27,12 +27,16 @@ public class TimeSharePaint {
     protected float priceDelta;
 
     protected Boolean showDetail = true;
+    protected Boolean showBVol = true; //量柱
 
     protected float margin = 4f * KlineStyle.pxScaleRate, padding = 2.5f * KlineStyle.pxScaleRate;
-    float chartHeight,chartWeight,candleWidth,volWidth;
+    float chartHeight,chartWeight,candleWidth,volWidth,volHeight;
 
     public void setShowDetail(Boolean showDetail) {
         this.showDetail = showDetail;
+    }
+    public void setShowBVol(Boolean showBV) {
+        this.showBVol = showBV;
     }
 
     public TimeSharePaint() {
@@ -96,6 +100,10 @@ public class TimeSharePaint {
             candleWidth = chartWeight * 0.74f;
             volWidth = chartWeight-candleWidth;
         }
+        if(showBVol){
+            volHeight = contentRect.height() * 0.2f - padding;
+            chartHeight = contentRect.height()*0.8f - 2*padding;
+        }
     }
 
     public void setData(TimeShareGroup data) {
@@ -134,6 +142,9 @@ public class TimeSharePaint {
                 canvas.drawLine(lsolidPt.x, lsolidPt.y, solidPt.x, solidPt.y, avgPaint);
             }
 
+            if(showBVol){
+                canvas.drawLine(timePt.x, timePt.volSY, timePt.x, timePt.volY, timePaint);
+            }
 
             //draw char B\S\T
             if(timePt.opChar != null){
@@ -267,6 +278,9 @@ public class TimeSharePaint {
         float distanceX = candleWidth / count;
         float mYMax = priceDelta+data.lastClosePrice;
 
+        float vunit = volHeight / data.deltaVol;
+        float pStarY = this.contentRect.top + padding;
+        float volEndY = this.contentRect.bottom;
         timePoints.clear();
         solidPts.clear();
         Integer endIndex = data.solidPrices.size();
@@ -276,11 +290,14 @@ public class TimeSharePaint {
             CMinute snode = data.solidPrices.get(i);
 
             float startx = distanceX * i + margin;
-            ChartPoint timeItem = new ChartPoint(startx, (mYMax - node.price) * punit + padding);
+            ChartPoint timeItem = new ChartPoint(startx, (mYMax - node.price) * punit + pStarY);
+            float volY = volEndY - (volHeight-(data.deltaVol - node.vol) * vunit);
+//            System.out.println("VolY:" + volY);
+            timeItem.setVolPos(volEndY, volY);
             timePoints.add(timeItem);
-            solidPts.add(new ChartPoint(startx, (mYMax - snode.price) * punit + padding));
+            solidPts.add(new ChartPoint(startx, (mYMax - snode.price) * punit + pStarY));
             if(node.opChar != null){
-                timeItem.setOpInfo(startx, (mYMax - node.opPrice) * punit + padding, node.opChar);
+                timeItem.setOpInfo(startx, (mYMax - node.opPrice) * punit + pStarY, node.opChar);
             }
         }
     }
@@ -301,10 +318,20 @@ public class TimeSharePaint {
 
         yLines.clear();
         Integer countY = 0;
+        float endY =  contentRect.bottom;
+        if(showBVol){
+            endY = chartHeight+padding;
+        }
         while(countY < 5){
             float x = candleWidth * countY / 4;
-            yLines.add(new PriceLinePoint(new float[]{x+margin, contentRect.top+padding}, new float[]{x+margin, contentRect.bottom-padding}, null));
+
+            yLines.add(new PriceLinePoint(new float[]{x+margin, contentRect.top+padding}, new float[]{x+margin, endY-padding}, null));
             countY++;
+        }
+        if(showBVol){
+            xLines.add(new PriceLinePoint(new float[]{pstartx, contentRect.bottom}, new float[]{pendx, contentRect.bottom}, null));
+            yLines.add(new PriceLinePoint(new float[]{pstartx, endY}, new float[]{pstartx, contentRect.bottom}, null));
+            yLines.add(new PriceLinePoint(new float[]{pendx, endY}, new float[]{pendx, contentRect.bottom}, null));
         }
     }
 
@@ -315,6 +342,10 @@ public class TimeSharePaint {
         textPrices.clear();
         float moveY = 8 * KlineStyle.pxScaleRate;
         float moveBY = 3 * KlineStyle.pxScaleRate;
+        float endY = contentRect.bottom;
+        if(showBVol){
+            endY = chartHeight+padding;
+        }
         String downRate = "-"+CommonUtil.formatPercent(priceDelta/data.lastClosePrice);
         float textWidth = mUpPaint.measureText(downRate);
         float startX = margin+2f*KlineStyle.pxScaleRate;
@@ -324,14 +355,16 @@ public class TimeSharePaint {
         textPrices.add(new PriceLinePoint(
                 new float[]{margin+candleWidth-textWidth, contentRect.top+moveY+padding},null,
                 CommonUtil.formatPercent(priceDelta/data.lastClosePrice)));
+
         textPrices.add(new PriceLinePoint(
-                new float[]{startX, contentRect.height()/2+moveBY},null,
+                new float[]{startX, endY/2+moveBY},null,
                 CommonUtil.formatNumer(data.lastClosePrice)));
+
         textPrices.add(new PriceLinePoint(
-                new float[]{startX, contentRect.bottom-moveBY-padding},null,
+                new float[]{startX, endY-moveBY-padding},null,
                 CommonUtil.formatNumer(data.lastClosePrice-priceDelta)));
         textPrices.add(new PriceLinePoint(
-                new float[]{margin+candleWidth-textWidth, contentRect.bottom-moveBY-padding},null,
+                new float[]{margin+candleWidth-textWidth, endY-moveBY-padding},null,
                 downRate));
 
     }

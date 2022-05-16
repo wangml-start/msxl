@@ -9,6 +9,9 @@ public class ChartPoint {
     public float opX;
     public float opY;
 
+    public float volSY;
+    public float volY;
+
     public ChartPoint(){
         x=0f;
         y=0f;
@@ -22,5 +25,10 @@ public class ChartPoint {
         opX=xx;
         opY=yy;
         opChar = op;
+    }
+
+    public void setVolPos(float sy, float yy){
+        volSY=sy;
+        volY=yy;
     }
 }
