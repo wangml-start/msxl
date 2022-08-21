@@ -97,87 +97,6 @@
                 app:loadingView="@layout/loading_layout" />
         <!--k line -->
 
-        <!--X SPEED -->
-        <LinearLayout
-                android:id="@+id/speed_div"
-                android:layout_margin="1dp"
-                android:layout_marginTop="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="25dp"
-                android:background="@color/bg_white"
-                android:orientation="horizontal">
-            <Button
-                    android:id="@+id/bt_1"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="X1"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/size12"
-                    style="@style/trading_page_btns"
-                    />
-            <Button
-                    android:id="@+id/bt_3"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:drawablePadding="2dp"
-                    android:gravity="center"
-                    android:text="X3"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/size12"
-                    style="@style/trading_page_btns"
-                    />
-            <Button
-                    android:id="@+id/bt_10"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:drawablePadding="2dp"
-                    android:gravity="center"
-                    android:text="X10"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/size12"
-                    style="@style/trading_page_btns"
-                    />
-            <Button
-                    android:id="@+id/bt_30"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:drawablePadding="2dp"
-                    android:gravity="center"
-                    android:text="X30"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/size12"
-                    style="@style/trading_page_btns"
-                    />
-            <Button
-                    android:id="@+id/bt_60"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:drawablePadding="2dp"
-                    android:gravity="center"
-                    android:text="X60"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/size12"
-                    style="@style/trading_page_btns"
-                    />
-            <Button
-                    android:id="@+id/bt_120"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:drawablePadding="2dp"
-                    android:gravity="center"
-                    android:text="X120"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/size12"
-                    style="@style/trading_page_btns"
-                    />
-        </LinearLayout>
         <LinearLayout
                 android:id="@+id/lb_topbar_div"
                 android:layout_width="match_parent"
@@ -185,8 +104,12 @@
                 android:background="@color/bg_white"
                 android:orientation="horizontal">
             <TextView
+                    android:id="@+id/lb_add_speed"
                     android:layout_weight="1"
                     android:layout_height="match_parent"
+                    android:text="  加速"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/size14"
                     android:layout_width="0dp"
                     />
             <TextView
@@ -194,8 +117,8 @@
                     android:layout_height="match_parent"
                     android:layout_width="60dp"
                     android:gravity="left"
-                    android:textColor="@color/colorPrimary"
                     android:text="09:25:00"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/size14"
                     />
             <TextView
@@ -227,8 +150,13 @@
                     android:layout_width="60dp"
                     />
             <TextView
+                    android:id="@+id/lb_sub_speed"
                     android:layout_weight="1"
                     android:layout_height="match_parent"
+                    android:text="减速  "
+                    android:gravity="right"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/size14"
                     android:layout_width="0dp"
                     />
         </LinearLayout>

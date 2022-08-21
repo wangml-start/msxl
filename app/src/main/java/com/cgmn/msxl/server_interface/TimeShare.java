@@ -14,6 +14,10 @@ public class TimeShare {
     private Float lastClose;
     private String tradeDate;
 
+    public Float dif;
+    public Float dea;
+    public Float macd;
+
     public String getTradeDate() {
         return tradeDate;
     }

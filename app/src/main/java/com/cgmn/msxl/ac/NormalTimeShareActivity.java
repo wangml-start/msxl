@@ -17,6 +17,7 @@ import com.cgmn.msxl.comp.k.KlineStyle;
 import com.cgmn.msxl.comp.k.time.TimeShareChart;
 import com.cgmn.msxl.comp.k.time.TimeShareGroup;
 import com.cgmn.msxl.data.SimpleStockHolder;
+import com.cgmn.msxl.db.AppSqlHelper;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.cgmn.msxl.server_interface.BaseData;
 import com.cgmn.msxl.server_interface.TimeShare;
@@ -40,18 +41,17 @@ public class NormalTimeShareActivity extends AppCompatActivity implements View.O
     private LoadingLayout chartParent;
     private TimeShareChart chart;
     Button bt_buy, bt_sell, bt_change, bt_exit;
-    Button bt_1, bt_3, bt_10, bt_30, bt_60, bt_120;
-    TextView lb_current_price, lb_current_rate,lb_current_speed,lb_current_time;
+    TextView lb_current_price, lb_current_rate,lb_current_time;
     TextView lb_buy_cost, lb_rate;
 
-    private LinearLayout bottomBar, pop_div_text, speed_div;
+    private LinearLayout bottomBar, pop_div_text;
 
     SimpleStockHolder holder;
     private TimeShareGroup timeShareGroup;
 
     Timer mTimer;
     TimerTask mTimerTask;
-    Integer currentSpeed=0;
+    Integer currentSpeed=1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,30 +71,14 @@ public class NormalTimeShareActivity extends AppCompatActivity implements View.O
         bt_exit = findViewById(R.id.bt_exit);
         bottomBar = findViewById(R.id.pop_div);
         pop_div_text = findViewById(R.id.pop_div_text);
-        speed_div = findViewById(R.id.speed_div);
 
         bt_buy.setOnClickListener(this);
         bt_sell.setOnClickListener(this);
         bt_change.setOnClickListener(this);
         bt_exit.setOnClickListener(this);
 
-        bt_1 = findViewById(R.id.bt_1);
-        bt_3 = findViewById(R.id.bt_3);
-        bt_10 = findViewById(R.id.bt_10);
-        bt_30 = findViewById(R.id.bt_30);
-        bt_60 = findViewById(R.id.bt_60);
-        bt_120 = findViewById(R.id.bt_120);
-
-        bt_1.setOnClickListener(this);
-        bt_3.setOnClickListener(this);
-        bt_10.setOnClickListener(this);
-        bt_30.setOnClickListener(this);
-        bt_60.setOnClickListener(this);
-        bt_120.setOnClickListener(this);
-
         lb_current_price = findViewById(R.id.lb_current_price);
         lb_current_rate = findViewById(R.id.lb_current_rate);
-        lb_current_speed = findViewById(R.id.lb_current_speed);
         lb_buy_cost = findViewById(R.id.lb_buy_cost);
         lb_rate = findViewById(R.id.lb_rate);
         lb_current_time = findViewById(R.id.lb_current_time);
@@ -120,13 +104,6 @@ public class NormalTimeShareActivity extends AppCompatActivity implements View.O
         }
         bottomBar.setLayoutParams(bottomParams);
         pop_div_text.setLayoutParams(bottomParams);
-
-        LinearLayout.LayoutParams bottomParams2 = (LinearLayout.LayoutParams) speed_div.getLayoutParams();
-        bottomParams2.height = ((Double) (screenHeight * 0.055)).intValue();
-        if(bottomParams2.height > 80){
-            bottomParams2.height = 80;
-        }
-        speed_div.setLayoutParams(bottomParams2);
 
         chart = new TimeShareChart(this);
         chart.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
@@ -179,7 +156,7 @@ public class NormalTimeShareActivity extends AppCompatActivity implements View.O
                 params.put("token", GlobalDataHelper.getToken(mContxt));
                 String url = CommonUtil.buildGetUrl(
                         ConstantHelper.serverUrl,
-                        "/stock/normal_time_share_datas", params);
+                        "/stock/normal_minute_share_datas", params);
                 OkHttpClientManager.getAsyn(url,
                         new OkHttpClientManager.ResultCallback<BaseData>() {
                             @Override
@@ -347,18 +324,6 @@ public class NormalTimeShareActivity extends AppCompatActivity implements View.O
                     //取消操作
                 }
             });
-        }else if(v.getId() == R.id.bt_1){
-            playSpeed(1);
-        }else if(v.getId() == R.id.bt_3){
-            playSpeed(3);
-        }else if(v.getId() == R.id.bt_10){
-            playSpeed(10);
-        }else if(v.getId() == R.id.bt_30){
-            playSpeed(30);
-        }else if(v.getId() == R.id.bt_60){
-            playSpeed(60);
-        }else if(v.getId() == R.id.bt_120){
-            playSpeed(120);
         }else if(v.getId() == R.id.bt_change){
             onChageStock();
         }else if(v.getId() == R.id.bt_buy){
@@ -391,29 +356,30 @@ public class NormalTimeShareActivity extends AppCompatActivity implements View.O
     }
 
     public void playSpeed(Integer speed){
-        if(currentSpeed != speed){
-            lb_current_speed.setText("X"+speed);
-            stopTimeChart();
-            mTimerTask = new TimerTask() {
-                @Override
-                public void run() {
-                    timeShareGroup.onNextStep();
-                    mHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            onNextMunite();
-                        }
-                    });
-                }
-            };
-            mTimer = new Timer();
-            Integer delay = 3000;
-            if(currentSpeed > 0){
-                delay = 0;
-            }
-            currentSpeed = speed;
-            mTimer.schedule(mTimerTask, delay, 3000/currentSpeed);
+        stopTimeChart();
+        final AppSqlHelper dbHelper = new AppSqlHelper(mContxt);
+        Map<String, String> map =  dbHelper.getSystenSettings();
+        if(map.containsKey("TIME_SHARE_TIME")){
+            currentSpeed = ((Float)(Float.valueOf(map.get("TIME_SHARE_TIME")) * 1000 )).intValue();
         }
+        mTimerTask = new TimerTask() {
+            @Override
+            public void run() {
+                timeShareGroup.onNextMinu();
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        onNextMunite();
+                    }
+                });
+            }
+        };
+        mTimer = new Timer();
+        Integer delay = 3000;
+        if(currentSpeed > 0){
+            delay = 0;
+        }
+        mTimer.schedule(mTimerTask, delay, currentSpeed);
     }
 
     private void stopTimeChart() {

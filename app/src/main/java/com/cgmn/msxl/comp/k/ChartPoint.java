@@ -1,5 +1,7 @@
 package com.cgmn.msxl.comp.k;
 
+import com.cgmn.msxl.comp.k.time.CPoint;
+
 public class ChartPoint {
     public float x;
     public float y;
@@ -11,6 +13,12 @@ public class ChartPoint {
 
     public float volSY;
     public float volY;
+
+    public CPoint difPt = null;
+    public CPoint deaPt = null;
+    public CPoint macdPt = null;
+    public CPoint macdBPt = null;
+    public int macdState=0;
 
     public ChartPoint(){
         x=0f;

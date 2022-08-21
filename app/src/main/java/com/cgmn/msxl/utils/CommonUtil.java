@@ -113,6 +113,8 @@ public class CommonUtil {
     public static String formatNumer(Object num, int tail){
         if(tail ==3){
             return format3.format(num);
+        }else if(tail == 1) {
+            return format1.format(num);
         }else {
             return format2.format(num);
         }

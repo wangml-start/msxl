@@ -60,6 +60,7 @@ public class KLineSettingActivity extends BaseOtherActivity
 
     private TextView count_minus,et_count,count_plus;
     private TextView count_minus_lb,et_count_lb,count_plus_lb;
+    private TextView stcount_minus,stet_count,stcount_plus;
 
     private EditText pos_1_up,pos_2_up,pos_3_up,pos_4_up,pos_5_up;
     private EditText pos_1_down,pos_2_down,pos_3_down,pos_4_down,pos_5_down;
@@ -158,6 +159,10 @@ public class KLineSettingActivity extends BaseOtherActivity
         et_count_lb = findViewById(R.id.et_count_lb);
         count_plus_lb = findViewById(R.id.count_plus_lb);
 
+        stcount_minus = findViewById(R.id.stcount_minus);
+        stet_count = findViewById(R.id.stet_count);
+        stcount_plus = findViewById(R.id.stcount_plus);
+
         View.OnClickListener ls = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -185,6 +190,9 @@ public class KLineSettingActivity extends BaseOtherActivity
 
         count_minus_lb.setOnClickListener(ls);
         count_plus_lb.setOnClickListener(ls);
+
+        stcount_minus.setOnClickListener(ls);
+        stcount_plus.setOnClickListener(ls);
 
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -239,10 +247,14 @@ public class KLineSettingActivity extends BaseOtherActivity
             calcTime(et_count, -1, "TREND_TIME");
         }else if(v.getId() == R.id.count_minus_lb){
             calcTime(et_count_lb, -1, "SHORT_TIME");
+        }else if(v.getId() == R.id.stcount_minus){
+            calcTime(stet_count, -1, "TIME_SHARE_TIME");
         }else if(v.getId() == R.id.count_plus){
             calcTime(et_count, 1, "TREND_TIME");
         }else if(v.getId() == R.id.count_plus_lb){
             calcTime(et_count_lb, 1, "SHORT_TIME");
+        }else if(v.getId() == R.id.stcount_plus){
+            calcTime(stet_count, 1, "TIME_SHARE_TIME");
         }
     }
 
@@ -250,6 +262,7 @@ public class KLineSettingActivity extends BaseOtherActivity
         String firstIndex = "MACD", secondIndex="VOL";
         Integer autoNext = 0,playVoice=0;
         Integer trendTime = 3, shortTime = 5;
+        Float timeshareTime=1.5f;
 
         final AppSqlHelper dbHelper = new AppSqlHelper(mContext);
         Map<String, String> map =  dbHelper.getSystenSettings();
@@ -271,6 +284,9 @@ public class KLineSettingActivity extends BaseOtherActivity
         if(!CommonUtil.isEmpty(map.get("SHORT_TIME"))){
             shortTime = Integer.valueOf(map.get("SHORT_TIME"));
         }
+        if(!CommonUtil.isEmpty(map.get("TIME_SHARE_TIME"))){
+            timeshareTime = Float.valueOf(map.get("TIME_SHARE_TIME"));
+        }
 
         txt_first_dex_list.setText(firstIndex);
         txt_second_dex_list.setText(secondIndex);
@@ -278,6 +294,7 @@ public class KLineSettingActivity extends BaseOtherActivity
         bt_voice_sw.changeStatus(playVoice);
         et_count.setText(trendTime+"");
         et_count_lb.setText(shortTime+"");
+        stet_count.setText((timeshareTime+""));
 
         if(!CommonUtil.isEmpty(map.get("FIRST_POS"))){
             String[] arr1 = map.get("FIRST_POS").toString().split(ConstantHelper.positionSplit);
@@ -319,11 +336,23 @@ public class KLineSettingActivity extends BaseOtherActivity
     private void calcTime(TextView v , Integer direction, String field){
         String value = v.getText().toString();
         if(!CommonUtil.isEmpty(value)){
-            Integer base = Integer.valueOf(value);
-            Integer changed = base + 1*direction;
-            v.setText(changed+"");
-
-            upsertSetting(field, changed+"");
+            if("TIME_SHARE_TIME".equals(field)){
+                Float base = Float.valueOf(value);
+                Float changed = base + 0.5f*direction;
+                if(changed<0.5){
+                    return;
+                }
+                v.setText((Math.round(changed * 10) * 0.1)+"");
+                upsertSetting(field, changed+"");
+            }else{
+                Integer base = Integer.valueOf(value);
+                Integer changed = base + 1*direction;
+                if(changed<1){
+                    return;
+                }
+                v.setText(changed+"");
+                upsertSetting(field, changed+"");
+            }
         }
     }
 

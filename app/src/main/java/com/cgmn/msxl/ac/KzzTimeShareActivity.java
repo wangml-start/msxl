@@ -31,6 +31,7 @@ import com.cgmn.msxl.comp.view.StockHolderView;
 import com.cgmn.msxl.data.SettledAccount;
 import com.cgmn.msxl.data.StockHolder;
 import com.cgmn.msxl.data.Trade;
+import com.cgmn.msxl.db.AppSqlHelper;
 import com.cgmn.msxl.handdler.GlobalExceptionHandler;
 import com.cgmn.msxl.receiver.ReceiverMessage;
 import com.cgmn.msxl.server_interface.BaseData;
@@ -73,7 +74,7 @@ public class KzzTimeShareActivity extends AppCompatActivity implements View.OnCl
 
     Timer mTimer;
     TimerTask mTimerTask;
-    Integer currentSpeed=1;
+    Integer currentSpeed=1000;
 
     MyMarqueeView marqueeview;
     MarqueeManager marqueeManager;
@@ -89,6 +90,11 @@ public class KzzTimeShareActivity extends AppCompatActivity implements View.OnCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.kzz_time_share_layout);
         bindView();
+        final AppSqlHelper dbHelper = new AppSqlHelper(mContxt);
+        Map<String, String> map =  dbHelper.getSystenSettings();
+        if(map.containsKey("TIME_SHARE_TIME")){
+            currentSpeed = ((Float)(Float.valueOf(map.get("TIME_SHARE_TIME")) * 1000 )).intValue();
+        }
         playSpeed(currentSpeed);
         initMessageHandle();
         loadAccCash();
@@ -161,8 +167,8 @@ public class KzzTimeShareActivity extends AppCompatActivity implements View.OnCl
             public boolean handleMessage(Message msg) {
                 if (msg.what == MessageUtil.REQUEST_SUCCESS) {
                     chartParent.showContent();
-                    startChartInit((List<TimeShare>) msg.obj);
                     initStockHolder();
+                    startChartInit((List<TimeShare>) msg.obj);
                 } else if (msg.what == MessageUtil.EXCUTE_EXCEPTION) {
                     GlobalExceptionHandler.getInstance(mContxt).handlerException((Exception) msg.obj);
                 } else if(msg.what == MessageUtil.GET_CASH_ACC_SUCCESS){
@@ -223,11 +229,7 @@ public class KzzTimeShareActivity extends AppCompatActivity implements View.OnCl
         };
         mTimer = new Timer();
         Integer delay = 200;
-//        if(currentSpeed > 0){
-//            delay = 0;
-//        }
-        currentSpeed = speed;
-        mTimer.schedule(mTimerTask, delay, 1500);
+        mTimer.schedule(mTimerTask, delay, speed);
     }
 
     public void showReloadView(final LoadingLayout loadingLayout) {

@@ -82,7 +82,7 @@ public class KzzXLActivity extends AppCompatActivity implements View.OnClickList
     TextView lb_open_price;
     TextView lb_close_price;
     TextView lb_left_day;
-    TextView lb_left_s;
+    TextView kzz_g_zf;
     Button bt_next, bt_buy,bt_sell, bt_change, bt_exit;
     MyMarqueeView marqueeview;
     MarqueeManager marqueeManager;
@@ -250,11 +250,31 @@ public class KzzXLActivity extends AppCompatActivity implements View.OnClickList
         StockDetail current = realtradeManage.getCurrentK();
         StockDetail last = realtradeManage.getLastK();
         lb_open_price.setText("开盘价： " + CommonUtil.formatNumer(current.getStart()));
-        lb_close_price.setText("收盘价： 00.00");
         lb_left_day.setText("剩余: " + realtradeManage.getLeftDay() + " 天");
+        lb_close_price.setText("涨幅：0%");
         lb_close_price.setTextColor(getResources().getColor(R.color.text_topbar));
         lb_open_price.setTextColor(getResources().getColor(R.color.text_topbar));
-
+        if(current != null && last != null){
+            float zf = (current.getStart()-last.getEnd())/last.getEnd();
+            lb_close_price.setText("涨幅：" + CommonUtil.formatPercent(zf));
+            if (zf > 0) {
+                lb_close_price.setTextColor(getResources().getColor(R.color.kline_up));
+            } else {
+                lb_close_price.setTextColor(getResources().getColor(R.color.kline_down));
+            }
+        }
+        kzz_g_zf.setText("0%");
+        String kzz_pre_close = realtradeManage.getKlineset().getKzzPreClose();
+        if(current != null && !CommonUtil.isEmpty(kzz_pre_close)){
+            float pre_close = Float.valueOf(kzz_pre_close);
+            float g_zf = (current.getStart() - pre_close) / pre_close;
+            kzz_g_zf.setText(CommonUtil.formatPercent(g_zf));
+            if (current.getEnd() > pre_close) {
+                kzz_g_zf.setTextColor(getResources().getColor(R.color.kline_up));
+            } else {
+                kzz_g_zf.setTextColor(getResources().getColor(R.color.kline_down));
+            }
+        }
     }
 
     private void bindView(){
@@ -264,6 +284,7 @@ public class KzzXLActivity extends AppCompatActivity implements View.OnClickList
         lb_open_price = findViewById(R.id.lb_open_price);
         lb_close_price = findViewById(R.id.lb_close_price);
         lb_left_day = findViewById(R.id.lb_left_day);
+        kzz_g_zf = findViewById(R.id.kzz_g_zf);
         bt_next = findViewById(R.id.bt_next);
         bt_buy = findViewById(R.id.bt_buy);
         bt_sell = findViewById(R.id.bt_sell);
@@ -354,11 +375,23 @@ public class KzzXLActivity extends AppCompatActivity implements View.OnClickList
             chart.invalidateView();
             StockDetail current = realtradeManage.getCurrentK();
             StockDetail last = realtradeManage.getLastK();
-            lb_close_price.setText("收盘价：" + CommonUtil.formatNumer(current.getEnd()));
+            float zf = (current.getEnd()-current.getStart())/current.getStart();
+            lb_close_price.setText("涨幅：" + CommonUtil.formatPercent(zf));
             if(current.getEnd() > last.getEnd()){
                 lb_close_price.setTextColor(getResources().getColor(R.color.kline_up));
             }else{
                 lb_close_price.setTextColor(getResources().getColor(R.color.kline_down));
+            }
+            String kzz_pre_close = realtradeManage.getKlineset().getKzzPreClose();
+            if(!CommonUtil.isEmpty(kzz_pre_close)){
+                float pre_close = Float.valueOf(kzz_pre_close);
+                float g_zf = (current.getEnd()-pre_close)/pre_close;
+                kzz_g_zf.setText(CommonUtil.formatPercent(g_zf));
+                if(current.getEnd() > pre_close){
+                    kzz_g_zf.setTextColor(getResources().getColor(R.color.kline_up));
+                }else{
+                    kzz_g_zf.setTextColor(getResources().getColor(R.color.kline_down));
+                }
             }
             stockView.getStockHolder().nextPrice(current.getEnd(), false);
             if(autoRunManager != null){

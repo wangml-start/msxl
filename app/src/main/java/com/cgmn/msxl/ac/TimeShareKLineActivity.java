@@ -72,13 +72,12 @@ public class TimeShareKLineActivity extends AppCompatActivity
     TextView lb_left_day;
     TextView lb_last_rate;
     Button bt_next, bt_buy,bt_sell, bt_change, bt_exit;
-    Button bt_1, bt_3, bt_10, bt_30, bt_60, bt_120;
     TextView lb_current_price, lb_current_rate,lb_current_speed,lb_current_time;
-
+    TextView lb_sub_speed,lb_add_speed;
 
     Timer mTimer;
     TimerTask mTimerTask;
-    Integer currentSpeed=0;
+    Integer currentSpeed=1000;
     private TimeShareGroup timeShareGroup;
 
     MyMarqueeView marqueeview;
@@ -199,7 +198,7 @@ public class TimeShareKLineActivity extends AppCompatActivity
                 Log.i("A", String.format("%s-%s",params.get("stock_code"),params.get("trade_date")));
                 String url = CommonUtil.buildGetUrl(
                         ConstantHelper.serverUrl,
-                        "/stock/normal_time_share_datas", params);
+                        "/stock/normal_minute_share_datas", params);
                 OkHttpClientManager.getAsyn(url,
                         new OkHttpClientManager.ResultCallback<BaseData>() {
                             @Override
@@ -384,6 +383,10 @@ public class TimeShareKLineActivity extends AppCompatActivity
     private void bindView(){
         mContxt = this;
         realtradeManage = new RealTradeManage();
+        lb_add_speed = findViewById(R.id.lb_add_speed);
+        lb_sub_speed = findViewById(R.id.lb_sub_speed);
+        lb_add_speed.setOnClickListener(this);
+        lb_sub_speed.setOnClickListener(this);
 
         lb_open_price = findViewById(R.id.lb_open_price);
         lb_close_price = findViewById(R.id.lb_close_price);
@@ -404,19 +407,6 @@ public class TimeShareKLineActivity extends AppCompatActivity
         bt_change.setOnClickListener(this);
         bt_exit.setOnClickListener(this);
 
-        bt_1 = findViewById(R.id.bt_1);
-        bt_3 = findViewById(R.id.bt_3);
-        bt_10 = findViewById(R.id.bt_10);
-        bt_30 = findViewById(R.id.bt_30);
-        bt_60 = findViewById(R.id.bt_60);
-        bt_120 = findViewById(R.id.bt_120);
-
-        bt_1.setOnClickListener(this);
-        bt_3.setOnClickListener(this);
-        bt_10.setOnClickListener(this);
-        bt_30.setOnClickListener(this);
-        bt_60.setOnClickListener(this);
-        bt_120.setOnClickListener(this);
 
         lb_current_price = findViewById(R.id.lb_current_price);
         lb_current_rate = findViewById(R.id.lb_current_rate);
@@ -430,7 +420,7 @@ public class TimeShareKLineActivity extends AppCompatActivity
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         int screenHeight = dm.heightPixels;
-        chartParent.getLayoutParams().height=((Double)(screenHeight * 0.2)).intValue();
+        chartParent.getLayoutParams().height=((Double)(screenHeight * 0.18)).intValue();
         chartParent.setStateClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -458,10 +448,10 @@ public class TimeShareKLineActivity extends AppCompatActivity
 
         timeChart = new TimeShareChart(this);
         timeChart.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-        timeChart.setShowDetails(true);
-        timeChart.setShowBVol(false);
+        timeChart.setShowDetails(false);
+        timeChart.setShowBVol(true);
 
-        timeParent.getLayoutParams().height = ((Double) (screenHeight * 0.25)).intValue();
+        timeParent.getLayoutParams().height = ((Double) (screenHeight * 0.35)).intValue();
         timeParent.setStateClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -478,6 +468,12 @@ public class TimeShareKLineActivity extends AppCompatActivity
         marqueeview = findViewById(R.id.marqueeview);
         marqueeManager = new MarqueeManager(mContxt, marqueeview);
         marqueeManager.startMarquee();
+
+        final AppSqlHelper dbHelper = new AppSqlHelper(mContxt);
+        Map<String, String> map =  dbHelper.getSystenSettings();
+        if(map.containsKey("TIME_SHARE_TIME")){
+            currentSpeed = ((Float)(Float.valueOf(map.get("TIME_SHARE_TIME")) * 1000 )).intValue();
+        }
     }
 
     /**
@@ -709,18 +705,21 @@ public class TimeShareKLineActivity extends AppCompatActivity
                     //取消操作
                 }
             });
-        }else if(v.getId() == R.id.bt_1){
-            playSpeed(1);
-        }else if(v.getId() == R.id.bt_3){
-            playSpeed(3);
-        }else if(v.getId() == R.id.bt_10){
-            playSpeed(10);
-        }else if(v.getId() == R.id.bt_30){
-            playSpeed(30);
-        }else if(v.getId() == R.id.bt_60){
-            playSpeed(60);
-        }else if(v.getId() == R.id.bt_120){
-            playSpeed(120);
+        }else if(v.getId() == R.id.lb_add_speed){
+            if(currentSpeed <= 500){
+                currentSpeed -= 100;
+            }else{
+                currentSpeed -= 500;
+            }
+            if(currentSpeed < 100){
+                currentSpeed = 100;
+            }
+            lb_current_speed.setText(CommonUtil.formatNumer(currentSpeed/1000f, 1)+"s");
+            playSpeed(0);
+        }else if(v.getId() == R.id.lb_sub_speed){
+            currentSpeed += 100;
+            lb_current_speed.setText(CommonUtil.formatNumer(currentSpeed/1000f, 1)+"s");
+            playSpeed(0);
         }
         v.setEnabled(true);
     }
@@ -823,9 +822,8 @@ public class TimeShareKLineActivity extends AppCompatActivity
             timeChart.setData(timeShareGroup);
             timeChart.invalidateView();
             onNextMunite();
-            currentSpeed = 0;
             bt_next.setEnabled(false);
-            playSpeed(1);
+            playSpeed(3000);
         }else{
             timeParent.showEmpty();
             bt_next.setEnabled(true);
@@ -845,16 +843,17 @@ public class TimeShareKLineActivity extends AppCompatActivity
 
     /**
      * 播放分时
-     * @param speed
      */
-    public void playSpeed(Integer speed){
-        if(currentSpeed != speed){
-            lb_current_speed.setText("X"+speed);
-            stopTimeChart();
-            mTimerTask = new TimerTask() {
-                @Override
-                public void run() {
-                    timeShareGroup.onNextStep();
+    public void playSpeed(int delay){
+        stopTimeChart();
+        if(currentSpeed < 100){
+            currentSpeed = 100;
+        }
+        mTimerTask = new TimerTask() {
+            @Override
+            public void run() {
+                if(timeShareGroup != null && timeShareGroup.isValidData){
+                    timeShareGroup.onNextMinu();
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
@@ -862,15 +861,10 @@ public class TimeShareKLineActivity extends AppCompatActivity
                         }
                     });
                 }
-            };
-            mTimer = new Timer();
-            Integer delay = 3000;
-            if(currentSpeed > 0){
-                delay = 0;
             }
-            currentSpeed = speed;
-            mTimer.schedule(mTimerTask, delay, 3000/currentSpeed);
-        }
+        };
+        mTimer = new Timer();
+        mTimer.schedule(mTimerTask, delay, currentSpeed);
     }
 
     /**

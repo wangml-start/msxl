@@ -16,6 +16,8 @@ public class KlineSet {
 
     private List<StockDetail> futureList;
 
+    private String kzzPreClose;
+
     public String getStockName() {
         return stockName;
     }
@@ -62,5 +64,13 @@ public class KlineSet {
 
     public void setFutureList(List<StockDetail> futureList) {
         this.futureList = futureList;
+    }
+
+    public String getKzzPreClose() {
+        return kzzPreClose;
+    }
+
+    public void setKzzPreClose(String kzzPreClose) {
+        this.kzzPreClose = kzzPreClose;
     }
 }

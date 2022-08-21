@@ -25,11 +25,11 @@
                 android:layout_height="wrap_content"
                 android:background="@color/bg_white"
                 android:orientation="horizontal">
+
             <TextView
                     android:id="@+id/lb_open_price"
                     style="@style/kline_top_bar"
-                    android:textSize="@dimen/size14"
-                />
+                    android:textSize="@dimen/size14"/>
 
             <TextView
                 android:id="@+id/lb_left_day"
@@ -41,13 +41,17 @@
                 android:textColor="@color/text_topbar"
                 android:text="Wating.."
                 android:gravity="center" />
-
             <TextView
-                    android:id="@+id/lb_close_price"
-                    style="@style/kline_top_bar"
-                    android:layout_marginRight="15dp"
-                    android:textSize="@dimen/size14"
-                    />
+                android:id="@+id/kzz_g_zf"
+                style="@style/kline_top_bar"
+                android:layout_marginRight="15dp"
+                android:textSize="@dimen/size14"
+                />
+            <TextView
+                android:id="@+id/lb_close_price"
+                style="@style/kline_top_bar"
+                android:layout_marginRight="15dp"
+                android:textSize="@dimen/size14" />
         </LinearLayout>
 
         <View

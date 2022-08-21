@@ -1,6 +1,8 @@
 package com.cgmn.msxl.comp.k.time;
 
 import android.util.Log;
+
+import com.cgmn.msxl.comp.k.index.MACDCalculation;
 import com.cgmn.msxl.server_interface.TimeShare;
 import com.cgmn.msxl.utils.CommonUtil;
 
@@ -12,7 +14,7 @@ import java.util.Map;
 public class TimeShareGroup {
 
     public Float lastClosePrice;
-
+    private List<Float> show_close_price = new ArrayList<>();
     //分时均价计算
     Float totAmt=0f;
     Float totVol=0f;
@@ -32,9 +34,15 @@ public class TimeShareGroup {
     Integer leftIndex=0;
     float priceDelta,deltaVol=0;
 
+    float mYMaxMacd = 0.0f;
+    float mYMinMacd = 0.0f;
+
+    public boolean isValidData = false;
+
 
     public Boolean init(List<TimeShare> list){
         if(CommonUtil.isEmpty(list)){
+            isValidData = false;
             return false;
         }
         timer = new MinuteCounter();
@@ -58,6 +66,7 @@ public class TimeShareGroup {
                 if(item.getVolume() > 0){
                     showList.add(item);
                     current = item;
+                    show_close_price.add(item.getPrice());
                 }
             }else{
                 leftList.addAll(list.subList(index-1, list.size()));
@@ -71,7 +80,47 @@ public class TimeShareGroup {
 
         updateCurrentNode("0925");
         calExtremeNum();
+        calcMacdDatas();
+        isValidData = true;
         return true;
+    }
+
+    public void calcMacdDatas(){
+        Float number = 99999f;
+        mYMaxMacd = number * -1;
+        mYMinMacd = number;
+
+        Map<String, List<Float>> map = MACDCalculation.MACD(12, 26, 9, show_close_price);
+        int length = showList.size();
+        int i = 0;
+        while(i < length){
+            TimeShare entry = showList.get(i);
+            entry.dif = (map.get("dif").get(i));
+            entry.dea = (map.get("dea").get(i));
+            entry.macd = (map.get("macd").get(i));
+
+            if(entry.dif > mYMaxMacd){
+                mYMaxMacd = entry.dif;
+            }
+            if(entry.dea > mYMaxMacd){
+                mYMaxMacd = entry.dea;
+            }
+            if(entry.macd > mYMaxMacd){
+                mYMaxMacd = entry.macd;
+            }
+
+            if(entry.dif < mYMinMacd){
+                mYMinMacd = entry.dif;
+            }
+            if(entry.dea < mYMinMacd){
+                mYMinMacd = entry.dea;
+            }
+            if(entry.macd < mYMinMacd){
+                mYMinMacd = entry.macd;
+            }
+
+            i += 1;
+        }
     }
 
 
@@ -141,27 +190,37 @@ public class TimeShareGroup {
         last = current;
         timer.nextMinutes();
         String time = timer.getTimeStr();
-        while(leftIndex<leftList.size()){
-            TimeShare item = leftList.get(leftIndex);
-            String key = item.getTimeStr();
-            if(exist.containsKey(key)){
-                leftIndex++;
-                continue;
-            }
-            if(Integer.valueOf(key) <= Integer.valueOf(time)){
-                if(item.getVolume() > 0){
-                    showList.add(item);
-                    current = item;
-                    exist.put(key, 1);
-                }
-
-            }else{
-                break;
-            }
-            leftIndex++;
+        if(leftIndex>=leftList.size()){
+            return;
+        }
+        TimeShare item = leftList.get(leftIndex);
+        String key = item.getTimeStr();
+        if(key.compareTo("113000") > 0 && key.compareTo("130000") < 0){
+            key = "113000";
+        }
+        int idxTime = Integer.valueOf(key), cTime = Integer.valueOf(time);
+        if(idxTime == cTime){
+            showList.add(item);
+            show_close_price.add(item.getPrice());
+            current = item;
+            leftIndex += 1;
+        }else if(cTime < idxTime && leftIndex > 0){ //存在改时间没有交易的情况
+            TimeShare pre_item = leftList.get(leftIndex-1);
+            TimeShare new_item = new TimeShare();
+            new_item.setVolume(1);
+            new_item.setPrice(pre_item.getPrice());
+            new_item.setAmt(0);
+            new_item.setStockCode(pre_item.getStockCode());
+            new_item.setTimeStr(time);
+            new_item.setLastClose(pre_item.getLastClose());
+            new_item.setTradeDate(pre_item.getTradeDate());
+            showList.add(new_item);
+            show_close_price.add(new_item.getPrice());
+            current = new_item;
         }
         updateCurrentNode(null);
         calExtremeNum();
+        calcMacdDatas();
     }
 
 

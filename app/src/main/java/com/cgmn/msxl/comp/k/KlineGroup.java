@@ -3,12 +3,14 @@ package com.cgmn.msxl.comp.k;
 import com.cgmn.msxl.comp.k.index.KDJCalculation;
 import com.cgmn.msxl.comp.k.index.MACDCalculation;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 public class KlineGroup {
     private LinkedList<KLine> nodes = new LinkedList<>();
+    private List<Float> close_prices = new ArrayList<>();
 
     public float mYMax = 0.0f;
     public float mYMin = 0.0f;
@@ -30,6 +32,7 @@ public class KlineGroup {
 
     public void addKline(KLine kline) {
         nodes.addLast(kline);
+        close_prices.add(kline.close);
     }
 
     public void calcMinMax(int start, int end) {
@@ -120,7 +123,7 @@ public class KlineGroup {
      * 计算指标各项数据
      */
     public void calcAverageMACD() {
-        Map<String, List<Float>> map = MACDCalculation.MACD(12, 26, 9, nodes);
+        Map<String, List<Float>> map = MACDCalculation.MACD(12, 26, 9, close_prices);
         Map<String, List<Float>> kdjMap = KDJCalculation.KDJ(nodes,9,3,3,1);
         int length = nodes.size();
         for (int i = 0; i < length; i++) {

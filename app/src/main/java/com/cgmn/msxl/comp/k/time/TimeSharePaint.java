@@ -30,7 +30,8 @@ public class TimeSharePaint {
     protected Boolean showBVol = true; //量柱
 
     protected float margin = 4f * KlineStyle.pxScaleRate, padding = 2.5f * KlineStyle.pxScaleRate;
-    float chartHeight,chartWeight,candleWidth,volWidth,volHeight;
+    float chartHeight,chartWeight,candleWidth,volWidth,volHeight,macdHeight;
+    float index_rate = 0.2f;
 
     public void setShowDetail(Boolean showDetail) {
         this.showDetail = showDetail;
@@ -47,12 +48,12 @@ public class TimeSharePaint {
         avgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         avgPaint.setStyle(Paint.Style.FILL);
         avgPaint.setStrokeWidth(KlineStyle.timeShareBold);
-        avgPaint.setColor(Color.parseColor("#FFC800"));
+        avgPaint.setColor(Color.parseColor("#577DAF"));
 
         timePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         timePaint.setStyle(Paint.Style.FILL);
         timePaint.setStrokeWidth(KlineStyle.timeShareBold);
-        timePaint.setColor(Color.parseColor("#577DAF"));
+        timePaint.setColor(Color.parseColor("#756D7E"));
 
         mdotGridPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mdotGridPaint.setStrokeWidth(KlineStyle.gridLine);
@@ -80,13 +81,13 @@ public class TimeSharePaint {
         mDownPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mDownPaint.setStyle(Paint.Style.FILL);
         mDownPaint.setTextSize(textSize);
-        mDownPaint.setStrokeWidth(KlineStyle.gridLine);
+//        mDownPaint.setStrokeWidth(KlineStyle.gridLine);
         mDownPaint.setColor(Color.parseColor("#05870A"));
 
         mUpPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mUpPaint.setStyle(Paint.Style.FILL);
         mUpPaint.setTextSize(textSize);
-        mUpPaint.setStrokeWidth(KlineStyle.gridLine);
+//        mUpPaint.setStrokeWidth(KlineStyle.gridLine);
         mUpPaint.setColor(Color.parseColor("#CC0000"));
     }
 
@@ -99,10 +100,12 @@ public class TimeSharePaint {
         if(showDetail){
             candleWidth = chartWeight * 0.74f;
             volWidth = chartWeight-candleWidth;
+            chartHeight = contentRect.height();
         }
         if(showBVol){
-            volHeight = contentRect.height() * 0.2f - padding;
-            chartHeight = contentRect.height()*0.8f - 2*padding;
+            volHeight = contentRect.height() * index_rate - padding;
+            macdHeight = contentRect.height() * index_rate - padding;
+            chartHeight = contentRect.height() * (1-2*index_rate);
         }
     }
 
@@ -144,6 +147,16 @@ public class TimeSharePaint {
 
             if(showBVol){
                 canvas.drawLine(timePt.x, timePt.volSY, timePt.x, timePt.volY, timePaint);
+                if (i > 0) {
+                    ChartPoint ltimePt = timePoints.get(i-1);
+                    canvas.drawLine(ltimePt.difPt.x, ltimePt.difPt.y, timePt.difPt.x, timePt.difPt.y, timePaint);
+                    canvas.drawLine(ltimePt.deaPt.x, ltimePt.deaPt.y, timePt.deaPt.x, timePt.deaPt.y, avgPaint);
+                }
+                if(timePt.macdState == 1){
+                    canvas.drawLine(timePt.macdBPt.x, timePt.macdBPt.y, timePt.macdPt.x, timePt.macdPt.y, mUpPaint);
+                }else{
+                    canvas.drawLine(timePt.macdBPt.x, timePt.macdBPt.y, timePt.macdPt.x, timePt.macdPt.y, mDownPaint);
+                }
             }
 
             //draw char B\S\T
@@ -280,7 +293,14 @@ public class TimeSharePaint {
 
         float vunit = volHeight / data.deltaVol;
         float pStarY = this.contentRect.top + padding;
-        float volEndY = this.contentRect.bottom;
+        float volEndY = this.contentRect.height()*(1-index_rate);
+        float munit = 0f;
+        float macdDelta = 0f;
+        if(showBVol){
+            macdDelta = data.mYMaxMacd - data.mYMinMacd;
+            munit = macdHeight / macdDelta;
+        }
+
         timePoints.clear();
         solidPts.clear();
         Integer endIndex = data.solidPrices.size();
@@ -290,14 +310,23 @@ public class TimeSharePaint {
             CMinute snode = data.solidPrices.get(i);
 
             float startx = distanceX * i + margin;
-            ChartPoint timeItem = new ChartPoint(startx, (mYMax - node.price) * punit + pStarY);
-            float volY = volEndY - (volHeight-(data.deltaVol - node.vol) * vunit);
-//            System.out.println("VolY:" + volY);
-            timeItem.setVolPos(volEndY, volY);
+            ChartPoint timeItem = new ChartPoint(startx, (mYMax - node.price) * punit);
+
             timePoints.add(timeItem);
             solidPts.add(new ChartPoint(startx, (mYMax - snode.price) * punit + pStarY));
             if(node.opChar != null){
                 timeItem.setOpInfo(startx, (mYMax - node.opPrice) * punit + pStarY, node.opChar);
+            }
+            if(showBVol){
+                TimeShare item = data.showList.get(i);
+                float volY = volEndY - (volHeight-(data.deltaVol - node.vol) * vunit);
+                timeItem.setVolPos(volEndY, volY);
+                //macd
+                timeItem.difPt = new CPoint(startx, (data.mYMaxMacd - item.dif) * munit + volEndY + padding);
+                timeItem.deaPt = new CPoint(startx, (data.mYMaxMacd - item.dea) * munit + volEndY + padding);
+                timeItem.macdPt = new CPoint(startx, (data.mYMaxMacd - item.macd) * munit + volEndY + padding);
+                timeItem.macdBPt = new CPoint(startx, (data.mYMaxMacd) * munit + volEndY + padding);
+                timeItem.macdState = item.macd >= 0 ? 1 : -1;
             }
         }
     }
@@ -312,7 +341,7 @@ public class TimeSharePaint {
 
         while(count < 5){
             float y = chartHeight * count / 4;
-            xLines.add(new PriceLinePoint(new float[]{pstartx, y+padding}, new float[]{pendx, y+padding}, null));
+            xLines.add(new PriceLinePoint(new float[]{pstartx, y}, new float[]{pendx, y}, null));
             count++;
         }
 
@@ -325,7 +354,7 @@ public class TimeSharePaint {
         while(countY < 5){
             float x = candleWidth * countY / 4;
 
-            yLines.add(new PriceLinePoint(new float[]{x+margin, contentRect.top+padding}, new float[]{x+margin, endY-padding}, null));
+            yLines.add(new PriceLinePoint(new float[]{x+margin, contentRect.top}, new float[]{x+margin, endY-padding}, null));
             countY++;
         }
         if(showBVol){
